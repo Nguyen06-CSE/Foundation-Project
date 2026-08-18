@@ -1,16 +1,16 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional
 
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Foundation Project"
-    DATABASE_URL: str 
-    DEBUG: bool = True
+    DATABASE_URL: str
+    SECRET_KEY: Optional[str] = None
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(Path(__file__).resolve().parents[3] / ".env"),  # trỏ đúng về file .env ở gốc dự án
         env_file_encoding="utf-8",
-        extra="ignore",
+        extra="ignore"
     )
-
 
 settings = Settings()
