@@ -5,6 +5,7 @@ uvicorn==0.30.1
 # Validation & Settings
 pydantic==2.7.4
 pydantic-settings==2.3.4
+python-multipart
 
 # Database & ORM
 sqlalchemy==2.0.31
@@ -19,6 +20,9 @@ httpx
 
 # Security
 passlib[bcrypt]
+python-jose[cryptography]==3.5.0
 
 # alembic
 alembic==1.16.5
+
+

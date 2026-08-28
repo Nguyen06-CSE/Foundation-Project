@@ -1,22 +1,42 @@
+# app/models/__init__.py
+from .base import Base, TimestampMixin
+from .faculty import Faculty
+from .academic_class import Class
 from .user import User
 from .category import Category
 from .tag import Tag
+from .workspace import Workspace
+from .workspace_member import WorkspaceMember
+from .workspace_invitation import WorkspaceInvitation
+from .document_tag import document_tags
 from .document import Document
-from .document_tag import DocumentTag
 from .document_version import DocumentVersion
 from .note import Note
+from .trash_batch import TrashBatch
+from .document_share import DocumentShare
+from .notification import Notification
 from .favorite import Favorite
 from .download_log import DownloadLog
 from .processing_job import ProcessingJob
 
 __all__ = [
+    "Base",
+    "TimestampMixin",
+    "Faculty",
+    "Class",
     "User",
     "Category",
     "Tag",
+    "Workspace",
+    "WorkspaceMember",
+    "WorkspaceInvitation",
+    "document_tags",
     "Document",
-    "DocumentTag",
     "DocumentVersion",
     "Note",
+    "TrashBatch",
+    "DocumentShare",
+    "Notification",
     "Favorite",
     "DownloadLog",
     "ProcessingJob",
