@@ -9,18 +9,40 @@ from app.models.download_log import DownloadLog
 from app.services.file_service import checksum_for_file, save_upload_file
 
 
-async def create_document_from_upload(db: AsyncSession, *, upload, owner_id: int, title: str, description: str | None, category_id: int | None, content: str | None = None):
+async def create_document_from_upload(
+    db: AsyncSession, 
+    *, 
+    upload, 
+    owner_id: int, 
+    title: str, 
+    description: str | None, 
+    category_id: int | None, 
+    workspace_id: int | None = None, # Thêm tham số workspace_id
+    content: str | None = None
+):
     file_path = save_upload_file(upload, owner_id)
     checksum = checksum_for_file(file_path)
-    result = await db.execute(
-        select(Document).where(Document.owner_id == owner_id, Document.checksum == checksum)
+    
+    # Kiểm tra file trùng lặp (Bỏ qua các file đã xóa mềm)
+    query = select(Document).where(
+        Document.checksum == checksum, 
+        Document.is_deleted == False
     )
+    if workspace_id:
+        query = query.where(Document.workspace_id == workspace_id)
+    else:
+        query = query.where(Document.owner_id == owner_id, Document.workspace_id.is_(None))
+        
+    result = await db.execute(query)
     existing = result.scalar_one_or_none()
+    
     if existing:
         raise ValueError(f"duplicate_document:{existing.id}")
+        
     document = Document(
         owner_id=owner_id,
         category_id=category_id,
+        workspace_id=workspace_id, # Gán workspace_id cho model
         title=title,
         description=description,
         file_path=file_path,
