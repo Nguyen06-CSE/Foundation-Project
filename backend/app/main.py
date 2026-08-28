@@ -10,6 +10,10 @@ from app.routers.notes import router as notes_router
 from app.routers.search import router as search_router
 from app.routers.tags import router as tags_router
 from app.routers.users import router as users_router
+from app.routers.workspaces import router as workspaces_router
+from app.routers.trash import router as trash_router
+from app.routers.academic import router as academic_router
+from app.routers.notifications import router as notifications_router
 
 app = FastAPI(
     title="Thư Viện Số - Quản Lí Tài Liệu",
@@ -17,7 +21,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
-
+# Đăng ký tất cả các router
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(categories_router)
@@ -28,6 +32,10 @@ app.include_router(notes_router)
 app.include_router(favorites_router)
 app.include_router(download_logs_router)
 app.include_router(search_router)
+app.include_router(workspaces_router)
+app.include_router(trash_router)
+app.include_router(academic_router)
+app.include_router(notifications_router)
 
 
 @app.get("/health")
