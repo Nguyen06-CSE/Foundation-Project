@@ -8,7 +8,7 @@ from .tag import Tag
 from .workspace import Workspace
 from .workspace_member import WorkspaceMember
 from .workspace_invitation import WorkspaceInvitation
-from .document_tag import document_tags
+from .document_tag import document_tags, document_tags as DocumentTag
 from .document import Document
 from .document_version import DocumentVersion
 from .note import Note

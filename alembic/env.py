@@ -16,6 +16,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1] / "backend"))
 from app.core.config import settings
 
 # Import Base từ đúng nơi model đang dùng
+import app.models
 from app.models.base import Base
 
 # Import tất cả model để Alembic nhận diện metadata
