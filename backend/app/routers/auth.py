@@ -1,13 +1,13 @@
 # app/routers/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.dependencies import get_current_user
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import User
-from app.schemas.auth import Token, UserRegister
+from app.schemas.auth import Token, UserInfo, UserLogin, UserRegister
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -17,7 +17,7 @@ async def register(payload: UserRegister, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).where(User.email == payload.email))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email đã được sử dụng")
-    
+
     result = await db.execute(select(User).where(User.username == payload.username))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Username đã được sử dụng")
@@ -35,29 +35,43 @@ async def register(payload: UserRegister, db: AsyncSession = Depends(get_db)):
     db.add(user)
     await db.commit()
     await db.refresh(user)
+
+    from app.services.folder_service import create_default_folders_for_user
+    await create_default_folders_for_user(db, user.id)
+
     return {"id": user.id, "email": user.email, "username": user.username}
 
 
 @router.post("/login", response_model=Token)
 async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: AsyncSession = Depends(get_db)
+    payload: UserLogin,
+    db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
         select(User).where(
             or_(
-                User.email == form_data.username,
-                User.username == form_data.username
+                User.email == payload.identifier,
+                User.username == payload.identifier,
+                User.student_code == payload.identifier,
             )
         )
     )
     user = result.scalar_one_or_none()
 
-    if not user or not verify_password(form_data.password, user.password_hash):
+    if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Sai tài khoản hoặc mật khẩu"
+            detail="Sai thông tin đăng nhập. Vui lòng kiểm tra lại.",
         )
 
     token = create_access_token({"sub": str(user.id)})
-    return Token(access_token=token)
+    return Token(
+        access_token=token,
+        token_type="bearer",
+        user=UserInfo.model_validate(user),
+    )
+
+
+@router.get("/me", response_model=UserInfo)
+async def get_me(current_user: User = Depends(get_current_user)):
+    return current_user

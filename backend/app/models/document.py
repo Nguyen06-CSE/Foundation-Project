@@ -34,7 +34,7 @@ class Document(Base, TimestampMixin):
     file_size: Mapped[Optional[int]] = mapped_column(BigInteger)
     checksum: Mapped[str] = mapped_column(String(64), nullable=False)
     content: Mapped[Optional[str]] = mapped_column(Text)
-    metadata_: Mapped[Optional[dict]] = mapped_column("metadata", JSONB) 
+    metadata_: Mapped[Optional[dict]] = mapped_column("metadata", JSONB, nullable=True) 
     search_vector = mapped_column(TSVECTOR)
     is_important: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
     is_deleted: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)

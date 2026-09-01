@@ -1,4 +1,4 @@
-# app/core/security.py
+# backend/app/core/security.py
 
 from __future__ import annotations
 

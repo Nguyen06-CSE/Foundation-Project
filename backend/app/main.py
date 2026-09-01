@@ -1,4 +1,7 @@
+# backend/app/main.py
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.auth import router as auth_router
 from app.routers.categories import router as categories_router
@@ -21,6 +24,20 @@ app = FastAPI(
     version="0.1.0",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Đăng ký tất cả các router
 app.include_router(auth_router)
 app.include_router(users_router)
@@ -32,10 +49,13 @@ app.include_router(notes_router)
 app.include_router(favorites_router)
 app.include_router(download_logs_router)
 app.include_router(search_router)
+from app.routers.folders import router as folders_router
+
 app.include_router(workspaces_router)
 app.include_router(trash_router)
 app.include_router(academic_router)
 app.include_router(notifications_router)
+app.include_router(folders_router)
 
 
 @app.get("/health")

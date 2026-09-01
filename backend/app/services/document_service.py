@@ -1,3 +1,5 @@
+# backend/app/services/document_service.py
+
 from __future__ import annotations
 
 from sqlalchemy import func, select
@@ -7,6 +9,9 @@ from app.models.document import Document
 from app.models.document_version import DocumentVersion
 from app.models.download_log import DownloadLog
 from app.services.file_service import checksum_for_file, save_upload_file
+
+
+
 
 
 async def create_document_from_upload(
@@ -79,3 +84,16 @@ async def log_download(db: AsyncSession, *, document_id: int, user_id: int, acti
     db.add(log)
     await db.flush()
     return log
+
+async def get_document_file_types(db: AsyncSession, owner_id: int) -> list[str]:
+    result = await db.execute(
+        select(Document.file_type)
+        .where(
+            Document.owner_id == owner_id,
+            Document.is_deleted == False,
+            Document.file_type.is_not(None)
+        )
+        .distinct()
+        .order_by(Document.file_type)
+    )
+    return result.scalars().all()

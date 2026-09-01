@@ -42,3 +42,4 @@ class User(Base, TimestampMixin):
     favorites: Mapped[List["Favorite"]] = relationship("Favorite", back_populates="user")
     download_logs: Mapped[List["DownloadLog"]] = relationship("DownloadLog", back_populates="user")
     uploaded_versions: Mapped[List["DocumentVersion"]] = relationship("DocumentVersion", back_populates="uploader")
+    folders: Mapped[List["Folder"]] = relationship("Folder", back_populates="owner")

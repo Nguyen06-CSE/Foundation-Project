@@ -1,4 +1,4 @@
-# app/routers/documents.py
+# backend/app/routers/documents.py
 from typing import Optional
 from datetime import datetime
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
@@ -44,20 +44,68 @@ async def upload_document(
     return document
 
 
-@router.get("/", response_model=list[DocumentOut])
+from fastapi import Query
+from sqlalchemy import func
+from app.schemas.document import PaginatedDocuments
+from app.models.folder import Folder
+from app.services.folder_service import get_documents_by_folder
+from sqlalchemy.orm import selectinload
+
+@router.get("/", response_model=PaginatedDocuments)
 async def list_documents(
-    workspace_id: Optional[int] = None,
+    workspace_id: Optional[int] = Query(None),
+    folder_id: Optional[int] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    query = select(Document).where(
+    if folder_id is not None:
+        folder = await db.get(Folder, folder_id)
+        if not folder or folder.owner_id != current_user.id:
+            raise HTTPException(404, "Không tìm thấy thư mục")
+        return await get_documents_by_folder(db, current_user.id, folder_id, page, page_size)
+
+    offset = (page - 1) * page_size
+    
+    # 2. Bổ sung .options(selectinload(Document.tags)) vào câu query
+    query = select(Document).options(selectinload(Document.tags)).where(
         Document.owner_id == current_user.id,
         Document.is_deleted == False
     )
     if workspace_id:
         query = query.where(Document.workspace_id == workspace_id)
 
+    count_result = await db.execute(select(func.count()).select_from(query.subquery()))
+    total = count_result.scalar()
+
+    query = query.order_by(Document.created_at.desc()).offset(offset).limit(page_size)
     result = await db.execute(query)
+    items = result.scalars().all()
+    
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": (total + page_size - 1) // page_size if page_size else 1
+    }
+@router.get("/file-types", response_model=list[str])
+async def get_document_file_types(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(Document.file_type)
+        .where(
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+            Document.file_type.is_not(None)
+        )
+        .distinct()
+        .order_by(Document.file_type)
+    )
+
     return result.scalars().all()
 
 
@@ -67,8 +115,11 @@ async def get_document(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # Bổ sung .options(selectinload(Document.tags)) tại đây nữa
     result = await db.execute(
-        select(Document).where(
+        select(Document)
+        .options(selectinload(Document.tags))
+        .where(
             Document.id == document_id,
             Document.owner_id == current_user.id,
             Document.is_deleted == False
@@ -78,7 +129,6 @@ async def get_document(
     if not document:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
     return document
-
 
 @router.patch("/{document_id}", response_model=DocumentOut)
 async def update_document(
@@ -127,3 +177,5 @@ async def soft_delete_document(
     document.is_deleted = True
     document.deleted_at = datetime.utcnow()
     await db.commit()
+
+

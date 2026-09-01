@@ -1,3 +1,5 @@
+# backend/app/routers/tags.py
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,6 +18,19 @@ async def list_tags(db: AsyncSession = Depends(get_db), current_user: User = Dep
     result = await db.execute(select(Tag).where(Tag.owner_id == current_user.id))
     return result.scalars().all()
 
+@router.get("/name/{name}", response_model=TagOut)
+async def get_tag_by_name(
+    name: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(Tag).where(Tag.name == name, Tag.owner_id == current_user.id)
+    )
+    tag = result.scalar_one_or_none()
+    if not tag:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tag với tên này")
+    return tag
 
 @router.post("/", response_model=TagOut, status_code=status.HTTP_201_CREATED)
 async def create_tag(

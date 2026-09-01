@@ -7,6 +7,11 @@ export const documentService = {
   getAll: (params?: { folder_id?: number; page?: number; page_size?: number }) =>
     api.get<PaginatedDocuments>('/documents/', { params }).then(r => r.data),
 
+  getFileTypes: async (): Promise<string[]> => {
+    const response = await api.get<string[]>("/documents/file-types");
+    return response.data;
+  },
+
   getById: (id: number) =>
     api.get<Document>(`/documents/${id}`).then(r => r.data),
 

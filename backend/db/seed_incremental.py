@@ -16,6 +16,8 @@ from app.core.database import AsyncSessionLocal
 
 # Models
 from app.models.faculty import Faculty
+from app.models.folder import Folder
+from app.models.folder_tag import FolderTag
 from app.models.academic_class import Class
 from app.models.user import User
 from app.models.category import Category
@@ -294,7 +296,7 @@ async def seed_workspaces_and_members(
 
 
 # =========================================================
-# 5. SEED CATEGORIES & TAGS
+# 5a. SEED CATEGORIES & TAGS
 # =========================================================
 async def seed_classifications(session: AsyncSession, users):
     print("5. Seeding Categories and Tags...")
@@ -410,6 +412,83 @@ async def seed_classifications(session: AsyncSession, users):
         "categories": categories,
         "tags": tags,
     }
+
+# =========================================================
+# 5b. SEED FOLDERS & FOLDER_TAGS
+# =========================================================
+async def seed_folders(session: AsyncSession, users, classifications):
+    print("5b. Seeding Folders and FolderTags...")
+
+    u_admin = users["admin_cntt"]
+    u_an = users["sv_an"]
+    u_tuan = users["gv_tuan"]
+    u_mai = users["gv_mai"]
+
+    tags = classifications["tags"]
+
+    # Specs cho các Folder
+    folder_specs = [
+        {
+            "key": "giao_trinh",
+            "lookup": {"owner_id": u_admin.id, "name": "Giáo trình"},
+            "values": {"color": "#3B82F6"},
+            "tag_keys": ["Đại cương", "Lập trình Python", "Cơ sở dữ liệu"],
+        },
+        {
+            "key": "bai_tap",
+            "lookup": {"owner_id": u_tuan.id, "name": "Bài Tập"},
+            "values": {"color": "#10B981"},
+            "tag_keys": ["Toán cao cấp"],
+        },
+        {
+            "key": "tai_lieu",
+            "lookup": {"owner_id": u_mai.id, "name": "Tài liệu tham khảo"},
+            "values": {"color": "#F59E0B"},
+            "tag_keys": [],
+        },
+        {
+            "key": "do_an",
+            "lookup": {"owner_id": u_an.id, "name": "Đồ án tốt nghiệp"},
+            "values": {"color": "#EC4899"},
+            "tag_keys": ["Đồ án nhóm"],
+        },
+        {
+            "key": "hoc_tap_an",
+            "lookup": {"owner_id": u_an.id, "name": "Góc Học Tập Cá Nhân"},
+            "values": {"color": "#8B5CF6"},
+            "tag_keys": ["Lập trình Python", "Cần ôn tập"],
+        },
+    ]
+
+    folders = {}
+    for spec in folder_specs:
+        # 1. Seed bảng folders
+        folder, created = await get_or_create(
+            session,
+            Folder,
+            spec["lookup"],
+            spec["values"],
+        )
+        folders[spec["key"]] = folder
+        print(f"  {'INSERT' if created else 'SKIP'} folder: {spec['lookup']['name']}")
+
+        # 2. Seed bảng trung gian folder_tags
+        for tag_key in spec["tag_keys"]:
+            if tag_key in tags:
+                tag_id = tags[tag_key].id
+                ft_obj, ft_created = await get_or_create(
+                    session,
+                    FolderTag,
+                    {"folder_id": folder.id, "tag_id": tag_id},
+                )
+                print(
+                    f"    {'INSERT' if ft_created else 'SKIP'} folder_tag: "
+                    f"folder={folder.name}, tag={tag_key}"
+                )
+
+    await session.commit()
+    return folders
+
 
 
 # =========================================================
@@ -907,7 +986,433 @@ async def seed_interactions(session: AsyncSession, users, workspaces, docs):
         )
 
     await session.commit()
+# =========================================================
+# 9. SEED ADDITIONAL DATA (TAGS, FOLDERS, DOCUMENTS) FOR MULTIPLE USERS
+# =========================================================
+async def seed_additional_data(
+    session: AsyncSession,
+    users,
+    workspaces,
+    classifications,
+    trash_batches,
+):
+    print("9. Seeding additional Tags, Folders, and Documents...")
 
+    # ----- Additional Tags -----
+    # Mỗi user được thêm 2-3 tag mới
+    tag_specs = [
+        # admin_cntt
+        {"name": "Hướng dẫn", "owner_id": users["admin_cntt"].id, "color": "#FFA500"},
+        {"name": "Thực hành", "owner_id": users["admin_cntt"].id, "color": "#008000"},
+        {"name": "Đề thi", "owner_id": users["admin_cntt"].id, "color": "#FF0000"},
+        # gv_tuan
+        {"name": "Giáo án", "owner_id": users["gv_tuan"].id, "color": "#1E90FF"},
+        {"name": "Bài giảng", "owner_id": users["gv_tuan"].id, "color": "#FF4500"},
+        {"name": "Bài tập nâng cao", "owner_id": users["gv_tuan"].id, "color": "#8B008B"},
+        # gv_mai
+        {"name": "Kinh tế vi mô", "owner_id": users["gv_mai"].id, "color": "#2E8B57"},
+        {"name": "Kinh tế vĩ mô", "owner_id": users["gv_mai"].id, "color": "#4682B4"},
+        {"name": "Thương mại", "owner_id": users["gv_mai"].id, "color": "#D2691E"},
+        # sv_an
+        {"name": "Web Development", "owner_id": users["sv_an"].id, "color": "#6A5ACD"},
+        {"name": "JavaScript", "owner_id": users["sv_an"].id, "color": "#F7DF1E"},
+        # sv_binh
+        {"name": "Machine Learning", "owner_id": users["sv_binh"].id, "color": "#FF6F00"},
+        {"name": "Data Visualization", "owner_id": users["sv_binh"].id, "color": "#17BECF"},
+        # sv_cuong
+        {"name": "Java", "owner_id": users["sv_cuong"].id, "color": "#007396"},
+        {"name": "Spring Boot", "owner_id": users["sv_cuong"].id, "color": "#6DB33F"},
+        # sv_dung
+        {"name": "Tài chính", "owner_id": users["sv_dung"].id, "color": "#B22222"},
+        {"name": "Ngân hàng", "owner_id": users["sv_dung"].id, "color": "#8FBC8F"},
+    ]
+
+    new_tags = {}
+    for spec in tag_specs:
+        lookup = {"owner_id": spec["owner_id"], "name": spec["name"]}
+        values = {"color": spec["color"], "parent_id": None}
+        tag, created = await get_or_create(session, Tag, lookup, values)
+        new_tags[(spec["owner_id"], spec["name"])] = tag
+        print(f"  {'INSERT' if created else 'SKIP'} tag: {spec['name']} (user {spec['owner_id']})")
+
+    # ----- Additional Folders -----
+    # Mỗi user có 1 folder mới, gán tag vừa tạo
+    folder_specs = [
+        {
+            "owner_id": users["admin_cntt"].id,
+            "name": "Tài liệu hành chính",
+            "color": "#A9A9A9",
+            "tag_names": ["Hướng dẫn", "Đề thi"],
+        },
+        {
+            "owner_id": users["gv_tuan"].id,
+            "name": "Giáo trình môn học",
+            "color": "#FFD700",
+            "tag_names": ["Giáo án", "Bài giảng"],
+        },
+        {
+            "owner_id": users["gv_mai"].id,
+            "name": "Kinh tế học",
+            "color": "#8FBC8F",
+            "tag_names": ["Kinh tế vi mô", "Kinh tế vĩ mô"],
+        },
+        {
+            "owner_id": users["sv_an"].id,
+            "name": "Frontend",
+            "color": "#E9967A",
+            "tag_names": ["Web Development", "JavaScript"],
+        },
+        {
+            "owner_id": users["sv_binh"].id,
+            "name": "AI Projects",
+            "color": "#9370DB",
+            "tag_names": ["Machine Learning", "Data Visualization"],
+        },
+        {
+            "owner_id": users["sv_cuong"].id,
+            "name": "Backend",
+            "color": "#20B2AA",
+            "tag_names": ["Java", "Spring Boot"],
+        },
+        {
+            "owner_id": users["sv_dung"].id,
+            "name": "Tài chính ngân hàng",
+            "color": "#DAA520",
+            "tag_names": ["Tài chính", "Ngân hàng"],
+        },
+    ]
+
+    new_folders = {}
+    for spec in folder_specs:
+        lookup = {"owner_id": spec["owner_id"], "name": spec["name"]}
+        values = {"color": spec["color"]}
+        folder, created = await get_or_create(session, Folder, lookup, values)
+        new_folders[(spec["owner_id"], spec["name"])] = folder
+        print(f"  {'INSERT' if created else 'SKIP'} folder: {spec['name']} (user {spec['owner_id']})")
+
+        # Gán tag cho folder
+        for tag_name in spec["tag_names"]:
+            key = (spec["owner_id"], tag_name)
+            if key in new_tags:
+                tag_id = new_tags[key].id
+                ft_obj, ft_created = await get_or_create(
+                    session,
+                    FolderTag,
+                    {"folder_id": folder.id, "tag_id": tag_id},
+                )
+                print(f"    {'INSERT' if ft_created else 'SKIP'} folder_tag: {folder.name} <-> {tag_name}")
+
+    # ----- Additional Documents -----
+    # Mỗi user có 2-3 document mới, gán tag vừa tạo, kèm version, note, share, favorite...
+    doc_specs = [
+        # admin_cntt
+        {
+            "key": "admin_doc1",
+            "title": "Quy trình xử lý văn bản",
+            "owner_id": users["admin_cntt"].id,
+            "workspace_id": workspaces["faculty_cntt"].id,
+            "category_id": classifications["categories"]["root"].id,
+            "description": "Hướng dẫn quy trình hành chính",
+            "file_path": "/docs/admin_proc.pdf",
+            "file_type": "application/pdf",
+            "file_size": 2048,
+            "is_important": True,
+            "tag_names": ["Hướng dẫn", "Đề thi"],
+            "versions": [{"version_no": 1, "note": "Bản chính thức", "uploaded_by": users["admin_cntt"].id}],
+            "notes": [{"user_id": users["gv_tuan"].id, "note": "Cần cập nhật quy trình mới"}],
+            "share_to": [users["gv_tuan"].id, users["sv_an"].id],
+        },
+        {
+            "key": "admin_doc2",
+            "title": "Đề cương môn học CNTT",
+            "owner_id": users["admin_cntt"].id,
+            "workspace_id": workspaces["faculty_cntt"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Đề cương chi tiết các môn",
+            "file_path": "/docs/de_cuong.pdf",
+            "file_type": "application/pdf",
+            "file_size": 4096,
+            "is_important": False,
+            "tag_names": ["Thực hành", "Đề thi"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+        # gv_tuan
+        {
+            "key": "tuan_doc1",
+            "title": "Giáo án lập trình C",
+            "owner_id": users["gv_tuan"].id,
+            "workspace_id": workspaces["class_cntt1"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Giáo án chi tiết môn C",
+            "file_path": "/docs/c_lesson.pdf",
+            "file_type": "application/pdf",
+            "file_size": 1024,
+            "is_important": True,
+            "tag_names": ["Giáo án", "Bài giảng"],
+            "versions": [{"version_no": 1, "note": "Bản thảo"}],
+            "notes": [{"user_id": users["sv_an"].id, "note": "Chương 3 cần sửa"}],
+            "share_to": [users["sv_an"].id, users["sv_binh"].id],
+        },
+        {
+            "key": "tuan_doc2",
+            "title": "Bài tập nâng cao - Đệ quy",
+            "owner_id": users["gv_tuan"].id,
+            "workspace_id": workspaces["class_cntt1"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Bài tập đệ quy khó",
+            "file_path": "/docs/recursion.pdf",
+            "file_type": "application/pdf",
+            "file_size": 512,
+            "is_important": False,
+            "tag_names": ["Bài tập nâng cao"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+        # gv_mai
+        {
+            "key": "mai_doc1",
+            "title": "Lý thuyết kinh tế vi mô",
+            "owner_id": users["gv_mai"].id,
+            "workspace_id": workspaces["faculty_kt"].id,
+            "category_id": classifications["categories"]["Kinh tế đại cương"].id,
+            "description": "Tổng quan vi mô",
+            "file_path": "/docs/micro.pdf",
+            "file_type": "application/pdf",
+            "file_size": 3072,
+            "is_important": True,
+            "tag_names": ["Kinh tế vi mô"],
+            "versions": [{"version_no": 1, "note": "Lần đầu"}],
+            "notes": [{"user_id": users["sv_dung"].id, "note": "Cần thêm đồ thị"}],
+            "share_to": [users["sv_dung"].id],
+        },
+        {
+            "key": "mai_doc2",
+            "title": "Thương mại quốc tế",
+            "owner_id": users["gv_mai"].id,
+            "workspace_id": workspaces["faculty_kt"].id,
+            "category_id": classifications["categories"]["Kinh tế đại cương"].id,
+            "description": "Các hiệp định thương mại",
+            "file_path": "/docs/trade.pdf",
+            "file_type": "application/pdf",
+            "file_size": 2048,
+            "is_important": False,
+            "tag_names": ["Thương mại"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+        # sv_an
+        {
+            "key": "an_doc1",
+            "title": "React JS cơ bản",
+            "owner_id": users["sv_an"].id,
+            "workspace_id": workspaces["group_web"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Giới thiệu React",
+            "file_path": "/docs/react.pdf",
+            "file_type": "application/pdf",
+            "file_size": 1536,
+            "is_important": True,
+            "tag_names": ["Web Development", "JavaScript"],
+            "versions": [{"version_no": 1, "note": "Draft"}, {"version_no": 2, "note": "Thêm hooks"}],
+            "notes": [{"user_id": users["sv_binh"].id, "note": "Cần viết thêm về state"}],
+            "share_to": [users["sv_binh"].id, users["sv_cuong"].id],
+        },
+        {
+            "key": "an_doc2",
+            "title": "Node.js REST API",
+            "owner_id": users["sv_an"].id,
+            "workspace_id": workspaces["group_web"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Xây dựng API với Express",
+            "file_path": "/docs/node_api.pdf",
+            "file_type": "application/pdf",
+            "file_size": 1024,
+            "is_important": False,
+            "tag_names": ["Web Development"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+        # sv_binh
+        {
+            "key": "binh_doc1",
+            "title": "Giới thiệu Machine Learning",
+            "owner_id": users["sv_binh"].id,
+            "workspace_id": workspaces["group_python"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Các khái niệm cơ bản ML",
+            "file_path": "/docs/ml_intro.pdf",
+            "file_type": "application/pdf",
+            "file_size": 2048,
+            "is_important": True,
+            "tag_names": ["Machine Learning"],
+            "versions": [{"version_no": 1, "note": "Sơ bộ"}],
+            "notes": [{"user_id": users["sv_an"].id, "note": "Thêm ví dụ về regression"}],
+            "share_to": [users["sv_an"].id],
+        },
+        {
+            "key": "binh_doc2",
+            "title": "Data Visualization with Matplotlib",
+            "owner_id": users["sv_binh"].id,
+            "workspace_id": workspaces["group_python"].id,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Hướng dẫn vẽ biểu đồ",
+            "file_path": "/docs/matplotlib.pdf",
+            "file_type": "application/pdf",
+            "file_size": 1024,
+            "is_important": False,
+            "tag_names": ["Data Visualization"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+        # sv_cuong
+        {
+            "key": "cuong_doc1",
+            "title": "Java Collections Framework",
+            "owner_id": users["sv_cuong"].id,
+            "workspace_id": None,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Tổng quan các Collections",
+            "file_path": "/docs/java_collections.pdf",
+            "file_type": "application/pdf",
+            "file_size": 1024,
+            "is_important": True,
+            "tag_names": ["Java"],
+            "versions": [{"version_no": 1, "note": "Lần đầu"}],
+            "notes": [{"user_id": users["sv_an"].id, "note": "Thêm ví dụ về Concurrent"}],
+            "share_to": [users["sv_an"].id],
+        },
+        {
+            "key": "cuong_doc2",
+            "title": "Spring Boot Microservices",
+            "owner_id": users["sv_cuong"].id,
+            "workspace_id": None,
+            "category_id": classifications["categories"]["Lập trình"].id,
+            "description": "Xây dựng microservices với Spring Boot",
+            "file_path": "/docs/spring_micro.pdf",
+            "file_type": "application/pdf",
+            "file_size": 2048,
+            "is_important": False,
+            "tag_names": ["Spring Boot"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+        # sv_dung
+        {
+            "key": "dung_doc1",
+            "title": "Phân tích tài chính doanh nghiệp",
+            "owner_id": users["sv_dung"].id,
+            "workspace_id": None,
+            "category_id": classifications["categories"]["Kinh tế đại cương"].id,
+            "description": "Các chỉ số tài chính",
+            "file_path": "/docs/fin_analysis.pdf",
+            "file_type": "application/pdf",
+            "file_size": 2048,
+            "is_important": True,
+            "tag_names": ["Tài chính"],
+            "versions": [{"version_no": 1, "note": "Bản nháp"}],
+            "notes": [{"user_id": users["gv_mai"].id, "note": "Cần bổ sung phân tích rủi ro"}],
+            "share_to": [users["gv_mai"].id],
+        },
+        {
+            "key": "dung_doc2",
+            "title": "Ngân hàng trung ương",
+            "owner_id": users["sv_dung"].id,
+            "workspace_id": None,
+            "category_id": classifications["categories"]["Kinh tế đại cương"].id,
+            "description": "Vai trò và chính sách",
+            "file_path": "/docs/central_bank.pdf",
+            "file_type": "application/pdf",
+            "file_size": 1536,
+            "is_important": False,
+            "tag_names": ["Ngân hàng"],
+            "versions": [],
+            "notes": [],
+            "share_to": [],
+        },
+    ]
+
+    new_docs = {}
+    for spec in doc_specs:
+        checksum = generate_checksum(spec["key"])  # key dùng để tạo checksum ổn định
+        lookup = {"checksum": checksum}
+        values = {
+            "owner_id": spec["owner_id"],
+            "workspace_id": spec.get("workspace_id"),
+            "category_id": spec["category_id"],
+            "title": spec["title"],
+            "description": spec["description"],
+            "file_path": spec["file_path"],
+            "file_type": spec["file_type"],
+            "file_size": spec["file_size"],
+            "is_important": spec["is_important"],
+            "is_deleted": False,
+            "deleted_at": None,
+            "trash_batch_id": None,
+        }
+        doc, created = await get_or_create(session, Document, lookup, values)
+        new_docs[spec["key"]] = doc
+        print(f"  {'INSERT' if created else 'SKIP'} document: {spec['title']} (user {spec['owner_id']})")
+
+        # Gán tag cho document
+        for tag_name in spec["tag_names"]:
+            key = (spec["owner_id"], tag_name)
+            if key in new_tags:
+                tag_id = new_tags[key].id
+                dt_created = await get_or_create_m2m(
+                    session,
+                    document_tags,
+                    {"document_id": doc.id, "tag_id": tag_id},
+                )
+                print(f"    {'INSERT' if dt_created else 'SKIP'} document_tag: {doc.title} <-> {tag_name}")
+
+        # Thêm version
+        for v_spec in spec.get("versions", []):
+            v_lookup = {"document_id": doc.id, "version_no": v_spec["version_no"]}
+            v_values = {
+                "file_path": f"/docs/versions/{spec['key']}_v{v_spec['version_no']}.pdf",
+                "checksum": generate_checksum(f"{spec['key']}_v{v_spec['version_no']}"),
+                "uploaded_by": v_spec.get("uploaded_by", spec["owner_id"]),
+                "note": v_spec.get("note", ""),
+            }
+            _, v_created = await get_or_create(session, DocumentVersion, v_lookup, v_values)
+            print(f"    {'INSERT' if v_created else 'SKIP'} version v{v_spec['version_no']} for {spec['title']}")
+
+        # Thêm note
+        for n_spec in spec.get("notes", []):
+            n_lookup = {
+                "document_id": doc.id,
+                "user_id": n_spec["user_id"],
+                "note": n_spec["note"],
+            }
+            _, n_created = await get_or_create(session, Note, n_lookup, {})
+            print(f"    {'INSERT' if n_created else 'SKIP'} note for {spec['title']} by user {n_spec['user_id']}")
+
+        # Thêm share
+        for to_user_id in spec.get("share_to", []):
+            s_lookup = {
+                "document_id": doc.id,
+                "source_document_id": doc.id,
+                "from_user_id": spec["owner_id"],
+                "to_user_id": to_user_id,
+            }
+            s_values = {"share_type": "personal_send"}
+            _, s_created = await get_or_create(session, DocumentShare, s_lookup, s_values)
+            print(f"    {'INSERT' if s_created else 'SKIP'} share to user {to_user_id} for {spec['title']}")
+
+        # Thêm favorite cho owner (tự động)
+        fav_lookup = {"user_id": spec["owner_id"], "document_id": doc.id}
+        _, fav_created = await get_or_create(session, Favorite, fav_lookup, {})
+        print(f"    {'INSERT' if fav_created else 'SKIP'} favorite for owner {spec['owner_id']}")
+
+    await session.commit()
+    print("9. Additional seeding completed.")
 
 # =========================================================
 # MAIN
@@ -936,6 +1441,8 @@ async def seed_database():
 
             classifications = await seed_classifications(session, users)
 
+            folders = await seed_folders(session, users, classifications)
+
             trash_batches = await seed_trash_batches(
                 session,
                 users,
@@ -956,6 +1463,8 @@ async def seed_database():
                 workspaces,
                 docs,
             )
+
+            await seed_additional_data(session, users, workspaces, classifications, trash_batches)
 
             print("=" * 70)
             print("DATABASE SEEDED SUCCESSFULLY (INCREMENTAL / IDEMPOTENT)!")

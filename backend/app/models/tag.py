@@ -22,3 +22,7 @@ class Tag(Base):
     parent: Mapped[Optional["Tag"]] = relationship("Tag", remote_side=[id], back_populates="sub_tags")
     sub_tags: Mapped[List["Tag"]] = relationship("Tag", back_populates="parent")
     documents: Mapped[List["Document"]] = relationship("Document", secondary="document_tags", back_populates="tags")
+    folder_tags: Mapped[List["FolderTag"]] = relationship("FolderTag", back_populates="tag")
+    folders: Mapped[List["Folder"]] = relationship(
+        "Folder", secondary="folder_tags", back_populates="tags", viewonly=True
+    )

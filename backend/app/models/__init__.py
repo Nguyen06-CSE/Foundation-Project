@@ -18,6 +18,8 @@ from .notification import Notification
 from .favorite import Favorite
 from .download_log import DownloadLog
 from .processing_job import ProcessingJob
+from .folder import Folder
+from .folder_tag import FolderTag
 
 __all__ = [
     "Base",
@@ -40,4 +42,6 @@ __all__ = [
     "Favorite",
     "DownloadLog",
     "ProcessingJob",
+    "Folder",
+    "FolderTag",
 ]
