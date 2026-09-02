@@ -57,7 +57,6 @@ async def _process_document_background(doc_id: int, file_path: str, mime_type: s
                 f"Background processing lỗi doc {doc_id}: {e}"
             )
 
-
 @router.post("/upload", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
 async def upload_document(
     background_tasks: BackgroundTasks,
@@ -65,6 +64,7 @@ async def upload_document(
     description: Optional[str] = Form(None),
     category_id: Optional[int] = Form(None),
     workspace_id: Optional[int] = Form(None),
+    tag_ids: list[int] = Form(default=[]), # <-- Khai báo default=[] để nhận list[int]
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -78,6 +78,7 @@ async def upload_document(
             description=description,
             category_id=category_id,
             workspace_id=workspace_id,
+            tag_ids=tag_ids, # Pass mảng tag_ids vào service
         )
     except ValueError as exc:
         if str(exc).startswith("duplicate_document:"):
@@ -86,7 +87,7 @@ async def upload_document(
 
     await db.commit()
 
-    # Query lại document kèm selectinload(Document.tags) để Pydantic serialize không bị lỗi
+    # Query lại document cùng quan hệ tags để trả về JSON chuẩn
     result = await db.execute(
         select(Document)
         .options(selectinload(Document.tags))

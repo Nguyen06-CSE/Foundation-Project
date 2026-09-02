@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.document import Document
 from app.models.document_version import DocumentVersion
 from app.models.download_log import DownloadLog
+from app.models.tag import Tag  # <-- Thêm dòng này
 from app.services.file_service import checksum_for_file, save_upload_file
-
 
 
 
@@ -22,7 +22,8 @@ async def create_document_from_upload(
     title: str, 
     description: str | None, 
     category_id: int | None, 
-    workspace_id: int | None = None, # Thêm tham số workspace_id
+    workspace_id: int | None = None,
+    tag_ids: list[int] | None = None,  # <-- Thêm tham số tag_ids
     content: str | None = None
 ):
     file_path = save_upload_file(upload, owner_id)
@@ -47,7 +48,7 @@ async def create_document_from_upload(
     document = Document(
         owner_id=owner_id,
         category_id=category_id,
-        workspace_id=workspace_id, # Gán workspace_id cho model
+        workspace_id=workspace_id,
         title=title,
         description=description,
         file_path=file_path,
@@ -56,10 +57,17 @@ async def create_document_from_upload(
         checksum=checksum,
         content=content,
     )
+
+    # Truy vấn các Tag hợp lệ và gắn vào quan hệ document.tags
+    if tag_ids:
+        tag_stmt = select(Tag).where(Tag.id.in_(tag_ids))
+        tag_result = await db.execute(tag_stmt)
+        tags = tag_result.scalars().all()
+        document.tags = list(tags)
+
     db.add(document)
     await db.flush()
     return document
-
 
 async def add_document_version(db: AsyncSession, *, document: Document, file_path: str, uploaded_by: int | None, note: str | None, checksum: str | None = None):
     result = await db.execute(
