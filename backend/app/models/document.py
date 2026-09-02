@@ -48,7 +48,7 @@ class Document(Base, TimestampMixin):
     category: Mapped[Optional["Category"]] = relationship("Category", back_populates="documents")
     source_document: Mapped[Optional["Document"]] = relationship("Document", remote_side=[id], back_populates="derived_documents")
     derived_documents: Mapped[List["Document"]] = relationship("Document", back_populates="source_document")
-    tags: Mapped[List["Tag"]] = relationship("Tag", secondary="document_tags", back_populates="documents")
+    tags: Mapped[List["Tag"]] = relationship("Tag", secondary="document_tags", back_populates="documents",lazy="selectin",)
     versions: Mapped[List["DocumentVersion"]] = relationship("DocumentVersion", back_populates="document")
     notes: Mapped[List["Note"]] = relationship("Note", back_populates="document")
     trash_batch: Mapped[Optional["TrashBatch"]] = relationship("TrashBatch", back_populates="documents")

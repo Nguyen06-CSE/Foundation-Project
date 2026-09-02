@@ -15,7 +15,10 @@ import { Button } from "@/components/ui/Button";
 import { FileIcon } from "@/components/shared/FileIcon";
 import { Tag } from "@/components/ui/Tag";
 import { cn } from "@/utils/cn";
-import { documents } from "@/mocks/documents";
+import { useQuery } from "@tanstack/react-query"
+import { documentService } from "@/services/documentService"
+import { formatSize } from "@/utils/formatSize"
+import { formatRelativeDate } from "@/utils/formatDate"
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -58,24 +61,44 @@ function StatItem({ label, value }: StatItemProps) {
 
 // ── Tab content ────────────────────────────────────────────────────────────────
 
-function TabDetail({ description }: { description: string }) {
+// Đã cập nhật tham số nhận vào là toàn bộ object doc
+function TabDetail({ doc }: { doc: any }) {
+  const thumbnailUrl = doc.thumbnail_path
+    ? `${import.meta.env.VITE_API_URL}/${doc.thumbnail_path}`
+    : null;
+
   return (
     <div className="space-y-6">
-      {/* Book cover preview */}
+      {/* Preview Thumbnail */}
       <div className="flex justify-center rounded-xl bg-gray-100 py-8">
-        <div className="flex h-60 w-44 flex-col items-center justify-center rounded-xl bg-gradient-to-b from-red-600 to-red-700 px-6 text-white shadow-lg">
-          <p className="mb-3 text-xs font-medium tracking-widest uppercase opacity-80">ĐẠI HỌC QUỐC GIA</p>
-          <p className="text-center text-base font-extrabold leading-tight uppercase tracking-wide">
-            CẤU TRÚC DỮ LIỆU &amp; GIẢI THUẬT
+        {thumbnailUrl ? (
+          <img
+            src={thumbnailUrl}
+            alt={doc.title}
+            className="max-h-72 rounded-lg shadow-lg object-contain"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        ) : (
+          <div className="flex h-60 w-44 flex-col items-center justify-center rounded-xl bg-gradient-to-b from-gray-400 to-gray-500 px-6 text-white shadow-lg">
+            <p className="text-center text-base font-bold">{doc.title}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Preview nội dung text từ DB */}
+      {doc.content && (
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">
+            Xem nhanh nội dung
+          </h3>
+          <p className="text-sm text-gray-600 leading-relaxed line-clamp-6 whitespace-pre-line">
+            {doc.content.slice(0, 500)}
+            {doc.content.length > 500 && "..."}
           </p>
-          <p className="mt-4 text-xs opacity-60">Tài liệu lưu hành nội bộ</p>
         </div>
-      </div>
-      {/* Description */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-900 mb-2">Mô tả tài liệu</h3>
-        <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
-      </div>
+      )}
     </div>
   );
 }
@@ -127,43 +150,84 @@ function TabActivity() {
 // ── Main component ─────────────────────────────────────────────────────────────
 
 export function DocumentDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabKey>("detail");
-  const [tags, setTags] = useState(["giáo trình", "CTDLGT", "Đại Học"]);
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState<TabKey>("detail")
+  const [tags, setTags] = useState<string[]>([])
 
-  // Find document by id, fallback to first
-  const rawDoc = documents.find((d) => d.id === id) ?? documents[0];
+  const { data: doc, isLoading, isError } = useQuery({
+    queryKey: ["document", id],
+    queryFn: () => documentService.getById(Number(id)),
+    enabled: !!id,
+  })
 
-  // Enrich with static detail fields
-  const doc = {
-    ...rawDoc,
-    description:
-      "Giáo trình cung cấp các kiến thức cơ bản về các cấu trúc dữ liệu cơ bản như Danh sách liên kết, Ngăn xếp, Hàng đợi, Cây nhị phân và các giải thuật tìm kiếm, sắp xếp kinh điển.",
-    pageCount: 326,
-    folder: "Giáo trình / Năm 2",
-    language: "Tiếng Việt",
-    fileTypeLabel:
-      rawDoc.fileType === "pdf"
-        ? "PDF Document"
-        : rawDoc.fileType === "docx" || rawDoc.fileType === "doc"
-        ? "Word Document"
-        : rawDoc.fileType === "pptx" || rawDoc.fileType === "ppt"
-        ? "PowerPoint"
-        : rawDoc.fileType === "zip"
-        ? "ZIP Archive"
-        : "Code File",
-    viewCount: 25,
-    downloadCount: 12,
-    shareCount: 5,
-    uploadedAt: "Hôm qua, 10:30",
-  };
+  // Sync tags từ API khi data load xong (nếu sau này có field tags)
+  // Hiện tại để tags rỗng, có thể mở rộng sau
 
-  const removeTag = (tag: string) => setTags((prev) => prev.filter((t) => t !== tag));
+  // ── Loading state ──
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="h-6 w-24 rounded bg-gray-200 animate-pulse" />
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+          <div className="h-96 rounded-xl bg-gray-200 animate-pulse" />
+          <div className="h-96 rounded-xl bg-gray-200 animate-pulse" />
+        </div>
+      </div>
+    )
+  }
+
+  // ── Error / not found ──
+  if (isError || !doc) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-4">
+        <p className="text-gray-500">Không tìm thấy tài liệu.</p>
+        <button
+          onClick={() => navigate(-1)}
+          className="text-sm text-primary-600 hover:underline"
+        >
+          ← Quay lại
+        </button>
+      </div>
+    )
+  }
+
+  // ── Map MIME type → label hiển thị ──
+  const FILE_TYPE_LABELS: Record<string, string> = {
+    "application/pdf": "PDF Document",
+    "application/msword": "Word Document",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "Word Document",
+    "application/vnd.ms-powerpoint": "PowerPoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "PowerPoint",
+    "image/jpeg": "Hình ảnh JPEG",
+    "image/png": "Hình ảnh PNG",
+    "text/plain": "Văn bản thuần",
+  }
+
+  // Map MIME → type string dùng cho FileIcon
+  const MIME_TO_ICON_TYPE: Record<string, string> = {
+    "application/pdf": "pdf",
+    "application/msword": "docx",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.ms-powerpoint": "pptx",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "image/jpeg": "image",
+    "image/png": "image",
+  }
+
+  const fileTypeLabel = FILE_TYPE_LABELS[doc.file_type ?? ""] ?? doc.file_type ?? "Không xác định"
+  const iconType = MIME_TO_ICON_TYPE[doc.file_type ?? ""] ?? "default"
+  const sizeLabel = formatSize(doc.file_size ?? 0)
+  const uploadedAt = formatRelativeDate(doc.created_at)
+  const fileDownloadUrl = doc.file_path
+    ? `${import.meta.env.VITE_API_URL}/${doc.file_path}`
+    : "#"
+
+  const removeTag = (tag: string) => setTags((prev) => prev.filter((t) => t !== tag))
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Back link */}
+      {/* Back */}
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors w-fit"
@@ -173,15 +237,15 @@ export function DocumentDetail() {
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
-        {/* ── Left column ────────────────────────────────────────────── */}
+        {/* ── Left column ── */}
         <Card className="flex flex-col gap-4">
           {/* Header */}
           <div className="flex items-start gap-4">
-            <FileIcon type={rawDoc.fileType} className="h-12 w-12 shrink-0" iconClassName="h-6 w-6" />
+            <FileIcon type={iconType} className="h-12 w-12 shrink-0" iconClassName="h-6 w-6" />
             <div className="min-w-0">
-              <h1 className="text-2xl font-bold text-gray-900 leading-snug">{rawDoc.title}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 leading-snug">{doc.title}</h1>
               <p className="text-sm text-gray-400 mt-1">
-                Dung lượng: {rawDoc.sizeLabel} &nbsp;•&nbsp; Ngày tải: {doc.uploadedAt}
+                Dung lượng: {sizeLabel} &nbsp;•&nbsp; Ngày tải: {uploadedAt}
               </p>
             </div>
           </div>
@@ -206,27 +270,30 @@ export function DocumentDetail() {
 
           {/* Tab content */}
           <div className="pt-1">
-            {activeTab === "detail" && <TabDetail description={doc.description} />}
-            {activeTab === "description" && <TabDescription description={doc.description} />}
+            {activeTab === "detail" && <TabDetail doc={doc} />}
+            {activeTab === "description" && (
+              <TabDescription description={doc.description ?? "Chưa có mô tả."} />
+            )}
             {activeTab === "note" && <TabNote />}
             {activeTab === "activity" && <TabActivity />}
           </div>
         </Card>
 
-        {/* ── Right column ────────────────────────────────────────────── */}
+        {/* ── Right column ── */}
         <div className="flex flex-col gap-4">
-          {/* File info card */}
           <Card>
             <h2 className="text-base font-semibold text-gray-900 mb-3">Thông tin tệp</h2>
             <div>
-              <InfoRow label="Tên tệp" value={rawDoc.title.length > 22 ? rawDoc.title.slice(0, 22) + "…" : rawDoc.title} />
-              <InfoRow label="Loại tệp" value={doc.fileTypeLabel} />
-              <InfoRow label="Số trang" value={`${doc.pageCount} trang`} />
-              <InfoRow label="Thư mục" value={doc.folder} />
-              <InfoRow label="Ngôn ngữ" value={doc.language} />
+              <InfoRow
+                label="Tên tệp"
+                value={doc.title.length > 22 ? doc.title.slice(0, 22) + "…" : doc.title}
+              />
+              <InfoRow label="Loại tệp" value={fileTypeLabel} />
+              <InfoRow label="Dung lượng" value={sizeLabel} />
+              <InfoRow label="Ngày tải lên" value={uploadedAt} />
             </div>
 
-            {/* Tags */}
+            {/* Tags — hiện tại để trống, mở rộng sau */}
             <div className="mt-4">
               <h3 className="text-sm font-medium text-gray-700 mb-2">Nhãn dán</h3>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -239,33 +306,29 @@ export function DocumentDetail() {
               </div>
             </div>
 
-            {/* Stats */}
+            {/* Stats — placeholder, mở rộng sau khi có API */}
             <div className="mt-5 flex justify-around border-t border-gray-100 pt-4">
-              <StatItem label="Lượt xem" value={doc.viewCount} />
+              <StatItem label="Lượt xem" value={0} />
               <div className="w-px bg-gray-100" />
-              <StatItem label="Tải xuống" value={doc.downloadCount} />
+              <StatItem label="Tải xuống" value={0} />
               <div className="w-px bg-gray-100" />
-              <StatItem label="Đã chia sẻ" value={doc.shareCount} />
+              <StatItem label="Đã chia sẻ" value={0} />
             </div>
           </Card>
 
-          {/* Actions card */}
           <Card className="flex flex-col gap-3">
-            <Button
-              variant="primary"
-              className="w-full py-3 h-auto text-base"
-              icon={<Download className="h-5 w-5" />}
-              onClick={() => console.log("Download")}
-            >
-              Tải xuống tài liệu
-            </Button>
+            <a href={fileDownloadUrl} download={doc.title} target="_blank" rel="noreferrer" className="w-full block">
+              <Button variant="primary" className="w-full py-3 h-auto text-base" icon={<Download className="h-5 w-5" />}>
+                Tải xuống tài liệu
+              </Button>
+            </a>
 
             <div className="flex flex-col mt-1">
               {[
-                { icon: Share2, label: "Chia sẻ tài liệu", danger: false },
-                { icon: Star, label: "Thêm vào yêu thích", danger: false },
-                { icon: FolderInput, label: "Di chuyển tệp", danger: false },
-                { icon: Edit2, label: "Đổi tên tệp", danger: false },
+                { icon: Share2, label: "Chia sẻ tài liệu" },
+                { icon: Star, label: "Thêm vào yêu thích" },
+                { icon: FolderInput, label: "Di chuyển tệp" },
+                { icon: Edit2, label: "Đổi tên tệp" },
               ].map(({ icon: Icon, label }) => (
                 <button
                   key={label}
@@ -290,5 +353,5 @@ export function DocumentDetail() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -3,8 +3,10 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field
-
 from app.schemas.tag import TagOut
+
+
+
 
 class DocumentBase(BaseModel):
     title: str = Field(min_length=1, max_length=255)
@@ -12,8 +14,10 @@ class DocumentBase(BaseModel):
     category_id: Optional[int] = None
     workspace_id: Optional[int] = None
 
+
 class DocumentCreate(DocumentBase):
     file_path: Optional[str] = None
+
 
 class DocumentUpdate(BaseModel):
     title: Optional[str] = Field(default=None, min_length=1, max_length=255)
@@ -22,6 +26,7 @@ class DocumentUpdate(BaseModel):
     workspace_id: Optional[int] = None
     is_important: Optional[bool] = None
 
+
 class DocumentOut(DocumentBase):
     id: int
     owner_id: int
@@ -29,6 +34,7 @@ class DocumentOut(DocumentBase):
     file_path: str
     file_type: Optional[str] = None
     file_size: Optional[int] = None
+    thumbnail_path: Optional[str] = None
     checksum: str
     content: Optional[str] = None
     # Đổi alias thành serialization_alias để Pydantic đọc doc.metadata_ từ ORM
@@ -40,9 +46,10 @@ class DocumentOut(DocumentBase):
     trash_batch_id: Optional[int] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
-    tags: list[TagOut] = []
+    tags: list[TagOut] = Field(default_factory=list)
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+
 
 class PaginatedDocuments(BaseModel):
     items: list[DocumentOut]

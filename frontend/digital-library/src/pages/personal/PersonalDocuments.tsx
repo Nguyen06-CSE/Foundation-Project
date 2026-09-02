@@ -27,12 +27,13 @@ import { tagService } from "@/services/tagService";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { cn } from "@/utils/cn";
-
+import { UploadModal } from "./components/UploadModal";
 
 import {
   CreateFolderModal,
   type FolderInitialData,
 } from "./components/CreateFolderModal";
+
 type TabKey = "all" | "document" | "image" | "pdf" | "other";
 
 const TABS: { key: TabKey; label: string }[] = [
@@ -181,7 +182,9 @@ export function PersonalDocuments() {
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
 
+  // States quản lý Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(
     null,
   );
@@ -262,54 +265,59 @@ export function PersonalDocuments() {
   };
 
   // Map dữ liệu tài liệu
-  const allDocCards = (docData?.items ?? []).map((doc) => ({
-    id: doc.id.toString(),
-    name: doc.title,
-    type: doc.file_type || "unknown",
-    updatedAt: formatRelativeDate(doc.created_at),
-    size: formatSize(doc.file_size || 0),
-    extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
-    owner: { name: "You", avatar: "" },
-    rawType: doc.file_type,
-    rawTags: (doc as any).tags || [],
-  }));
+// src/pages/personal/PersonalDocuments.tsx
 
-  // Thuật toán lọc kết hợp
-  const filteredDocCards = allDocCards.filter((doc) => {
-    if (
-      searchQuery &&
-      !doc.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ) {
-      return false;
-    }
-    if (selectedTagId !== null) {
-      const hasTag = doc.rawTags.some((t: any) => t.id === selectedTagId);
-      if (!hasTag) return false;
-    }
-    if (selectedFileType !== null) {
-      if (doc.rawType !== selectedFileType) return false;
-    }
-    if (activeTab !== "all") {
-      const ext = getNormalizedExtension(doc.extension || doc.type);
-      const isDoc = [
-        "doc",
-        "docx",
-        "xls",
-        "xlsx",
-        "ppt",
-        "pptx",
-        "txt",
-      ].includes(ext);
-      const isImg = ["png", "jpg", "jpeg", "gif", "svg", "webp"].includes(ext);
-      const isPdf = ext === "pdf";
+// Map dữ liệu tài liệu
+const allDocCards = (docData?.items ?? []).map((doc) => ({
+  id: doc.id.toString(),
+  name: doc.title,
+  type: doc.file_type || "unknown",
+  updatedAt: formatRelativeDate(doc.created_at),
+  size: formatSize(doc.file_size || 0),
+  extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
+  thumbnail_path: doc.thumbnail_path ?? null, // Đảm bảo không bị thiếu property trong TS
+  owner: { name: "You", avatar: "" },
+  rawType: doc.file_type,
+  tags: doc.tags || [], // Sửa rawTags -> tags để DocumentCard nhận đúng
+}));
 
-      if (activeTab === "document" && !isDoc) return false;
-      if (activeTab === "image" && !isImg) return false;
-      if (activeTab === "pdf" && !isPdf) return false;
-      if (activeTab === "other" && (isDoc || isImg || isPdf)) return false;
-    }
-    return true;
-  });
+// Thuật toán lọc kết hợp
+const filteredDocCards = allDocCards.filter((doc) => {
+  if (
+    searchQuery &&
+    !doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ) {
+    return false;
+  }
+  if (selectedTagId !== null) {
+    // Sửa doc.rawTags thành doc.tags
+    const hasTag = doc.tags.some((t: any) => t.id === selectedTagId);
+    if (!hasTag) return false;
+  }
+  if (selectedFileType !== null) {
+    if (doc.rawType !== selectedFileType) return false;
+  }
+  if (activeTab !== "all") {
+    const ext = getNormalizedExtension(doc.extension || doc.type);
+    const isDoc = [
+      "doc",
+      "docx",
+      "xls",
+      "xlsx",
+      "ppt",
+      "pptx",
+      "txt",
+    ].includes(ext);
+    const isImg = ["png", "jpg", "jpeg", "gif", "svg", "webp"].includes(ext);
+    const isPdf = ext === "pdf";
+
+    if (activeTab === "document" && !isDoc) return false;
+    if (activeTab === "image" && !isImg) return false;
+    if (activeTab === "pdf" && !isPdf) return false;
+    if (activeTab === "other" && (isDoc || isImg || isPdf)) return false;
+  }
+  return true;
+});
 
   return (
     <div className="flex flex-col gap-6">
@@ -345,7 +353,11 @@ export function PersonalDocuments() {
         </div>
 
         <div className="ml-auto">
-          <Button variant="primary" icon={<Upload className="h-4 w-4" />}>
+          <Button
+            variant="primary"
+            icon={<Upload className="h-4 w-4" />}
+            onClick={() => setIsUploadOpen(true)}
+          >
             + Tải lên
           </Button>
         </div>
@@ -416,15 +428,17 @@ export function PersonalDocuments() {
                   )}
                 >
                   <FolderCard
-                    id={folder.id}
-                    name={folder.name}
-                    count={folder.document_count}
-                    onClick={() => {
-                      setSelectedFolderId(folder.id);
-                      setPage(1);
-                    }}
-                    onAction={handleFolderAction}
-                  />
+  id={folder.id}
+  name={folder.name}
+  count={folder.document_count}
+  color={folder.color}
+  tags={folder.tags}
+  onClick={() => {
+    setSelectedFolderId(folder.id);
+    setPage(1);
+  }}
+  onAction={handleFolderAction}
+/>
                 </div>
               ))}
             </>
@@ -444,7 +458,7 @@ export function PersonalDocuments() {
 
       {/* All Documents section */}
       <section>
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Tài liệu</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Tải liệu</h2>
         <div
           className={cn(
             "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4",
@@ -470,7 +484,7 @@ export function PersonalDocuments() {
                 title="Không tìm thấy tài liệu"
                 description="Không có tài liệu nào phù hợp với bộ lọc hiện tại."
                 actionLabel="Tải lên ngay"
-                onAction={() => console.log("Upload")}
+                onAction={() => setIsUploadOpen(true)}
               />
             </div>
           )}
@@ -504,13 +518,15 @@ export function PersonalDocuments() {
         )}
       </section>
 
-      {/* Modal */}
+      {/* Modals */}
       {isModalOpen && (
         <CreateFolderModal
           onClose={handleCloseModal}
           initialData={editingFolder}
         />
       )}
+
+      {isUploadOpen && <UploadModal onClose={() => setIsUploadOpen(false)} />}
     </div>
   );
 }

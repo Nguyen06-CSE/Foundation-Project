@@ -25,4 +25,6 @@ export const documentService = {
 
   delete: (id: number) =>
     api.delete(`/documents/${id}`),
+
 }
+
