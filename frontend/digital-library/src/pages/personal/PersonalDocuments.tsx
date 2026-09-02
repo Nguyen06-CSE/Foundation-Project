@@ -1,7 +1,11 @@
 // src/pages/personal/PersonalDocuments.tsx
 
-import { useState, useRef, useEffect } from "react";
-
+// ==========================================
+// 1. IMPORTS
+// ==========================================
+import { useState, useRef, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   Search,
   Upload,
@@ -10,31 +14,36 @@ import {
   FileX,
   FolderOpen,
   Check,
-} from "lucide-react";
+} from "lucide-react"
 
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
-import { FolderCard } from "@/components/shared/FolderCard";
-import { type FolderAction } from "@/components/shared/FolderContextMenu";
-import { DocumentCard } from "@/components/shared/DocumentCard";
-import EmptyState from "@/components/shared/EmptyState";
-import { type DocumentAction } from "@/components/shared/DocumentContextMenu";
-import { folderService } from "@/services/folderService";
-import { documentService } from "@/services/documentService";
-import { tagService } from "@/services/tagService";
-import { formatSize } from "@/utils/formatSize";
-import { formatRelativeDate } from "@/utils/formatDate";
-import { cn } from "@/utils/cn";
-import { UploadModal } from "./components/UploadModal";
+// UI Components & Icons
+import { Input } from "@/components/ui/Input"
+import { Button } from "@/components/ui/Button"
+import { FolderCard } from "@/components/shared/FolderCard"
+import { type FolderAction } from "@/components/shared/FolderContextMenu"
+import { DocumentCard } from "@/components/shared/DocumentCard"
+import { type DocumentAction } from "@/components/shared/DocumentContextMenu"
+import EmptyState from "@/components/shared/EmptyState"
 
+// Modals
+import { UploadModal } from "./components/UploadModal"
 import {
   CreateFolderModal,
   type FolderInitialData,
-} from "./components/CreateFolderModal";
+} from "./components/CreateFolderModal"
 
-type TabKey = "all" | "document" | "image" | "pdf" | "other";
+// Services & Utils
+import { folderService } from "@/services/folderService"
+import { documentService } from "@/services/documentService"
+import { tagService } from "@/services/tagService"
+import { formatSize } from "@/utils/formatSize"
+import { formatRelativeDate } from "@/utils/formatDate"
+import { cn } from "@/utils/cn"
+
+// ==========================================
+// 2. TYPES & CONSTANTS
+// ==========================================
+type TabKey = "all" | "document" | "image" | "pdf" | "other"
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "Tất cả" },
@@ -42,16 +51,52 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "image", label: "Hình ảnh" },
   { key: "pdf", label: "PDF" },
   { key: "other", label: "Khác" },
-];
+]
 
 // ==========================================
-// 1. COMPONENT DROPDOWN ĐỘNG (ĐẶT Ở NGOÀI)
+// 3. HELPER FUNCTIONS
+// ==========================================
+const getNormalizedExtension = (type?: string | null) => {
+  if (!type) return ""
+  let cleanType = type.toLowerCase().trim()
+  if (cleanType.startsWith(".")) cleanType = cleanType.substring(1)
+  
+  const mimeMap: Record<string, string> = {
+    "application/pdf": "pdf",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.ms-excel": "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    "application/vnd.ms-powerpoint": "ppt",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "application/zip": "zip",
+    "application/x-zip-compressed": "zip",
+  }
+  return mimeMap[cleanType] || cleanType.split("/").pop() || cleanType
+}
+
+const getFileExtension = (
+  filePath?: string,
+  fileType?: string,
+  title?: string
+): string => {
+  if (filePath && filePath.includes("."))
+    return filePath.split(".").pop()?.toLowerCase() || ""
+  if (title && title.includes("."))
+    return title.split(".").pop()?.toLowerCase() || ""
+  return fileType || ""
+}
+
+// ==========================================
+// 4. SUB-COMPONENTS
 // ==========================================
 interface FilterDropdownProps {
-  label: string;
-  options: { value: string | number; label: string }[];
-  selectedValue: string | number | null;
-  onChange: (value: string | number | null) => void;
+  label: string
+  options: { value: string | number; label: string }[]
+  selectedValue: string | number | null
+  onChange: (value: string | number | null) => void
 }
 
 function DynamicFilterDropdown({
@@ -60,19 +105,20 @@ function DynamicFilterDropdown({
   selectedValue,
   onChange,
 }: FilterDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node))
-        setIsOpen(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
-  const selectedOption = options.find((o) => o.value === selectedValue);
+  const selectedOption = options.find((o) => o.value === selectedValue)
 
   return (
     <div className="relative" ref={ref}>
@@ -82,7 +128,7 @@ function DynamicFilterDropdown({
           "inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600",
           selectedValue !== null
             ? "border-primary-500 bg-primary-50 text-primary-700"
-            : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50",
+            : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
         )}
       >
         {selectedOption ? `${label}: ${selectedOption.label}` : label}
@@ -90,7 +136,7 @@ function DynamicFilterDropdown({
           className={cn(
             "h-3.5 w-3.5 transition-transform",
             isOpen && "rotate-180",
-            selectedValue !== null ? "text-primary-600" : "text-gray-400",
+            selectedValue !== null ? "text-primary-600" : "text-gray-400"
           )}
         />
       </button>
@@ -99,8 +145,8 @@ function DynamicFilterDropdown({
         <div className="absolute left-0 top-full z-50 mt-1 max-h-60 w-48 overflow-y-auto rounded-lg border border-gray-100 bg-white py-1 shadow-lg custom-scrollbar animate-in fade-in zoom-in-95">
           <button
             onClick={() => {
-              onChange(null);
-              setIsOpen(false);
+              onChange(null)
+              setIsOpen(false)
             }}
             className="flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
           >
@@ -118,8 +164,8 @@ function DynamicFilterDropdown({
             <button
               key={opt.value}
               onClick={() => {
-                onChange(selectedValue === opt.value ? null : opt.value);
-                setIsOpen(false);
+                onChange(selectedValue === opt.value ? null : opt.value)
+                setIsOpen(false)
               }}
               className="flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
@@ -132,86 +178,71 @@ function DynamicFilterDropdown({
         </div>
       )}
     </div>
-  );
+  )
+}
+
+function CardSkeleton({ variant }: { variant: "folder" | "document" }) {
+  if (variant === "folder") {
+    return (
+      <div className="flex min-h-[64px] items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="h-10 w-10 rounded-lg bg-gray-200 animate-pulse" />
+        <div className="flex-1 space-y-2">
+          <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
+          <div className="h-3 w-16 rounded bg-gray-200 animate-pulse" />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="aspect-[1/0.82] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="h-[60%] bg-gray-200 animate-pulse" />
+      <div className="space-y-2 p-3">
+        <div className="h-4 w-full rounded bg-gray-200 animate-pulse" />
+        <div className="h-3 w-2/3 rounded bg-gray-200 animate-pulse" />
+      </div>
+    </div>
+  )
 }
 
 // ==========================================
-// CÁC HÀM HỖ TRỢ CHUẨN HÓA ĐỊNH DẠNG FILE
-// ==========================================
-const getNormalizedExtension = (type?: string | null) => {
-  if (!type) return "";
-  let cleanType = type.toLowerCase().trim();
-  if (cleanType.startsWith(".")) cleanType = cleanType.substring(1);
-  const mimeMap: Record<string, string> = {
-    "application/pdf": "pdf",
-    "application/msword": "doc",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-      "docx",
-    "application/vnd.ms-excel": "xls",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
-    "application/vnd.ms-powerpoint": "ppt",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-      "pptx",
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "application/zip": "zip",
-    "application/x-zip-compressed": "zip",
-  };
-  return mimeMap[cleanType] || cleanType.split("/").pop() || cleanType;
-};
-
-const getFileExtension = (
-  filePath?: string,
-  fileType?: string,
-  title?: string,
-): string => {
-  if (filePath && filePath.includes("."))
-    return filePath.split(".").pop()?.toLowerCase() || "";
-  if (title && title.includes("."))
-    return title.split(".").pop()?.toLowerCase() || "";
-  return fileType || "";
-};
-
-// ==========================================
-// COMPONENT CHÍNH
+// 5. MAIN COMPONENT
 // ==========================================
 export function PersonalDocuments() {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabKey>("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
-  const [page, setPage] = useState(1);
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  // States quản lý Modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(
-    null,
-  );
+  // State điều hướng & tìm kiếm
+  const [activeTab, setActiveTab] = useState<TabKey>("all")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null)
+  const [page, setPage] = useState(1)
 
-  // States bộ lọc động
-  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
-  const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
+  // State bộ lọc động
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(null)
+  const [selectedFileType, setSelectedFileType] = useState<string | null>(null)
 
-  // Fetch Folders
+  // State quản lý Modals
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isUploadOpen, setIsUploadOpen] = useState(false)
+  const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(null)
+
+  // --- QUERIES ---
   const { data: folders, isLoading: foldersLoading } = useQuery({
     queryKey: ["folders"],
     queryFn: folderService.getAll,
-  });
+  })
 
-  // Fetch Tags cho bộ lọc
   const { data: tags = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: tagService.getAll,
-  });
+  })
 
-  // Fetch File Types cho bộ lọc
   const { data: fileTypes = [] } = useQuery({
     queryKey: ["document-file-types"],
     queryFn: documentService.getFileTypes,
-  });
+  })
 
-  // Fetch Documents
   const {
     data: docData,
     isLoading: docsLoading,
@@ -225,12 +256,21 @@ export function PersonalDocuments() {
         page_size: 20,
       }),
     placeholderData: (prev) => prev,
-  });
+  })
 
+  // --- MUTATIONS ---
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => documentService.delete(Number(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] })
+    },
+  })
+
+  // --- ACTION HANDLERS ---
   const handleFolderAction = async (action: FolderAction, folderId: number) => {
     if (action === "edit") {
       try {
-        const folderDetail = await folderService.getById(folderId);
+        const folderDetail = await folderService.getById(folderId)
         setEditingFolder({
           id: folderDetail.id,
           name: folderDetail.name,
@@ -239,89 +279,90 @@ export function PersonalDocuments() {
             folderDetail.tags?.map((t: any) => t.id) ||
             folderDetail.tag_ids ||
             [],
-        });
-        setIsModalOpen(true);
+        })
+        setIsModalOpen(true)
       } catch (error) {
-        console.error("Lỗi khi lấy chi tiết thư mục:", error);
+        console.error("Lỗi khi lấy chi tiết thư mục:", error)
       }
     } else if (action === "share") {
-      console.log("Chia sẻ folder:", folderId);
+      console.log("Chia sẻ folder:", folderId)
     } else if (action === "delete") {
-      console.log("Xóa folder:", folderId);
+      console.log("Xóa folder:", folderId)
     }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingFolder(null);
-  };
+  }
 
   const handleDocumentAction = (action: DocumentAction, documentId: string) => {
     if (action === "view") {
-      navigate(`/ca-nhan/tai-lieu/${documentId}`);
+      navigate(`/ca-nhan/tai-lieu/${documentId}`)
+    } else if (action === "delete") {
+      if (
+        window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")
+      ) {
+        deleteMutation.mutate(documentId)
+      }
     } else {
-      console.log("Action:", action, "on document:", documentId);
+      console.log("Action:", action, "on document:", documentId)
     }
-  };
-
-  // Map dữ liệu tài liệu
-// src/pages/personal/PersonalDocuments.tsx
-
-// Map dữ liệu tài liệu
-const allDocCards = (docData?.items ?? []).map((doc) => ({
-  id: doc.id.toString(),
-  name: doc.title,
-  type: doc.file_type || "unknown",
-  updatedAt: formatRelativeDate(doc.created_at),
-  size: formatSize(doc.file_size || 0),
-  extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
-  thumbnail_path: doc.thumbnail_path ?? null, // Đảm bảo không bị thiếu property trong TS
-  owner: { name: "You", avatar: "" },
-  rawType: doc.file_type,
-  tags: doc.tags || [], // Sửa rawTags -> tags để DocumentCard nhận đúng
-}));
-
-// Thuật toán lọc kết hợp
-const filteredDocCards = allDocCards.filter((doc) => {
-  if (
-    searchQuery &&
-    !doc.name.toLowerCase().includes(searchQuery.toLowerCase())
-  ) {
-    return false;
   }
-  if (selectedTagId !== null) {
-    // Sửa doc.rawTags thành doc.tags
-    const hasTag = doc.tags.some((t: any) => t.id === selectedTagId);
-    if (!hasTag) return false;
-  }
-  if (selectedFileType !== null) {
-    if (doc.rawType !== selectedFileType) return false;
-  }
-  if (activeTab !== "all") {
-    const ext = getNormalizedExtension(doc.extension || doc.type);
-    const isDoc = [
-      "doc",
-      "docx",
-      "xls",
-      "xlsx",
-      "ppt",
-      "pptx",
-      "txt",
-    ].includes(ext);
-    const isImg = ["png", "jpg", "jpeg", "gif", "svg", "webp"].includes(ext);
-    const isPdf = ext === "pdf";
 
-    if (activeTab === "document" && !isDoc) return false;
-    if (activeTab === "image" && !isImg) return false;
-    if (activeTab === "pdf" && !isPdf) return false;
-    if (activeTab === "other" && (isDoc || isImg || isPdf)) return false;
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setEditingFolder(null)
   }
-  return true;
-});
+
+  // --- DATA PROCESSING & FILTERING ---
+  const allDocCards = (docData?.items ?? []).map((doc) => ({
+    id: doc.id.toString(),
+    name: doc.title,
+    type: doc.file_type || "unknown",
+    updatedAt: formatRelativeDate(doc.created_at),
+    size: formatSize(doc.file_size || 0),
+    extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
+    thumbnail_path: doc.thumbnail_path ?? null,
+    owner: { name: "You", avatar: "" },
+    rawType: doc.file_type,
+    tags: doc.tags || [],
+  }))
+
+  const filteredDocCards = allDocCards.filter((doc) => {
+    if (
+      searchQuery &&
+      !doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
+      return false
+    }
+    if (selectedTagId !== null) {
+      const hasTag = doc.tags.some((t: any) => t.id === selectedTagId)
+      if (!hasTag) return false
+    }
+    if (selectedFileType !== null) {
+      if (doc.rawType !== selectedFileType) return false
+    }
+    if (activeTab !== "all") {
+      const ext = getNormalizedExtension(doc.extension || doc.type)
+      const isDoc = [
+        "doc",
+        "docx",
+        "xls",
+        "xlsx",
+        "ppt",
+        "pptx",
+        "txt",
+      ].includes(ext)
+      const isImg = ["png", "jpg", "jpeg", "gif", "svg", "webp"].includes(ext)
+      const isPdf = ext === "pdf"
+
+      if (activeTab === "document" && !isDoc) return false
+      if (activeTab === "image" && !isImg) return false
+      if (activeTab === "pdf" && !isPdf) return false
+      if (activeTab === "other" && (isDoc || isImg || isPdf)) return false
+    }
+    return true
+  })
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Filter bar */}
+      {/* Search & Filter Bar */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="min-w-[240px] flex-1">
           <Input
@@ -332,7 +373,6 @@ const filteredDocCards = allDocCards.filter((doc) => {
           />
         </div>
 
-        {/* Dropdowns lọc động */}
         <div className="flex flex-wrap items-center gap-2">
           <DynamicFilterDropdown
             label="Nhãn dán"
@@ -363,7 +403,7 @@ const filteredDocCards = allDocCards.filter((doc) => {
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs Filter */}
       <div className="flex items-center gap-6 border-b border-gray-200">
         {TABS.map((tab) => (
           <button
@@ -373,7 +413,7 @@ const filteredDocCards = allDocCards.filter((doc) => {
               "pb-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600",
               activeTab === tab.key
                 ? "border-b-2 border-primary-600 text-primary-600 font-semibold"
-                : "border-b-2 border-transparent text-gray-600 hover:text-gray-900",
+                : "border-b-2 border-transparent text-gray-600 hover:text-gray-900"
             )}
           >
             {tab.label}
@@ -381,7 +421,7 @@ const filteredDocCards = allDocCards.filter((doc) => {
         ))}
       </div>
 
-      {/* Folders section */}
+      {/* Folders Section */}
       <section>
         <h2 className="text-sm font-semibold text-gray-700 mb-3">
           Thư mục cá nhân
@@ -398,11 +438,11 @@ const filteredDocCards = allDocCards.filter((doc) => {
                   "cursor-pointer rounded-xl border p-4 hover:border-primary-300 transition-colors bg-white",
                   selectedFolderId === null
                     ? "border-primary-500 shadow-sm"
-                    : "border-gray-200",
+                    : "border-gray-200"
                 )}
                 onClick={() => {
-                  setSelectedFolderId(null);
-                  setPage(1);
+                  setSelectedFolderId(null)
+                  setPage(1)
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -424,21 +464,21 @@ const filteredDocCards = allDocCards.filter((doc) => {
                     "rounded-xl border transition-colors bg-white",
                     selectedFolderId === folder.id
                       ? "border-primary-500 shadow-sm"
-                      : "border-gray-200",
+                      : "border-gray-200"
                   )}
                 >
                   <FolderCard
-  id={folder.id}
-  name={folder.name}
-  count={folder.document_count}
-  color={folder.color}
-  tags={folder.tags}
-  onClick={() => {
-    setSelectedFolderId(folder.id);
-    setPage(1);
-  }}
-  onAction={handleFolderAction}
-/>
+                    id={folder.id}
+                    name={folder.name}
+                    count={folder.document_count}
+                    color={folder.color}
+                    tags={folder.tags}
+                    onClick={() => {
+                      setSelectedFolderId(folder.id)
+                      setPage(1)
+                    }}
+                    onAction={handleFolderAction}
+                  />
                 </div>
               ))}
             </>
@@ -446,8 +486,8 @@ const filteredDocCards = allDocCards.filter((doc) => {
 
           <button
             onClick={() => {
-              setEditingFolder(null);
-              setIsModalOpen(true);
+              setEditingFolder(null)
+              setIsModalOpen(true)
             }}
             className="flex min-h-[64px] items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-5 text-sm font-medium text-gray-400 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50 transition-all duration-150"
           >
@@ -456,13 +496,13 @@ const filteredDocCards = allDocCards.filter((doc) => {
         </div>
       </section>
 
-      {/* All Documents section */}
+      {/* Documents Grid Section */}
       <section>
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Tải liệu</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Tài liệu</h2>
         <div
           className={cn(
             "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4",
-            isFetching && "opacity-60 pointer-events-none",
+            isFetching && "opacity-60 pointer-events-none"
           )}
         >
           {docsLoading ? (
@@ -490,6 +530,7 @@ const filteredDocCards = allDocCards.filter((doc) => {
           )}
         </div>
 
+        {/* Pagination */}
         {docData && docData.total_pages > 1 && (
           <div className="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm text-gray-600">
             <span>
@@ -528,33 +569,5 @@ const filteredDocCards = allDocCards.filter((doc) => {
 
       {isUploadOpen && <UploadModal onClose={() => setIsUploadOpen(false)} />}
     </div>
-  );
-}
-
-interface CardSkeletonProps {
-  variant: "folder" | "document";
-}
-
-function CardSkeleton({ variant }: CardSkeletonProps) {
-  if (variant === "folder") {
-    return (
-      <div className="flex min-h-[64px] items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-        <div className="h-10 w-10 rounded-lg bg-gray-200 animate-pulse" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
-          <div className="h-3 w-16 rounded bg-gray-200 animate-pulse" />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="aspect-[1/0.82] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-      <div className="h-[60%] bg-gray-200 animate-pulse" />
-      <div className="space-y-2 p-3">
-        <div className="h-4 w-full rounded bg-gray-200 animate-pulse" />
-        <div className="h-3 w-2/3 rounded bg-gray-200 animate-pulse" />
-      </div>
-    </div>
-  );
+  )
 }

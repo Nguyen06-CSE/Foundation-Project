@@ -1,4 +1,4 @@
-// DocumentContextMenu.tsx
+// frontend/digital-library/src/components/shared/DocumentContextMenu.tsx
 import { Dropdown } from "@/components/ui/Dropdown";
 import { 
   Eye, 
