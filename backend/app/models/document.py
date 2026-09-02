@@ -30,6 +30,7 @@ class Document(Base, TimestampMixin):
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text)
     file_path: Mapped[str] = mapped_column(String(1024), nullable=False)
+    thumbnail_path: Mapped[Optional[str]] = mapped_column(String(1024))
     file_type: Mapped[Optional[str]] = mapped_column(String(50))
     file_size: Mapped[Optional[int]] = mapped_column(BigInteger)
     checksum: Mapped[str] = mapped_column(String(64), nullable=False)
