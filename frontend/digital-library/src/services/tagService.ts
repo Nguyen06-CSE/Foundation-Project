@@ -1,7 +1,28 @@
-import api from '@/services/api'
-import type { Tag } from '@/types/document'
+// src/services/tagService.ts
+
+import api from "./api"
+
+export interface Tag {
+  id: number
+  name: string
+  color?: string
+}
+
+export interface CreateTagRequest {
+  name: string
+  color: string
+}
 
 export const tagService = {
-  getAll: () => api.get<Tag[]>('/tags/').then(r => r.data),
-  create: (payload: { name: string, owner_id?: number }) => api.post<Tag>('/tags/', payload).then(r => r.data)
+  async getAll(): Promise<Tag[]> {
+    const response = await api.get("/tags")
+
+    return response.data
+  },
+
+  async create(data: CreateTagRequest): Promise<Tag> {
+    const response = await api.post("/tags", data)
+
+    return response.data
+  },
 }

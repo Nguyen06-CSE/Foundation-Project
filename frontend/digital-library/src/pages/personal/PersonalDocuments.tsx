@@ -227,6 +227,11 @@ export function PersonalDocuments() {
   const [isUploadOpen, setIsUploadOpen] = useState(false)
   const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(null)
 
+  // State đổi tên tài liệu (Đặt đúng vị trí trong component)
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+  const [renamingDoc, setRenamingDoc] = useState<{ id: string; title: string } | null>(null)
+  const [newDocumentTitle, setNewDocumentTitle] = useState("")
+
   // --- QUERIES ---
   const { data: folders, isLoading: foldersLoading } = useQuery({
     queryKey: ["folders"],
@@ -266,6 +271,19 @@ export function PersonalDocuments() {
     },
   })
 
+const renameDocumentMutation = useMutation({
+    mutationFn: ({ id, title }: { id: number | string; title: string }) =>
+      documentService.update(Number(id), { title }), // Thêm Number() ở đây
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] })
+      setIsRenameModalOpen(false)
+      setRenamingDoc(null)
+    },
+    onError: (error) => {
+      console.error("Lỗi đổi tên tài liệu:", error)
+    },
+  })
+
   // --- ACTION HANDLERS ---
   const handleFolderAction = async (action: FolderAction, folderId: number) => {
     if (action === "edit") {
@@ -291,13 +309,19 @@ export function PersonalDocuments() {
     }
   }
 
+  // Gộp đầy đủ các action của Document (view, rename, delete) vào 1 hàm duy nhất
   const handleDocumentAction = (action: DocumentAction, documentId: string) => {
     if (action === "view") {
       navigate(`/ca-nhan/tai-lieu/${documentId}`)
+    } else if (action === "rename") {
+      const docToRename = docData?.items.find((d) => d.id.toString() === documentId)
+      if (docToRename) {
+        setRenamingDoc({ id: docToRename.id.toString(), title: docToRename.title })
+        setNewDocumentTitle(docToRename.title)
+        setIsRenameModalOpen(true)
+      }
     } else if (action === "delete") {
-      if (
-        window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")
-      ) {
+      if (window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")) {
         deleteMutation.mutate(documentId)
       }
     } else {
@@ -565,6 +589,50 @@ export function PersonalDocuments() {
           onClose={handleCloseModal}
           initialData={editingFolder}
         />
+      )}
+
+      {/* Modal Đổi tên tài liệu */}
+      {isRenameModalOpen && renamingDoc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Đổi tên tài liệu</h3>
+            
+            <input
+              type="text"
+              value={newDocumentTitle}
+              onChange={(e) => setNewDocumentTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && newDocumentTitle.trim()) {
+                  renameDocumentMutation.mutate({ id: renamingDoc.id, title: newDocumentTitle.trim() });
+                }
+                if (e.key === "Escape") setIsRenameModalOpen(false);
+              }}
+              autoFocus
+              placeholder="Nhập tên mới..."
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 mb-5"
+            />
+
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsRenameModalOpen(false)}
+              >
+                Hủy
+              </Button>
+              <Button
+                variant="primary"
+                disabled={renameDocumentMutation.isPending || !newDocumentTitle.trim()}
+                onClick={() => {
+                  if (newDocumentTitle.trim()) {
+                    renameDocumentMutation.mutate({ id: renamingDoc.id, title: newDocumentTitle.trim() });
+                  }
+                }}
+              >
+                {renameDocumentMutation.isPending ? "Đang lưu..." : "Lưu"}
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
 
       {isUploadOpen && <UploadModal onClose={() => setIsUploadOpen(false)} />}

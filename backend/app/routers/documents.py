@@ -24,11 +24,12 @@ from app.core.dependencies import get_current_user
 from app.models.document import Document
 from app.models.folder import Folder
 from app.models.user import User
-from app.schemas.document import DocumentOut, DocumentUpdate, PaginatedDocuments
+from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
 from app.schemas.tag import TagOut
 from app.services.document_service import create_document_from_upload
 from app.services.file_processor import create_thumbnail, extract_text
 from app.services.folder_service import get_documents_by_folder
+from app.models.tag import Tag
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -240,6 +241,67 @@ async def update_document(
     await db.refresh(document)
     return document
 
+@router.patch("/{document_id}/tags", response_model=DocumentOut)
+async def update_document_tags(
+    document_id: int,
+    payload: DocumentTagsUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+        )
+    )
+
+    document = result.scalar_one_or_none()
+
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Không tìm thấy tài liệu"
+        )
+
+    # Loại ID trùng
+    tag_ids = list(set(payload.tag_ids))
+
+    # Không có tag -> xóa toàn bộ tag
+    if not tag_ids:
+        document.tags = []
+
+    else:
+        result = await db.execute(
+            select(Tag).where(
+                Tag.id.in_(tag_ids)
+            )
+        )
+
+        tags = result.scalars().all()
+
+        # Kiểm tra tất cả tag có tồn tại
+        found_tag_ids = {tag.id for tag in tags}
+
+        missing_tag_ids = [
+            tag_id
+            for tag_id in tag_ids
+            if tag_id not in found_tag_ids
+        ]
+
+        if missing_tag_ids:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Không tìm thấy tag: {missing_tag_ids}"
+            )
+
+        document.tags = tags
+
+    await db.commit()
+    await db.refresh(document)
+
+    return document
+
 
 @router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def soft_delete_document(
@@ -263,6 +325,50 @@ async def soft_delete_document(
     await db.commit()
 
 
+@router.delete("/{document_id}/tags/{tag_id}", response_model=DocumentOut)
+async def remove_document_tag(
+    document_id: int,
+    tag_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Xóa một tag cụ thể khỏi tài liệu
+    """
+    # 1. Truy vấn document và load sẵn danh sách tags (selectinload)
+    result = await db.execute(
+        select(Document)
+        .options(selectinload(Document.tags))
+        .where(
+            Document.id == document_id,
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
 
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Không tìm thấy tài liệu"
+        )
+
+    # 2. Kiểm tra xem tag_id có nằm trong danh sách tags của document không
+    tag_to_remove = next((tag for tag in document.tags if tag.id == tag_id), None)
+
+    if not tag_to_remove:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nhãn dán không tồn tại trong tài liệu này"
+        )
+
+    # 3. Xóa tag khỏi danh sách và commit
+    document.tags.remove(tag_to_remove)
+    
+    await db.commit()
+    await db.refresh(document)
+
+    # Trả về document đã được cập nhật danh sách tags mới
+    return document
 
     

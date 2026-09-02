@@ -26,6 +26,8 @@ class DocumentUpdate(BaseModel):
     workspace_id: Optional[int] = None
     is_important: Optional[bool] = None
 
+class DocumentTagsUpdate(BaseModel):
+    tag_ids: list[int] = Field(default_factory=list)
 
 class DocumentOut(DocumentBase):
     id: int

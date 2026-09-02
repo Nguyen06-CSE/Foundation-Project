@@ -4,27 +4,56 @@ import api from '@/services/api'
 import type { PaginatedDocuments, Document } from '@/types/document'
 
 export const documentService = {
-  getAll: (params?: { folder_id?: number; page?: number; page_size?: number }) =>
-    api.get<PaginatedDocuments>('/documents/', { params }).then(r => r.data),
+  getAll: (params?: {
+    folder_id?: number
+    page?: number
+    page_size?: number
+  }) =>
+    api.get<PaginatedDocuments>('/documents/', { params })
+      .then(r => r.data),
 
   getFileTypes: async (): Promise<string[]> => {
-    const response = await api.get<string[]>("/documents/file-types");
-    return response.data;
+    const response = await api.get<string[]>("/documents/file-types")
+    return response.data
   },
 
   getById: (id: number) =>
-    api.get<Document>(`/documents/${id}`).then(r => r.data),
+    api.get<Document>(`/documents/${id}`)
+      .then(r => r.data),
 
   upload: (formData: FormData) =>
     api.post<Document>('/documents/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     }).then(r => r.data),
 
   update: (id: number, payload: Partial<Document>) =>
-    api.patch<Document>(`/documents/${id}`, payload).then(r => r.data),
+    api.patch<Document>(
+      `/documents/${id}`,
+      payload
+    ).then(r => r.data),
+
+  updateTags: (
+    documentId: number,
+    tagIds: number[]
+  ) =>
+    api.patch<Document>(
+      `/documents/${documentId}/tags`,
+      {
+        tag_ids: tagIds,
+      }
+    ).then(r => r.data),
+
+  // XÓA MỘT TAG KHỎI DOCUMENT
+  removeTag: (
+    documentId: number,
+    tagId: number
+  ) =>
+    api.delete<Document>(
+      `/documents/${documentId}/tags/${tagId}`
+    ).then(r => r.data),
 
   delete: (id: number) =>
     api.delete(`/documents/${id}`),
-
 }
-
