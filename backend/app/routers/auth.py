@@ -1,4 +1,5 @@
-# app/routers/auth.py
+# backend/app/routers/auth.py
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,7 +8,13 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import User
-from app.schemas.auth import Token, UserInfo, UserLogin, UserRegister
+from app.schemas.auth import (
+    Token,
+    UserInfo,
+    UserLogin,
+    UserRegister,
+    get_login_payload,
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -44,7 +51,7 @@ async def register(payload: UserRegister, db: AsyncSession = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 async def login(
-    payload: UserLogin,
+    payload: UserLogin = Depends(get_login_payload),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(

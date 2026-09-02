@@ -1,3 +1,5 @@
+// frontend/digital-library/src/pages/auth/LoginPage.tsx
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, User, EyeOff, Eye, LogIn, AlertCircle } from "lucide-react";
