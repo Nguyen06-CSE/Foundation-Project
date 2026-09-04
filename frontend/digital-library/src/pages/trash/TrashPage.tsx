@@ -23,6 +23,13 @@ import { trashService } from "@/services/trashService";
 import { formatSize } from "@/utils/formatSize";
 import { cn } from "@/utils/cn";
 
+const getTrashSourceLabel = (source: TrashBatch["source"], groupName?: string | null) => {
+  if (source === "group_orphaned") {
+    return groupName ? `Từ nhóm ${groupName}` : "Từ nhóm đã giải tán";
+  }
+  return "Kho cá nhân";
+};
+
 // ==========================================
 // 2. TYPES
 // ==========================================
@@ -31,6 +38,8 @@ interface TrashDocument {
   name: string;
   type: string;
   size: string;
+  source: "personal" | "group_orphaned" | string;
+  groupName?: string | null;
 }
 
 interface TrashBatch {
@@ -39,6 +48,8 @@ interface TrashBatch {
   deletedAtTimestamp: number;
   documentCount: number;
   totalSize: string;
+  source: "personal" | "group_orphaned" | string;
+  groupName?: string | null;
   expiresAt: string;
   remainingDays: number;
   documents: TrashDocument[];
@@ -95,6 +106,8 @@ export default function TrashPage() {
           deletedAtTimestamp: deletedAtDate.getTime(),
           documentCount: docs.length,
           totalSize: formatSize(totalBytes),
+          source: firstDoc.trash_source ?? "personal",
+          groupName: firstDoc.trash_group_name,
           expiresAt: expiresAtDate.toLocaleDateString("vi-VN"),
           remainingDays,
           documents: docs.map((d: any) => ({
@@ -102,6 +115,8 @@ export default function TrashPage() {
             name: d.title,
             type: d.file_type?.split("/")[1]?.toUpperCase() ?? "FILE",
             size: formatSize(d.file_size ?? 0),
+            source: d.trash_source ?? "personal",
+            groupName: d.trash_group_name,
           })),
           docIds: docs.map((d: any) => d.id),
         };
@@ -430,9 +445,19 @@ function TrashBatchRow({
               <p className="truncate text-xs font-medium text-gray-800">
                 Xóa ngày {batch.deletedAt.split(" ")[0]}
               </p>
-              <p className="mt-0.5 text-[10px] text-gray-400">
-                {batch.deletedAt}
-              </p>
+              <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                <span className="text-[10px] text-gray-400">{batch.deletedAt}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                    batch.source === "group_orphaned"
+                      ? "bg-orange-50 text-orange-600"
+                      : "bg-gray-100 text-gray-500"
+                  )}
+                >
+                  {getTrashSourceLabel(batch.source, batch.groupName)}
+                </span>
+              </div>
             </div>
           </button>
         </td>
@@ -497,7 +522,7 @@ function TrashBatchRow({
                           {document.name}
                         </p>
                         <p className="text-[10px] text-gray-400">
-                          {document.type}
+                          {document.type} · {getTrashSourceLabel(document.source, document.groupName)}
                         </p>
                       </div>
                     </div>
@@ -544,6 +569,16 @@ function MobileTrashBatch({
               Xóa ngày {batch.deletedAt.split(" ")[0]}
             </p>
             <p className="mt-0.5 text-xs text-gray-400">{batch.deletedAt}</p>
+            <p
+              className={cn(
+                "mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium",
+                batch.source === "group_orphaned"
+                  ? "bg-orange-50 text-orange-600"
+                  : "bg-gray-100 text-gray-500"
+              )}
+            >
+              {getTrashSourceLabel(batch.source, batch.groupName)}
+            </p>
           </button>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
@@ -588,9 +623,12 @@ function MobileTrashBatch({
                 >
                   <div className="flex min-w-0 items-center gap-2">
                     <FileText className="h-4 w-4 shrink-0 text-gray-400" />
-                    <span className="truncate text-xs text-gray-700">
-                      {document.name}
-                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-xs text-gray-700">{document.name}</p>
+                      <p className="truncate text-[10px] text-gray-400">
+                        {getTrashSourceLabel(document.source, document.groupName)}
+                      </p>
+                    </div>
                   </div>
 
                   <span className="shrink-0 text-[10px] text-gray-400">

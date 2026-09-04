@@ -302,7 +302,7 @@ export function DocumentDetail() {
   const {
     data: allTags = [],
     isLoading: isLoadingTags,
-    isError: isTagError,
+    isError: _isTagError,
   } = useQuery<TagType[]>({
     queryKey: ["all-tags"],
     queryFn: () => tagService.getAll(),
@@ -910,4 +910,3 @@ export function DocumentDetail() {
     </div>
   );
 }
-

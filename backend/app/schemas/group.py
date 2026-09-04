@@ -6,7 +6,7 @@ from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
-PermissionLevel = Literal["view", "full"]
+PermissionLevel = Literal["view", "edit", "full"]
 
 
 class GroupCreate(BaseModel):

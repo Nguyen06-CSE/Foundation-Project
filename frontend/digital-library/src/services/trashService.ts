@@ -1,4 +1,4 @@
-import api from "./api"
+import api from "@/services/api"
 
 export const trashService = {
   // Lấy danh sách tất cả document trong thùng rác

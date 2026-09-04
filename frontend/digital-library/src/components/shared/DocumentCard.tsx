@@ -42,6 +42,8 @@ export interface DocumentTag {
   name: string;
 }
 
+import { type DocumentMenuItem } from "@/components/shared/DocumentContextMenu";
+
 export interface DocumentCardProps {
   document: {
     id: string;
@@ -51,20 +53,23 @@ export interface DocumentCardProps {
     size: string;
     extension?: string;
     thumbnail_path?: string | null;
-    tags?: DocumentTag[]; // Thêm trường tags vào đây
+    tags?: DocumentTag[];
   };
-  onAction: (action: DocumentAction, documentId: string) => void;
+  onAction: (action: DocumentAction | string, documentId: string) => void;
+  basePath?: string;
+  allowedActions?: DocumentAction[];
+  extraItems?: DocumentMenuItem[];
 }
 
 // ======================================================
 // Component
 // ======================================================
 
-export function DocumentCard({ document, onAction }: DocumentCardProps) {
+export function DocumentCard({ document, onAction, basePath = "/personal/documents", allowedActions, extraItems }: DocumentCardProps) {
   const navigate = useNavigate();
 
-  const handleAction = (action: DocumentAction, id: string) => {
-    if (action === "view") navigate(`/personal/documents/${id}`);
+  const handleAction = (action: DocumentAction | string, id: string) => {
+    if (action === "view") navigate(`${basePath}/${id}`);
     else onAction(action, id);
   };
 
@@ -82,7 +87,7 @@ export function DocumentCard({ document, onAction }: DocumentCardProps) {
       {/* Preview */}
       <div
         className="relative h-[140px] w-full shrink-0 overflow-hidden rounded-t-xl bg-gray-50 flex items-center justify-center"
-        onClick={() => navigate(`/personal/documents/${document.id}`)}
+        onClick={() => navigate(`${basePath}/${document.id}`)}
       >
         {thumbnailUrl && (
           <img
@@ -101,7 +106,7 @@ export function DocumentCard({ document, onAction }: DocumentCardProps) {
       <div className="relative flex min-h-[140px] flex-1 items-start justify-between gap-2 rounded-b-xl bg-white px-3 py-3">
         <div
           className="min-w-0 flex-1"
-          onClick={() => navigate(`/personal/documents/${document.id}`)}
+          onClick={() => navigate(`${basePath}/${document.id}`)}
         >
           <h3
             className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900"
@@ -144,7 +149,11 @@ export function DocumentCard({ document, onAction }: DocumentCardProps) {
           className="absolute right-2 top-2 z-10 shrink-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-within:opacity-100"
           onClick={(e) => e.stopPropagation()}
         >
-          <DocumentContextMenu onAction={(action) => handleAction(action, document.id)} />
+          <DocumentContextMenu 
+            onAction={(action) => handleAction(action, document.id)} 
+            allowedActions={allowedActions}
+            extraItems={extraItems}
+          />
         </div>
       </div>
     </div>

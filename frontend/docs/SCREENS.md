@@ -14,3 +14,18 @@
 - Icon "X đỏ" xuất hiện trên 1 số file trong ảnh dashboard/documents là lỗi hiển thị
   ảnh bị thiếu khi export từ Figma (broken image), KHÔNG PHẢI thiết kế chủ đích —
   agent phải thay bằng icon file đúng loại (PDF/DOCX...) theo FileIcon component.
+
+  ## Màn hình Nhóm (bổ sung)
+
+| # | Route | File | Ảnh tham chiếu |
+|---|---|---|---|
+| G1 | /groups | pages/group/GroupList.tsx | nhom-danh-sach-nhom.png |
+| G2 | /groups/:id | pages/group/GroupSpace.tsx | nhom-khong-gian-nhom.png |
+| G3 | /groups/:id?tab=members | pages/group/GroupSpace.tsx | quan-ly-thanh-vien-nhom.png |
+| G4 | /groups/:id?tab=requests | pages/group/GroupSpace.tsx | loi-moi-tham-gia-nhom.png |
+
+## Lưu ý routing Nhóm
+- GroupSpace là 1 component duy nhất, tab được điều khiển bằng
+  query param ?tab=documents|members|requests|settings
+- Không tạo 4 file riêng cho 4 tab — dùng useState hoặc useSearchParams
+  để switch tab, giữ URL đồng bộ

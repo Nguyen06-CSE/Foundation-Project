@@ -2,9 +2,12 @@ export interface User {
   id: number
   username: string
   email: string
-  full_name?: string
-  role: 'student' | 'teacher' | 'faculty_admin' | 'school_admin' | 'system_admin'
-  student_code?: string
+  full_name?: string | null
+  role: string
+  student_code?: string | null
+  class_id?: number | null
+  faculty_id?: number | null
+  created_at?: string | null
 }
 
 export type UserRole = User['role']

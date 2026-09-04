@@ -227,7 +227,12 @@ export function PersonalDocuments() {
   const [isUploadOpen, setIsUploadOpen] = useState(false)
   const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(null)
 
-  // State đổi tên tài liệu (Đặt đúng vị trí trong component)
+  // State xác nhận xóa thư mục
+  const [deletingFolderId, setDeletingFolderId] = useState<number | null>(null)
+  const [isDeleteFolderOpen, setIsDeleteFolderOpen] = useState(false)
+  const [isDeletingFolder, setIsDeletingFolder] = useState(false)
+
+  // State đổi tên tài liệu
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [renamingDoc, setRenamingDoc] = useState<{ id: string; title: string } | null>(null)
   const [newDocumentTitle, setNewDocumentTitle] = useState("")
@@ -271,9 +276,9 @@ export function PersonalDocuments() {
     },
   })
 
-const renameDocumentMutation = useMutation({
+  const renameDocumentMutation = useMutation({
     mutationFn: ({ id, title }: { id: number | string; title: string }) =>
-      documentService.update(Number(id), { title }), // Thêm Number() ở đây
+      documentService.update(Number(id), { title }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] })
       setIsRenameModalOpen(false)
@@ -284,11 +289,15 @@ const renameDocumentMutation = useMutation({
     },
   })
 
-  // --- ACTION HANDLERS ---
-  const handleFolderAction = async (action: FolderAction, folderId: number) => {
+  // --- ACTION HANDLERS FOR FOLDERS ---
+  const handleFolderAction = async (
+    action: FolderAction,
+    folderId: number
+  ) => {
     if (action === "edit") {
       try {
         const folderDetail = await folderService.getById(folderId)
+
         setEditingFolder({
           id: folderDetail.id,
           name: folderDetail.name,
@@ -298,18 +307,69 @@ const renameDocumentMutation = useMutation({
             folderDetail.tag_ids ||
             [],
         })
+
         setIsModalOpen(true)
       } catch (error) {
         console.error("Lỗi khi lấy chi tiết thư mục:", error)
       }
-    } else if (action === "share") {
+
+      return
+    }
+
+    if (action === "share") {
       console.log("Chia sẻ folder:", folderId)
-    } else if (action === "delete") {
-      console.log("Xóa folder:", folderId)
+      return
+    }
+
+    if (action === "delete") {
+      setDeletingFolderId(folderId)
+      setIsDeleteFolderOpen(true)
     }
   }
 
-  // Gộp đầy đủ các action của Document (view, rename, delete) vào 1 hàm duy nhất
+  const handleConfirmDeleteFolder = async () => {
+    if (deletingFolderId === null) {
+      return
+    }
+
+    try {
+      setIsDeletingFolder(true)
+
+      await folderService.delete(deletingFolderId)
+
+      // Refresh danh sách folder
+      await queryClient.invalidateQueries({
+        queryKey: ["folders"],
+      })
+
+      // Nếu folder đang được chọn thì quay về "Tất cả"
+      if (selectedFolderId === deletingFolderId) {
+        setSelectedFolderId(null)
+        setPage(1)
+      }
+
+      // Đóng modal
+      setIsDeleteFolderOpen(false)
+      setDeletingFolderId(null)
+
+      console.log("Đã xóa folder:", deletingFolderId)
+    } catch (error) {
+      console.error("Lỗi khi xóa thư mục:", error)
+    } finally {
+      setIsDeletingFolder(false)
+    }
+  }
+
+  const handleCancelDeleteFolder = () => {
+    if (isDeletingFolder) {
+      return
+    }
+
+    setIsDeleteFolderOpen(false)
+    setDeletingFolderId(null)
+  }
+
+  // --- ACTION HANDLERS FOR DOCUMENTS ---
   const handleDocumentAction = (action: DocumentAction, documentId: string) => {
     if (action === "view") {
       navigate(`/ca-nhan/tai-lieu/${documentId}`)
@@ -333,6 +393,11 @@ const renameDocumentMutation = useMutation({
     setIsModalOpen(false)
     setEditingFolder(null)
   }
+
+  // Lấy folder đang xóa để hiển thị thông tin
+  const deletingFolder = folders?.find(
+    (folder) => folder.id === deletingFolderId
+  )
 
   // --- DATA PROCESSING & FILTERING ---
   const allDocCards = (docData?.items ?? []).map((doc) => ({
@@ -595,17 +660,22 @@ const renameDocumentMutation = useMutation({
       {isRenameModalOpen && renamingDoc && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl animate-in fade-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Đổi tên tài liệu</h3>
-            
+            <h3 className="text-lg font-bold text-gray-900 mb-4">
+              Đổi tên tài liệu
+            </h3>
+
             <input
               type="text"
               value={newDocumentTitle}
               onChange={(e) => setNewDocumentTitle(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && newDocumentTitle.trim()) {
-                  renameDocumentMutation.mutate({ id: renamingDoc.id, title: newDocumentTitle.trim() });
+                  renameDocumentMutation.mutate({
+                    id: renamingDoc.id,
+                    title: newDocumentTitle.trim(),
+                  })
                 }
-                if (e.key === "Escape") setIsRenameModalOpen(false);
+                if (e.key === "Escape") setIsRenameModalOpen(false)
               }}
               autoFocus
               placeholder="Nhập tên mới..."
@@ -621,10 +691,15 @@ const renameDocumentMutation = useMutation({
               </Button>
               <Button
                 variant="primary"
-                disabled={renameDocumentMutation.isPending || !newDocumentTitle.trim()}
+                disabled={
+                  renameDocumentMutation.isPending || !newDocumentTitle.trim()
+                }
                 onClick={() => {
                   if (newDocumentTitle.trim()) {
-                    renameDocumentMutation.mutate({ id: renamingDoc.id, title: newDocumentTitle.trim() });
+                    renameDocumentMutation.mutate({
+                      id: renamingDoc.id,
+                      title: newDocumentTitle.trim(),
+                    })
                   }
                 }}
               >
@@ -636,6 +711,72 @@ const renameDocumentMutation = useMutation({
       )}
 
       {isUploadOpen && <UploadModal onClose={() => setIsUploadOpen(false)} />}
+
+      {/* Modal Xác nhận xóa thư mục */}
+      {isDeleteFolderOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+          <div className="w-full max-w-md rounded-xl bg-white shadow-xl">
+            {/* Header */}
+            <div className="flex items-start justify-between gap-4 border-b border-gray-100 px-5 py-4">
+              <div>
+                <h3 className="text-base font-semibold text-gray-900">
+                  Xóa thư mục?
+                </h3>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Bạn có chắc muốn xóa thư mục này không?
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleCancelDeleteFolder}
+                disabled={isDeletingFolder}
+                className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span className="text-lg leading-none">×</span>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="px-5 py-4">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
+                <p className="text-sm font-medium text-gray-800">
+                  {deletingFolder?.name || "Thư mục"}
+                </p>
+              </div>
+
+              <div className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
+                <p className="text-xs leading-5 text-green-700">
+                  <span className="font-semibold">Lưu ý:</span> Xóa thư mục
+                  sẽ không xóa các tài liệu hoặc nhãn (tag) bên trong. Các tài
+                  liệu và tag vẫn được giữ nguyên.
+                </p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-end gap-2 border-t border-gray-100 px-5 py-4">
+              <Button
+                variant="outline"
+                onClick={handleCancelDeleteFolder}
+                disabled={isDeletingFolder}
+              >
+                Hủy
+              </Button>
+
+              <Button
+                variant="primary"
+                onClick={handleConfirmDeleteFolder}
+                disabled={isDeletingFolder}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {isDeletingFolder ? "Đang xóa..." : "Xóa thư mục"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

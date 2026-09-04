@@ -67,7 +67,7 @@ export function CreateFolderModal({ onClose, initialData }: CreateFolderModalPro
 
   // 3. Mutation tạo Tag mới
   const createTagMutation = useMutation({
-    mutationFn: (name: string) => tagService.create({ name }),
+    mutationFn: (name: string) => tagService.create({ name, color: selectedColor }),
     onSuccess: (newTag) => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
       setSelectedTagIds((prev) => [...prev, newTag.id]);

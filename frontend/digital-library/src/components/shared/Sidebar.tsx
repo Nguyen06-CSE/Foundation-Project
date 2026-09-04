@@ -1,6 +1,7 @@
 // digital-library/src/components/shared/Sidebar.tsx
 
 import { NavLink } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { type ElementType, useEffect, useRef, useState } from "react";
 import {
   User,
@@ -19,6 +20,7 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { groupService } from "@/services/groupService";
 
 interface SidebarItem {
   icon: ElementType;
@@ -59,6 +61,13 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const [width, setWidth] = useState(MAX_WIDTH);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const { data: invitations = [] } = useQuery({
+    queryKey: ["my-invitations"],
+    queryFn: groupService.getMyInvitations,
+    refetchInterval: 30000,
+    retry: false,
+  });
+  const pendingInvitationCount = invitations.filter((invitation) => invitation.status === "pending").length;
 
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(MAX_WIDTH);
@@ -218,6 +227,14 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           <span className="truncate">
             {item.label}
           </span>
+        )}
+        {!isCollapsed && item.to === "/groups" && pendingInvitationCount > 0 && (
+          <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-xs font-semibold text-white">
+            {pendingInvitationCount}
+          </span>
+        )}
+        {isCollapsed && item.to === "/groups" && pendingInvitationCount > 0 && (
+          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500" />
         )}
       </NavLink>
     );

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import {
   FolderContextMenu,
   type FolderAction,
+  type FolderMenuItem,
 } from "./FolderContextMenu";
 
 export interface FolderTag {
@@ -20,6 +21,8 @@ export interface FolderCardProps {
   tags?: FolderTag[];
   onClick: () => void;
   onAction?: (action: FolderAction, folderId: number) => void;
+  allowedActions?: string[];
+  extraItems?: FolderMenuItem[];
 }
 
 export function FolderCard({
@@ -30,6 +33,8 @@ export function FolderCard({
   tags = [],
   onClick,
   onAction,
+  allowedActions,
+  extraItems,
 }: FolderCardProps) {
   // Màu mặc định nếu folder chưa có màu
   const folderColor = color || "#2F7D46";
@@ -161,6 +166,8 @@ export function FolderCard({
         >
           <FolderContextMenu
             onAction={(action) => onAction(action, id)}
+            allowedActions={allowedActions}
+            extraItems={extraItems}
           />
         </div>
       )}

@@ -19,27 +19,45 @@ export type DocumentAction =
   | "favorite" 
   | "rename" 
   | "move" 
-  | "delete";
+  | "delete"
+  | "save-to-personal";
 
-export interface DocumentContextMenuProps {
-  onAction: (action: DocumentAction) => void;
+export interface DocumentMenuItem {
+  action: string;
+  icon: React.ReactNode;
+  label: string;
+  danger?: boolean;
+  onClick?: () => void;
 }
 
-export function DocumentContextMenu({ onAction }: DocumentContextMenuProps) {
-  const items = [
-    { icon: <Eye className="h-4 w-4" />, label: "Xem/Xem trước", onClick: () => onAction("view") },
-    { icon: <Download className="h-4 w-4" />, label: "Tải xuống", onClick: () => onAction("download") },
-    { icon: <Share2 className="h-4 w-4" />, label: "Chia sẻ", onClick: () => onAction("share") },
-    { icon: <Heart className="h-4 w-4" />, label: "Thêm vào Yêu thích", onClick: () => onAction("favorite") },
-    { icon: <Edit2 className="h-4 w-4" />, label: "Đổi tên", onClick: () => onAction("rename") },
-    { icon: <FolderInput className="h-4 w-4" />, label: "Di chuyển", onClick: () => onAction("move") },
-    { 
-      icon: <Trash2 className="h-4 w-4" />, 
-      label: "Xóa", 
-      onClick: () => onAction("delete"), 
-      danger: true 
-    },
+export interface DocumentContextMenuProps {
+  onAction: (action: DocumentAction | string) => void;
+  allowedActions?: DocumentAction[];
+  extraItems?: DocumentMenuItem[];
+}
+
+export function DocumentContextMenu({ onAction, allowedActions, extraItems = [] }: DocumentContextMenuProps) {
+  const DEFAULT_ITEMS: DocumentMenuItem[] = [
+    { action: "view", icon: <Eye className="h-4 w-4" />, label: "Xem/Xem trước" },
+    { action: "download", icon: <Download className="h-4 w-4" />, label: "Tải xuống" },
+    { action: "share", icon: <Share2 className="h-4 w-4" />, label: "Chia sẻ" },
+    { action: "favorite", icon: <Heart className="h-4 w-4" />, label: "Thêm vào Yêu thích" },
+    { action: "rename", icon: <Edit2 className="h-4 w-4" />, label: "Đổi tên" },
+    { action: "move", icon: <FolderInput className="h-4 w-4" />, label: "Di chuyển" },
+    { action: "delete", icon: <Trash2 className="h-4 w-4" />, label: "Xóa", danger: true },
   ];
+
+  let displayItems = DEFAULT_ITEMS;
+  if (allowedActions) {
+    displayItems = displayItems.filter(item => allowedActions.includes(item.action as DocumentAction));
+  }
+  
+  displayItems = [...displayItems, ...extraItems];
+
+  const dropdownItems = displayItems.map(item => ({
+    ...item,
+    onClick: item.onClick || (() => onAction(item.action)),
+  }));
 
   return (
     <div className="relative z-50">
@@ -49,7 +67,7 @@ export function DocumentContextMenu({ onAction }: DocumentContextMenuProps) {
             <MoreVertical className="h-5 w-5" />
           </Button>
         }
-        items={items}
+        items={dropdownItems}
         align="right"
       />
     </div>

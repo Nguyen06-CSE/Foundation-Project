@@ -1,6 +1,6 @@
 // src/services/tagService.ts
 
-import api from "./api"
+import api from "@/services/api"
 
 export interface Tag {
   id: number
