@@ -45,6 +45,10 @@ class DocumentOut(DocumentBase):
     is_important: bool = False
     is_deleted: bool = False
     deleted_at: Optional[datetime] = None
+    is_orphaned: bool = False
+    orphaned_at: Optional[datetime] = None
+    trash_source: Optional[str] = None
+    trash_group_name: Optional[str] = None
     trash_batch_id: Optional[int] = None
     created_at: datetime
     updated_at: Optional[datetime] = None

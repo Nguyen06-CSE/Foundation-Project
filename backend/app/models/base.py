@@ -13,3 +13,4 @@ class TimestampMixin:
         server_default=func.now(),
         nullable=False,
     )
+    

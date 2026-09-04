@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from app.models.tag import Tag
@@ -44,24 +44,35 @@ async def create_default_folders_for_user(db: AsyncSession, user_id: int) -> Non
 
     await db.commit()
 
-async def get_folders_with_stats(db: AsyncSession, owner_id: int) -> List[dict]:
+async def get_folders_with_stats(
+    db: AsyncSession,
+    owner_id: int,
+    workspace_id: Optional[int] = None,
+) -> List[dict]:
     """Lấy danh sách folder kèm tag_count và document_count"""
+    workspace_filter = "f.workspace_id = :workspace_id" if workspace_id is not None else "f.workspace_id IS NULL"
+    document_workspace_filter = (
+        "d.workspace_id = :workspace_id"
+        if workspace_id is not None
+        else "d.workspace_id IS NULL AND d.owner_id = :owner_id"
+    )
     sql = text("""
         SELECT
-            f.id, f.name, f.color, f.created_at,
+            f.id, f.owner_id, f.workspace_id, f.name, f.color, f.created_at,
             COUNT(DISTINCT ft.tag_id) AS tag_count,
             COUNT(DISTINCT dt.document_id) AS document_count
         FROM folders f
         LEFT JOIN folder_tags ft ON ft.folder_id = f.id
         LEFT JOIN document_tags dt ON dt.tag_id = ft.tag_id
         LEFT JOIN documents d ON d.id = dt.document_id
-            AND d.owner_id = :owner_id
+            AND """ + document_workspace_filter + """
             AND d.is_deleted = false
         WHERE f.owner_id = :owner_id
-        GROUP BY f.id, f.name, f.color, f.created_at
+            AND """ + workspace_filter + """
+        GROUP BY f.id, f.owner_id, f.workspace_id, f.name, f.color, f.created_at
         ORDER BY f.created_at ASC
     """)
-    result = await db.execute(sql, {"owner_id": owner_id})
+    result = await db.execute(sql, {"owner_id": owner_id, "workspace_id": workspace_id})
     rows = result.mappings().all()
 
     folders_out = []

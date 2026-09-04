@@ -40,6 +40,10 @@ class Document(Base, TimestampMixin):
     is_important: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
     is_deleted: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
     deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    is_orphaned: Mapped[bool] = mapped_column(Boolean, default=False)
+    orphaned_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    trash_source: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    trash_group_name: Mapped[Optional[str]] = mapped_column(String(150), nullable=True)
     trash_batch_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("trash_batches.id"))
 
     # Relationships
@@ -52,3 +56,6 @@ class Document(Base, TimestampMixin):
     versions: Mapped[List["DocumentVersion"]] = relationship("DocumentVersion", back_populates="document")
     notes: Mapped[List["Note"]] = relationship("Note", back_populates="document")
     trash_batch: Mapped[Optional["TrashBatch"]] = relationship("TrashBatch", back_populates="documents")
+    workspace: Mapped[Optional["Workspace"]] = relationship(
+    "Workspace", back_populates="documents"
+)

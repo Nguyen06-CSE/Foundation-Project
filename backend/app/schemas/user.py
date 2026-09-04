@@ -1,3 +1,5 @@
+# backend/app/schemas/user.py
+
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
@@ -23,6 +25,10 @@ class UserUpdate(BaseModel):
     student_code: Optional[str] = Field(default=None, max_length=20)
     class_id: Optional[int] = None
     faculty_id: Optional[int] = None
+
+class PasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
 
 class UserOut(UserBase):
     id: int

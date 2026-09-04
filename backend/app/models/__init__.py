@@ -21,6 +21,7 @@ from .processing_job import ProcessingJob
 from .folder import Folder
 from .folder_tag import FolderTag
 
+
 __all__ = [
     "Base",
     "TimestampMixin",

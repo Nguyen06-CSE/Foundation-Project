@@ -20,3 +20,6 @@ class Faculty(Base, TimestampMixin):
     classes: Mapped[List["Class"]] = relationship("Class", back_populates="faculty")
     users: Mapped[List["User"]] = relationship("User", back_populates="faculty")
     workspaces: Mapped[List["Workspace"]] = relationship("Workspace", back_populates="ref_faculty")
+    workspaces: Mapped[List["Workspace"]] = relationship(
+    "Workspace", back_populates="ref_faculty"
+)

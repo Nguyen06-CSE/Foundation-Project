@@ -13,6 +13,8 @@ from app.routers.documents import router as documents_router
 from app.routers.download_logs import router as download_logs_router
 from app.routers.favorites import router as favorites_router
 from app.routers.folders import router as folders_router
+from app.routers.groups import router as groups_router
+from app.jobs.scheduler import register_jobs, scheduler
 from app.routers.notes import router as notes_router
 from app.routers.notifications import router as notifications_router
 from app.routers.search import router as search_router
@@ -29,6 +31,9 @@ app = FastAPI(
 
 # Đảm bảo thư mục lưu trữ thumbnail tồn tại và mount static path
 os.makedirs("storage/thumbnails", exist_ok=True)
+os.makedirs("storage/personal", exist_ok=True)
+os.makedirs("storage/groups", exist_ok=True)
+os.makedirs("storage/orphaned", exist_ok=True)
 app.mount("/storage", StaticFiles(directory="storage"), name="storage")
 
 app.add_middleware(
@@ -61,6 +66,20 @@ app.include_router(trash_router)
 app.include_router(academic_router)
 app.include_router(notifications_router)
 app.include_router(folders_router)
+app.include_router(groups_router)
+
+
+@app.on_event("startup")
+async def startup():
+    if not scheduler.running:
+        register_jobs()
+        scheduler.start()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    if scheduler.running:
+        scheduler.shutdown()
 
 
 @app.get("/health")

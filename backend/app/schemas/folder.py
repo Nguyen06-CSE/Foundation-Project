@@ -10,6 +10,8 @@ class TagOut(BaseModel):
 
 class FolderOut(BaseModel):
     id: int
+    owner_id: int
+    workspace_id: Optional[int] = None
     name: str
     color: Optional[str]
     tag_count: int
