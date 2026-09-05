@@ -1,3 +1,4 @@
+// frontend/digital-library/src/services/folderService.ts
 import api from "@/services/api";
 import type { Folder } from "@/types/document";
 

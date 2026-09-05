@@ -1,9 +1,11 @@
 // frontend/digital-library/src/pages/group/GroupSpace.tsx
 
+// ============================================================================
+// 1. IMPORTS & DEPENDENCIES
+// ============================================================================
 import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useDocumentFilters } from "@/hooks/useDocumentFilters";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArchiveRestore,
   FileBox,
@@ -17,6 +19,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -26,22 +29,27 @@ import EmptyState from "@/components/shared/EmptyState";
 import { FileIcon } from "@/components/shared/FileIcon";
 import { FolderCard } from "@/components/shared/FolderCard";
 import { type FolderAction } from "@/components/shared/FolderContextMenu";
+
+import { CreateFolderModal } from "@/pages/personal/components/CreateFolderModal";
+import { UploadModal } from "@/pages/personal/components/UploadModal";
+
+import { getNormalizedExtension, useDocumentFilters } from "@/hooks/useDocumentFilters";
 import { groupService } from "@/services/groupService";
+import { groupTagService } from "@/services/tagService";
+import { groupFolderService } from "@/services/folderService";
+import { documentService, groupDocumentService } from "@/services/documentService";
 import { useAuthStore } from "@/stores/authStore";
+
 import type { Document } from "@/types/document";
-import type {
-  PermissionLevel,
-  WorkspaceInvitation,
-  WorkspaceMember,
-} from "@/types/group";
+import type { PermissionLevel, WorkspaceInvitation, WorkspaceMember } from "@/types/group";
+
 import { cn } from "@/utils/cn";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
-import { CreateFolderModal } from "@/pages/personal/components/CreateFolderModal";
-import { UploadModal } from "@/pages/personal/components/UploadModal";
-import { groupTagService } from "@/services/tagService";
-import { groupFolderService } from "@/services/folderService";
-import { groupDocumentService } from "@/services/documentService";
+
+// ============================================================================
+// 2. TYPES & CONSTANTS
+// ============================================================================
 type GroupTab = "documents" | "members" | "requests" | "settings" | "trash";
 
 const TAB_LABELS: Record<GroupTab, string> = {
@@ -52,37 +60,69 @@ const TAB_LABELS: Record<GroupTab, string> = {
   trash: "Thùng rác",
 };
 
+// ============================================================================
+// 3. MAIN COMPONENT
+// ============================================================================
 export default function GroupSpace() {
+  // --------------------------------------------------------------------------
+  // 3.1. ROUTING & NAVIGATION
+  // --------------------------------------------------------------------------
   const { id } = useParams<{ id: string }>();
   const groupId = Number(id);
   const navigate = useNavigate();
-
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = (searchParams.get("tab") as GroupTab) || "documents";
-  const [shareModal, setShareModal] = useState<
-    "documents" | "folder" | "invite" | null
-  >(null);
+
+  // --------------------------------------------------------------------------
+  // 3.2. GLOBAL STORES & QUERY CLIENT
+  // --------------------------------------------------------------------------
+  const queryClient = useQueryClient();
+  const currentUser = useAuthStore((state) => state.user);
+
+  // --------------------------------------------------------------------------
+  // 3.3. LOCAL STATES
+  // --------------------------------------------------------------------------
+  // Bộ lọc
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
+  const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
+
+  // Modals
+  const [shareModal, setShareModal] = useState<"documents" | "folder" | "invite" | null>(null);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
-  const queryClient = useQueryClient();
-  const currentUser = useAuthStore((state) => state.user);
+  // Quản lý Thư mục (Sửa & Xóa)
+  const [editingFolder, setEditingFolder] = useState<{
+    id: number;
+    name: string;
+    color: string;
+    tagIds: number[];
+  } | null>(null);
+  const [deletingFolder, setDeletingFolder] = useState<{ id: number; name: string } | null>(null);
+  const [isDeleteFolderOpen, setIsDeleteFolderOpen] = useState(false);
+  const [isDeletingFolder, setIsDeletingFolder] = useState(false);
+
+  // --------------------------------------------------------------------------
+  // 3.4. QUERIES (FETCHING DATA)
+  // --------------------------------------------------------------------------
+  const { data: workspaceTags = [] } = useQuery({
+    queryKey: ["workspace-tags", groupId],
+    queryFn: () => groupTagService.getWorkspaceTags(Number(groupId)),
+    enabled: !!groupId,
+  });
+
+  const { data: fileTypes = [] } = useQuery({
+    queryKey: ["document-file-types", groupId],
+    queryFn: () => documentService.getFileTypes(),
+  });
 
   const { data: groupTagsData = [] } = useQuery({
     queryKey: ["group-tags", groupId],
     queryFn: () => groupTagService.getAll(groupId),
     enabled: !isNaN(groupId),
   });
-  const groupTags = groupTagsData;
 
-  // Guard điều hướng sớm nếu id không hợp lệ
-  useEffect(() => {
-    if (!id || isNaN(groupId)) {
-      navigate("/groups", { replace: true });
-    }
-  }, [id, groupId, navigate]);
-
-  // Fetch dữ liệu với dependency và loading/error state
   const {
     data: workspace,
     isLoading: workspaceLoading,
@@ -105,12 +145,100 @@ export default function GroupSpace() {
     enabled: !!workspace,
   });
 
-  const [editingFolder, setEditingFolder] = useState<{
-    id: number;
-    name: string;
-    color: string;
-    tagIds: number[];
-  } | null>(null);
+
+
+  const { data: membersData = [] } = useQuery({
+    queryKey: ["group-members", groupId],
+    queryFn: () => groupService.getMembers(groupId),
+    enabled: !!workspace,
+  });
+
+  const { data: invitationsData = [] } = useQuery({
+    queryKey: ["my-invitations"],
+    queryFn: groupService.getMyInvitations,
+  });
+
+  // --------------------------------------------------------------------------
+  // 3.5. DERIVED DATA & PERMISSIONS
+  // --------------------------------------------------------------------------
+  const documents = documentsData?.items ?? [];
+  const folders = foldersData;
+  const members = membersData;
+  const invitations = invitationsData;
+  const groupTags = groupTagsData;
+
+  const currentMember = members.find((m) => m.user_id === currentUser?.id);
+  const isOwner =
+    currentMember?.is_owner ??
+    (!!workspace?.owner_id && workspace.owner_id === currentUser?.id);
+  const permission: PermissionLevel = currentMember?.permission_level ?? "view";
+  const canManageDocuments = isOwner || permission === "full";
+
+  // Trash Query (Chỉ fetch khi người dùng là Owner)
+  const { data: trashData = [] } = useQuery({
+    queryKey: ["group-trash", groupId],
+    queryFn: () => groupService.getTrash(groupId),
+    enabled: isOwner,
+  });
+  const trash = trashData;
+
+  // Lọc tài liệu theo Bộ lọc (Search, Tag, FileType)
+  const filteredDocuments = (documents || []).filter((doc: any) => {
+    const docName = doc.title || doc.name || "";
+    if (searchQuery && !docName.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+
+    if (selectedTagId !== null) {
+      const hasTag = doc.tags?.some(
+        (t: any) => t.id === selectedTagId || t.tag_id === selectedTagId
+      );
+      if (!hasTag) return false;
+    }
+
+    if (selectedFileType !== null) {
+      const fileType = doc.file_type || doc.rawType;
+      if (fileType !== selectedFileType) return false;
+    }
+
+    return true;
+  });
+
+  // --------------------------------------------------------------------------
+  // 3.6. EFFECTS & NAVIGATION GUARDS
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    if (!id || isNaN(groupId)) {
+      navigate("/groups", { replace: true });
+    }
+  }, [id, groupId, navigate]);
+
+  // --------------------------------------------------------------------------
+  // 3.7. MUTATIONS
+  // --------------------------------------------------------------------------
+  const documentMutationOptions = {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["group-documents", groupId] });
+      queryClient.invalidateQueries({ queryKey: ["group-trash", groupId] });
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    },
+  };
+
+  const saveDocument = useMutation({
+    mutationFn: (docId: number) => groupService.saveToPersonal(groupId, docId),
+    ...documentMutationOptions,
+  });
+
+  const deleteDocument = useMutation({
+    mutationFn: (docId: number) => groupService.deleteDocument(groupId, docId),
+    ...documentMutationOptions,
+  });
+
+  // --------------------------------------------------------------------------
+  // 3.8. EVENT HANDLERS
+  // --------------------------------------------------------------------------
+  const setTab = (tab: GroupTab) =>
+    setSearchParams(tab === "documents" ? {} : { tab });
 
   const handleFolderAction = async (action: FolderAction, folderId: number) => {
     if (action === "edit") {
@@ -133,76 +261,43 @@ export default function GroupSpace() {
     }
 
     if (action === "delete") {
-      if (
-        window.confirm("Xóa thư mục này? Thao tác này không thể khôi phục.")
-      ) {
-        try {
-          await groupFolderService.delete(folderId, groupId);
-          queryClient.invalidateQueries({
-            queryKey: ["group-folders", groupId],
-          });
-        } catch (error) {
-          console.error("Lỗi khi xóa thư mục:", error);
-        }
+      const targetFolder = folders.find((f) => f.id === folderId);
+      if (targetFolder) {
+        setDeletingFolder({ id: targetFolder.id, name: targetFolder.name });
+        setIsDeleteFolderOpen(true);
       }
     }
   };
 
-  const { data: membersData = [] } = useQuery({
-    queryKey: ["group-members", groupId],
-    queryFn: () => groupService.getMembers(groupId),
-    enabled: !!workspace,
-  });
-
-  const { data: invitationsData = [] } = useQuery({
-    queryKey: ["my-invitations"],
-    queryFn: groupService.getMyInvitations,
-  });
-
-  // Gán data
-  const documents = documentsData?.items ?? [];
-  const folders = foldersData;
-  const members = membersData;
-  const invitations = invitationsData;
-
-  // Tính toán quyền hạn (cần membersData và workspace có sẵn)
-  const currentMember = members.find((m) => m.user_id === currentUser?.id);
-  const isOwner =
-    currentMember?.is_owner ??
-    (!!workspace?.owner_id && workspace.owner_id === currentUser?.id);
-  const permission: PermissionLevel = currentMember?.permission_level ?? "view";
-  const canManageDocuments = isOwner || permission === "full";
-
-  // Fetch trash dựa vào isOwner
-  const { data: trashData = [] } = useQuery({
-    queryKey: ["group-trash", groupId],
-    queryFn: () => groupService.getTrash(groupId),
-    enabled: isOwner,
-  });
-  const trash = trashData;
-
-  const documentMutationOptions = {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["group-documents", groupId] });
-      queryClient.invalidateQueries({ queryKey: ["group-trash", groupId] });
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-    },
+  const handleCancelDeleteFolder = () => {
+    if (isDeletingFolder) return;
+    setIsDeleteFolderOpen(false);
+    setDeletingFolder(null);
   };
 
-  const saveDocument = useMutation({
-    mutationFn: (docId: number) => groupService.saveToPersonal(groupId, docId),
-    ...documentMutationOptions,
-  });
+  const handleConfirmDeleteFolder = async () => {
+    if (!deletingFolder) return;
 
-  const deleteDocument = useMutation({
-    mutationFn: (docId: number) => groupService.deleteDocument(groupId, docId),
-    ...documentMutationOptions,
-  });
+    try {
+      setIsDeletingFolder(true);
+      await groupFolderService.delete(deletingFolder.id, groupId);
+      
+      queryClient.invalidateQueries({
+        queryKey: ["group-folders", groupId],
+      });
 
-  const setTab = (tab: GroupTab) =>
-    setSearchParams(tab === "documents" ? {} : { tab });
+      setIsDeleteFolderOpen(false);
+      setDeletingFolder(null);
+    } catch (error) {
+      console.error("Lỗi khi xóa thư mục nhóm:", error);
+    } finally {
+      setIsDeletingFolder(false);
+    }
+  };
 
-  // Render Guard: Loading
+  // --------------------------------------------------------------------------
+  // 3.9. CONDITIONAL RENDER GUARDS (LOADING & ERROR)
+  // --------------------------------------------------------------------------
   if (workspaceLoading) {
     return (
       <div className="flex flex-col gap-5">
@@ -220,7 +315,6 @@ export default function GroupSpace() {
     );
   }
 
-  // Render Guard: Error hoặc không tìm thấy
   if (workspaceError || !workspace) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20">
@@ -234,7 +328,7 @@ export default function GroupSpace() {
     );
   }
 
-  return (
+ return (
     <div className="flex flex-col gap-5">
       <Card className="flex flex-wrap items-center justify-between gap-4 p-5">
         <div className="flex items-center gap-4">
@@ -304,23 +398,62 @@ export default function GroupSpace() {
           ))}
       </div>
 
+      {/* TAB TÀI LIỆU KÈM THANH TÌM KIẾM & BỘ LỌC ĐỘNG */}
       {activeTab === "documents" && (
-        <DocumentsTab
-          documents={documents}
-          folders={folders}
-          isLoading={docsLoading || foldersLoading}
-          permission={permission}
-          isOwner={isOwner}
-          groupId={groupId}
-          onSave={(docId) => saveDocument.mutateAsync(docId)}
-          onDelete={(docId) => deleteDocument.mutateAsync(docId)}
-          onAddFolder={() => {
-            setEditingFolder(null);
-            setIsFolderModalOpen(true);
-          }}
-          onFolderAction={handleFolderAction} // Thêm dòng này
-        />
+        <div className="flex flex-col gap-4">
+          {/* Thanh Tìm kiếm & Bộ lọc */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="min-w-[240px] flex-1 max-w-md">
+              <Input
+                icon={<Search className="h-4 w-4" />}
+                placeholder="Tìm tệp trong không gian..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <DynamicFilterDropdown
+                label="Nhãn dán"
+                options={workspaceTags.map((t) => ({
+                  value: t.tag_id,
+                  label: t.name,
+                }))}
+                selectedValue={selectedTagId}
+                onChange={(val) => setSelectedTagId(val as number | null)}
+              />
+
+              <DynamicFilterDropdown
+                label="Loại tài liệu"
+                options={fileTypes.map((ft: string) => ({
+                  value: ft,
+                  label: getNormalizedExtension(ft).toUpperCase() || "Khác",
+                }))}
+                selectedValue={selectedFileType}
+                onChange={(val) => setSelectedFileType(val as string | null)}
+              />
+            </div>
+          </div>
+
+          {/* Component DocumentsTab hiển thị danh sách đã qua bộ lọc */}
+          <DocumentsTab
+            documents={filteredDocuments} // Truyền mảng documents đã được lọc theo searchQuery, selectedTagId, selectedFileType
+            folders={folders}
+            isLoading={docsLoading || foldersLoading}
+            permission={permission}
+            isOwner={isOwner}
+            groupId={groupId}
+            onSave={(docId) => saveDocument.mutateAsync(docId)}
+            onDelete={(docId) => deleteDocument.mutateAsync(docId)}
+            onAddFolder={() => {
+              setEditingFolder(null);
+              setIsFolderModalOpen(true);
+            }}
+            onFolderAction={handleFolderAction}
+          />
+        </div>
       )}
+
       {activeTab === "members" && (
         <MembersTab
           members={members}
@@ -363,7 +496,6 @@ export default function GroupSpace() {
           }}
           onSubmitData={async (data) => {
             if (editingFolder) {
-              // 1. LOGIC CẬP NHẬT (EDIT)
               await groupFolderService.update(
                 editingFolder.id,
                 {
@@ -372,9 +504,7 @@ export default function GroupSpace() {
                 },
                 groupId,
               );
-              // (Tùy chọn) Thêm logic update/sync Tags tại đây nếu cần
             } else {
-              // 2. LOGIC TẠO MỚI (CREATE)
               const newFolder = await groupFolderService.create(
                 {
                   name: data.name,
@@ -396,7 +526,6 @@ export default function GroupSpace() {
               }
             }
 
-            // Đóng modal, reset form và tải lại dữ liệu
             setIsFolderModalOpen(false);
             setEditingFolder(null);
             queryClient.invalidateQueries({
@@ -418,8 +547,6 @@ export default function GroupSpace() {
             );
           }}
           onUpload={async (fd, selectedTagIds) => {
-            // Document service might need custom upload for groups if backend expects it differently,
-            // but for now we use groupDocumentService.upload
             const newDoc = await groupDocumentService.upload(fd, groupId);
 
             if (selectedTagIds.length > 0) {
@@ -437,7 +564,6 @@ export default function GroupSpace() {
         />
       )}
 
-      {/* Truyền documents thay vì dùng mock trong SimpleShareModal */}
       {shareModal === "documents" && (
         <SimpleShareModal
           title="Chia sẻ từ kho cá nhân"
@@ -455,6 +581,70 @@ export default function GroupSpace() {
       {shareModal === "invite" && (
         <InviteModal groupId={groupId} onClose={() => setShareModal(null)} />
       )}
+
+      {/* Modal Xác nhận xóa thư mục nhóm */}
+{isDeleteFolderOpen && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm">
+    <div className="w-full max-w-md rounded-xl bg-white shadow-xl">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 border-b border-gray-100 px-5 py-4">
+        <div>
+          <h3 className="text-base font-semibold text-gray-900">
+            Xóa thư mục nhóm?
+          </h3>
+
+          <p className="mt-1 text-sm text-gray-500">
+            Bạn có chắc muốn xóa thư mục này khỏi không gian nhóm không?
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleCancelDeleteFolder}
+          disabled={isDeletingFolder}
+          className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span className="text-lg leading-none">×</span>
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="px-5 py-4">
+        <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
+          <p className="text-sm font-medium text-gray-800">
+            {deletingFolder?.name || "Thư mục"}
+          </p>
+        </div>
+
+        <div className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
+          <p className="text-xs leading-5 text-green-700">
+            <span className="font-semibold">Lưu ý:</span> Xóa thư mục sẽ không xóa các tài liệu hoặc nhãn (tag) bên trong. Các tài liệu và tag vẫn được giữ nguyên trong nhóm.
+          </p>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-end gap-2 border-t border-gray-100 px-5 py-4">
+        <Button
+          variant="outline"
+          onClick={handleCancelDeleteFolder}
+          disabled={isDeletingFolder}
+        >
+          Hủy
+        </Button>
+
+        <Button
+          variant="primary"
+          onClick={handleConfirmDeleteFolder}
+          disabled={isDeletingFolder}
+          className="bg-red-600 hover:bg-red-700"
+        >
+          {isDeletingFolder ? "Đang xóa..." : "Xóa thư mục"}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
@@ -503,6 +693,26 @@ function DocumentsTab({
     tags: (doc as any).tags || [],
     _original: doc,
   }));
+  const { data: workspaceTags = [] } = useQuery({
+    queryKey: ["workspace-tags", groupId],
+    queryFn: () => groupTagService.getWorkspaceTags(Number(groupId)),
+    enabled: !!groupId,
+  });
+  // Helper lấy danh sách tag chi tiết cho từng folder
+const getFolderTags = (folder: any) => {
+  // Trường hợp 1: Backend folder đã trả về full danh sách object tags
+  if (Array.isArray(folder.tags) && folder.tags.length > 0) {
+    return folder.tags;
+  }
+
+  // Trường hợp 2: Backend folder chỉ trả về tag_ids -> Map từ workspaceTags
+  if (Array.isArray(folder.tag_ids) && folder.tag_ids.length > 0) {
+    return workspaceTags.filter((t: any) => folder.tag_ids.includes(t.id));
+  }
+
+  return [];
+};
+  
 
   const {
     searchQuery,
@@ -541,14 +751,14 @@ function DocumentsTab({
 
   return (
     <div className="space-y-5">
-      <div className="max-w-md">
+      {/* <div className="max-w-md">
         <Input
           icon={<Search className="h-4 w-4" />}
           placeholder="Tìm tệp trong không gian..."
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.target.value)}
         />
-      </div>
+      </div> */}
       <section>
         <h2 className="mb-3 text-sm font-semibold text-gray-700">
           Thư mục học tập
@@ -561,6 +771,7 @@ function DocumentsTab({
               name={folder.name}
               count={folder.document_count}
               color={folder.color}
+              tags={getFolderTags(folder)}
               onClick={() => console.log(folder.id)}
               onAction={(action) =>
                 onFolderAction(action as FolderAction, folder.id)
@@ -615,6 +826,7 @@ interface LocalGroupDocumentCardProps {
 }
 
 import { GroupDocumentContextMenu } from "@/pages/group/components/GroupDocumentContextMenu";
+import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown";
 
 function LocalGroupDocumentCard({
   document,
