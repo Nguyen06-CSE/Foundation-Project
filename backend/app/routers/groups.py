@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, Query, UploadFile, status
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import and_, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -13,13 +13,14 @@ from app.models.document_tag import document_tags
 from app.models.folder import Folder
 from app.models.folder_tag import FolderTag
 from app.models.notification import Notification
+from app.models.tag import Tag
 from app.models.user import User
 from app.models.workspace import Workspace
 from app.models.workspace_invitation import WorkspaceInvitation
 from app.models.workspace_member import WorkspaceMember
 from app.routers.documents import _process_document_background
 from app.schemas.document import DocumentOut, PaginatedDocuments
-from app.schemas.folder import FolderCreate, FolderOut
+from app.schemas.folder import AddTagsToFolder, FolderCreate, FolderOut, FolderUpdate
 from app.schemas.group import (
     GroupCreate,
     GroupListItem,
@@ -34,8 +35,10 @@ from app.schemas.group import (
     TransferOwnerPayload,
     WorkspaceOut,
 )
+from app.schemas.tag import TagCreate, TagOut, TagUpdate
 from app.services.document_service import create_document_from_upload
 from app.services.folder_service import get_folders_with_stats
+from app.services.group_service import require_write_permission
 from app.services.group_service import (
     mark_group_document_deleted,
     require_full_permission,
@@ -599,7 +602,7 @@ async def list_group_folders(
     await require_member(db, group_id, current_user.id)
     return await get_folders_with_stats(db, current_user.id, group_id)
 
-
+@router.post("/groups/{group_id}/folders", response_model=FolderOut, status_code=status.HTTP_201_CREATED)
 @router.post("/groups/{group_id}/folders/", response_model=FolderOut, status_code=status.HTTP_201_CREATED)
 async def create_group_folder(
     group_id: int,
@@ -607,21 +610,55 @@ async def create_group_folder(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    await require_full_permission(db, group_id, current_user.id)
-    folder = Folder(
-        owner_id=current_user.id,
-        workspace_id=group_id,
-        name=payload.name,
-        color=payload.color,
-    )
-    db.add(folder)
-    await db.flush()
-    for tag_id in payload.tag_ids:
-        db.add(FolderTag(folder_id=folder.id, tag_id=tag_id))
-    await db.commit()
-    folders = await get_folders_with_stats(db, current_user.id, group_id)
-    return next(folder_out for folder_out in folders if folder_out["id"] == folder.id)
+    # Kiểm tra quyền ghi (hàm bạn vừa thêm thành công)
+    await require_write_permission(db, group_id, current_user.id)
 
+    # Khởi tạo Folder (Sử dụng owner_id thay vì user_id)
+    new_folder = Folder(
+        name=payload.name,
+        color=payload.color or "#2196F3",
+        workspace_id=group_id,
+        owner_id=current_user.id,  # <--- SỬA TẠI ĐÂY (đổi user_id -> owner_id)
+    )
+    
+    db.add(new_folder)
+    await db.commit()
+    await db.refresh(new_folder)
+
+    # Lấy dữ liệu trả về theo đúng định dạng
+    folders = await get_folders_with_stats(db, current_user.id, group_id)
+    created_folder = next((f for f in folders if f["id"] == new_folder.id), None)
+
+    return created_folder or new_folder
+
+@router.post("/groups/", response_model=WorkspaceOut, status_code=status.HTTP_201_CREATED)
+async def create_group(
+    payload: GroupCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    workspace = Workspace(
+        type="group",
+        name=payload.name,
+        description=payload.description,
+        owner_id=current_user.id,
+        default_member_permission=payload.default_member_permission,
+    )
+    db.add(workspace)
+    await db.flush() # Flush để lấy workspace.id trước khi gán cho member
+    
+    # BỔ SUNG: Thêm chủ nhóm vào bảng thành viên với quyền cao nhất (full)
+    db.add(
+        WorkspaceMember(
+            workspace_id=workspace.id,
+            user_id=current_user.id,
+            permission_level="full",
+        )
+    )
+    
+    await db.commit()
+    await db.refresh(workspace)
+    return workspace
 
 @router.get("/groups/{group_id}/trash/", response_model=list[DocumentOut])
 async def list_group_trash(
@@ -652,4 +689,218 @@ async def restore_group_document(
         raise HTTPException(404, "Không tìm thấy tài liệu trong thùng rác")
     document.is_deleted = False
     document.deleted_at = None
+    await db.commit()
+
+# ==========================================
+# 1. API XÓA THƯ MỤC (Bọc cả 2 route)
+# ==========================================
+@router.delete("/groups/{group_id}/folders/{folder_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/groups/{group_id}/folders/{folder_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_group_folder(
+    group_id: int,
+    folder_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    await require_full_permission(db, group_id, current_user.id)
+    
+    folder = await db.get(Folder, folder_id)
+    if not folder or folder.workspace_id != group_id:
+        raise HTTPException(status_code=404, detail="Không tìm thấy thư mục trong nhóm này")
+    
+    await db.delete(folder)
+    await db.commit()
+
+
+# ==========================================
+# 2. API CẬP NHẬT THƯ MỤC (Bọc cả 2 route) 
+# Để khi bạn sửa thư mục cũng không bị lỗi 405
+# ==========================================
+@router.patch("/groups/{group_id}/folders/{folder_id}", response_model=FolderOut)
+@router.patch("/groups/{group_id}/folders/{folder_id}/", response_model=FolderOut)
+async def update_group_folder(
+    group_id: int,
+    folder_id: int,
+    payload: FolderUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    await require_full_permission(db, group_id, current_user.id)
+    
+    folder = await db.get(Folder, folder_id)
+    if not folder or folder.workspace_id != group_id:
+        raise HTTPException(status_code=404, detail="Không tìm thấy thư mục trong nhóm này")
+    
+    if payload.name is not None: 
+        folder.name = payload.name
+    if payload.color is not None: 
+        folder.color = payload.color
+        
+    await db.commit()
+    await db.refresh(folder)
+    
+    folders = await get_folders_with_stats(db, current_user.id, group_id)
+    return next((f for f in folders if f["id"] == folder_id), folder)
+
+# ==========================================
+# QUẢN LÝ TAGS CỦA TÀI LIỆU TRONG GROUP
+# ==========================================
+
+@router.post("/groups/{group_id}/documents/{document_id}/tags", status_code=status.HTTP_204_NO_CONTENT)
+async def add_tags_to_group_document(
+    group_id: int,
+    document_id: int,
+    payload: AddTagsToFolder, # Tái sử dụng schema chứa list tag_ids
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    await require_full_permission(db, group_id, current_user.id)
+    
+    document = await db.get(Document, document_id)
+    if not document or document.workspace_id != group_id or document.is_deleted:
+        raise HTTPException(404, "Không tìm thấy tài liệu trong nhóm này")
+    
+    for tag_id in payload.tag_ids:
+        # Dùng SQLAlchemy Core để insert vào bảng trung gian document_tags
+        # Bỏ qua nếu đã tồn tại bằng cách kiểm tra trước
+        check_stmt = select(document_tags).where(
+            and_(
+                document_tags.c.document_id == document_id,
+                document_tags.c.tag_id == tag_id
+            )
+        )
+        existing = (await db.execute(check_stmt)).first()
+        if not existing:
+            insert_stmt = document_tags.insert().values(document_id=document_id, tag_id=tag_id)
+            await db.execute(insert_stmt)
+            
+    await db.commit()
+
+@router.delete("/groups/{group_id}/documents/{document_id}/tags/{tag_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def remove_tag_from_group_document(
+    group_id: int,
+    document_id: int,
+    tag_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    await require_full_permission(db, group_id, current_user.id)
+    
+    document = await db.get(Document, document_id)
+    if not document or document.workspace_id != group_id or document.is_deleted:
+        raise HTTPException(404, "Không tìm thấy tài liệu trong nhóm này")
+    
+    delete_stmt = delete(document_tags).where(
+        and_(
+            document_tags.c.document_id == document_id,
+            document_tags.c.tag_id == tag_id
+        )
+    )
+    await db.execute(delete_stmt)
+    await db.commit()
+    
+    # ==========================================
+# QUẢN LÝ DANH MỤC TAGS DÙNG CHUNG CỦA GROUP
+# ==========================================
+
+@router.get("/groups/{group_id}/tags/", response_model=list[TagOut])
+async def list_group_tags(
+    group_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Lấy danh sách tất cả các tags có trong Group (Ai là thành viên cũng xem được)"""
+    await require_member(db, group_id, current_user.id)
+    
+    result = await db.execute(
+        select(Tag)
+        .where(Tag.workspace_id == group_id)
+        .order_by(Tag.name.asc())
+    )
+    return result.scalars().all()
+
+
+@router.post("/groups/{group_id}/tags/", response_model=TagOut, status_code=status.HTTP_201_CREATED)
+async def create_group_tag(
+    group_id: int,
+    payload: TagCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Tạo tag mới cho Group (Yêu cầu quyền Cố vấn/Admin)"""
+    await require_full_permission(db, group_id, current_user.id)
+    
+    # Kiểm tra tag trùng tên trong group
+    existing_tag = await db.execute(
+        select(Tag).where(
+            Tag.workspace_id == group_id,
+            func.lower(Tag.name) == payload.name.lower()
+        )
+    )
+    if existing_tag.scalar_one_or_none():
+        raise HTTPException(400, "Nhãn dán với tên này đã tồn tại trong nhóm")
+
+    new_tag = Tag(
+        name=payload.name,
+        color=payload.color,
+        owner_id=current_user.id, # Lưu lại ai là người tạo
+        workspace_id=group_id     # Gắn tag này vào Group
+    )
+    db.add(new_tag)
+    await db.commit()
+    await db.refresh(new_tag)
+    return new_tag
+
+
+@router.patch("/groups/{group_id}/tags/{tag_id}", response_model=TagOut)
+async def update_group_tag(
+    group_id: int,
+    tag_id: int,
+    payload: TagUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Sửa tên/màu tag của Group"""
+    await require_full_permission(db, group_id, current_user.id)
+    
+    tag = await db.get(Tag, tag_id)
+    if not tag or tag.workspace_id != group_id:
+        raise HTTPException(404, "Không tìm thấy nhãn dán trong nhóm này")
+    
+    if payload.name is not None:
+        # Kiểm tra trùng tên với các tag khác
+        existing_tag = await db.execute(
+            select(Tag).where(
+                Tag.workspace_id == group_id,
+                Tag.id != tag_id,
+                func.lower(Tag.name) == payload.name.lower()
+            )
+        )
+        if existing_tag.scalar_one_or_none():
+            raise HTTPException(400, "Nhãn dán với tên này đã tồn tại trong nhóm")
+        tag.name = payload.name
+        
+    if payload.color is not None:
+        tag.color = payload.color
+        
+    await db.commit()
+    await db.refresh(tag)
+    return tag
+
+
+@router.delete("/groups/{group_id}/tags/{tag_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_group_tag(
+    group_id: int,
+    tag_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Xóa tag khỏi Group (Các tài liệu/thư mục đang gắn tag này sẽ tự động bị gỡ tag nếu DB setup cascade)"""
+    await require_full_permission(db, group_id, current_user.id)
+    
+    tag = await db.get(Tag, tag_id)
+    if not tag or tag.workspace_id != group_id:
+        raise HTTPException(404, "Không tìm thấy nhãn dán trong nhóm này")
+    
+    await db.delete(tag)
     await db.commit()

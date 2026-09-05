@@ -2,14 +2,15 @@
 
 import { useState, useRef } from "react"
 import { X, Upload, FileText, AlertCircle, Search, Plus, Check } from "lucide-react"
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/Button"
-import { documentService } from "@/services/documentService"
-import { tagService } from "@/services/tagService"
 import { cn } from "@/utils/cn"
 
 interface UploadModalProps {
   onClose: () => void
+  availableTags: { id: number; name: string }[]
+  onCreateTag?: (name: string) => Promise<{ id: number; name: string }>
+  onUpload: (formData: FormData, selectedTagIds: number[]) => Promise<void>
+  isUploading: boolean
 }
 
 const ACCEPTED_MIME = [
@@ -23,8 +24,7 @@ const ACCEPTED_MIME = [
 ]
 const MAX_MB = 50
 
-export function UploadModal({ onClose }: UploadModalProps) {
-  const queryClient = useQueryClient()
+export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isUploading }: UploadModalProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState("")
@@ -34,22 +34,7 @@ export function UploadModal({ onClose }: UploadModalProps) {
   // States cho Tags
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([])
   const [tagSearchQuery, setTagSearchQuery] = useState("")
-
-  // Fetch danh sách tag
-  const { data: availableTags = [] } = useQuery({
-    queryKey: ["tags"],
-    queryFn: tagService.getAll,
-  })
-
-  // Mutation tạo Tag mới
-  const createTagMutation = useMutation({
-    mutationFn: (name: string) => tagService.create({ name, color: "#2F6B3C" }),
-    onSuccess: (newTag) => {
-      queryClient.invalidateQueries({ queryKey: ["tags"] })
-      setSelectedTagIds((prev) => [...prev, newTag.id])
-      setTagSearchQuery("")
-    },
-  })
+  const [isCreatingTag, setIsCreatingTag] = useState(false)
 
   const handleFile = (f: File) => {
     setError(null)
@@ -65,38 +50,27 @@ export function UploadModal({ onClose }: UploadModalProps) {
     setTitle(f.name.replace(/\.[^/.]+$/, "")) // bỏ extension
   }
 
-const mutation = useMutation({
-  mutationFn: () => {
-    const fd = new FormData()
-    fd.append("file", file!)
-    fd.append("title", title.trim() || file!.name)
+  const handleUploadSubmit = async () => {
+    try {
+      setError(null)
+      const fd = new FormData()
+      fd.append("file", file!)
+      fd.append("title", title.trim() || file!.name)
 
-    // Chỉ gửi description nếu người dùng có nhập
-    if (description.trim()) {
-      fd.append("description", description.trim())
+      if (description.trim()) {
+        fd.append("description", description.trim())
+      }
+
+      await onUpload(fd, selectedTagIds)
+      onClose()
+    } catch (err: any) {
+      setError(
+        err?.response?.status === 409
+          ? "Tài liệu này đã tồn tại trong thư viện của bạn"
+          : "Tải lên thất bại, vui lòng thử lại"
+      )
     }
-
-    // Gửi từng tag_id dạng mảng Form
-    if (selectedTagIds.length > 0) {
-      selectedTagIds.forEach((id) => {
-        fd.append("tag_ids", id.toString())
-      })
-    }
-
-    return documentService.upload(fd)
-  },
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["documents"] })
-    onClose()
-  },
-  onError: (err: any) => {
-    setError(
-      err?.response?.status === 409
-        ? "Tài liệu này đã tồn tại trong thư viện của bạn"
-        : "Tải lên thất bại, vui lòng thử lại"
-    )
-  },
-})
+  }
 
   // Tag Helpers
   const toggleTag = (tagId: number) => {
@@ -113,10 +87,17 @@ const mutation = useMutation({
     (tag) => tag.name.toLowerCase() === tagSearchQuery.toLowerCase().trim()
   )
 
-  const handleCreateNewTag = () => {
+  const handleCreateNewTag = async () => {
     const name = tagSearchQuery.trim()
-    if (!name) return
-    createTagMutation.mutate(name)
+    if (!name || !onCreateTag) return
+    setIsCreatingTag(true)
+    try {
+      const newTag = await onCreateTag(name)
+      setSelectedTagIds((prev) => [...prev, newTag.id])
+      setTagSearchQuery("")
+    } finally {
+      setIsCreatingTag(false)
+    }
   }
 
   return (
@@ -205,15 +186,15 @@ const mutation = useMutation({
               </div>
 
               <div className="max-h-32 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
-                {tagSearchQuery.trim() !== "" && !isExactMatch && (
+                {tagSearchQuery.trim() !== "" && !isExactMatch && onCreateTag && (
                   <button
                     type="button"
                     onClick={handleCreateNewTag}
-                    disabled={createTagMutation.isPending}
+                    disabled={isCreatingTag}
                     className="flex items-center gap-1 rounded-full border border-dashed border-primary-500 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50"
                   >
                     <Plus className="h-3.5 w-3.5" />
-                    {createTagMutation.isPending
+                    {isCreatingTag
                       ? "Đang tạo..."
                       : `Tạo mới "${tagSearchQuery.trim()}"`}
                   </button>
@@ -267,11 +248,11 @@ const mutation = useMutation({
             <Button variant="outline" onClick={onClose} className="mt-2">Huỷ</Button>
             <Button
               variant="primary"
-              disabled={!file || mutation.isPending || createTagMutation.isPending}
-              onClick={() => mutation.mutate()}
+              disabled={!file || isUploading || isCreatingTag}
+              onClick={handleUploadSubmit}
               className="mt-2"
             >
-              {mutation.isPending ? "Đang tải lên..." : "Tải lên"}
+              {isUploading ? "Đang tải lên..." : "Tải lên"}
             </Button>
           </div>
         </div>

@@ -2,6 +2,7 @@
 from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional, List
+from pydantic import Tag
 from sqlalchemy import (
     Integer, String, Text, Boolean, DateTime,
     ForeignKey, func, Index
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
     from .folder import Folder
     from .classes import Class
     from .faculty import Faculty
-    from .trash_batch import TrashBatch  # THÊM IMPORT NÀY
+    from .trash_batch import TrashBatch  
 
 class Workspace(Base, TimestampMixin):
     __tablename__ = "workspaces"
@@ -87,6 +88,7 @@ class Workspace(Base, TimestampMixin):
     trash_batches: Mapped[List["TrashBatch"]] = relationship(
         "TrashBatch", back_populates="workspace"
     )
+    tags: Mapped[List["Tag"]] = relationship("Tag", back_populates="workspace", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<Workspace(id={self.id}, name='{self.name}', type='{self.type}')>"

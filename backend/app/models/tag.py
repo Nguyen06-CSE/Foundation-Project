@@ -7,6 +7,7 @@ from .base import Base
 if TYPE_CHECKING:
     from .user import User
     from .document import Document
+    from .workspace import Workspace # Thêm import nếu cần
 
 class Tag(Base):
     __tablename__ = "tags"
@@ -16,9 +17,12 @@ class Tag(Base):
     name: Mapped[str] = mapped_column(String(128), nullable=False)
     color: Mapped[Optional[str]] = mapped_column(String(7))
     parent_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("tags.id"))
+    
+    workspace_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("workspaces.id"), nullable=True)
 
     # Relationships
     owner: Mapped[Optional["User"]] = relationship("User", back_populates="tags")
+    workspace: Mapped[Optional["Workspace"]] = relationship("Workspace", back_populates="tags") # Thêm quan hệ ngược lại nếu Workspace có list tags
     parent: Mapped[Optional["Tag"]] = relationship("Tag", remote_side=[id], back_populates="sub_tags")
     sub_tags: Mapped[List["Tag"]] = relationship("Tag", back_populates="parent")
     documents: Mapped[List["Document"]] = relationship("Document", secondary="document_tags", back_populates="tags")

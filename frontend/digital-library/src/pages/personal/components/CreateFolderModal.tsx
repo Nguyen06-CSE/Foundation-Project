@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import { X, Check, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { tagService } from "@/services/tagService";
-import { folderService } from "@/services/folderService";
 
 export interface FolderInitialData {
   id: number;
@@ -15,9 +12,20 @@ export interface FolderInitialData {
   tagIds: number[] | string[];
 }
 
+export interface FolderSubmitData {
+  id?: number;
+  name: string;
+  color: string;
+  tagIds: number[];
+}
+
 interface CreateFolderModalProps {
   onClose: () => void;
   initialData?: FolderInitialData | null;
+  availableTags: { id: number; name: string }[];
+  onCreateTag?: (name: string) => Promise<{ id: number; name: string }>;
+  onSubmitData: (data: FolderSubmitData) => Promise<void>;
+  isSubmitting: boolean;
 }
 
 const COLORS = [
@@ -31,22 +39,16 @@ const COLORS = [
   { hex: "#64748B", tw: "bg-slate-500" },
 ];
 
-export function CreateFolderModal({ onClose, initialData }: CreateFolderModalProps) {
-  const queryClient = useQueryClient();
+export function CreateFolderModal({ onClose, initialData, availableTags, onCreateTag, onSubmitData, isSubmitting }: CreateFolderModalProps) {
   const isEditMode = !!initialData;
 
   const [folderName, setFolderName] = useState("");
   const [selectedColor, setSelectedColor] = useState(COLORS[0].hex);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [tagSearchQuery, setTagSearchQuery] = useState("");
+  const [isCreatingTag, setIsCreatingTag] = useState(false);
 
-  // 1. Fetch danh sách tag từ Backend
-  const { data: availableTags = [] } = useQuery({
-    queryKey: ["tags"],
-    queryFn: tagService.getAll,
-  });
-
-  // 2. Load dữ liệu ban đầu khi ở chế độ Chỉnh Sửa
+  // Load dữ liệu ban đầu khi ở chế độ Chỉnh Sửa
   useEffect(() => {
     if (initialData) {
       setFolderName(initialData.name || "");
@@ -65,65 +67,6 @@ export function CreateFolderModal({ onClose, initialData }: CreateFolderModalPro
     }
   }, [initialData]);
 
-  // 3. Mutation tạo Tag mới
-  const createTagMutation = useMutation({
-    mutationFn: (name: string) => tagService.create({ name, color: selectedColor }),
-    onSuccess: (newTag) => {
-      queryClient.invalidateQueries({ queryKey: ["tags"] });
-      setSelectedTagIds((prev) => [...prev, newTag.id]);
-      setTagSearchQuery("");
-    },
-  });
-
-  // 4. Mutation Tạo Thư Mục
-  const createFolderMutation = useMutation({
-    mutationFn: () =>
-      folderService.create({
-        name: folderName.trim() || "Chưa có tên",
-        color: selectedColor,
-        tag_ids: selectedTagIds,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["folders"] });
-      onClose();
-    },
-  });
-
-  // 5. Mutation Cập nhật Thư Mục (Gồm đổi tên, màu và cập nhật Tag)
-  const updateFolderMutation = useMutation({
-    mutationFn: async () => {
-      const folderId = initialData!.id;
-
-      // Cập nhật Tên và Màu
-      await folderService.update(folderId, {
-        name: folderName.trim() || "Chưa có tên",
-        color: selectedColor,
-      });
-
-      // So sánh để tìm tag nào cần thêm, tag nào cần xóa
-      const initialTags = (initialData!.tagIds || []).map(Number);
-      const tagsToAdd = selectedTagIds.filter((id) => !initialTags.includes(id));
-      const tagsToRemove = initialTags.filter((id) => !selectedTagIds.includes(id));
-
-      const tagPromises = [];
-      if (tagsToAdd.length > 0) {
-        tagPromises.push(folderService.addTags(folderId, tagsToAdd));
-      }
-      tagsToRemove.forEach((tagId) => {
-        tagPromises.push(folderService.removeTag(folderId, tagId));
-      });
-
-      await Promise.all(tagPromises);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["folders"] });
-      onClose();
-    },
-  });
-
-  const isSubmitting =
-    createFolderMutation.isPending || updateFolderMutation.isPending;
-
   const toggleTag = (tagId: number) => {
     setSelectedTagIds((prev) =>
       prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
@@ -138,19 +81,28 @@ export function CreateFolderModal({ onClose, initialData }: CreateFolderModalPro
     (tag) => tag.name.toLowerCase() === tagSearchQuery.toLowerCase().trim()
   );
 
-  const handleCreateNewTag = () => {
+  const handleCreateNewTag = async () => {
     const name = tagSearchQuery.trim();
-    if (!name) return;
-    createTagMutation.mutate(name);
+    if (!name || !onCreateTag) return;
+    setIsCreatingTag(true);
+    try {
+      const newTag = await onCreateTag(name);
+      setSelectedTagIds((prev) => [...prev, newTag.id]);
+      setTagSearchQuery("");
+    } finally {
+      setIsCreatingTag(false);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditMode) {
-      updateFolderMutation.mutate();
-    } else {
-      createFolderMutation.mutate();
-    }
+    await onSubmitData({
+      id: initialData?.id,
+      name: folderName.trim() || "Chưa có tên",
+      color: selectedColor,
+      tagIds: selectedTagIds,
+    });
+    onClose();
   };
 
   return (
@@ -212,15 +164,15 @@ export function CreateFolderModal({ onClose, initialData }: CreateFolderModalPro
               </div>
 
               <div className="max-h-36 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
-                {tagSearchQuery.trim() !== "" && !isExactMatch && (
+                {tagSearchQuery.trim() !== "" && !isExactMatch && onCreateTag && (
                   <button
                     type="button"
                     onClick={handleCreateNewTag}
-                    disabled={createTagMutation.isPending}
+                    disabled={isCreatingTag}
                     className="flex items-center gap-1 rounded-full border border-dashed border-primary-500 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50"
                   >
                     <Plus className="h-3.5 w-3.5" />
-                    {createTagMutation.isPending
+                    {isCreatingTag
                       ? "Đang tạo..."
                       : `Tạo mới "${tagSearchQuery.trim()}"`}
                   </button>

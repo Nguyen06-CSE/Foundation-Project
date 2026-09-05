@@ -12,7 +12,7 @@ export interface DocumentType {
 
 export interface DocumentRowProps {
   document: DocumentType;
-  onAction: (action: DocumentAction, documentId: string) => void;
+  onAction: (action: DocumentAction | string, documentId: string) => void;
 }
 
 export function DocumentRow({ document, onAction }: DocumentRowProps) {

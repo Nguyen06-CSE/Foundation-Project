@@ -22,7 +22,7 @@ export function PersonalDashboard() {
     return () => window.clearTimeout(timer);
   }, []);
 
-  const handleDocumentAction = (action: DocumentAction, documentId: string) => {
+  const handleDocumentAction = (action: DocumentAction | string, documentId: string) => {
     console.log("Action:", action, "on document:", documentId);
   };
 

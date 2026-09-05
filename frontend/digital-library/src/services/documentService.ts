@@ -3,43 +3,44 @@
 import api from '@/services/api'
 import type { PaginatedDocuments, Document } from '@/types/document'
 
-export const documentService = {
+export const createDocumentService = (getBaseUrl: (groupId?: number | string) => string) => ({
   getAll: (params?: {
     folder_id?: number
     page?: number
     page_size?: number
-  }) =>
-    api.get<PaginatedDocuments>('/documents/', { params })
+  }, groupId?: number | string) =>
+    api.get<PaginatedDocuments>(`${getBaseUrl(groupId)}/`, { params })
       .then(r => r.data),
 
-  getFileTypes: async (): Promise<string[]> => {
-    const response = await api.get<string[]>("/documents/file-types")
+  getFileTypes: async (groupId?: number | string): Promise<string[]> => {
+    const response = await api.get<string[]>(`${getBaseUrl(groupId)}/file-types`)
     return response.data
   },
 
-  getById: (id: number) =>
-    api.get<Document>(`/documents/${id}`)
+  getById: (id: number, groupId?: number | string) =>
+    api.get<Document>(`${getBaseUrl(groupId)}/${id}`)
       .then(r => r.data),
 
-  upload: (formData: FormData) =>
-    api.post<Document>('/documents/upload', formData, {
+  upload: (formData: FormData, groupId?: number | string) =>
+    api.post<Document>(`${getBaseUrl(groupId)}/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }).then(r => r.data),
 
-  update: (id: number, payload: Partial<Document>) =>
+  update: (id: number, payload: Partial<Document>, groupId?: number | string) =>
     api.patch<Document>(
-      `/documents/${id}`,
+      `${getBaseUrl(groupId)}/${id}`,
       payload
     ).then(r => r.data),
 
   updateTags: (
     documentId: number,
-    tagIds: number[]
+    tagIds: number[],
+    groupId?: number | string
   ) =>
     api.patch<Document>(
-      `/documents/${documentId}/tags`,
+      `${getBaseUrl(groupId)}/${documentId}/tags`,
       {
         tag_ids: tagIds,
       }
@@ -48,12 +49,25 @@ export const documentService = {
   // XÓA MỘT TAG KHỎI DOCUMENT
   removeTag: (
     documentId: number,
-    tagId: number
+    tagId: number,
+    groupId?: number | string
   ) =>
     api.delete<Document>(
-      `/documents/${documentId}/tags/${tagId}`
+      `${getBaseUrl(groupId)}/${documentId}/tags/${tagId}`
     ).then(r => r.data),
 
-  delete: (id: number) =>
-    api.delete(`/documents/${id}`),
+  delete: (id: number, groupId?: number | string) =>
+    api.delete(`${getBaseUrl(groupId)}/${id}`),
+})
+
+export const documentService = createDocumentService(() => '/documents')
+
+export const groupDocumentService = {
+  ...createDocumentService((groupId) => `/groups/${groupId}/documents`),
+  saveToPersonal: (groupId: number | string, documentId: number) =>
+    api.post(`/groups/${groupId}/documents/${documentId}/save-to-personal`).then(r => r.data),
+  attachTag: (groupId: number | string, documentId: number, tagId: number) =>
+    api.post(`/groups/${groupId}/documents/${documentId}/tags`, { tag_id: tagId }).then(r => r.data),
+  detachTag: (groupId: number | string, documentId: number, tagId: number) =>
+    api.delete(`/groups/${groupId}/documents/${documentId}/tags/${tagId}`).then(r => r.data),
 }

@@ -1,30 +1,37 @@
 import api from "@/services/api";
 import type { Folder } from "@/types/document";
 
+// Helper xác định URL gốc dựa trên việc có truyền groupId hay không
+const getFolderBaseUrl = (groupId?: number | string) =>
+  groupId ? `/groups/${groupId}/folders` : "/folders";
+
 export const folderService = {
   // ============================================================
   // Lấy danh sách folder
   // ============================================================
-  getAll: () =>
-    api.get<Folder[]>("/folders/").then((r) => r.data),
+  getAll: (groupId?: number | string) =>
+    api.get<Folder[]>(`${getFolderBaseUrl(groupId)}/`).then((r) => r.data),
 
   // ============================================================
   // Tạo folder
   // ============================================================
-  create: (payload: {
-    name: string;
-    color?: string;
-    tag_ids?: number[];
-  }) =>
+  create: (
+    payload: {
+      name: string;
+      color?: string;
+      tag_ids?: number[];
+    },
+    groupId?: number | string
+  ) =>
     api
-      .post<Folder>("/folders/", payload)
+      .post<Folder>(`${getFolderBaseUrl(groupId)}/`, payload)
       .then((r) => r.data),
 
   // ============================================================
   // Lấy chi tiết folder
   // ============================================================
-  getById: async (id: number) => {
-    const res = await api.get(`/folders/${id}`);
+  getById: async (id: number, groupId?: number | string) => {
+    const res = await api.get(`${getFolderBaseUrl(groupId)}/${id}`);
     return res.data;
   },
 
@@ -37,37 +44,40 @@ export const folderService = {
       name?: string;
       color?: string;
     },
+    groupId?: number | string
   ) => {
-    const res = await api.patch(`/folders/${id}`, data);
+    const res = await api.patch(`${getFolderBaseUrl(groupId)}/${id}`, data);
     return res.data;
   },
 
   // ============================================================
-  // XÓA FOLDER
+  // Xóa folder
   // ============================================================
-  //
-  // Backend:
-  // DELETE /folders/{folder_id}
-  //
-  // TODO:
-  // Backend chỉ xóa Folder và quan hệ FolderTag.
-  // Không xóa Tag hoặc Document.
-  //
-  delete: async (id: number) => {
-    await api.delete(`/folders/${id}`);
+  delete: async (id: number, groupId?: number | string) => {
+    await api.delete(`${getFolderBaseUrl(groupId)}/${id}`);
   },
 
   // ============================================================
   // Thêm Tags vào folder
   // ============================================================
-  addTags: async (folderId: number, tagIds: number[]) => {
+  addTags: async (folderId: number, tagIds: number[], groupId?: number | string) => {
     const res = await api.post(
-      `/folders/${folderId}/tags`,
+      `${getFolderBaseUrl(groupId)}/${folderId}/tags`,
       {
         tag_ids: tagIds,
-      },
+      }
     );
+    return res.data;
+  },
 
+  // Alias để giữ tương thích với code cũ
+  attachFolderTag: async (groupId: number | string, folderId: number, tagId: number) => {
+    const res = await api.post(
+      `${getFolderBaseUrl(groupId)}/${folderId}/tags`,
+      {
+        tag_ids: [tagId],
+      }
+    );
     return res.data;
   },
 
@@ -77,11 +87,22 @@ export const folderService = {
   removeTag: async (
     folderId: number,
     tagId: number,
+    groupId?: number | string
   ) => {
     const res = await api.delete(
-      `/folders/${folderId}/tags/${tagId}`,
+      `${getFolderBaseUrl(groupId)}/${folderId}/tags/${tagId}`
     );
+    return res.data;
+  },
 
+  // Alias để giữ tương thích với code cũ
+  detachFolderTag: async (groupId: number | string, folderId: number, tagId: number) => {
+    const res = await api.delete(
+      `${getFolderBaseUrl(groupId)}/${folderId}/tags/${tagId}`
+    );
     return res.data;
   },
 };
+
+// Export thêm alias cho groupFolderService
+export const groupFolderService = folderService;

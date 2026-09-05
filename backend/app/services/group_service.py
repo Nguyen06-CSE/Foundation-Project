@@ -31,9 +31,20 @@ async def get_member_permission(
 
 
 async def require_member(db: AsyncSession, workspace_id: int, user_id: int) -> str:
+    # 1. Truy vấn Workspace để kiểm tra sự tồn tại và Owner
+    workspace = await db.get(Workspace, workspace_id)
+    if not workspace or workspace.is_deleted or workspace.type != "group":
+        raise HTTPException(status_code=404, detail="Không tìm thấy nhóm")
+        
+    # 2. Nếu là Owner -> Trả về quyền 'full' ngay lập tức
+    if workspace.owner_id == user_id:
+        return "full"
+
+    # 3. Nếu không phải Owner -> Kiểm tra bảng WorkspaceMember
     perm = await get_member_permission(db, workspace_id, user_id)
     if perm is None:
-        raise HTTPException(403, "Bạn không phải thành viên của nhóm này")
+        raise HTTPException(status_code=403, detail="Bạn không phải thành viên của nhóm này")
+        
     return perm
 
 
@@ -44,6 +55,15 @@ async def require_full_permission(db: AsyncSession, workspace_id: int, user_id: 
         raise HTTPException(404, "Không tìm thấy nhóm")
     if perm != "full" and workspace.owner_id != user_id:
         raise HTTPException(403, "Bạn không có quyền thực hiện hành động này")
+    
+async def require_write_permission(db: AsyncSession, workspace_id: int, user_id: int) -> None:
+    perm = await require_member(db, workspace_id, user_id)
+    workspace = await db.get(Workspace, workspace_id)
+    if not workspace or workspace.is_deleted:
+        raise HTTPException(404, "Không tìm thấy nhóm")
+    # Cho phép nếu là owner, hoặc permission_level là 'write' hoặc 'full'
+    if perm not in ["write", "full"] and workspace.owner_id != user_id:
+        raise HTTPException(403, "Bạn không có quyền chỉnh sửa/tạo dữ liệu trong nhóm này")
 
 
 async def require_owner(db: AsyncSession, workspace_id: int, user_id: int) -> Workspace:

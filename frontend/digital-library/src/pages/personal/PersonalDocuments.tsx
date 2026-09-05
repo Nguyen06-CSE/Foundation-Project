@@ -24,6 +24,7 @@ import { type FolderAction } from "@/components/shared/FolderContextMenu"
 import { DocumentCard } from "@/components/shared/DocumentCard"
 import { type DocumentAction } from "@/components/shared/DocumentContextMenu"
 import EmptyState from "@/components/shared/EmptyState"
+import { getNormalizedExtension, useDocumentFilters, type TabKey } from "@/hooks/useDocumentFilters"
 
 // Modals
 import { UploadModal } from "./components/UploadModal"
@@ -43,7 +44,6 @@ import { cn } from "@/utils/cn"
 // ==========================================
 // 2. TYPES & CONSTANTS
 // ==========================================
-type TabKey = "all" | "document" | "image" | "pdf" | "other"
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "Tất cả" },
@@ -56,26 +56,6 @@ const TABS: { key: TabKey; label: string }[] = [
 // ==========================================
 // 3. HELPER FUNCTIONS
 // ==========================================
-const getNormalizedExtension = (type?: string | null) => {
-  if (!type) return ""
-  let cleanType = type.toLowerCase().trim()
-  if (cleanType.startsWith(".")) cleanType = cleanType.substring(1)
-  
-  const mimeMap: Record<string, string> = {
-    "application/pdf": "pdf",
-    "application/msword": "doc",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
-    "application/vnd.ms-excel": "xls",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
-    "application/vnd.ms-powerpoint": "ppt",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "application/zip": "zip",
-    "application/x-zip-compressed": "zip",
-  }
-  return mimeMap[cleanType] || cleanType.split("/").pop() || cleanType
-}
 
 const getFileExtension = (
   filePath?: string,
@@ -213,14 +193,8 @@ export function PersonalDocuments() {
   const queryClient = useQueryClient()
 
   // State điều hướng & tìm kiếm
-  const [activeTab, setActiveTab] = useState<TabKey>("all")
-  const [searchQuery, setSearchQuery] = useState("")
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null)
   const [page, setPage] = useState(1)
-
-  // State bộ lọc động
-  const [selectedTagId, setSelectedTagId] = useState<number | null>(null)
-  const [selectedFileType, setSelectedFileType] = useState<string | null>(null)
 
   // State quản lý Modals
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -240,17 +214,17 @@ export function PersonalDocuments() {
   // --- QUERIES ---
   const { data: folders, isLoading: foldersLoading } = useQuery({
     queryKey: ["folders"],
-    queryFn: folderService.getAll,
+    queryFn: () => folderService.getAll(),
   })
 
   const { data: tags = [] } = useQuery({
     queryKey: ["tags"],
-    queryFn: tagService.getAll,
+    queryFn: () => tagService.getAll(),
   })
 
   const { data: fileTypes = [] } = useQuery({
     queryKey: ["document-file-types"],
-    queryFn: documentService.getFileTypes,
+    queryFn: () => documentService.getFileTypes(),
   })
 
   const {
@@ -287,6 +261,50 @@ export function PersonalDocuments() {
     onError: (error) => {
       console.error("Lỗi đổi tên tài liệu:", error)
     },
+  })
+
+  const createFolderMutation = useMutation({
+    mutationFn: (data: { name: string; color: string; tagIds: number[] }) =>
+      folderService.create({ name: data.name, color: data.color, tag_ids: data.tagIds }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["folders"] })
+    }
+  })
+
+  const updateFolderMutation = useMutation({
+    mutationFn: async (data: { id: number; name: string; color: string; tagIds: number[]; initialTagIds: number[] }) => {
+      await folderService.update(data.id, { name: data.name, color: data.color })
+      
+      const tagsToAdd = data.tagIds.filter(id => !data.initialTagIds.includes(id))
+      const tagsToRemove = data.initialTagIds.filter(id => !data.tagIds.includes(id))
+      
+      const tagPromises = []
+      if (tagsToAdd.length > 0) {
+        tagPromises.push(folderService.addTags(data.id, tagsToAdd))
+      }
+      tagsToRemove.forEach(tagId => {
+        tagPromises.push(folderService.removeTag(data.id, tagId))
+      })
+      
+      await Promise.all(tagPromises)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["folders"] })
+    }
+  })
+
+  const createTagMutation = useMutation({
+    mutationFn: (name: string) => tagService.create({ name, color: "#2F6B3C" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tags"] })
+    }
+  })
+
+  const uploadMutation = useMutation({
+    mutationFn: (fd: FormData) => documentService.upload(fd),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] })
+    }
   })
 
   // --- ACTION HANDLERS FOR FOLDERS ---
@@ -370,7 +388,7 @@ export function PersonalDocuments() {
   }
 
   // --- ACTION HANDLERS FOR DOCUMENTS ---
-  const handleDocumentAction = (action: DocumentAction, documentId: string) => {
+  const handleDocumentAction = (action: DocumentAction| string,documentId: string) => {
     if (action === "view") {
       navigate(`/ca-nhan/tai-lieu/${documentId}`)
     } else if (action === "rename") {
@@ -413,41 +431,18 @@ export function PersonalDocuments() {
     tags: doc.tags || [],
   }))
 
-  const filteredDocCards = allDocCards.filter((doc) => {
-    if (
-      searchQuery &&
-      !doc.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ) {
-      return false
-    }
-    if (selectedTagId !== null) {
-      const hasTag = doc.tags.some((t: any) => t.id === selectedTagId)
-      if (!hasTag) return false
-    }
-    if (selectedFileType !== null) {
-      if (doc.rawType !== selectedFileType) return false
-    }
-    if (activeTab !== "all") {
-      const ext = getNormalizedExtension(doc.extension || doc.type)
-      const isDoc = [
-        "doc",
-        "docx",
-        "xls",
-        "xlsx",
-        "ppt",
-        "pptx",
-        "txt",
-      ].includes(ext)
-      const isImg = ["png", "jpg", "jpeg", "gif", "svg", "webp"].includes(ext)
-      const isPdf = ext === "pdf"
+  const {
+    activeTab,
+    setActiveTab,
+    searchQuery,
+    setSearchQuery,
+    selectedTagId,
+    setSelectedTagId,
+    selectedFileType,
+    setSelectedFileType,
+    filteredDocuments: filteredDocCards
+  } = useDocumentFilters(allDocCards)
 
-      if (activeTab === "document" && !isDoc) return false
-      if (activeTab === "image" && !isImg) return false
-      if (activeTab === "pdf" && !isPdf) return false
-      if (activeTab === "other" && (isDoc || isImg || isPdf)) return false
-    }
-    return true
-  })
 
   return (
     <div className="flex flex-col gap-6">
@@ -653,6 +648,28 @@ export function PersonalDocuments() {
         <CreateFolderModal
           onClose={handleCloseModal}
           initialData={editingFolder}
+          availableTags={tags}
+          onCreateTag={async (name) => {
+            return await createTagMutation.mutateAsync(name)
+          }}
+          onSubmitData={async (data) => {
+            if (data.id) {
+              await updateFolderMutation.mutateAsync({
+                id: data.id,
+                name: data.name,
+                color: data.color,
+                tagIds: data.tagIds,
+                initialTagIds: (editingFolder?.tagIds || []).map(Number)
+              })
+            } else {
+              await createFolderMutation.mutateAsync({
+                name: data.name,
+                color: data.color,
+                tagIds: data.tagIds
+              })
+            }
+          }}
+          isSubmitting={createFolderMutation.isPending || updateFolderMutation.isPending}
         />
       )}
 
@@ -710,7 +727,24 @@ export function PersonalDocuments() {
         </div>
       )}
 
-      {isUploadOpen && <UploadModal onClose={() => setIsUploadOpen(false)} />}
+      {isUploadOpen && (
+        <UploadModal 
+          onClose={() => setIsUploadOpen(false)} 
+          availableTags={tags}
+          onCreateTag={async (name) => {
+            return await createTagMutation.mutateAsync(name)
+          }}
+          onUpload={async (fd, selectedTagIds) => {
+            if (selectedTagIds.length > 0) {
+              selectedTagIds.forEach((id) => {
+                fd.append("tag_ids", id.toString())
+              })
+            }
+            await uploadMutation.mutateAsync(fd)
+          }}
+          isUploading={uploadMutation.isPending}
+        />
+      )}
 
       {/* Modal Xác nhận xóa thư mục */}
       {isDeleteFolderOpen && (
