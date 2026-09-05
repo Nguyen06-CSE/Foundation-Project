@@ -1,3 +1,5 @@
+// frontend/digital-library/src/pages/group/components/GroupDocumentCard.tsx
+
 import { DocumentCard, type DocumentCardProps } from "@/components/shared/DocumentCard";
 import { type GroupPermission } from "./GroupDocumentContextMenu";
 import { type DocumentAction, type DocumentMenuItem } from "@/components/shared/DocumentContextMenu";

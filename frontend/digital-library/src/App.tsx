@@ -5,7 +5,7 @@ import { MainLayout } from '@/layouts/MainLayout';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { PersonalDashboard } from '@/pages/personal/PersonalDashboard';
 import { PersonalDocuments } from '@/pages/personal/PersonalDocuments';
-import { DocumentDetail } from '@/pages/personal/DocumentDetail';
+import { DocumentDetail } from '@/components/shared/DocumentDetail';
 import SharedWithMe from '@/pages/personal/SharedWithMe';
 import FavoritesPage from '@/pages/personal/FavoritesPage';
 import TrashPage from '@/pages/trash/TrashPage';
@@ -18,6 +18,7 @@ import StatsPage from '@/pages/stats/StatsPage';
 import SettingsPage from '@/pages/settings/SettingsPage';
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
 import { useRestoreSession } from '@/hooks/useRestoreSession';
+import GroupDocumentDetailPage from "@/pages/group/GroupDocumentDetailPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -71,6 +72,10 @@ function AppRoutes() {
           </Route>
         </Route>
       </Route>
+      <Route
+  path="/groups/:id/documents/:docId"
+  element={<GroupDocumentDetailPage />}
+/>
 
       {/* Fallback */}
       <Route path="/" element={<Navigate to="/personal" replace />} />

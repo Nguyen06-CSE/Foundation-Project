@@ -1,3 +1,5 @@
+// frontend/digital-library/src/pages/group/components/GroupDocumentContextMenu.tsx
+
 import { DocumentContextMenu, type DocumentAction, type DocumentMenuItem } from "@/components/shared/DocumentContextMenu";
 import { Save } from "lucide-react";
 

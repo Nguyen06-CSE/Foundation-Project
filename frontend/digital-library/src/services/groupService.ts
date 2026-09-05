@@ -90,4 +90,20 @@ export const groupService = {
 
   addTagsToGroup: (groupId: number, tagIds: number[]) =>
     api.post(`/workspaces/${groupId}/tags/bulk`, { tag_ids: tagIds }).then(r => r.data),
+
+  // Lấy chi tiết 1 tài liệu trong nhóm
+  getDocumentById: (groupId: number, docId: number) =>
+    api.get<Document>(`/groups/${groupId}/documents/${docId}`).then((r) => r.data),
+
+  // Cập nhật thông tin/đổi tên tài liệu nhóm
+  updateDocument: (groupId: number, docId: number, payload: { title: string }) =>
+    api.patch<Document>(`/groups/${groupId}/documents/${docId}`, payload).then((r) => r.data),
+
+  // Cập nhật danh sách tags cho tài liệu nhóm
+  updateTags: (groupId: number, docId: number, tagIds: number[]) =>
+    api.put<Document>(`/groups/${groupId}/documents/${docId}/tags`, { tag_ids: tagIds }).then((r) => r.data),
+
+  // Xóa 1 tag khỏi tài liệu nhóm
+  removeTag: (groupId: number, docId: number, tagId: number) =>
+    api.delete<Document>(`/groups/${groupId}/documents/${docId}/tags/${tagId}`).then((r) => r.data),
 };

@@ -1,4 +1,4 @@
-// src/pages/personal/DocumentDetail.tsx
+// frontend/digital-library/src/components/shared/DocumentDetail.tsx
 
 // ==========================================
 // 1. IMPORTS
@@ -31,8 +31,6 @@ import { tagService } from "@/services/tagService";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { cn } from "@/utils/cn";
-
-
 
 // ==========================================
 // 2. TYPES & CONSTANTS
@@ -88,6 +86,35 @@ const MIME_TO_ICON_TYPE: Record<string, string> = {
   "image/png": "image",
 };
 
+export interface DocumentDetailPermissions {
+  canEdit?: boolean;
+  canDelete?: boolean;
+  canManageTags?: boolean;
+}
+
+export interface SharedDocumentDetailProps {
+  // 1. Dữ liệu định danh
+  documentId?: number; // Truyền từ ngoài vào (dành cho modal/tab), nếu không có sẽ lấy từ URL params
+
+  // 2. Các hàm gọi API (để ghi đè khi dùng ở Group/Lớp học)
+  fetchDocumentFn?: (id: number) => Promise<any>;
+  updateDocumentFn?: (id: number, data: { title: string }) => Promise<any>;
+  deleteDocumentFn?: (id: number) => Promise<any>;
+  updateTagsFn?: (id: number, tagIds: number[]) => Promise<any>;
+  removeTagFn?: (id: number, tagId: number) => Promise<any>;
+
+  // 3. React Query Config
+  queryKeyPrefix?: string[]; // Mặc định là ["document"]
+
+  // 4. Phân quyền
+  permissions?: DocumentDetailPermissions;
+
+  // 5. Điều hướng
+  backUrl?: string; // URL để quay lại sau khi xóa hoặc ấn nút Back
+  onBack?: () => void; // Hàm custom khi ấn nút Back
+  onDeleteSuccess?: () => void; // Hàm custom khi xóa thành công
+}
+
 // ==========================================
 // 3. SUB-COMPONENTS
 // ==========================================
@@ -118,6 +145,7 @@ function StatItem({ label, value }: StatItemProps) {
     </div>
   );
 }
+
 function TabDetail({ doc }: { doc: any }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -238,12 +266,30 @@ function TabActivity() {
 // ==========================================
 // 4. MAIN COMPONENT
 // ==========================================
-export function DocumentDetail() {
-  const { id } = useParams<{ id: string }>();
+export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
+  const {
+    documentId: propDocumentId,
+    fetchDocumentFn = documentService.getById,
+    updateDocumentFn = documentService.update,
+    deleteDocumentFn = documentService.delete,
+    updateTagsFn = documentService.updateTags,
+    removeTagFn = documentService.removeTag,
+    queryKeyPrefix = ["document"],
+    permissions = {},
+    backUrl = "/personal/documents",
+    onBack,
+    onDeleteSuccess,
+  } = props;
+
+  const canEdit = permissions.canEdit ?? true;
+  const canDelete = permissions.canDelete ?? true;
+  const canManageTags = permissions.canManageTags ?? true;
+
+  const params = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-
+  const id = propDocumentId ?? Number(params.id);
 
   const [activeTab, setActiveTab] = useState<TabKey>("detail");
 
@@ -254,18 +300,36 @@ export function DocumentDetail() {
   const [tagSearchQuery, setTagSearchQuery] = useState("");
   const [selectedColor, setSelectedColor] = useState(COLORS[0].hex);
 
-
   const [isRenaming, setIsRenaming] = useState(false);
   const [tempTitle, setTempTitle] = useState("");
 
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (backUrl) {
+      navigate(backUrl);
+    } else {
+      navigate(-1);
+    }
+  };
 
- // Mutation cập nhật tên tài liệu trực tiếp
+  // --- QUERIES & MUTATIONS ---
+  const {
+    data: doc,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: [...queryKeyPrefix, id],
+    queryFn: () => fetchDocumentFn(id),
+    enabled: !isNaN(id) && id > 0,
+  });
+
+  // Mutation cập nhật tên tài liệu trực tiếp
   const renameMutation = useMutation({
-    mutationFn: (newTitle: string) =>
-      documentService.update(Number(id), { title: newTitle }),
+    mutationFn: (newTitle: string) => updateDocumentFn(id, { title: newTitle }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
-      queryClient.invalidateQueries({ queryKey: ["document", id] });
+      queryClient.invalidateQueries({ queryKey: [...queryKeyPrefix, id] });
       setIsRenaming(false);
     },
     onError: (error) => {
@@ -274,6 +338,7 @@ export function DocumentDetail() {
   });
 
   const handleStartRename = () => {
+    if (!canEdit) return;
     setTempTitle(doc?.title || "");
     setIsRenaming(true);
   };
@@ -287,22 +352,10 @@ export function DocumentDetail() {
     }
   };
 
-  // --- QUERIES & MUTATIONS ---
-  const {
-    data: doc,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["document", id],
-    queryFn: () => documentService.getById(Number(id)),
-    enabled: !!id,
-  });
-
   // Lấy danh sách Tag từ DB
   const {
     data: allTags = [],
     isLoading: isLoadingTags,
-    isError: _isTagError,
   } = useQuery<TagType[]>({
     queryKey: ["all-tags"],
     queryFn: () => tagService.getAll(),
@@ -326,8 +379,14 @@ export function DocumentDetail() {
   }, [doc]);
 
   const deleteMutation = useMutation({
-    mutationFn: () => documentService.delete(Number(id)),
-    onSuccess: () => navigate("/ca-nhan/tai-lieu"),
+    mutationFn: () => deleteDocumentFn(id),
+    onSuccess: () => {
+      if (onDeleteSuccess) {
+        onDeleteSuccess();
+      } else {
+        navigate(backUrl);
+      }
+    },
   });
 
   // API TẠO TAG MỚI
@@ -336,14 +395,12 @@ export function DocumentDetail() {
       tagService.create(newTag),
 
     onSuccess: async (createdTag) => {
-      // Thêm tag vừa tạo vào danh sách tag đã chọn trên UI
       setSelectedTags((prev) => {
         const exists = prev.some((tag) => tag.id === createdTag.id);
         if (exists) return prev;
         return [...prev, createdTag];
       });
 
-      // Cập nhật cache danh sách tất cả tag
       queryClient.setQueryData<TagType[]>(["all-tags"], (currentTags = []) => {
         const exists = currentTags.some((tag) => tag.id === createdTag.id);
         if (exists) return currentTags;
@@ -365,21 +422,19 @@ export function DocumentDetail() {
       if (!id) {
         throw new Error("Không tìm thấy document ID");
       }
-
-      return documentService.updateTags(Number(id), tagIds);
+      return updateTagsFn(id, tagIds);
     },
 
     onSuccess: async (updatedDocument) => {
-      // Backend là nguồn dữ liệu chính
-      const savedTags = updatedDocument.tags ?? [];
+      const savedTags = updatedDocument?.tags ?? [];
 
       setSelectedTags(savedTags);
       setOriginalTags(savedTags);
 
-      queryClient.setQueryData(["document", id], updatedDocument);
+      queryClient.setQueryData([...queryKeyPrefix, id], updatedDocument);
 
       await queryClient.invalidateQueries({
-        queryKey: ["document", id],
+        queryKey: [...queryKeyPrefix, id],
       });
 
       setIsTagEditorOpen(false);
@@ -388,7 +443,6 @@ export function DocumentDetail() {
 
     onError: (error: any) => {
       console.error("Không thể lưu tags:", error);
-
       alert(
         error?.response?.data?.detail ||
           "Không thể lưu nhãn dán. Vui lòng thử lại.",
@@ -402,13 +456,11 @@ export function DocumentDetail() {
       if (!id) {
         throw new Error("Không tìm thấy document ID");
       }
-
-      return documentService.removeTag(Number(id), tagId);
+      return removeTagFn(id, tagId);
     },
 
     onSuccess: async (updatedDocument) => {
-      // Backend trả về document sau khi xóa tag
-      const updatedTags: TagType[] = Array.isArray(updatedDocument.tags)
+      const updatedTags: TagType[] = Array.isArray(updatedDocument?.tags)
         ? updatedDocument.tags.map((tag: any) => ({
             id: Number(tag.id),
             name: tag.name,
@@ -416,22 +468,18 @@ export function DocumentDetail() {
           }))
         : [];
 
-      // Cập nhật UI
       setSelectedTags(updatedTags);
       setOriginalTags(updatedTags);
 
-      // Cập nhật React Query cache
-      queryClient.setQueryData(["document", id], updatedDocument);
+      queryClient.setQueryData([...queryKeyPrefix, id], updatedDocument);
 
-      // Đồng bộ lại với backend
       await queryClient.invalidateQueries({
-        queryKey: ["document", id],
+        queryKey: [...queryKeyPrefix, id],
       });
     },
 
     onError: (error: any) => {
       console.error("Không thể xóa tag:", error);
-
       alert(
         error?.response?.data?.detail ||
           "Không thể xóa nhãn dán. Vui lòng thử lại.",
@@ -507,7 +555,7 @@ export function DocumentDetail() {
       <div className="flex flex-col items-center justify-center py-24 gap-4">
         <p className="text-gray-500">Không tìm thấy tài liệu.</p>
         <button
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="text-sm text-primary-600 hover:underline"
         >
           ← Quay lại
@@ -529,7 +577,7 @@ export function DocumentDetail() {
   return (
     <div className="flex flex-col gap-6 pb-10">
       <button
-        onClick={() => navigate(-1)}
+        onClick={handleBack}
         className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors w-fit"
       >
         <ArrowLeft className="h-4 w-4" /> Quay lại
@@ -545,7 +593,7 @@ export function DocumentDetail() {
               iconClassName="h-6 w-6"
             />
             <div className="min-w-0 flex-1">
-              {isRenaming ? (
+              {isRenaming && canEdit ? (
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -653,41 +701,45 @@ export function DocumentDetail() {
                       }}
                     >
                       {tag.name}
-                      <button
-                        type="button"
-                        onClick={() => removeTag(tag.id)}
-                        disabled={removeTagMutation.isPending}
-                        className="opacity-60 hover:opacity-100 transition-opacity focus:outline-none disabled:opacity-30"
-                        title="Xóa tag khỏi tài liệu"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
+                      {canManageTags && (
+                        <button
+                          type="button"
+                          onClick={() => removeTag(tag.id)}
+                          disabled={removeTagMutation.isPending}
+                          className="opacity-60 hover:opacity-100 transition-opacity focus:outline-none disabled:opacity-30"
+                          title="Xóa tag khỏi tài liệu"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
                     </span>
                   );
                 })}
 
-                <button
-                  onClick={() => {
-                    if (!isTagEditorOpen) {
-                      setOriginalTags([...selectedTags]);
-                      setTagSearchQuery("");
-                      setSelectedColor(COLORS[0].hex);
-                    }
-                    setIsTagEditorOpen((prev) => !prev);
-                  }}
-                  className={cn(
-                    "inline-flex h-7 w-7 items-center justify-center rounded-full border border-dashed text-gray-400 transition-colors",
-                    isTagEditorOpen
-                      ? "border-primary-500 text-primary-600 bg-primary-50"
-                      : "border-gray-300 hover:border-primary-500 hover:text-primary-600",
-                  )}
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
+                {canManageTags && (
+                  <button
+                    onClick={() => {
+                      if (!isTagEditorOpen) {
+                        setOriginalTags([...selectedTags]);
+                        setTagSearchQuery("");
+                        setSelectedColor(COLORS[0].hex);
+                      }
+                      setIsTagEditorOpen((prev) => !prev);
+                    }}
+                    className={cn(
+                      "inline-flex h-7 w-7 items-center justify-center rounded-full border border-dashed text-gray-400 transition-colors",
+                      isTagEditorOpen
+                        ? "border-primary-500 text-primary-600 bg-primary-50"
+                        : "border-gray-300 hover:border-primary-500 hover:text-primary-600",
+                    )}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                )}
               </div>
 
               {/* POPUP TAG EDITOR */}
-              {isTagEditorOpen && (
+              {isTagEditorOpen && canManageTags && (
                 <div className="absolute top-full left-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50 animate-in fade-in zoom-in-95">
                   <div className="mb-4">
                     <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-gray-700">
@@ -854,55 +906,67 @@ export function DocumentDetail() {
                   icon: Share2,
                   label: "Chia sẻ tài liệu",
                   onClick: () => console.log("Chia sẻ"),
+                  show: true,
                 },
                 {
                   icon: Star,
                   label: "Thêm vào yêu thích",
                   onClick: () => console.log("Yêu thích"),
+                  show: true,
                 },
                 {
                   icon: FolderInput,
                   label: "Di chuyển tệp",
                   onClick: () => console.log("Di chuyển"),
+                  show: true,
                 },
-                {
-                  icon: Edit2,
-                  label: renameMutation.isPending
-                    ? "Đang lưu..."
-                    : "Đổi tên tệp",
-                  onClick: handleStartRename,
-                  disabled: renameMutation.isPending,
-                },
-              ].map(({ icon: Icon, label, onClick, disabled }) => (
-                <button
-                  key={label}
-                  disabled={disabled}
-                  className="flex items-center gap-3 px-1 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50"
-                  onClick={onClick}
-                >
-                  <Icon className="h-4 w-4 text-gray-500 shrink-0" />
-                  {label}
-                </button>
-              ))}
+                ...(canEdit
+                  ? [
+                      {
+                        icon: Edit2,
+                        label: renameMutation.isPending
+                          ? "Đang lưu..."
+                          : "Đổi tên tệp",
+                        onClick: handleStartRename,
+                        disabled: renameMutation.isPending,
+                        show: true,
+                      },
+                    ]
+                  : []),
+              ]
+                .filter((item) => item.show)
+                .map(({ icon: Icon, label, onClick, disabled }) => (
+                  <button
+                    key={label}
+                    disabled={disabled}
+                    className="flex items-center gap-3 px-1 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50"
+                    onClick={onClick}
+                  >
+                    <Icon className="h-4 w-4 text-gray-500 shrink-0" />
+                    {label}
+                  </button>
+                ))}
 
-              <div className="border-t border-gray-200 mt-1 pt-1">
-                <button
-                  disabled={deleteMutation.isPending}
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.",
-                      )
-                    ) {
-                      deleteMutation.mutate();
-                    }
-                  }}
-                  className="flex items-center gap-3 px-1 py-2.5 text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full disabled:opacity-50"
-                >
-                  <Trash2 className="h-4 w-4 shrink-0" />
-                  {deleteMutation.isPending ? "Đang xóa..." : "Xóa tài liệu"}
-                </button>
-              </div>
+              {canDelete && (
+                <div className="border-t border-gray-200 mt-1 pt-1">
+                  <button
+                    disabled={deleteMutation.isPending}
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.",
+                        )
+                      ) {
+                        deleteMutation.mutate();
+                      }
+                    }}
+                    className="flex items-center gap-3 px-1 py-2.5 text-sm font-medium text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full disabled:opacity-50"
+                  >
+                    <Trash2 className="h-4 w-4 shrink-0" />
+                    {deleteMutation.isPending ? "Đang xóa..." : "Xóa tài liệu"}
+                  </button>
+                </div>
+              )}
             </div>
           </Card>
         </div>
