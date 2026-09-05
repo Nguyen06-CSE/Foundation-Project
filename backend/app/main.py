@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from app.routers import workspace_tags
 from app.routers.academic import router as academic_router
 from app.routers.auth import router as auth_router
 from app.routers.categories import router as categories_router
@@ -67,6 +68,7 @@ app.include_router(academic_router)
 app.include_router(notifications_router)
 app.include_router(folders_router)
 app.include_router(groups_router)
+app.include_router(workspace_tags.router)
 
 
 @app.on_event("startup")

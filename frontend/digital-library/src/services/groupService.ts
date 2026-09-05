@@ -87,4 +87,7 @@ export const groupService = {
 
   restoreFromTrash: (groupId: number, docId: number) =>
     api.post(`/groups/${groupId}/trash/${docId}/restore`),
+
+  addTagsToGroup: (groupId: number, tagIds: number[]) =>
+    api.post(`/workspaces/${groupId}/tags/bulk`, { tag_ids: tagIds }).then(r => r.data),
 };

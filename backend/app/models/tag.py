@@ -2,6 +2,8 @@
 from typing import TYPE_CHECKING, List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey
+
+from app.models.workspace_tag import WorkspaceTag
 from .base import Base
 
 if TYPE_CHECKING:
@@ -30,3 +32,5 @@ class Tag(Base):
     folders: Mapped[List["Folder"]] = relationship(
         "Folder", secondary="folder_tags", back_populates="tags", viewonly=True
     )
+    workspace_tags: Mapped[List["WorkspaceTag"]] = relationship(
+        "WorkspaceTag", back_populates="tag")

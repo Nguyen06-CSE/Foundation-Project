@@ -8,6 +8,8 @@ from sqlalchemy import (
     ForeignKey, func, Index
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.models.workspace_tag import WorkspaceTag
 from .base import Base, TimestampMixin
 
 if TYPE_CHECKING:
@@ -89,6 +91,11 @@ class Workspace(Base, TimestampMixin):
         "TrashBatch", back_populates="workspace"
     )
     tags: Mapped[List["Tag"]] = relationship("Tag", back_populates="workspace", cascade="all, delete-orphan")
+    
+    workspace_tags: Mapped[List["WorkspaceTag"]] = relationship(
+        "WorkspaceTag", back_populates="workspace",
+        cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Workspace(id={self.id}, name='{self.name}', type='{self.type}')>"

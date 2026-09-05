@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Search, Users, X } from "lucide-react";
+import { Search, Users, X, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -10,11 +10,23 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import EmptyState from "@/components/shared/EmptyState";
 import { groupService } from "@/services/groupService";
+import { tagService } from "@/services/tagService";
 import type { GroupListItem, PermissionLevel } from "@/types/group";
 import { cn } from "@/utils/cn";
 import { mockGroups } from "@/mocks/groups";
-import { formatRelativeDate } from "@/utils/formatDate"
+import { formatRelativeDate } from "@/utils/formatDate";
 
+export interface Tag {
+  id: number;
+  name: string;
+}
+
+export interface CreateGroupSubmitData {
+  name: string;
+  description?: string;
+  default_member_permission: PermissionLevel;
+  tagIds: number[];
+}
 
 export default function GroupList() {
   const navigate = useNavigate();
@@ -28,6 +40,14 @@ export default function GroupList() {
     retry: false,
   });
 
+  // Đảm bảo gọi hàm lấy tags đúng cách
+  const { data: tagsData } = useQuery<Tag[]>({
+    queryKey: ["tags"],
+    queryFn: () => tagService.getAll(),
+    retry: false,
+  });
+
+  const availableTags: Tag[] = tagsData || [];
   const groups = data && data.length > 0 ? data : mockGroups;
   const filteredGroups = useMemo(
     () => groups.filter((group) => group.name.toLowerCase().includes(searchQuery.trim().toLowerCase())),
@@ -35,11 +55,26 @@ export default function GroupList() {
   );
 
   const createMutation = useMutation({
-    mutationFn: groupService.create,
+    mutationFn: async (payload: CreateGroupSubmitData) => {
+      // Bước 1: Gọi API tạo nhóm mới
+      const workspace = await groupService.create({
+        name: payload.name,
+        description: payload.description,
+        default_member_permission: payload.default_member_permission,
+      });
+
+      // Bước 2: Nếu người dùng có chọn thẻ, gọi tiếp API bulk để gắn thẻ
+      if (payload.tagIds && payload.tagIds.length > 0) {
+        await groupService.addTagsToGroup(workspace.id, payload.tagIds);
+      }
+
+      // Trả về workspace để onSuccess xử lý điều hướng
+      return workspace;
+    },
     onSuccess: (workspace) => {
       queryClient.invalidateQueries({ queryKey: ["groups"] });
       setIsCreateOpen(false);
-      navigate(`/groups/${workspace.id}`);
+      navigate(`/groups/${workspace.id}`); // Điều hướng vào trong nhóm vừa tạo
     },
   });
 
@@ -73,7 +108,14 @@ export default function GroupList() {
       ) : (
         <EmptyState icon={<Users className="h-6 w-6" />} title="Chưa có nhóm nào" description="Tạo nhóm đầu tiên để chia sẻ tài liệu học tập với bạn bè hoặc giảng viên." actionLabel="Tạo nhóm" onAction={() => setIsCreateOpen(true)} />
       )}
-      {isCreateOpen && <CreateGroupModal isPending={createMutation.isPending} onClose={() => setIsCreateOpen(false)} onSubmit={(payload) => createMutation.mutate(payload)} />}
+      {isCreateOpen && (
+        <CreateGroupModal
+          isPending={createMutation.isPending}
+          onClose={() => setIsCreateOpen(false)}
+          onSubmit={(payload) => createMutation.mutate(payload)}
+          availableTags={availableTags}
+        />
+      )}
     </div>
   );
 }
@@ -105,46 +147,152 @@ function GroupListCard({ group, onEnter }: GroupListCardProps) {
 interface CreateGroupModalProps {
   isPending: boolean;
   onClose: () => void;
-  onSubmit: (payload: { name: string; description?: string; default_member_permission: PermissionLevel }) => void;
+  onSubmit: (data: CreateGroupSubmitData) => void;
+  availableTags?: Tag[];
 }
 
-function CreateGroupModal({ isPending, onClose, onSubmit }: CreateGroupModalProps) {
+function CreateGroupModal({ isPending, onClose, onSubmit, availableTags = [] }: CreateGroupModalProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [permission, setPermission] = useState<PermissionLevel>("view");
+
+  const [allowTags, setAllowTags] = useState<boolean>(false);
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+  const [tagSearchQuery, setTagSearchQuery] = useState("");
+
+  const handleAllowTagsChange = (allow: boolean) => {
+    setAllowTags(allow);
+    if (allow) {
+      setSelectedTagIds(availableTags.map((tag) => tag.id));
+    } else {
+      setSelectedTagIds([]);
+      setTagSearchQuery("");
+    }
+  };
+
+  const toggleTag = (tagId: number) => {
+    setSelectedTagIds((prev) =>
+      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
+    );
+  };
+
+  const filteredTags = useMemo(() => {
+    if (!tagSearchQuery.trim()) return availableTags;
+    return availableTags.filter((tag) =>
+      tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase())
+    );
+  }, [availableTags, tagSearchQuery]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 p-4">
-      <Card className="w-full max-w-lg p-0">
-        <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 p-4 backdrop-blur-sm">
+      <Card className="w-full max-w-lg p-0 max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-5 py-4">
           <h2 className="text-lg font-semibold text-gray-900">Tạo nhóm mới</h2>
-          <button className="rounded-lg p-1 text-gray-400 hover:bg-gray-100" onClick={onClose}><X className="h-5 w-5" /></button>
+          <button className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition-colors" onClick={onClose}>
+            <X className="h-5 w-5" />
+          </button>
         </div>
-        <form className="space-y-5 p-5" onSubmit={(event) => { event.preventDefault(); onSubmit({ name, description: description || undefined, default_member_permission: permission }); }}>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Tên nhóm</label>
-            <Input value={name} onChange={(event) => setName(event.target.value)} required />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Mô tả</label>
-            <textarea className="min-h-24 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary-600" value={description} onChange={(event) => setDescription(event.target.value)} />
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              { value: "full" as const, label: "Toàn quyền", desc: "Thành viên có thể upload, sửa và xóa tài liệu." },
-              { value: "view" as const, label: "Chỉ xem", desc: "Thành viên xem, tải và lưu tài liệu về cá nhân." },
-            ].map((option) => (
-              <label key={option.value} className={cn("cursor-pointer rounded-xl border p-4", permission === option.value ? "border-primary-500 bg-primary-50" : "border-gray-200 bg-white")}>
-                <input className="sr-only" type="radio" checked={permission === option.value} onChange={() => setPermission(option.value)} />
-                <span className="text-sm font-semibold text-gray-900">{option.label}</span>
-                <span className="mt-1 block text-xs text-gray-500">{option.desc}</span>
-              </label>
-            ))}
-          </div>
-          <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={onClose}>Hủy</Button>
-            <Button type="submit" disabled={isPending || !name.trim()}>Tạo nhóm</Button>
-          </div>
-        </form>
+        <div className="overflow-y-auto custom-scrollbar p-5">
+          <form id="create-group-form" className="space-y-6" onSubmit={(event) => {
+            event.preventDefault();
+            onSubmit({
+              name,
+              description: description || undefined,
+              default_member_permission: permission,
+              tagIds: selectedTagIds,
+            });
+          }}>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Tên nhóm</label>
+              <Input value={name} onChange={(event) => setName(event.target.value)} required />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">Mô tả</label>
+              <textarea className="min-h-24 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary-600" value={description} onChange={(event) => setDescription(event.target.value)} />
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-600"
+                    checked={allowTags === true}
+                    onChange={() => handleAllowTagsChange(true)}
+                  />
+                  <span className="text-sm font-semibold text-gray-900">Cho phép lấy danh sách thẻ</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-600"
+                    checked={allowTags === false}
+                    onChange={() => handleAllowTagsChange(false)}
+                  />
+                  <span className="text-sm font-semibold text-gray-900">Không phép lấy danh sách thẻ</span>
+                </label>
+              </div>
+
+              {allowTags && (
+                <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4 animate-in fade-in slide-in-from-top-2">
+                  <div className="relative mb-3">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={tagSearchQuery}
+                      onChange={(e) => setTagSearchQuery(e.target.value)}
+                      placeholder="tìm tên tag..."
+                      className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                    />
+                  </div>
+
+                  <div className="max-h-40 overflow-y-auto flex flex-wrap gap-2.5 pt-1">
+                    {filteredTags.length > 0 ? (
+                      filteredTags.map((tag) => {
+                        const isSelected = selectedTagIds.includes(tag.id);
+                        return (
+                          <button
+                            key={tag.id}
+                            type="button"
+                            onClick={() => toggleTag(tag.id)}
+                            className={cn(
+                              "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors border",
+                              isSelected
+                                ? "bg-green-700 border-green-700 text-white hover:bg-green-800"
+                                : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                            )}
+                          >
+                            {tag.name}
+                            {isSelected && <Check className="h-4 w-4" />}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <div className="w-full text-center text-sm text-gray-500 py-2">Không tìm thấy thẻ.</div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                { value: "full" as const, label: "Toàn quyền", desc: "Thành viên có thể upload, sửa và xóa tài liệu." },
+                { value: "view" as const, label: "Chỉ xem", desc: "Thành viên xem, tải và lưu tài liệu về cá nhân." },
+              ].map((option) => (
+                <label key={option.value} className={cn("cursor-pointer rounded-xl border p-4 transition-colors", permission === option.value ? "border-primary-500 bg-primary-50" : "border-gray-200 bg-white hover:border-gray-300")}>
+                  <input className="sr-only" type="radio" checked={permission === option.value} onChange={() => setPermission(option.value)} />
+                  <span className="text-sm font-semibold text-gray-900">{option.label}</span>
+                  <span className="mt-1 block text-xs text-gray-500">{option.desc}</span>
+                </label>
+              ))}
+            </div>
+          </form>
+        </div>
+        <div className="flex shrink-0 items-center justify-end gap-3 border-t border-gray-100 bg-white px-5 py-4">
+          <Button type="button" variant="outline" onClick={onClose}>Hủy bỏ</Button>
+          <Button type="submit" form="create-group-form" disabled={isPending || !name.trim()}>Tạo</Button>
+        </div>
       </Card>
     </div>
   );
