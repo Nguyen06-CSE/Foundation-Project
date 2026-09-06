@@ -16,13 +16,12 @@ import { Input } from "@/components/ui/Input";
 import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown";
 
 import { CreateFolderModal } from "@/pages/personal/components/CreateFolderModal";
-import { UploadModal } from "@/pages/personal/components/UploadModal";
+import { GroupUploadModal } from "./components/GroupUploadModal";
 
 import { getNormalizedExtension } from "@/hooks/useDocumentFilters";
 import { groupService } from "@/services/groupService";
 import { groupTagService } from "@/services/tagService";
 import { groupFolderService } from "@/services/folderService";
-import { groupDocumentService } from "@/services/documentService";
 
 import { cn } from "@/utils/cn";
 import { formatRelativeDate } from "@/utils/formatDate";
@@ -191,7 +190,6 @@ export default function GroupSpace() {
       {/* TAB TÀI LIỆU KÈM THANH TÌM KIẾM & BỘ LỌC ĐỘNG */}
       {activeTab === "documents" && (
         <div className="flex flex-col gap-4">
-          {/* Thanh Tìm kiếm & Bộ lọc */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="min-w-[240px] flex-1 max-w-md">
               <Input
@@ -225,9 +223,8 @@ export default function GroupSpace() {
             </div>
           </div>
 
-          {/* Component DocumentsTab hiển thị danh sách đã qua bộ lọc */}
           <DocumentsTab
-            documents={filteredDocuments} // Truyền mảng documents đã được lọc theo searchQuery, selectedTagId, selectedFileType
+            documents={filteredDocuments}
             folders={folders}
             isLoading={docsLoading || foldersLoading}
             permission={permission}
@@ -326,31 +323,12 @@ export default function GroupSpace() {
         />
       )}
 
+      {/* GroupUploadModal đã bọc toàn bộ logic upload */}
       {isUploadModalOpen && (
-        <UploadModal
+        <GroupUploadModal
+          groupId={groupId}
+          groupTags={groupTags}
           onClose={() => setIsUploadModalOpen(false)}
-          availableTags={groupTags}
-          onCreateTag={async (name) => {
-            return await groupTagService.create(
-              { name, color: "#2F6B3C" },
-              groupId,
-            );
-          }}
-          onUpload={async (fd, selectedTagIds) => {
-            const newDoc = await groupDocumentService.upload(fd, groupId);
-
-            if (selectedTagIds.length > 0) {
-              await Promise.all(
-                selectedTagIds.map((tagId) =>
-                  groupDocumentService.attachTag(groupId, newDoc.id, tagId),
-                ),
-              );
-            }
-            queryClient.invalidateQueries({
-              queryKey: ["group-documents", groupId],
-            });
-          }}
-          isUploading={false}
         />
       )}
 
@@ -376,13 +354,11 @@ export default function GroupSpace() {
       {isDeleteFolderOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-xl bg-white shadow-xl">
-            {/* Header */}
             <div className="flex items-start justify-between gap-4 border-b border-gray-100 px-5 py-4">
               <div>
                 <h3 className="text-base font-semibold text-gray-900">
                   Xóa thư mục nhóm?
                 </h3>
-
                 <p className="mt-1 text-sm text-gray-500">
                   Bạn có chắc muốn xóa thư mục này khỏi không gian nhóm không?
                 </p>
@@ -398,7 +374,6 @@ export default function GroupSpace() {
               </button>
             </div>
 
-            {/* Content */}
             <div className="px-5 py-4">
               <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
                 <p className="text-sm font-medium text-gray-800">
@@ -413,7 +388,6 @@ export default function GroupSpace() {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="flex justify-end gap-2 border-t border-gray-100 px-5 py-4">
               <Button
                 variant="outline"

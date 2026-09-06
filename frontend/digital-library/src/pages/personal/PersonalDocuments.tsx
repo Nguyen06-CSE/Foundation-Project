@@ -27,7 +27,7 @@ import EmptyState from "@/components/shared/EmptyState"
 import { getNormalizedExtension, useDocumentFilters, type TabKey } from "@/hooks/useDocumentFilters"
 
 // Modals
-import { UploadModal } from "./components/UploadModal"
+import { UploadModal } from "../../components/shared/UploadModal"
 import {
   CreateFolderModal,
   type FolderInitialData,

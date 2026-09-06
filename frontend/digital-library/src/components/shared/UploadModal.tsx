@@ -1,14 +1,20 @@
-// src/pages/personal/components/UploadModal.tsx
+// frontend/digital-library/src/components/shared/UploadModal.tsx
 
 import { useState, useRef } from "react"
 import { X, Upload, FileText, AlertCircle, Search, Plus, Check } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { cn } from "@/utils/cn"
 
-interface UploadModalProps {
+export interface TagItem {
+  id: number
+  name: string
+  color?: string
+}
+
+export interface UploadModalProps {
   onClose: () => void
-  availableTags: { id: number; name: string }[]
-  onCreateTag?: (name: string) => Promise<{ id: number; name: string }>
+  availableTags?: TagItem[]
+  onCreateTag?: (name: string) => Promise<TagItem>
   onUpload: (formData: FormData, selectedTagIds: number[]) => Promise<void>
   isUploading: boolean
 }
@@ -19,18 +25,29 @@ const ACCEPTED_MIME = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "image/jpeg", "image/png", "image/webp",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
   "text/plain",
 ]
 const MAX_MB = 50
 
-export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isUploading }: UploadModalProps) {
+export function UploadModal({
+  onClose,
+  availableTags = [],
+  onCreateTag,
+  onUpload,
+  isUploading,
+}: UploadModalProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [error, setError] = useState<string | null>(null)
-  
+
+  // Safe Fallback cho Tags để chống lỗi TypeError undefined
+  const safeTags = availableTags ?? []
+
   // States cho Tags
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([])
   const [tagSearchQuery, setTagSearchQuery] = useState("")
@@ -47,7 +64,7 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
       return
     }
     setFile(f)
-    setTitle(f.name.replace(/\.[^/.]+$/, "")) // bỏ extension
+    setTitle(f.name.replace(/\.[^/.]+$/, "")) // Bỏ extension
   }
 
   const handleUploadSubmit = async () => {
@@ -79,11 +96,11 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
     )
   }
 
-  const filteredTags = availableTags.filter((tag) =>
+  const filteredTags = safeTags.filter((tag) =>
     tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase())
   )
 
-  const isExactMatch = availableTags.some(
+  const isExactMatch = safeTags.some(
     (tag) => tag.name.toLowerCase() === tagSearchQuery.toLowerCase().trim()
   )
 
@@ -103,7 +120,6 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
       <div className="w-full max-w-md rounded-2xl bg-white shadow-xl flex flex-col max-h-[90vh]">
-
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 shrink-0">
           <h2 className="text-lg font-bold text-gray-900">Tải tài liệu lên</h2>
@@ -114,11 +130,14 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
 
         {/* Body (Scrollable) */}
         <div className="flex flex-col gap-4 px-6 py-5 overflow-y-auto custom-scrollbar">
-
           {/* Drop zone */}
           <div
             onClick={() => inputRef.current?.click()}
-            onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f) }}
+            onDrop={(e) => {
+              e.preventDefault()
+              const f = e.dataTransfer.files[0]
+              if (f) handleFile(f)
+            }}
             onDragOver={(e) => e.preventDefault()}
             className="cursor-pointer rounded-xl border-2 border-dashed border-gray-300 p-8 text-center hover:border-primary-400 hover:bg-primary-50 transition-colors"
           >
@@ -127,13 +146,20 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
               type="file"
               className="hidden"
               accept={ACCEPTED_MIME.join(",")}
-              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                if (f) handleFile(f)
+              }}
             />
             {file ? (
               <div className="flex flex-col items-center gap-2">
                 <FileText className="h-10 w-10 text-primary-600" />
-                <p className="text-sm font-medium text-gray-900 truncate max-w-[200px]">{file.name}</p>
-                <p className="text-xs text-gray-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                <p className="text-sm font-medium text-gray-900 truncate max-w-[200px]">
+                  {file.name}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                </p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-2">
@@ -141,7 +167,9 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
                 <p className="text-sm font-medium text-gray-700">
                   Kéo thả hoặc <span className="text-primary-600">chọn file</span>
                 </p>
-                <p className="text-xs text-gray-400">PDF, DOCX, PPTX, JPG, PNG — tối đa {MAX_MB}MB</p>
+                <p className="text-xs text-gray-400">
+                  PDF, DOCX, PPTX, JPG, PNG — tối đa {MAX_MB}MB
+                </p>
               </div>
             )}
           </div>
@@ -154,7 +182,9 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
           )}
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Tiêu đề</label>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Tiêu đề
+            </label>
             <input
               type="text"
               value={title}
@@ -164,7 +194,7 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
             />
           </div>
 
-          {/* Tags */}
+          {/* Tags Section */}
           <div>
             <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-gray-700">
               <span>Gắn nhãn dán (Tags)</span>
@@ -202,7 +232,7 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
 
                 {filteredTags.length > 0 ? (
                   filteredTags.map((tag) => {
-                    const isSelected = selectedTagIds.includes(tag.id);
+                    const isSelected = selectedTagIds.includes(tag.id)
                     return (
                       <button
                         key={tag.id}
@@ -218,14 +248,12 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
                         {tag.name}
                         {isSelected && <Check className="h-3 w-3" />}
                       </button>
-                    );
+                    )
                   })
-                ) : (
-                  isExactMatch || tagSearchQuery.trim() === "" ? null : (
-                    <div className="w-full text-center text-xs text-gray-500 py-2">
-                      Không tìm thấy tag phù hợp.
-                    </div>
-                  )
+                ) : isExactMatch || tagSearchQuery.trim() === "" ? null : (
+                  <div className="w-full text-center text-xs text-gray-500 py-2">
+                    Không tìm thấy tag phù hợp.
+                  </div>
                 )}
               </div>
             </div>
@@ -245,7 +273,9 @@ export function UploadModal({ onClose, availableTags, onCreateTag, onUpload, isU
           </div>
 
           <div className="flex justify-end gap-2 pt-2 shrink-0 border-t border-gray-100 mt-2">
-            <Button variant="outline" onClick={onClose} className="mt-2">Huỷ</Button>
+            <Button variant="outline" onClick={onClose} className="mt-2">
+              Huỷ
+            </Button>
             <Button
               variant="primary"
               disabled={!file || isUploading || isCreatingTag}
