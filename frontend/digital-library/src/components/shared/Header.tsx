@@ -1,29 +1,35 @@
+// frontend/digital-library/src/components/shared/Header.tsx
+
 import { Search, Bell, Menu, LogOut } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 
-export interface UserType {
-  name: string;
-  role: string;
-  avatarUrl?: string;
-}
-
 export interface HeaderProps {
   scopeLabel: string;
-  user: UserType;
   notificationCount?: number;
   onMenuClick?: () => void;
 }
 
-export function Header({ scopeLabel, user, notificationCount = 0, onMenuClick }: HeaderProps) {
+export function Header({ scopeLabel, notificationCount = 0, onMenuClick }: HeaderProps) {
   const navigate = useNavigate();
+  
+  // Lấy thông tin user và hàm logout trực tiếp từ Zustand Store
+  const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  // Xác định Tên hiển thị (Ưu tiên full_name -> username -> Mặc định)
+  const displayName = user?.full_name || user?.username || "Người dùng";
+  
+  // Format Role để hiển thị đẹp hơn trên UI (ví dụ: student/Sinh viên)
+  const displayRole = user?.role === 'student' || user?.role === 'Sinh viên' 
+    ? 'Sinh viên' 
+    : (user?.role || 'Người dùng');
 
   return (
     <header className="flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-6">
@@ -79,10 +85,10 @@ export function Header({ scopeLabel, user, notificationCount = 0, onMenuClick }:
         </button>
 
         <div className="flex items-center gap-3 border-l border-gray-200 pl-4">
-          <Avatar name={user.name} src={user.avatarUrl} />
+          <Avatar name={displayName} />
           <div className="hidden flex-col md:flex">
-            <span className="text-sm font-semibold text-gray-900">{user.name}</span>
-            <span className="text-xs text-gray-500">{user.role}</span>
+            <span className="text-sm font-semibold text-gray-900">{displayName}</span>
+            <span className="text-xs text-gray-500">{displayRole}</span>
           </div>
           <button 
             onClick={handleLogout} 

@@ -3,9 +3,9 @@
 // ==========================================
 // 1. IMPORTS
 // ==========================================
-import { useState, useRef, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Search,
   Upload,
@@ -14,33 +14,38 @@ import {
   FileX,
   FolderOpen,
   Check,
-} from "lucide-react"
+} from "lucide-react";
 
 // UI Components & Icons
-import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
-import { FolderCard } from "@/components/shared/FolderCard"
-import { type FolderAction } from "@/components/shared/FolderContextMenu"
-import { DocumentCard } from "@/components/shared/DocumentCard"
-import { type DocumentAction } from "@/components/shared/DocumentContextMenu"
-import EmptyState from "@/components/shared/EmptyState"
-import { getNormalizedExtension, useDocumentFilters, type TabKey } from "@/hooks/useDocumentFilters"
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { FolderCard } from "@/components/shared/FolderCard";
+import { type FolderAction } from "@/components/shared/FolderContextMenu";
+import { DocumentCard } from "@/components/shared/DocumentCard";
+import { type DocumentAction } from "@/components/shared/DocumentContextMenu";
+import EmptyState from "@/components/shared/EmptyState";
+import {
+  getNormalizedExtension,
+  useDocumentFilters,
+  type TabKey,
+} from "@/hooks/useDocumentFilters";
 
 // Modals
-import { UploadModal } from "../../components/shared/UploadModal"
+import { PersonalUploadModal } from "./components/PersonalUploadModal";
 import {
   CreateFolderModal,
   type FolderInitialData,
-} from "./components/CreateFolderModal"
+} from "./components/CreateFolderModal";
 
 // Services & Utils
-import { folderService } from "@/services/folderService"
-import { documentService } from "@/services/documentService"
-import { tagService } from "@/services/tagService"
-import { formatSize } from "@/utils/formatSize"
-import { formatRelativeDate } from "@/utils/formatDate"
-import { cn } from "@/utils/cn"
-import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown"
+import { folderService } from "@/services/folderService";
+import { documentService } from "@/services/documentService";
+import { tagService } from "@/services/tagService";
+import { formatSize } from "@/utils/formatSize";
+import { formatRelativeDate } from "@/utils/formatDate";
+import { cn } from "@/utils/cn";
+import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown";
+import { DocumentTypeTabs } from "@/components/shared/DocumentTypeTabs";
 
 // ==========================================
 // 2. TYPES & CONSTANTS
@@ -52,7 +57,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "image", label: "Hình ảnh" },
   { key: "pdf", label: "PDF" },
   { key: "other", label: "Khác" },
-]
+];
 
 // ==========================================
 // 3. HELPER FUNCTIONS
@@ -61,25 +66,24 @@ const TABS: { key: TabKey; label: string }[] = [
 const getFileExtension = (
   filePath?: string,
   fileType?: string,
-  title?: string
+  title?: string,
 ): string => {
   if (filePath && filePath.includes("."))
-    return filePath.split(".").pop()?.toLowerCase() || ""
+    return filePath.split(".").pop()?.toLowerCase() || "";
   if (title && title.includes("."))
-    return title.split(".").pop()?.toLowerCase() || ""
-  return fileType || ""
-}
+    return title.split(".").pop()?.toLowerCase() || "";
+  return fileType || "";
+};
 
 // ==========================================
 // 4. SUB-COMPONENTS
 // ==========================================
 interface FilterDropdownProps {
-  label: string
-  options: { value: string | number; label: string }[]
-  selectedValue: string | number | null
-  onChange: (value: string | number | null) => void
+  label: string;
+  options: { value: string | number; label: string }[];
+  selectedValue: string | number | null;
+  onChange: (value: string | number | null) => void;
 }
-
 
 function CardSkeleton({ variant }: { variant: "folder" | "document" }) {
   if (variant === "folder") {
@@ -91,7 +95,7 @@ function CardSkeleton({ variant }: { variant: "folder" | "document" }) {
           <div className="h-3 w-16 rounded bg-gray-200 animate-pulse" />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -102,50 +106,55 @@ function CardSkeleton({ variant }: { variant: "folder" | "document" }) {
         <div className="h-3 w-2/3 rounded bg-gray-200 animate-pulse" />
       </div>
     </div>
-  )
+  );
 }
 
 // ==========================================
 // 5. MAIN COMPONENT
 // ==========================================
 export function PersonalDocuments() {
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // State điều hướng & tìm kiếm
-  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null)
-  const [page, setPage] = useState(1)
+  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
 
   // State quản lý Modals
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isUploadOpen, setIsUploadOpen] = useState(false)
-  const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [editingFolder, setEditingFolder] = useState<FolderInitialData | null>(
+    null,
+  );
 
   // State xác nhận xóa thư mục
-  const [deletingFolderId, setDeletingFolderId] = useState<number | null>(null)
-  const [isDeleteFolderOpen, setIsDeleteFolderOpen] = useState(false)
-  const [isDeletingFolder, setIsDeletingFolder] = useState(false)
+  const [deletingFolderId, setDeletingFolderId] = useState<number | null>(null);
+  const [isDeleteFolderOpen, setIsDeleteFolderOpen] = useState(false);
+  const [isDeletingFolder, setIsDeletingFolder] = useState(false);
 
   // State đổi tên tài liệu
-  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
-  const [renamingDoc, setRenamingDoc] = useState<{ id: string; title: string } | null>(null)
-  const [newDocumentTitle, setNewDocumentTitle] = useState("")
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [renamingDoc, setRenamingDoc] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
+  const [newDocumentTitle, setNewDocumentTitle] = useState("");
 
   // --- QUERIES ---
   const { data: folders, isLoading: foldersLoading } = useQuery({
     queryKey: ["folders"],
     queryFn: () => folderService.getAll(),
-  })
+  });
 
   const { data: tags = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: () => tagService.getAll(),
-  })
+  });
 
   const { data: fileTypes = [] } = useQuery({
     queryKey: ["document-file-types"],
     queryFn: () => documentService.getFileTypes(),
-  })
+  });
 
   const {
     data: docData,
@@ -160,81 +169,95 @@ export function PersonalDocuments() {
         page_size: 20,
       }),
     placeholderData: (prev) => prev,
-  })
+  });
 
   // --- MUTATIONS ---
   const deleteMutation = useMutation({
     mutationFn: (id: string) => documentService.delete(Number(id)),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] })
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
     },
-  })
+  });
 
   const renameDocumentMutation = useMutation({
     mutationFn: ({ id, title }: { id: number | string; title: string }) =>
       documentService.update(Number(id), { title }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] })
-      setIsRenameModalOpen(false)
-      setRenamingDoc(null)
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      setIsRenameModalOpen(false);
+      setRenamingDoc(null);
     },
     onError: (error) => {
-      console.error("Lỗi đổi tên tài liệu:", error)
+      console.error("Lỗi đổi tên tài liệu:", error);
     },
-  })
+  });
 
   const createFolderMutation = useMutation({
     mutationFn: (data: { name: string; color: string; tagIds: number[] }) =>
-      folderService.create({ name: data.name, color: data.color, tag_ids: data.tagIds }),
+      folderService.create({
+        name: data.name,
+        color: data.color,
+        tag_ids: data.tagIds,
+      }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["folders"] })
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
+    },
+  });
 
   const updateFolderMutation = useMutation({
-    mutationFn: async (data: { id: number; name: string; color: string; tagIds: number[]; initialTagIds: number[] }) => {
-      await folderService.update(data.id, { name: data.name, color: data.color })
-      
-      const tagsToAdd = data.tagIds.filter(id => !data.initialTagIds.includes(id))
-      const tagsToRemove = data.initialTagIds.filter(id => !data.tagIds.includes(id))
-      
-      const tagPromises = []
+    mutationFn: async (data: {
+      id: number;
+      name: string;
+      color: string;
+      tagIds: number[];
+      initialTagIds: number[];
+    }) => {
+      await folderService.update(data.id, {
+        name: data.name,
+        color: data.color,
+      });
+
+      const tagsToAdd = data.tagIds.filter(
+        (id) => !data.initialTagIds.includes(id),
+      );
+      const tagsToRemove = data.initialTagIds.filter(
+        (id) => !data.tagIds.includes(id),
+      );
+
+      const tagPromises = [];
       if (tagsToAdd.length > 0) {
-        tagPromises.push(folderService.addTags(data.id, tagsToAdd))
+        tagPromises.push(folderService.addTags(data.id, tagsToAdd));
       }
-      tagsToRemove.forEach(tagId => {
-        tagPromises.push(folderService.removeTag(data.id, tagId))
-      })
-      
-      await Promise.all(tagPromises)
+      tagsToRemove.forEach((tagId) => {
+        tagPromises.push(folderService.removeTag(data.id, tagId));
+      });
+
+      await Promise.all(tagPromises);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["folders"] })
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
+    },
+  });
 
   const createTagMutation = useMutation({
     mutationFn: (name: string) => tagService.create({ name, color: "#2F6B3C" }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tags"] })
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
+    },
+  });
 
   const uploadMutation = useMutation({
     mutationFn: (fd: FormData) => documentService.upload(fd),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] })
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    },
+  });
 
   // --- ACTION HANDLERS FOR FOLDERS ---
-  const handleFolderAction = async (
-    action: FolderAction,
-    folderId: number
-  ) => {
+  const handleFolderAction = async (action: FolderAction, folderId: number) => {
     if (action === "edit") {
       try {
-        const folderDetail = await folderService.getById(folderId)
+        const folderDetail = await folderService.getById(folderId);
 
         setEditingFolder({
           id: folderDetail.id,
@@ -244,98 +267,110 @@ export function PersonalDocuments() {
             folderDetail.tags?.map((t: any) => t.id) ||
             folderDetail.tag_ids ||
             [],
-        })
+        });
 
-        setIsModalOpen(true)
+        setIsModalOpen(true);
       } catch (error) {
-        console.error("Lỗi khi lấy chi tiết thư mục:", error)
+        console.error("Lỗi khi lấy chi tiết thư mục:", error);
       }
 
-      return
+      return;
     }
 
     if (action === "share") {
-      console.log("Chia sẻ folder:", folderId)
-      return
+      console.log("Chia sẻ folder:", folderId);
+      return;
     }
 
     if (action === "delete") {
-      setDeletingFolderId(folderId)
-      setIsDeleteFolderOpen(true)
+      setDeletingFolderId(folderId);
+      setIsDeleteFolderOpen(true);
     }
-  }
+  };
 
   const handleConfirmDeleteFolder = async () => {
     if (deletingFolderId === null) {
-      return
+      return;
     }
 
     try {
-      setIsDeletingFolder(true)
+      setIsDeletingFolder(true);
 
-      await folderService.delete(deletingFolderId)
+      await folderService.delete(deletingFolderId);
 
       // Refresh danh sách folder
       await queryClient.invalidateQueries({
         queryKey: ["folders"],
-      })
+      });
 
       // Nếu folder đang được chọn thì quay về "Tất cả"
       if (selectedFolderId === deletingFolderId) {
-        setSelectedFolderId(null)
-        setPage(1)
+        setSelectedFolderId(null);
+        setPage(1);
       }
 
       // Đóng modal
-      setIsDeleteFolderOpen(false)
-      setDeletingFolderId(null)
+      setIsDeleteFolderOpen(false);
+      setDeletingFolderId(null);
 
-      console.log("Đã xóa folder:", deletingFolderId)
+      console.log("Đã xóa folder:", deletingFolderId);
     } catch (error) {
-      console.error("Lỗi khi xóa thư mục:", error)
+      console.error("Lỗi khi xóa thư mục:", error);
     } finally {
-      setIsDeletingFolder(false)
+      setIsDeletingFolder(false);
     }
-  }
+  };
 
   const handleCancelDeleteFolder = () => {
     if (isDeletingFolder) {
-      return
+      return;
     }
 
-    setIsDeleteFolderOpen(false)
-    setDeletingFolderId(null)
-  }
+    setIsDeleteFolderOpen(false);
+    setDeletingFolderId(null);
+  };
 
   // --- ACTION HANDLERS FOR DOCUMENTS ---
-  const handleDocumentAction = (action: DocumentAction| string,documentId: string) => {
+  const handleDocumentAction = (
+    action: DocumentAction | string,
+    documentId: string,
+  ) => {
     if (action === "view") {
-      navigate(`/ca-nhan/tai-lieu/${documentId}`)
+      navigate(`/ca-nhan/tai-lieu/${documentId}`);
     } else if (action === "rename") {
-      const docToRename = docData?.items.find((d) => d.id.toString() === documentId)
+      const docToRename = docData?.items.find(
+        (d) => d.id.toString() === documentId,
+      );
       if (docToRename) {
-        setRenamingDoc({ id: docToRename.id.toString(), title: docToRename.title })
-        setNewDocumentTitle(docToRename.title)
-        setIsRenameModalOpen(true)
+        setRenamingDoc({
+          id: docToRename.id.toString(),
+          title: docToRename.title,
+        });
+        setNewDocumentTitle(docToRename.title);
+        setIsRenameModalOpen(true);
       }
     } else if (action === "delete") {
-      if (window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")) {
-        deleteMutation.mutate(documentId)
+      if (
+        window.confirm(
+          "Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.",
+        )
+      ) {
+        deleteMutation.mutate(documentId);
       }
     } else {
-      console.log("Action:", action, "on document:", documentId)
+      console.log("Action:", action, "on document:", documentId);
     }
-  }
+  };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setEditingFolder(null)
-  }
+    setIsModalOpen(false);
+    setEditingFolder(null);
+  };
 
   // Lấy folder đang xóa để hiển thị thông tin
   const deletingFolder = folders?.find(
-    (folder) => folder.id === deletingFolderId
-  )
+    (folder) => folder.id === deletingFolderId,
+  );
 
   // --- DATA PROCESSING & FILTERING ---
   const allDocCards = (docData?.items ?? []).map((doc) => ({
@@ -349,7 +384,7 @@ export function PersonalDocuments() {
     owner: { name: "You", avatar: "" },
     rawType: doc.file_type,
     tags: doc.tags || [],
-  }))
+  }));
 
   const {
     activeTab,
@@ -360,9 +395,8 @@ export function PersonalDocuments() {
     setSelectedTagId,
     selectedFileType,
     setSelectedFileType,
-    filteredDocuments: filteredDocCards
-  } = useDocumentFilters(allDocCards)
-
+    filteredDocuments: filteredDocCards,
+  } = useDocumentFilters(allDocCards);
 
   return (
     <div className="flex flex-col gap-6">
@@ -408,22 +442,7 @@ export function PersonalDocuments() {
       </div>
 
       {/* Tabs Filter */}
-      <div className="flex items-center gap-6 border-b border-gray-200">
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={cn(
-              "pb-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600",
-              activeTab === tab.key
-                ? "border-b-2 border-primary-600 text-primary-600 font-semibold"
-                : "border-b-2 border-transparent text-gray-600 hover:text-gray-900"
-            )}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <DocumentTypeTabs activeTab={activeTab} onChangeTab={setActiveTab} />
 
       {/* Folders Section */}
       <section>
@@ -442,11 +461,11 @@ export function PersonalDocuments() {
                   "cursor-pointer rounded-xl border p-4 hover:border-primary-300 transition-colors bg-white",
                   selectedFolderId === null
                     ? "border-primary-500 shadow-sm"
-                    : "border-gray-200"
+                    : "border-gray-200",
                 )}
                 onClick={() => {
-                  setSelectedFolderId(null)
-                  setPage(1)
+                  setSelectedFolderId(null);
+                  setPage(1);
                 }}
               >
                 <div className="flex items-center gap-3">
@@ -468,7 +487,7 @@ export function PersonalDocuments() {
                     "rounded-xl border transition-colors bg-white",
                     selectedFolderId === folder.id
                       ? "border-primary-500 shadow-sm"
-                      : "border-gray-200"
+                      : "border-gray-200",
                   )}
                 >
                   <FolderCard
@@ -478,8 +497,8 @@ export function PersonalDocuments() {
                     color={folder.color}
                     tags={folder.tags}
                     onClick={() => {
-                      setSelectedFolderId(folder.id)
-                      setPage(1)
+                      setSelectedFolderId(folder.id);
+                      setPage(1);
                     }}
                     onAction={handleFolderAction}
                   />
@@ -490,8 +509,8 @@ export function PersonalDocuments() {
 
           <button
             onClick={() => {
-              setEditingFolder(null)
-              setIsModalOpen(true)
+              setEditingFolder(null);
+              setIsModalOpen(true);
             }}
             className="flex min-h-[64px] items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-5 text-sm font-medium text-gray-400 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50 transition-all duration-150"
           >
@@ -506,7 +525,7 @@ export function PersonalDocuments() {
         <div
           className={cn(
             "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4",
-            isFetching && "opacity-60 pointer-events-none"
+            isFetching && "opacity-60 pointer-events-none",
           )}
         >
           {docsLoading ? (
@@ -570,7 +589,7 @@ export function PersonalDocuments() {
           initialData={editingFolder}
           availableTags={tags}
           onCreateTag={async (name) => {
-            return await createTagMutation.mutateAsync(name)
+            return await createTagMutation.mutateAsync(name);
           }}
           onSubmitData={async (data) => {
             if (data.id) {
@@ -579,17 +598,19 @@ export function PersonalDocuments() {
                 name: data.name,
                 color: data.color,
                 tagIds: data.tagIds,
-                initialTagIds: (editingFolder?.tagIds || []).map(Number)
-              })
+                initialTagIds: (editingFolder?.tagIds || []).map(Number),
+              });
             } else {
               await createFolderMutation.mutateAsync({
                 name: data.name,
                 color: data.color,
-                tagIds: data.tagIds
-              })
+                tagIds: data.tagIds,
+              });
             }
           }}
-          isSubmitting={createFolderMutation.isPending || updateFolderMutation.isPending}
+          isSubmitting={
+            createFolderMutation.isPending || updateFolderMutation.isPending
+          }
         />
       )}
 
@@ -610,9 +631,9 @@ export function PersonalDocuments() {
                   renameDocumentMutation.mutate({
                     id: renamingDoc.id,
                     title: newDocumentTitle.trim(),
-                  })
+                  });
                 }
-                if (e.key === "Escape") setIsRenameModalOpen(false)
+                if (e.key === "Escape") setIsRenameModalOpen(false);
               }}
               autoFocus
               placeholder="Nhập tên mới..."
@@ -636,7 +657,7 @@ export function PersonalDocuments() {
                     renameDocumentMutation.mutate({
                       id: renamingDoc.id,
                       title: newDocumentTitle.trim(),
-                    })
+                    });
                   }
                 }}
               >
@@ -647,24 +668,17 @@ export function PersonalDocuments() {
         </div>
       )}
 
+      {/* =========================UPLOAD MODAL=========================== 
+          ================================================================*/}
       {isUploadOpen && (
-        <UploadModal 
-          onClose={() => setIsUploadOpen(false)} 
-          availableTags={tags}
-          onCreateTag={async (name) => {
-            return await createTagMutation.mutateAsync(name)
-          }}
-          onUpload={async (fd, selectedTagIds) => {
-            if (selectedTagIds.length > 0) {
-              selectedTagIds.forEach((id) => {
-                fd.append("tag_ids", id.toString())
-              })
-            }
-            await uploadMutation.mutateAsync(fd)
-          }}
-          isUploading={uploadMutation.isPending}
+        <PersonalUploadModal
+          onClose={() => setIsUploadOpen(false)}
+          tags={tags}
+          createTagMutation={createTagMutation}
+          uploadMutation={uploadMutation}
         />
       )}
+      {/* ================================================================ */}
 
       {/* Modal Xác nhận xóa thư mục */}
       {isDeleteFolderOpen && (
@@ -702,9 +716,9 @@ export function PersonalDocuments() {
 
               <div className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
                 <p className="text-xs leading-5 text-green-700">
-                  <span className="font-semibold">Lưu ý:</span> Xóa thư mục
-                  sẽ không xóa các tài liệu hoặc nhãn (tag) bên trong. Các tài
-                  liệu và tag vẫn được giữ nguyên.
+                  <span className="font-semibold">Lưu ý:</span> Xóa thư mục sẽ
+                  không xóa các tài liệu hoặc nhãn (tag) bên trong. Các tài liệu
+                  và tag vẫn được giữ nguyên.
                 </p>
               </div>
             </div>
@@ -732,5 +746,5 @@ export function PersonalDocuments() {
         </div>
       )}
     </div>
-  )
+  );
 }

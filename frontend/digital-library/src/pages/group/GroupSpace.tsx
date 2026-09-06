@@ -14,11 +14,11 @@ import { Card } from "@/components/ui/Card";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { Input } from "@/components/ui/Input";
 import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown";
+import { DocumentTypeTabs } from "@/components/shared/DocumentTypeTabs";
 
 import { CreateFolderModal } from "@/pages/personal/components/CreateFolderModal";
 import { GroupUploadModal } from "./components/GroupUploadModal";
 
-import { getNormalizedExtension } from "@/hooks/useDocumentFilters";
 import { groupService } from "@/services/groupService";
 import { groupTagService } from "@/services/tagService";
 import { groupFolderService } from "@/services/folderService";
@@ -38,6 +38,7 @@ import SimpleShareModal from "./components/SimpleShareModal";
 import InviteModal from "./components/InviteModal";
 
 import { useGroupSpace } from "./hooks/useGroupSpace";
+import { getNormalizedExtension } from "@/hooks/useDocumentFilters";
 
 export default function GroupSpace() {
   const {
@@ -51,6 +52,8 @@ export default function GroupSpace() {
     setSelectedTagId,
     selectedFileType,
     setSelectedFileType,
+    activeDocumentTab,
+    setActiveDocumentTab,
     shareModal,
     setShareModal,
     isFolderModalOpen,
@@ -168,28 +171,36 @@ export default function GroupSpace() {
         </div>
       )}
 
-      <div className="flex flex-wrap gap-6 border-b border-gray-200">
+      {/* Tabs chuyển đổi giữa các màn hình của Group */}
+      <div className="mx-auto flex w-max flex-wrap items-center gap-1.5 rounded-xl border border-gray-200/60 bg-gray-100/80 p-1.5">
         {(Object.keys(TAB_LABELS) as GroupTab[])
           .filter((tab) => isOwner || (tab !== "settings" && tab !== "trash"))
           .map((tab) => (
             <button
               key={tab}
-              className={cn(
-                "pb-3 text-sm transition-colors",
-                activeTab === tab
-                  ? "border-b-2 border-primary-600 font-semibold text-primary-600"
-                  : "border-b-2 border-transparent text-gray-600 hover:text-gray-900",
-              )}
               onClick={() => setTab(tab)}
+              className={cn(
+                "relative rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
+                activeTab === tab
+                  ? "bg-white text-primary-700 shadow-sm ring-1 ring-gray-200/50"
+                  : "text-gray-600 hover:bg-gray-200/60 hover:text-gray-900",
+              )}
             >
               {TAB_LABELS[tab]}
             </button>
           ))}
       </div>
 
-      {/* TAB TÀI LIỆU KÈM THANH TÌM KIẾM & BỘ LỌC ĐỘNG */}
+      {/* TAB TÀI LIỆU */}
       {activeTab === "documents" && (
         <div className="flex flex-col gap-4">
+          {/* Tabs chuyển loại tệp */}
+          <DocumentTypeTabs
+            activeTab={activeDocumentTab}
+            onChangeTab={setActiveDocumentTab}
+          />
+
+          {/* Thanh Tìm kiếm & Cả 2 Bộ lọc Dropdown */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="min-w-[240px] flex-1 max-w-md">
               <Input
@@ -267,7 +278,7 @@ export default function GroupSpace() {
         <TrashTab documents={trash} groupId={groupId} />
       )}
 
-      {/* Modals for documents tab */}
+      {/* Modals */}
       {isFolderModalOpen && (
         <CreateFolderModal
           onClose={() => {
@@ -323,7 +334,6 @@ export default function GroupSpace() {
         />
       )}
 
-      {/* GroupUploadModal đã bọc toàn bộ logic upload */}
       {isUploadModalOpen && (
         <GroupUploadModal
           groupId={groupId}
@@ -383,7 +393,9 @@ export default function GroupSpace() {
 
               <div className="mt-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2.5">
                 <p className="text-xs leading-5 text-green-700">
-                  <span className="font-semibold">Lưu ý:</span> Xóa thư mục sẽ không xóa các tài liệu hoặc nhãn (tag) bên trong. Các tài liệu và tag vẫn được giữ nguyên trong nhóm.
+                  <span className="font-semibold">Lưu ý:</span> Xóa thư mục sẽ
+                  không xóa các tài liệu hoặc nhãn (tag) bên trong. Các tài liệu
+                  và tag vẫn được giữ nguyên trong nhóm.
                 </p>
               </div>
             </div>

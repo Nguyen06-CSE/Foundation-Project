@@ -11,6 +11,7 @@ import { documentService } from "@/services/documentService";
 import { useAuthStore } from "@/stores/authStore";
 import type { PermissionLevel } from "@/types/group";
 import type { GroupTab } from "../types/groupSpace.types";
+import type { TabKey } from "@/hooks/useDocumentFilters";
 
 export function useGroupSpace() {
   // --------------------------------------------------------------------------
@@ -35,6 +36,7 @@ export function useGroupSpace() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
   const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
+  const [activeDocumentTab, setActiveDocumentTab] = useState<TabKey>("all");
 
   // Modals
   const [shareModal, setShareModal] = useState<"documents" | "folder" | "invite" | null>(null);
@@ -121,7 +123,7 @@ export function useGroupSpace() {
   const permission: PermissionLevel = currentMember?.permission_level ?? "view";
   const canManageDocuments = isOwner || permission === "full";
 
-  // Trash Query (Chỉ fetch khi người dùng là Owner)
+  // Trash Query
   const { data: trashData = [] } = useQuery({
     queryKey: ["group-trash", groupId],
     queryFn: () => groupService.getTrash(groupId),
@@ -129,7 +131,7 @@ export function useGroupSpace() {
   });
   const trash = trashData;
 
-  // Lọc tài liệu theo Bộ lọc (Search, Tag, FileType)
+  // Lọc tài liệu tổng hợp
   const filteredDocuments = (documents || []).filter((doc: any) => {
     const docName = doc.title || doc.name || "";
     if (searchQuery && !docName.toLowerCase().includes(searchQuery.toLowerCase())) {
@@ -143,9 +145,38 @@ export function useGroupSpace() {
       if (!hasTag) return false;
     }
 
+    // Lọc theo Dropdown loại tài liệu
     if (selectedFileType !== null) {
       const fileType = doc.file_type || doc.rawType;
       if (fileType !== selectedFileType) return false;
+    }
+
+    // Lọc theo Tab loại tài liệu
+    if (activeDocumentTab !== "all") {
+      const fileType = (doc.file_type || doc.rawType || "").toLowerCase();
+      const ext = (doc.extension || "").toLowerCase();
+
+      if (activeDocumentTab === "pdf") {
+        if (!fileType.includes("pdf") && ext !== "pdf") return false;
+      } else if (activeDocumentTab === "image") {
+        if (!fileType.startsWith("image/") && !["jpg", "jpeg", "png", "webp", "svg"].includes(ext)) return false;
+      } else if (activeDocumentTab === "document") {
+        const isDoc =
+          fileType.includes("word") ||
+          fileType.includes("presentation") ||
+          fileType.includes("spreadsheet") ||
+          ["doc", "docx", "ppt", "pptx", "xls", "xlsx", "txt"].includes(ext);
+        if (!isDoc) return false;
+      } else if (activeDocumentTab === "other") {
+        const isKnown =
+          fileType.includes("pdf") ||
+          fileType.startsWith("image/") ||
+          fileType.includes("word") ||
+          fileType.includes("presentation") ||
+          fileType.includes("spreadsheet") ||
+          ["pdf", "jpg", "jpeg", "png", "webp", "doc", "docx", "ppt", "pptx", "xls", "xlsx"].includes(ext);
+        if (isKnown) return false;
+      }
     }
 
     return true;
@@ -253,6 +284,8 @@ export function useGroupSpace() {
     setSelectedTagId,
     selectedFileType,
     setSelectedFileType,
+    activeDocumentTab,
+    setActiveDocumentTab,
     shareModal,
     setShareModal,
     isFolderModalOpen,

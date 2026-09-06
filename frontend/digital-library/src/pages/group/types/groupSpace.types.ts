@@ -1,3 +1,5 @@
+// frontend/digital-library/src/pages/group/types/groupSpace.types.ts
+
 import type { Document } from "@/types/document";
 import type { PermissionLevel, WorkspaceInvitation, WorkspaceMember } from "@/types/group";
 import type { FolderAction } from "@/components/shared/FolderContextMenu";
