@@ -1,100 +1,381 @@
-frontend/
-└── digital-library/
-    ├── dist/                    # Sản phẩm sau khi build dự án
-    ├── node_modules/            # Thư mục chứa các thư viện dependencies
-    ├── public/                  # Chứa file tĩnh không qua Webpack/Vite (favicon, index.html...)
-    └── src/
-        ├── assets/              # Ảnh, icon tĩnh dùng trong ứng dụng
-        ├── components/
-        │   ├── shared/          # Component nghiệp vụ tái sử dụng nhiều nơi
-        │   │   ├── DocumentCard.tsx          # Card hiển thị thông tin tài liệu dạng lưới
-        │   │   ├── DocumentContextMenu.tsx   # Menu ngữ cảnh khi click chuột phải/menu tài liệu
-        │   │   ├── DocumentRow.tsx           # Dòng hiển thị thông tin tài liệu dạng danh sách
-        │   │   ├── EmptyState.tsx            # Giao diện hiển thị khi không có dữ liệu
-        │   │   ├── FileIcon.tsx              # Component hiển thị icon phân loại theo định dạng file
-        │   │   ├── FolderCard.tsx            # Card hiển thị thông tin thư mục
-        │   │   ├── Header.tsx                # Thanh điều hướng phía trên của hệ thống
-        │   │   ├── NotificationDropdown.tsx  # Danh sách thả xuống xem thông báo mới
-        │   │   ├── PermissionBadge.tsx       # Badge hiển thị mức quyền (Chỉ xem / Toàn quyền)
-        │   │   ├── ProcessingDonut.tsx       # Biểu đồ tròn hiển thị tiến trình xử lý tài liệu
-        │   │   ├── ProtectedRoute.tsx        # Component bảo vệ các tuyến đường yêu cầu đăng nhập
-        │   │   ├── Sidebar.tsx               # Thanh điều hướng bên cạnh (thanh menu chính)
-        │   │   ├── StatCard.tsx              # Card hiển thị các chỉ số thống kê nhanh
-        │   │   └── TagDistribution.tsx       # Biểu đồ/thành phần phân bổ nhãn (tag) tài liệu
-        │   └── ui/              # Component giao diện nguyên tử cơ bản (Atomic Design)
-        │       ├── Avatar.tsx                # Component ảnh đại diện người dùng
-        │       ├── Badge.tsx                 # Nhãn hiển thị trạng thái ngắn
-        │       ├── Button.tsx                # Nút bấm tùy chỉnh
-        │       ├── Card.tsx                  # Khung chứa nội dung chung
-        │       ├── Dropdown.tsx              # Danh sách lựa chọn thả xuống cơ bản
-        │       ├── Input.tsx                 # Ô nhập liệu văn bản
-        │       ├── ProgressBar.tsx           # Thanh hiển thị tiến trình
-        │       └── Tag.tsx                   # Thẻ phân loại nội dung
-        ├── constants/
-        │   └── permissions.ts   # Định nghĩa hằng số quyền hạn, loại không gian làm việc
-        ├── hooks/               # Custom React Hooks
-        │   ├── useAuth.ts            # Hook quản lý trạng thái đăng nhập & thao tác người dùng
-        │   ├── useDocuments.ts       # Hook quản lý các thao tác CRUD với tài liệu
-        │   ├── useRestoreSession.ts  # Hook tự động khôi phục phiên đăng nhập khi load trang
-        │   └── useWorkspace.ts       # Hook xử lý logic không gian làm việc (Khoa, Lớp, Nhóm)
-        ├── layouts/             # Khung bố cục chính của giao diện
-        │   ├── AuthLayout.tsx        # Bố cục cho các trang xác thực (Đăng nhập / Đăng ký)
-        │   └── MainLayout.tsx        # Bố cục chính chứa Sidebar + Header + Nội dung trang
-        ├── mocks/               # Dữ liệu giả lập dùng khi chưa kết nối API backend
-        │   ├── documents.ts          # Danh sách tài liệu mẫu
-        │   ├── folders.ts            # Danh sách thư mục mẫu
-        │   ├── stats.ts              # Dữ liệu chỉ số thống kê mẫu
-        │   └── workspaces.ts         # Danh sách không gian làm việc mẫu
-        ├── pages/               # Các trang màn hình hiển thị chính
-        │   ├── auth/
-        │   │   ├── LoginPage.tsx     # Trang đăng nhập
-        │   │   └── RegisterPage.tsx  # Trang đăng ký
-        │   ├── class/
-        │   │   └── ClassSpace.tsx    # Không gian làm việc cấp Lớp
-        │   ├── faculty/
-        │   │   └── FacultySpace.tsx  # Không gian làm việc cấp Khoa
-        │   ├── group/
-        │   │   ├── GroupList.tsx     # Danh sách các nhóm học tập/làm việc
-        │   │   └── GroupSpace.tsx    # Không gian làm việc nội bộ nhóm
-        │   ├── personal/
-        │   │   ├── components/
-        │   │   │   └── CreateFolderModal.tsx # Modal tạo thư mục cá nhân mới
-        │   │   ├── DocumentDetail.tsx        # Trang chi tiết thông tin & xem trước tài liệu
-        │   │   ├── FavoritesPage.tsx         # Trang danh sách tài liệu yêu thích
-        │   │   ├── PersonalDashboard.tsx     # Bảng điều khiển tổng quan cá nhân
-        │   │   ├── PersonalDocuments.tsx     # Quản lý tài liệu cá nhân
-        │   │   └── SharedWithMe.tsx          # Danh sách tài liệu được người khác chia sẻ
-        │   ├── school/
-        │   │   └── SchoolSpace.tsx   # Không gian thư viện chung toàn Trường
-        │   ├── settings/
-        │   │   └── SettingsPage.tsx  # Trang cài đặt tài khoản & hệ thống
-        │   ├── stats/
-        │   │   └── StatsPage.tsx     # Trang thống kê lưu trữ & lượt truy cập
-        │   └── trash/
-        │       └── TrashPage.tsx     # Trang thùng rác chứa file/thư mục đã xóa
-        ├── services/            # Tầng gọi API backend
-        │   ├── api.ts                # Khởi tạo Axios instance + cài đặt Interceptors
-        │   ├── authService.ts        # API đăng nhập, đăng ký, đăng xuất, refresh token
-        │   ├── documentService.ts    # API tải lên, tải về, xóa, sửa tài liệu
-        │   ├── folderService.ts      # API quản lý thư mục
-        │   ├── notificationService.ts# API lấy danh sách và đánh dấu đã đọc thông báo
-        │   ├── tagService.ts         # API quản lý các thẻ phân loại
-        │   └── workspaceService.ts   # API lấy dữ liệu & thành viên các không gian làm việc
-        ├── stores/              # Quản lý state toàn cục (Zustand/Redux)
-        │   ├── authStore.ts          # Quản lý trạng thái xác thực người dùng & token
-        │   ├── notificationStore.ts  # Quản lý trạng thái danh sách thông báo
-        │   └── toastStore.ts         # Quản lý trạng thái hiển thị thông báo nhanh (Toast UI)
-        ├── types/               # Khai báo TypeScript Interfaces / Types
-        │   ├── document.ts           # Type tài liệu, thư mục, phiên bản file
-        │   ├── notification.ts       # Type cấu trúc thông báo
-        │   ├── user.ts               # Type người dùng, vai trò, quyền hạn
-        │   └── workspace.ts          # Type không gian làm việc (Trường, Khoa, Lớp, Nhóm)
-        ├── utils/               # Các hàm tiện ích hỗ trợ
-        │   ├── cn.ts                 # Hàm gộp class CSS (clsx + tailwind-merge)
-        │   ├── fileIcon.ts           # Map loại file (MIME/Extension) ra icon & màu tương ứng
-        │   ├── formatDate.ts         # Hàm định dạng ngày tháng (VD: "31/08/2026" hoặc "2 giờ trước")
-        │   └── formatSize.ts         # Hàm chuyển đổi dung lượng file (VD: 2048 KB -> "2 MB")
-        ├── App.css              # File CSS tùy chỉnh cấp ứng dụng
-        ├── App.tsx              # Component gốc, cấu hình Router và Providers
-        ├── index.css            # File CSS chung quy định Tailwind CSS / Global styles
-        └── main.tsx             # Entry point chính của dự án React
+Directory structure:
+└── nguyen06-cse-foundation-project/
+    ├── README.md
+    ├── alembic.ini
+    ├── package.json
+    ├── .env.example
+    ├── alembic/
+    │   ├── README
+    │   ├── env.py
+    │   ├── script.py.mako
+    │   └── versions/
+    │       ├── 93f46eb359df_add_workspace_tags_table.py
+    │       ├── dae4972dff87_init_full_db_elibrary.py
+    │       └── f844331e6c1e_add_is_dissolving_and_dissolve_at_to_.py
+    ├── backend/
+    │   ├── PROGRESS.MD
+    │   ├── requirements.txt
+    │   ├── app/
+    │   │   ├── __init__.py
+    │   │   ├── main.py
+    │   │   ├── core/
+    │   │   │   ├── __init__.py
+    │   │   │   ├── config.py
+    │   │   │   ├── database.py
+    │   │   │   ├── dependencies.py
+    │   │   │   └── security.py
+    │   │   ├── jobs/
+    │   │   │   ├── __init__.py
+    │   │   │   └── scheduler.py
+    │   │   ├── models/
+    │   │   │   ├── __init__.py
+    │   │   │   ├── academic_class.py
+    │   │   │   ├── base.py
+    │   │   │   ├── category.py
+    │   │   │   ├── classes.py
+    │   │   │   ├── community_submission.py
+    │   │   │   ├── document.py
+    │   │   │   ├── document_rating.py
+    │   │   │   ├── document_share.py
+    │   │   │   ├── document_tag.py
+    │   │   │   ├── document_version.py
+    │   │   │   ├── download_log.py
+    │   │   │   ├── faculty.py
+    │   │   │   ├── favorite.py
+    │   │   │   ├── folder.py
+    │   │   │   ├── folder_tag.py
+    │   │   │   ├── note.py
+    │   │   │   ├── notification.py
+    │   │   │   ├── processing_job.py
+    │   │   │   ├── subject.py
+    │   │   │   ├── tag.py
+    │   │   │   ├── trash_batch.py
+    │   │   │   ├── user.py
+    │   │   │   ├── workspace.py
+    │   │   │   ├── workspace_invitation.py
+    │   │   │   ├── workspace_member.py
+    │   │   │   └── workspace_tag.py
+    │   │   ├── routers/
+    │   │   │   ├── __init__.py
+    │   │   │   ├── academic.py
+    │   │   │   ├── auth.py
+    │   │   │   ├── categories.py
+    │   │   │   ├── document_versions.py
+    │   │   │   ├── documents.py
+    │   │   │   ├── download_logs.py
+    │   │   │   ├── favorites.py
+    │   │   │   ├── folders.py
+    │   │   │   ├── groups.py
+    │   │   │   ├── library.py
+    │   │   │   ├── notes.py
+    │   │   │   ├── notifications.py
+    │   │   │   ├── search.py
+    │   │   │   ├── tags.py
+    │   │   │   ├── trash.py
+    │   │   │   ├── users.py
+    │   │   │   ├── workspace_tags.py
+    │   │   │   └── workspaces.py
+    │   │   ├── schemas/
+    │   │   │   ├── __init__.py
+    │   │   │   ├── academic.py
+    │   │   │   ├── auth.py
+    │   │   │   ├── category.py
+    │   │   │   ├── document.py
+    │   │   │   ├── favorite.py
+    │   │   │   ├── folder.py
+    │   │   │   ├── group.py
+    │   │   │   ├── library.py
+    │   │   │   ├── note.py
+    │   │   │   ├── notification.py
+    │   │   │   ├── search.py
+    │   │   │   ├── tag.py
+    │   │   │   ├── user.py
+    │   │   │   ├── workspace.py
+    │   │   │   └── workspace_tag.py
+    │   │   ├── services/
+    │   │   │   ├── document_service.py
+    │   │   │   ├── file_processor.py
+    │   │   │   ├── file_service.py
+    │   │   │   ├── folder_service.py
+    │   │   │   ├── group_service.py
+    │   │   │   ├── search_service.py
+    │   │   │   └── workspace_tag_service.py
+    │   │   └── utils/
+    │   │       └── checksum.py
+    │   ├── db/
+    │   │   ├── __init__.py
+    │   │   ├── fix_passwords.py
+    │   │   ├── seed.py
+    │   │   ├── seed_inc_user.py
+    │   │   ├── seed_incremental.py
+    │   │   └── sync_group_schema.py
+    │   ├── storage/
+    │   │   └── 5/
+    │   │       ├── 19aa521dbc8840d88e9ea90af6d050d0.pptx
+    │   │       ├── 23cd2656f37c474bb1d4db3a505039ee.pptx
+    │   │       ├── 43471d41c9e343acaa7049bac0f9135b.pptx
+    │   │       ├── 4e0270a613f54751b22e8153f8d68370.pptx
+    │   │       ├── d5e15211653f47d2895a43f68dd6374a.pptx
+    │   │       └── dfa46e3d818e491caa99a690a30d27fb.pptx
+    │   └── tests/
+    │       ├── conftest.py
+    │       ├── test_auth.py
+    │       ├── test_categories_tags.py
+    │       ├── test_documents.py
+    │       └── test_search.py
+    ├── database/
+    │   └── README.MD
+    ├── docs/
+    │   ├── feat/
+    │   │   ├── bundle/
+    │   │   │   ├── README.md
+    │   │   │   ├── API.md
+    │   │   │   ├── BUSINESS_RULES.md
+    │   │   │   ├── DATABASE.md
+    │   │   │   └── FRONTEND.md
+    │   │   └── community-library/
+    │   │       ├── implementation.md
+    │   │       └── spec.md
+    │   ├── project-management/
+    │   │   ├── mau-slide-thuyet-trinh.md
+    │   │   ├── MoTaDuAn.MD
+    │   │   ├── PhanRaChucNang.md
+    │   │   └── PROJECT_STATUS_REPORT.md
+    │   ├── references/
+    │   │   └── sql/
+    │   │       ├── AddModel.sql
+    │   │       ├── DB_ELibrary.sql
+    │   │       └── schemaForUserOffline.sql
+    │   └── system-architecture/
+    │       ├── architecture/
+    │       │   ├── foundation-system-architecture.html
+    │       │   ├── foundation-system-architecture.visual-check.html
+    │       │   └── foundation-system-architecture.visual-check.json
+    │       └── flow/
+    │           ├── foundation-dataflow.html
+    │           ├── foundation-dataflow.visual-check.html
+    │           └── foundation-dataflow.visual-check.json
+    ├── frontend/
+    │   ├── AGENTS.md
+    │   ├── package.json
+    │   ├── requirements.txt
+    │   ├── struct.md
+    │   ├── digital-library/
+    │   │   ├── README.md
+    │   │   ├── components.json
+    │   │   ├── index.html
+    │   │   ├── package.json
+    │   │   ├── tailwind.config.ts
+    │   │   ├── tsconfig.app.json
+    │   │   ├── tsconfig.json
+    │   │   ├── tsconfig.node.json
+    │   │   ├── vite.config.ts
+    │   │   ├── .oxlintrc.json
+    │   │   ├── @/
+    │   │   │   ├── components/
+    │   │   │   │   └── ui/
+    │   │   │   │       └── button.tsx
+    │   │   │   └── lib/
+    │   │   │       └── utils.ts
+    │   │   └── src/
+    │   │       ├── App.css
+    │   │       ├── App.tsx
+    │   │       ├── index.css
+    │   │       ├── main.tsx
+    │   │       ├── components/
+    │   │       │   ├── library/
+    │   │       │   │   ├── FacultyCard.tsx
+    │   │       │   │   ├── PublicLayout.tsx
+    │   │       │   │   └── SubjectCard.tsx
+    │   │       │   ├── shared/
+    │   │       │   │   ├── AddToBundleModal.tsx
+    │   │       │   │   ├── CardSkeleton.tsx
+    │   │       │   │   ├── ContributeModal.tsx
+    │   │       │   │   ├── CreateFolderModal.tsx
+    │   │       │   │   ├── DocumentCard.tsx
+    │   │       │   │   ├── DocumentContextMenu.tsx
+    │   │       │   │   ├── DocumentDetail.tsx
+    │   │       │   │   ├── DocumentFilterBar.tsx
+    │   │       │   │   ├── DocumentListView.tsx
+    │   │       │   │   ├── DocumentRow.tsx
+    │   │       │   │   ├── DocumentTypeTabs.tsx
+    │   │       │   │   ├── DynamicFilterDropdown.tsx
+    │   │       │   │   ├── EditTagsModal.tsx
+    │   │       │   │   ├── EmptyState.tsx
+    │   │       │   │   ├── FileIcon.tsx
+    │   │       │   │   ├── FolderCard.tsx
+    │   │       │   │   ├── FolderContextMenu.tsx
+    │   │       │   │   ├── Header.tsx
+    │   │       │   │   ├── NotificationDropdown.tsx
+    │   │       │   │   ├── PermissionBadge.tsx
+    │   │       │   │   ├── ProcessingDonut.tsx
+    │   │       │   │   ├── ProtectedRoute.tsx
+    │   │       │   │   ├── RatingCard.tsx
+    │   │       │   │   ├── RenameDocumentModal.tsx
+    │   │       │   │   ├── SearchBar.tsx
+    │   │       │   │   ├── Sidebar.tsx
+    │   │       │   │   ├── StarRating.tsx
+    │   │       │   │   ├── StatCard.tsx
+    │   │       │   │   ├── TagDistribution.tsx
+    │   │       │   │   ├── UploadModal.tsx
+    │   │       │   │   ├── ViewToggle.tsx
+    │   │       │   │   └── trash/
+    │   │       │   │       ├── index.ts
+    │   │       │   │       ├── MobileTrashBatch.tsx
+    │   │       │   │       ├── TrashBatchRow.tsx
+    │   │       │   │       ├── TrashConfirmModal.tsx
+    │   │       │   │       ├── TrashEmptyState.tsx
+    │   │       │   │       └── TrashStatCard.tsx
+    │   │       │   └── ui/
+    │   │       │       ├── Avatar.tsx
+    │   │       │       ├── Badge.tsx
+    │   │       │       ├── Button.tsx
+    │   │       │       ├── Card.tsx
+    │   │       │       ├── Dropdown.tsx
+    │   │       │       ├── Input.tsx
+    │   │       │       ├── ProgressBar.tsx
+    │   │       │       └── Tag.tsx
+    │   │       ├── constants/
+    │   │       │   ├── fileTypeStyles.ts
+    │   │       │   └── permissions.ts
+    │   │       ├── hooks/
+    │   │       │   ├── useAuth.ts
+    │   │       │   ├── useDebounce.ts
+    │   │       │   ├── useDocumentFilters.ts
+    │   │       │   ├── useDocuments.ts
+    │   │       │   ├── useGroupSpace.ts
+    │   │       │   ├── useHighlightElement.ts
+    │   │       │   ├── useRestoreSession.ts
+    │   │       │   ├── useViewPreference.ts
+    │   │       │   ├── useWorkspace.ts
+    │   │       │   └── useWorkspaceOperations.ts
+    │   │       ├── layouts/
+    │   │       │   ├── AuthLayout.tsx
+    │   │       │   └── MainLayout.tsx
+    │   │       ├── mocks/
+    │   │       │   ├── documents.ts
+    │   │       │   ├── folders.ts
+    │   │       │   ├── groups.ts
+    │   │       │   ├── stats.ts
+    │   │       │   └── workspaces.ts
+    │   │       ├── pages/
+    │   │       │   ├── auth/
+    │   │       │   │   ├── LoginPage.tsx
+    │   │       │   │   └── RegisterPage.tsx
+    │   │       │   ├── class/
+    │   │       │   │   └── ClassSpace.tsx
+    │   │       │   ├── faculty/
+    │   │       │   │   └── FacultySpace.tsx
+    │   │       │   ├── group/
+    │   │       │   │   ├── GroupDocumentDetailPage.tsx
+    │   │       │   │   ├── GroupList.tsx
+    │   │       │   │   ├── GroupSpace.tsx
+    │   │       │   │   ├── components/
+    │   │       │   │   │   ├── DocumentsTab.tsx
+    │   │       │   │   │   ├── GroupDocumentCard.tsx
+    │   │       │   │   │   ├── GroupDocumentContextMenu.tsx
+    │   │       │   │   │   ├── GroupDocumentsSection.tsx
+    │   │       │   │   │   ├── GroupFolderModalContainer.tsx
+    │   │       │   │   │   ├── GroupSwitcher.tsx
+    │   │       │   │   │   ├── GroupUploadModal.tsx
+    │   │       │   │   │   ├── InviteModal.tsx
+    │   │       │   │   │   ├── LocalGroupDocumentCard.tsx
+    │   │       │   │   │   ├── MembersTab.tsx
+    │   │       │   │   │   ├── NotificationCard.tsx
+    │   │       │   │   │   ├── NotificationsTab.tsx
+    │   │       │   │   │   ├── RequestsTab.tsx
+    │   │       │   │   │   ├── SettingsTab.tsx
+    │   │       │   │   │   ├── SimpleShareModal.tsx
+    │   │       │   │   │   └── TrashTab.tsx
+    │   │       │   │   ├── hooks/
+    │   │       │   │   │   ├── useGroupData.ts
+    │   │       │   │   │   ├── useGroupDocuments.ts
+    │   │       │   │   │   ├── useGroupFilters.ts
+    │   │       │   │   │   ├── useGroupFolders.ts
+    │   │       │   │   │   └── useGroupSpace.ts
+    │   │       │   │   └── types/
+    │   │       │   │       └── groupSpace.types.ts
+    │   │       │   ├── library/
+    │   │       │   │   ├── LibraryDocumentDetail.tsx
+    │   │       │   │   ├── LibraryFaculty.tsx
+    │   │       │   │   ├── LibraryHome.tsx
+    │   │       │   │   ├── LibrarySubject.tsx
+    │   │       │   │   └── admin/
+    │   │       │   │       └── LibraryAdminSubmissions.tsx
+    │   │       │   ├── personal/
+    │   │       │   │   ├── BundleDetailPage.tsx
+    │   │       │   │   ├── FavoritesPage.tsx
+    │   │       │   │   ├── PersonalDashboard.tsx
+    │   │       │   │   ├── PersonalDocuments.tsx
+    │   │       │   │   ├── PersonalHome.tsx
+    │   │       │   │   ├── SharedWithMe.tsx
+    │   │       │   │   ├── TrashPage.tsx
+    │   │       │   │   ├── components/
+    │   │       │   │   │   ├── DeleteFolderConfirmModal.tsx
+    │   │       │   │   │   ├── PersonalDocumentsSection.tsx
+    │   │       │   │   │   ├── PersonalFolderModalContainer.tsx
+    │   │       │   │   │   ├── PersonalFoldersSection.tsx
+    │   │       │   │   │   └── PersonalUploadModal.tsx
+    │   │       │   │   └── hooks/
+    │   │       │   │       ├── usePersonalDocuments.ts
+    │   │       │   │       └── usePersonalFolders.ts
+    │   │       │   ├── school/
+    │   │       │   │   └── SchoolSpace.tsx
+    │   │       │   ├── search/
+    │   │       │   │   └── SearchPage.tsx
+    │   │       │   ├── settings/
+    │   │       │   │   └── SettingsPage.tsx
+    │   │       │   ├── shared/
+    │   │       │   │   └── DocumentBrowser.tsx
+    │   │       │   ├── stats/
+    │   │       │   │   └── StatsPage.tsx
+    │   │       │   └── trash/
+    │   │       │       └── TrashPage.tsx
+    │   │       ├── services/
+    │   │       │   ├── academicsService.ts
+    │   │       │   ├── api.ts
+    │   │       │   ├── authService.ts
+    │   │       │   ├── documentService.ts
+    │   │       │   ├── folderService.ts
+    │   │       │   ├── groupService.ts
+    │   │       │   ├── libraryService.ts
+    │   │       │   ├── notificationService.ts
+    │   │       │   ├── searchService.ts
+    │   │       │   ├── tagService.ts
+    │   │       │   ├── trashService.ts
+    │   │       │   ├── userService.ts
+    │   │       │   └── workspaceService.ts
+    │   │       ├── stores/
+    │   │       │   ├── authStore.ts
+    │   │       │   ├── notificationStore.ts
+    │   │       │   └── toastStore.ts
+    │   │       ├── types/
+    │   │       │   ├── document.ts
+    │   │       │   ├── group.ts
+    │   │       │   ├── library.ts
+    │   │       │   ├── notification.ts
+    │   │       │   ├── trash.ts
+    │   │       │   ├── user.ts
+    │   │       │   └── workspace.ts
+    │   │       └── utils/
+    │   │           ├── cn.ts
+    │   │           ├── file.ts
+    │   │           ├── fileIcon.ts
+    │   │           ├── formatDate.ts
+    │   │           ├── formatSize.ts
+    │   │           ├── pdfBuilder.ts
+    │   │           └── trashUtils.ts
+    │   └── docs/
+    │       ├── API_CONTRACTS.md
+    │       ├── COMPONENTS.md
+    │       ├── GROUP_LOGIC.md
+    │       ├── SCREENS.md
+    │       ├── design/
+    │       │   ├── design-from-figma.md
+    │       │   └── DESIGN_SYSTEM.md
+    │       └── specs/
+    │           └── COMMUNITY_LIBRARY.md
+    └── .vite/
+        └── deps/
+            ├── _metadata.json
+            └── package.json
