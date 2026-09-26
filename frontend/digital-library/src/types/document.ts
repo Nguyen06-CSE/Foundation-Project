@@ -70,6 +70,10 @@ export interface SharedDocument extends Document {
   shared_at?: string | null;
 }
 
+export interface FavoriteDocument extends Document {
+  favorited_at?: string | null;
+}
+
 export interface PaginatedSharedDocuments {
   items: SharedDocument[];
   total: number;

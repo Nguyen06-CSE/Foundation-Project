@@ -27,21 +27,40 @@ export default function SharedWithMe() {
   const items = data?.items ?? [];
   const totalPages = data?.total_pages ?? 1;
 
+  const { data: favorites = [] } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => documentService.listFavorites(),
+  });
+  const favoriteIds = new Set(favorites.map((f) => f.id));
+
   const handleDocumentAction = (action: DocumentAction | string, documentId: string) => {
+    const docIdNum = Number(documentId);
     if (action === "view") {
-      navigate(`/personal/documents/${documentId}`);
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      window.open(`${baseUrl}/documents/${documentId}/preview`, "_blank");
     } else if (action === "download") {
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
       const targetDoc = items.find((d) => d.id.toString() === documentId);
-      if (targetDoc?.file_path) {
-        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${targetDoc.file_path}`;
-        const link = document.createElement("a");
-        link.href = fileDownloadUrl;
-        link.download = targetDoc.title;
-        link.target = "_blank";
-        link.rel = "noreferrer";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      const downloadUrl = `${baseUrl}/documents/${documentId}/download`;
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = targetDoc?.title || "download";
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (action === "favorite") {
+      if (isNaN(docIdNum)) return;
+      const isFav = favoriteIds.has(docIdNum);
+      if (isFav) {
+        documentService.removeFavorite(docIdNum).then(() => {
+          refetch();
+        });
+      } else {
+        documentService.addFavorite(docIdNum).then(() => {
+          refetch();
+        });
       }
     }
   };
@@ -116,7 +135,8 @@ export default function SharedWithMe() {
                 bundle_children_count: doc.bundle_children_count,
               }}
               onAction={handleDocumentAction}
-              allowedActions={["view", "download"]}
+              allowedActions={["view", "download", "favorite"]}
+              isFavorited={favoriteIds.has(doc.id)}
             />
 
             {/* Khung lời nhắn từ người chia sẻ */}

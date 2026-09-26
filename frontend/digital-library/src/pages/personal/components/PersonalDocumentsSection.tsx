@@ -29,6 +29,7 @@ export interface DocCardType {
   is_bundle?: boolean;
   bundle_parent_id?: number | null;
   bundle_children_count?: number | null;
+  isFavorited?: boolean;
 }
 
 interface PersonalDocumentsSectionProps {
@@ -130,6 +131,7 @@ export function PersonalDocumentsSection({
                 key={doc.id}
                 document={doc}
                 onAction={onDocumentAction}
+                isFavorited={doc.isFavorited}
               />
             ))
           ) : (

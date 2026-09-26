@@ -39,9 +39,10 @@ export interface DocumentContextMenuProps {
   onAction: (action: DocumentAction | string) => void;
   allowedActions?: DocumentAction[];
   extraItems?: DocumentMenuItem[];
+  isFavorited?: boolean;
 }
 
-export function DocumentContextMenu({ onAction, allowedActions, extraItems = [] }: DocumentContextMenuProps) {
+export function DocumentContextMenu({ onAction, allowedActions, extraItems = [], isFavorited = false }: DocumentContextMenuProps) {
   const { isAuthenticated } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [coords, setCoords] = useState<{ top: number; right: number }>({
@@ -100,7 +101,11 @@ export function DocumentContextMenu({ onAction, allowedActions, extraItems = [] 
     { action: "view", icon: <ExternalLink className="h-4 w-4" />, label: "Mở trong thẻ mới" },
     { action: "download", icon: <Download className="h-4 w-4" />, label: "Tải xuống" },
     { action: "share", icon: <Share2 className="h-4 w-4" />, label: "Chia sẻ" },
-    { action: "favorite", icon: <Heart className="h-4 w-4" />, label: "Thêm vào Yêu thích" },
+    { 
+      action: "favorite", 
+      icon: <Heart className={`h-4 w-4 ${isFavorited ? "fill-rose-500 text-rose-500" : ""}`} />, 
+      label: isFavorited ? "Bỏ yêu thích" : "Thêm vào Yêu thích" 
+    },
     { action: "rename", icon: <Edit2 className="h-4 w-4" />, label: "Đổi tên" },
     { action: "move", icon: <FolderInput className="h-4 w-4" />, label: "Di chuyển" },
     { action: "delete", icon: <Trash2 className="h-4 w-4" />, label: "Xóa", danger: true },

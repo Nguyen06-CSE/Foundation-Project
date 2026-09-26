@@ -921,7 +921,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                 {
                   icon: ExternalLink,
                   label: "Mở trong thẻ mới",
-                  onClick: () => window.open(fileDownloadUrl, "_blank"),
+                  onClick: () => window.open(filePreviewUrl, "_blank"),
                   show: true,
                 },
                 {

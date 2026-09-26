@@ -144,6 +144,15 @@ export const documentService = {
         },
       )
       .then((r) => r.data),
+
+  listFavorites: () =>
+    api.get<import("@/types/document").FavoriteDocument[]>("/favorites/").then((r) => r.data),
+
+  addFavorite: (documentId: number) =>
+    api.post("/favorites/", { document_id: documentId }).then((r) => r.data),
+
+  removeFavorite: (documentId: number) =>
+    api.delete(`/favorites/${documentId}`).then((r) => r.data),
 };
 
 export const groupDocumentService = {

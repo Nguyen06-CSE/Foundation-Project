@@ -146,6 +146,7 @@ export interface DocumentCardProps {
   basePath?: string;
   allowedActions?: DocumentAction[];
   extraItems?: DocumentMenuItem[];
+  isFavorited?: boolean;
 }
 
 // ======================================================
@@ -158,6 +159,7 @@ export function DocumentCard({
   basePath = "/personal/documents",
   allowedActions,
   extraItems,
+  isFavorited,
 }: DocumentCardProps) {
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
@@ -267,6 +269,7 @@ export function DocumentCard({
                 onAction={(action) => handleAction(action, document.id)}
                 allowedActions={allowedActions}
                 extraItems={extraItems}
+                isFavorited={isFavorited}
               />
             </div>
           </div>

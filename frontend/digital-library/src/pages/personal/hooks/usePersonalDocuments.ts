@@ -76,6 +76,15 @@ export function usePersonalDocuments(
     queryFn: () => documentService.getAll({ page: 1, page_size: 100 }),
   });
 
+  const { data: favorites = [] } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => documentService.listFavorites(),
+  });
+
+  const favoriteIds = useMemo(() => {
+    return new Set(favorites.map((fav) => fav.id));
+  }, [favorites]);
+
   // --- 4. MUTATIONS ---
   const deleteMutation = useMutation({
     mutationFn: (id: string) => documentService.delete(Number(id)),
@@ -132,6 +141,21 @@ export function usePersonalDocuments(
       if (docToShare) {
         setSharingDoc({ id: docToShare.id, title: docToShare.title });
       }
+    } else if (action === "favorite") {
+      const docIdNum = Number(documentId);
+      if (isNaN(docIdNum)) return;
+      const isFav = favoriteIds.has(docIdNum);
+      if (isFav) {
+        documentService.removeFavorite(docIdNum).then(() => {
+          queryClient.invalidateQueries({ queryKey: ["documents"] });
+          queryClient.invalidateQueries({ queryKey: ["favorites"] });
+        });
+      } else {
+        documentService.addFavorite(docIdNum).then(() => {
+          queryClient.invalidateQueries({ queryKey: ["documents"] });
+          queryClient.invalidateQueries({ queryKey: ["favorites"] });
+        });
+      }
     } else if (action === "delete") {
       if (window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")) {
         deleteMutation.mutate(documentId);
@@ -157,12 +181,13 @@ export function usePersonalDocuments(
       is_bundle: doc.is_bundle,
       bundle_parent_id: doc.bundle_parent_id,
       bundle_children_count: doc.bundle_children_count,
+      isFavorited: favoriteIds.has(doc.id),
 
       // LƯU CÁC MỐC THỜI GIAN ĐỂ PHỤC VỤ BỘ LỌC
       created_at: doc.created_at,
       last_accessed_at: (doc as any).last_accessed_at || (doc as any).updated_at || doc.created_at,
     }));
-  }, [docData]);
+  }, [docData, favoriteIds]);
 
   // --- 7. LOGIC TÌM KIẾM ĐA TRƯỜNG & BỘ LỌC TỐC ĐỘ CAO ---
   const { filteredFolders, filteredDocuments } = useMemo(() => {
