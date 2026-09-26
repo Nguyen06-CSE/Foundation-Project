@@ -203,6 +203,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       <NavLink
         key={item.to}
         to={item.to}
+        end={item.to === "/personal" || item.to === "/groups"}
         onClick={onNavigate}
         title={isCollapsed ? item.label : undefined}
         className={({ isActive }) =>

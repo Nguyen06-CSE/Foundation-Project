@@ -99,9 +99,11 @@ export default function DocumentsTab({
     const docTitle = doc?.title || "";
 
     switch (action) {
-      case "view":
-        navigate(`/groups/${groupId}/documents/${docId}`);
+      case "view": {
+        const previewUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/groups/${groupId}/documents/${docId}/preview`;
+        window.open(previewUrl, '_blank');
         break;
+      }
       case "download": {
         const downloadUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/groups/${groupId}/documents/${docId}/download`;
         const link = window.document.createElement("a");
@@ -114,6 +116,9 @@ export default function DocumentsTab({
         window.document.body.removeChild(link);
         break;
       }
+      case "share":
+        onShare?.(Number(docId), docTitle);
+        break;
       case "save_personal":
       case "save":
         onSave?.(Number(docId));

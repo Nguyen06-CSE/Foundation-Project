@@ -31,12 +31,14 @@ from app.core.dependencies import get_current_user
 from app.models.document import Document
 from app.models.folder import Folder
 from app.models.user import User
-from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
+from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments, SharedDocumentOut, PaginatedSharedDocuments
 from app.schemas.tag import TagOut
-from app.services.document_service import create_document_from_upload
+from app.services.document_service import create_document_from_upload, user_can_access_document
 from app.services.file_processor import create_thumbnail, extract_text
 from app.services.folder_service import get_documents_by_folder
 from app.models.tag import Tag
+from app.models.document_share import DocumentShare
+from app.models.note import Note
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -365,6 +367,138 @@ async def get_document_file_types(
     return result.scalars().all()
 
 
+@router.post("/{document_id}/share")
+async def share_document(
+    document_id: int,
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    to_user_id = payload.get("to_user_id")
+    share_type = payload.get("share_type", "personal")
+    message = payload.get("message")
+
+    if not to_user_id:
+        raise HTTPException(status_code=400, detail="Thiếu to_user_id")
+
+    if to_user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Không thể chia sẻ cho chính mình")
+
+    # Kiểm tra tài liệu tồn tại và thuộc sở hữu của current_user
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    # Kiểm tra to_user_id có tồn tại
+    target_user = await db.get(User, to_user_id)
+    if not target_user:
+        raise HTTPException(status_code=404, detail="Không tìm thấy người nhận")
+
+    # Tạo dòng DocumentShare
+    share = DocumentShare(
+        document_id=document_id,
+        source_document_id=document.source_document_id or document_id,
+        from_user_id=current_user.id,
+        to_user_id=to_user_id,
+        share_type=share_type,
+    )
+    db.add(share)
+
+    # Nếu có message không rỗng: tạo thêm 1 dòng Note
+    if message and message.strip():
+        note = Note(
+            document_id=document_id,
+            user_id=current_user.id,
+            note=message.strip(),
+        )
+        db.add(note)
+
+    await db.commit()
+    await db.refresh(share)
+    return {"success": True, "share_id": share.id}
+
+
+@router.get("/shared-with-me", response_model=PaginatedSharedDocuments)
+async def get_shared_with_me(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    offset = (page - 1) * page_size
+
+    # Query: join Document với DocumentShare, lọc to_user_id == current_user
+    base_query = (
+        select(Document, DocumentShare)
+        .join(DocumentShare, DocumentShare.document_id == Document.id)
+        .where(
+            DocumentShare.to_user_id == current_user.id,
+            Document.is_deleted == False,
+        )
+    )
+
+    # Đếm tổng
+    count_result = await db.execute(
+        select(func.count()).select_from(base_query.subquery())
+    )
+    total = count_result.scalar() or 0
+
+    # Phân trang
+    result = await db.execute(
+        base_query
+        .options(selectinload(Document.tags), selectinload(Document.owner))
+        .order_by(DocumentShare.created_at.desc())
+        .offset(offset)
+        .limit(page_size)
+    )
+    rows = result.all()
+
+    items = []
+    for doc, share in rows:
+        # Lấy thông tin user gửi
+        from_user = await db.get(User, share.from_user_id)
+
+        # Lấy lời nhắn (Note mới nhất theo cặp document_id + from_user_id)
+        note_result = await db.execute(
+            select(Note)
+            .where(
+                Note.document_id == share.document_id,
+                Note.user_id == share.from_user_id,
+            )
+            .order_by(Note.created_at.desc())
+            .limit(1)
+        )
+        latest_note = note_result.scalar_one_or_none()
+
+        shared_doc = SharedDocumentOut.model_validate(doc)
+        shared_doc.share_id = share.id
+        if from_user:
+            shared_doc.shared_by = {
+                "id": from_user.id,
+                "username": from_user.username,
+                "full_name": getattr(from_user, "full_name", None),
+                "avatar": getattr(from_user, "avatar", None),
+            }
+        shared_doc.share_message = latest_note.note if latest_note else None
+        shared_doc.shared_at = share.created_at
+        items.append(shared_doc)
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": (total + page_size - 1) // page_size if page_size else 1,
+    }
+
+
 @router.get("/{document_id}", response_model=DocumentOut)
 async def get_document(
     document_id: int,
@@ -376,12 +510,11 @@ async def get_document(
         .options(selectinload(Document.tags))
         .where(
             Document.id == document_id,
-            Document.owner_id == current_user.id,
             Document.is_deleted == False,
         )
     )
     document = result.scalar_one_or_none()
-    if not document:
+    if not document or not await user_can_access_document(db, document, current_user.id):
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
 
     doc_out = DocumentOut.model_validate(document)
@@ -396,6 +529,75 @@ async def get_document(
     return doc_out
 
 
+@router.get("/{document_id}/download")
+async def download_document(
+    document_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Tải xuống tài liệu cá nhân — trả về file với header attachment."""
+    import os
+    import urllib.parse
+    from fastapi.responses import FileResponse
+
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document or not await user_can_access_document(db, document, current_user.id):
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    file_path = document.file_path
+    if not file_path or not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File không tồn tại trên server")
+
+    safe_name = urllib.parse.quote(document.title or os.path.basename(file_path))
+    ext = os.path.splitext(file_path)[1]
+    filename = document.title if document.title.endswith(ext) else f"{document.title}{ext}"
+
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type=document.file_type or "application/octet-stream",
+        headers={"Content-Disposition": f'attachment; filename="{safe_name}"'},
+    )
+
+
+@router.get("/{document_id}/preview")
+async def preview_document(
+    document_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Xem trước tài liệu cá nhân — trả về file với header inline."""
+    import os
+    import urllib.parse
+    from fastapi.responses import FileResponse
+
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document or not await user_can_access_document(db, document, current_user.id):
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    file_path = document.file_path
+    if not file_path or not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File không tồn tại trên server")
+
+    safe_name = urllib.parse.quote(document.title or os.path.basename(file_path))
+    return FileResponse(
+        path=file_path,
+        media_type=document.file_type or "application/octet-stream",
+        headers={"Content-Disposition": f'inline; filename="{safe_name}"'},
+    )
+
 @router.get("/{document_id}/tags", response_model=list[TagOut])
 async def get_document_tags(
     document_id: int,
@@ -407,13 +609,12 @@ async def get_document_tags(
         .options(selectinload(Document.tags))
         .where(
             Document.id == document_id,
-            Document.owner_id == current_user.id,
             Document.is_deleted == False,
         )
     )
     document = result.scalar_one_or_none()
     
-    if not document:
+    if not document or not await user_can_access_document(db, document, current_user.id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
             detail="Không tìm thấy tài liệu"

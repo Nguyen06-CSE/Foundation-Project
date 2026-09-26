@@ -145,8 +145,9 @@ function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
   const isPdf = doc.file_type === "application/pdf";
   const canPreview = isImage || isPdf;
 
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
   const thumbnailUrl = doc.thumbnail_path
-    ? `${import.meta.env.VITE_API_URL}/${doc.thumbnail_path}`
+    ? `${baseUrl}/${doc.thumbnail_path}`
     : null;
 
   return (
@@ -582,9 +583,9 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const iconType = MIME_TO_ICON_TYPE[doc.file_type ?? ""] ?? "default";
   const sizeLabel = formatSize(doc.file_size ?? 0);
   const uploadedAt = formatRelativeDate(doc.created_at);
-  const fileDownloadUrl = doc.file_path
-    ? `${import.meta.env.VITE_API_URL}/${doc.file_path}`
-    : "#";
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const fileDownloadUrl = doc.id ? `${baseUrl}/documents/${doc.id}/download` : "#";
+  const filePreviewUrl = doc.id ? `${baseUrl}/documents/${doc.id}/preview` : "#";
 
   return (
     <div className="flex flex-col gap-6 pb-10">
@@ -664,7 +665,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
           <div className="pt-1">
             {activeTab === "detail" && (
-              <TabDetail doc={doc} fileUrl={fileDownloadUrl} />
+              <TabDetail doc={doc} fileUrl={filePreviewUrl} />
             )}
             {activeTab === "content" && <TabContent content={doc.content} />}
             {activeTab === "description" && (

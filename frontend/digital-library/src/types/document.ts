@@ -62,3 +62,18 @@ export interface PaginatedDocuments {
   page_size: number;
   total_pages: number;
 }
+
+export interface SharedDocument extends Document {
+  share_id?: number | null;
+  shared_by?: DocumentOwner | null;
+  share_message?: string | null;
+  shared_at?: string | null;
+}
+
+export interface PaginatedSharedDocuments {
+  items: SharedDocument[];
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+}

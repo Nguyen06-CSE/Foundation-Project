@@ -73,9 +73,11 @@ export default function LocalGroupDocumentCard({
 
   const handleAction = (action: string) => {
     switch (action) {
-      case "view":
-        handleViewDetail();
+      case "view": {
+        const previewUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/groups/${groupId}/documents/${document.id}/preview`;
+        window.open(previewUrl, '_blank');
         break;
+      }
       case "download": {
         const downloadUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/groups/${groupId}/documents/${document.id}/download`;
         const link = window.document.createElement("a");
@@ -88,6 +90,9 @@ export default function LocalGroupDocumentCard({
         window.document.body.removeChild(link);
         break;
       }
+      case "share":
+        onShare?.(document.id, document.title);
+        break;
       case "save_personal":
       case "save":
         onSave?.(document.id);

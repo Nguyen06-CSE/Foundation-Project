@@ -75,3 +75,18 @@ class PaginatedDocuments(BaseModel):
     page: int
     page_size: int
     total_pages: int
+
+
+class SharedDocumentOut(DocumentOut):
+    share_id: Optional[int] = None
+    shared_by: Optional[DocumentOwnerOut] = None
+    share_message: Optional[str] = None
+    shared_at: Optional[datetime] = None
+
+
+class PaginatedSharedDocuments(BaseModel):
+    items: list[SharedDocumentOut]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int

@@ -336,6 +336,86 @@ async def get_group_bundle_children(
     )
     return result.scalars().all()
 
+
+@router.get("/groups/{group_id}/documents/{document_id}/download")
+async def download_group_document(
+    group_id: int,
+    document_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Tải xuống tài liệu thuộc nhóm — trả về file với header attachment."""
+    import os
+    import urllib.parse
+    from fastapi.responses import FileResponse
+
+    await require_member(db, group_id, current_user.id)
+
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.workspace_id == group_id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    file_path = document.file_path
+    if not file_path or not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File không tồn tại trên server")
+
+    # Tên file an toàn để gửi về client
+    safe_name = urllib.parse.quote(document.title or os.path.basename(file_path))
+    ext = os.path.splitext(file_path)[1]
+    filename = document.title if document.title.endswith(ext) else f"{document.title}{ext}"
+
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type=document.file_type or "application/octet-stream",
+        headers={"Content-Disposition": f'attachment; filename="{safe_name}"'},
+    )
+
+
+@router.get("/groups/{group_id}/documents/{document_id}/preview")
+async def preview_group_document(
+    group_id: int,
+    document_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Xem trước tài liệu thuộc nhóm — trả về file với header inline (trình duyệt hiển thị)."""
+    import os
+    import urllib.parse
+    from fastapi.responses import FileResponse
+
+    await require_member(db, group_id, current_user.id)
+
+    result = await db.execute(
+        select(Document).where(
+            Document.id == document_id,
+            Document.workspace_id == group_id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    file_path = document.file_path
+    if not file_path or not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File không tồn tại trên server")
+
+    safe_name = urllib.parse.quote(document.title or os.path.basename(file_path))
+    return FileResponse(
+        path=file_path,
+        media_type=document.file_type or "application/octet-stream",
+        headers={"Content-Disposition": f'inline; filename="{safe_name}"'},
+    )
+
+
 @router.post("/groups/{group_id}/documents/upload-batch", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
 async def upload_group_batch_documents(
     group_id: int,

@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom";
+
 export function PersonalHome() {
-      return <div>Trang đang xây dựng</div>;
-}
+  return <Navigate to="/personal/documents" replace />;
+}

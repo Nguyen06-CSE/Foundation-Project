@@ -10,6 +10,8 @@ import type { PermissionLevel, WorkspaceMember } from "@/types/group";
 import type { FolderAction } from "@/components/shared/FolderContextMenu";
 import DocumentsTab from "./DocumentsTab";
 import type { DocumentAction } from "@/components/shared/DocumentContextMenu";
+import { ShareDocumentModal } from "@/components/shared/ShareDocumentModal";
+import { useState } from "react";
 
 export interface WorkspaceTag {
   id?: number;
@@ -100,6 +102,8 @@ export function GroupDocumentsSection({
   handleFolderAction,
   onDocumentAction: _onDocumentAction,
 }: GroupDocumentsSectionProps) {
+  const [sharingDoc, setSharingDoc] = useState<{ id: number; title: string } | null>(null);
+
   return (
     <div className="flex flex-col gap-4">
       {/* Dynamic Tabs lọc theo định dạng tệp */}
@@ -195,12 +199,21 @@ export function GroupDocumentsSection({
         onSave={(docId: number) => saveDocument.mutateAsync(docId)}
         onDelete={(docId: number) => deleteDocument.mutateAsync(docId)}
         onRename={handleRenameDocument}
+        onShare={(docId: number, title: string) => setSharingDoc({ id: docId, title })}
         onAddFolder={() => {
           setEditingFolder(null);
           setIsFolderModalOpen(true);
         }}
         onFolderAction={handleFolderAction}
       />
+      
+      {sharingDoc && (
+        <ShareDocumentModal
+          documentId={sharingDoc.id}
+          documentTitle={sharingDoc.title}
+          onClose={() => setSharingDoc(null)}
+        />
+      )}
     </div>
   );
 }

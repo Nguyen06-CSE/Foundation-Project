@@ -63,6 +63,7 @@ export function usePersonalDocuments(
   const [renamingDoc, setRenamingDoc] = useState<{ id: string; title: string } | null>(null);
   const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
   const [contributeDoc, setContributeDoc] = useState<{ id: number; title: string } | null>(null);
+  const [sharingDoc, setSharingDoc] = useState<{ id: number; title: string } | null>(null);
 
   // --- 3. QUERIES ---
   const { data: fileTypes = [] } = useQuery({
@@ -99,21 +100,20 @@ export function usePersonalDocuments(
   // --- 5. HANDLERS ---
   const handleDocumentAction = (action: DocumentAction | string, documentId: string) => {
     if (action === "view") {
-      navigate(`/ca-nhan/tai-lieu/${documentId}`);
+      const previewUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/documents/${documentId}/preview`;
+      window.open(previewUrl, '_blank');
     } else if (action === "download") {
       const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
-      if (targetDoc?.file_path) {
-        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${targetDoc.file_path}`;
+      if (targetDoc) {
+        const downloadUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/documents/${documentId}/download`;
         const link = document.createElement("a");
-        link.href = fileDownloadUrl;
+        link.href = downloadUrl;
         link.download = targetDoc.title;
         link.target = "_blank";
         link.rel = "noreferrer";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      } else {
-        alert("Không tìm thấy đường dẫn tệp để tải xuống.");
       }
     } else if (action === "rename") {
       const docToRename = docData?.items.find((d) => d.id.toString() === documentId);
@@ -126,6 +126,11 @@ export function usePersonalDocuments(
       if (docToContribute) {
         setContributeDoc({ id: docToContribute.id, title: docToContribute.title });
         setIsContributeModalOpen(true);
+      }
+    } else if (action === "share") {
+      const docToShare = docData?.items.find((d) => d.id.toString() === documentId);
+      if (docToShare) {
+        setSharingDoc({ id: docToShare.id, title: docToShare.title });
       }
     } else if (action === "delete") {
       if (window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")) {
@@ -277,6 +282,7 @@ export function usePersonalDocuments(
     renamingDoc, setRenamingDoc,
     isContributeModalOpen, setIsContributeModalOpen,
     contributeDoc, setContributeDoc,
+    sharingDoc, setSharingDoc,
     activeTab, setActiveTab,
     searchQuery, setSearchQuery,
     selectedTagId, setSelectedTagId,

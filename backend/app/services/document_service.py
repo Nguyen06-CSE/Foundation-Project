@@ -11,8 +11,19 @@ from app.models.download_log import DownloadLog
 from app.models.tag import Tag  # <-- Thêm dòng này
 from app.services.file_service import checksum_for_file, save_upload_file
 
+from app.models.document_share import DocumentShare
 
-
+async def user_can_access_document(db: AsyncSession, document: Document, user_id: int) -> bool:
+    """True nếu user là chủ sở hữu HOẶC tài liệu đã được chia sẻ cho user này."""
+    if document.owner_id == user_id:
+        return True
+    result = await db.execute(
+        select(DocumentShare).where(
+            DocumentShare.document_id == document.id,
+            DocumentShare.to_user_id == user_id,
+        )
+    )
+    return result.scalar_one_or_none() is not None
 
 async def create_document_from_upload(
     db: AsyncSession, 

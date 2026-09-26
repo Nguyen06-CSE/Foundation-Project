@@ -9,6 +9,7 @@ import { usePersonalDocuments } from "./hooks/usePersonalDocuments";
 import { DocumentTypeTabs } from "@/components/shared/DocumentTypeTabs";
 import { RenameDocumentModal } from "@/components/shared/RenameDocumentModal";
 import { ContributeModal } from "@/components/shared/ContributeModal";
+import { ShareDocumentModal } from "@/components/shared/ShareDocumentModal";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 
 // Sub-sections & Modals
@@ -59,6 +60,8 @@ export function PersonalDocuments() {
     setIsContributeModalOpen,
     contributeDoc,
     setContributeDoc,
+    sharingDoc,
+    setSharingDoc,
     fileTypes,
     docData,
     docsLoading,
@@ -209,6 +212,14 @@ export function PersonalDocuments() {
             setIsContributeModalOpen(false);
             setContributeDoc(null);
           }}
+        />
+      )}
+
+      {sharingDoc && (
+        <ShareDocumentModal
+          documentId={sharingDoc.id}
+          documentTitle={sharingDoc.title}
+          onClose={() => setSharingDoc(null)}
         />
       )}
 
