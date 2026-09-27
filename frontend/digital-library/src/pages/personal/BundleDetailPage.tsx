@@ -44,7 +44,15 @@ import { cn } from "@/utils/cn";
 import type { Document } from "@/types/document";
 import type { DocumentAction } from "@/components/shared/DocumentContextMenu";
 
+import { ContributeModal } from "@/components/shared/ContributeModal";
+
 export default function BundleDetailPage() {
+  const [contributeDoc, setContributeDoc] = useState<{
+    id: number;
+    title: string;
+  } | null>(null);
+  const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
+
   const params = useParams<{ id?: string; docId?: string; groupId?: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -152,7 +160,9 @@ export default function BundleDetailPage() {
       queryClient.invalidateQueries({
         queryKey: isGroup ? ["group-documents", groupId] : ["documents"],
       });
-      navigate(isGroup ? `/groups/${groupId}?tab=documents` : "/personal/documents");
+      navigate(
+        isGroup ? `/groups/${groupId}?tab=documents` : "/personal/documents",
+      );
     },
   });
 
@@ -181,8 +191,7 @@ export default function BundleDetailPage() {
 
   // Phase 6 — Tách khỏi gói
   const removeFromBundleMutation = useMutation({
-    mutationFn: (childId: number) =>
-      documentService.removeFromBundle(childId),
+    mutationFn: (childId: number) => documentService.removeFromBundle(childId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: childrenQueryKey });
       queryClient.invalidateQueries({ queryKey: bundleQueryKey });
@@ -204,7 +213,6 @@ export default function BundleDetailPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: childrenQueryKey });
       queryClient.invalidateQueries({ queryKey: bundleQueryKey });
-
     },
     onError: (err: unknown) => {
       const msg =
@@ -226,10 +234,15 @@ export default function BundleDetailPage() {
 
   // ─── Handlers ───────────────────────────────────────────────────────
   const handleBack = () => {
-    navigate(isGroup ? `/groups/${groupId}?tab=documents` : "/personal/documents");
+    navigate(
+      isGroup ? `/groups/${groupId}?tab=documents` : "/personal/documents",
+    );
   };
 
-  const handleChildAction = (action: DocumentAction | string, docId: string | number) => {
+  const handleChildAction = (
+    action: DocumentAction | string,
+    docId: string | number,
+  ) => {
     const childId = Number(docId);
     const child = children.find((c) => c.id === childId);
     if (!child) return;
@@ -239,7 +252,7 @@ export default function BundleDetailPage() {
         navigate(
           isGroup
             ? `/groups/${groupId}/documents/${childId}`
-            : `/personal/documents/${childId}`
+            : `/personal/documents/${childId}`,
         );
         break;
       case "download":
@@ -257,6 +270,14 @@ export default function BundleDetailPage() {
       case "remove-from-bundle":
         setRemovingChild(child);
         break;
+      case "contribute":
+        setContributeDoc({
+          id: Number(child.id), // Đảm bảo ép kiểu sang number đúng với ContributeModalProps
+          title: child.content || child.title || "Tài liệu",
+        });
+        setIsContributeModalOpen(true);
+        break;
+
       default:
         break;
     }
@@ -283,7 +304,9 @@ export default function BundleDetailPage() {
         <div className="rounded-full bg-red-50 p-3 text-red-500">
           <FileX className="h-8 w-8" />
         </div>
-        <p className="text-gray-600 font-medium">Không tìm thấy gói tài liệu.</p>
+        <p className="text-gray-600 font-medium">
+          Không tìm thấy gói tài liệu.
+        </p>
         <Button variant="outline" size="sm" onClick={handleBack}>
           ← Quay lại danh sách
         </Button>
@@ -293,7 +316,7 @@ export default function BundleDetailPage() {
 
   // ─── Filter & map ───────────────────────────────────────────────────
   const filteredChildren = children.filter((c) =>
-    c.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
+    c.title.toLowerCase().includes(searchQuery.toLowerCase().trim()),
   );
 
   const basePath = isGroup
@@ -318,7 +341,9 @@ export default function BundleDetailPage() {
     updatedAt: child.updated_at || child.created_at,
     size: child.file_size,
     thumbnail_path: child.thumbnail_path,
-    owner: child.owner ? { full_name: child.owner.full_name || child.owner.username } : undefined,
+    owner: child.owner
+      ? { full_name: child.owner.full_name || child.owner.username }
+      : undefined,
     tags: child.tags,
     workspace_type: isGroup ? "group" : "personal",
     is_bundle: false,
@@ -382,7 +407,9 @@ export default function BundleDetailPage() {
               </h1>
 
               {bundle.description && (
-                <p className="text-sm text-gray-600 mt-1">{bundle.description}</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {bundle.description}
+                </p>
               )}
             </div>
           </div>
@@ -442,7 +469,9 @@ export default function BundleDetailPage() {
                         <Upload className="h-4 w-4 text-gray-400 shrink-0" />
                         <div>
                           <p className="font-medium">Tải file mới lên</p>
-                          <p className="text-xs text-gray-400">Upload file vào gói</p>
+                          <p className="text-xs text-gray-400">
+                            Upload file vào gói
+                          </p>
                         </div>
                       </button>
                       {/* Add from personal */}
@@ -456,7 +485,9 @@ export default function BundleDetailPage() {
                         <FolderInput className="h-4 w-4 text-gray-400 shrink-0" />
                         <div>
                           <p className="font-medium">Từ kho cá nhân</p>
-                          <p className="text-xs text-gray-400">Chọn tài liệu sẵn có</p>
+                          <p className="text-xs text-gray-400">
+                            Chọn tài liệu sẵn có
+                          </p>
                         </div>
                       </button>
                     </div>
@@ -490,11 +521,16 @@ export default function BundleDetailPage() {
         <div className="mt-5 pt-4 border-t border-purple-100/80 flex items-center gap-6 flex-wrap text-xs text-gray-500 font-medium">
           <div className="flex items-center gap-1.5">
             <Files className="h-4 w-4 text-purple-600" />
-            <span><strong>{children.length}</strong> tài liệu bên trong</span>
+            <span>
+              <strong>{children.length}</strong> tài liệu bên trong
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <HardDrive className="h-4 w-4 text-purple-600" />
-            <span>Tổng dung lượng: <strong>{formatSize(bundle.file_size || 0)}</strong></span>
+            <span>
+              Tổng dung lượng:{" "}
+              <strong>{formatSize(bundle.file_size || 0)}</strong>
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4 text-purple-600" />
@@ -547,7 +583,11 @@ export default function BundleDetailPage() {
           <div className="bg-white rounded-2xl border border-gray-100 p-8">
             <EmptyState
               icon={<FileX className="h-8 w-8 text-gray-400" />}
-              title={searchQuery ? "Không tìm thấy tài liệu phù hợp" : "Gói này chưa có tài liệu nào"}
+              title={
+                searchQuery
+                  ? "Không tìm thấy tài liệu phù hợp"
+                  : "Gói này chưa có tài liệu nào"
+              }
               description={
                 searchQuery
                   ? "Vui lòng thử tìm kiếm bằng từ khóa khác."
@@ -556,7 +596,12 @@ export default function BundleDetailPage() {
             />
           </div>
         ) : viewMode === "grid" ? (
-          <div className={cn("grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4", isChildrenFetching && "opacity-75")}>
+          <div
+            className={cn(
+              "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4",
+              isChildrenFetching && "opacity-75",
+            )}
+          >
             {mappedCardItems.map((childDoc) => (
               <DocumentCard
                 key={childDoc.id}
@@ -597,7 +642,10 @@ export default function BundleDetailPage() {
           isPending={renameChildMutation.isPending}
           onClose={() => setRenamingChild(null)}
           onConfirm={(newTitle) =>
-            renameChildMutation.mutate({ childId: renamingChild.id, title: newTitle })
+            renameChildMutation.mutate({
+              childId: renamingChild.id,
+              title: newTitle,
+            })
           }
         />
       )}
@@ -628,7 +676,9 @@ export default function BundleDetailPage() {
       {addFilesMutation.isPending && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-white rounded-xl shadow-xl border border-gray-100 px-4 py-3">
           <div className="h-4 w-4 rounded-full border-2 border-purple-600 border-t-transparent animate-spin" />
-          <span className="text-sm font-medium text-gray-700">Đang tải file lên...</span>
+          <span className="text-sm font-medium text-gray-700">
+            Đang tải file lên...
+          </span>
         </div>
       )}
 
@@ -640,11 +690,14 @@ export default function BundleDetailPage() {
               <div className="p-2 rounded-xl bg-red-50">
                 <Trash2 className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Xóa gói tài liệu?</h3>
+              <h3 className="text-lg font-bold text-gray-900">
+                Xóa gói tài liệu?
+              </h3>
             </div>
             <p className="text-sm text-gray-600 mb-6">
-              Bạn có chắc chắn muốn xóa gói <strong>"{bundle.title}"</strong> không? Tất cả{" "}
-              <strong>{children.length}</strong> tài liệu bên trong gói cũng sẽ được chuyển vào thùng rác.
+              Bạn có chắc chắn muốn xóa gói <strong>"{bundle.title}"</strong>{" "}
+              không? Tất cả <strong>{children.length}</strong> tài liệu bên
+              trong gói cũng sẽ được chuyển vào thùng rác.
             </p>
             <div className="flex justify-end gap-3">
               <Button
@@ -674,10 +727,13 @@ export default function BundleDetailPage() {
               <div className="p-2 rounded-xl bg-red-50">
                 <Trash2 className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Xóa tài liệu khỏi gói?</h3>
+              <h3 className="text-lg font-bold text-gray-900">
+                Xóa tài liệu khỏi gói?
+              </h3>
             </div>
             <p className="text-sm text-gray-600 mb-6">
-              Bạn có chắc chắn muốn xóa tài liệu <strong>"{deletingChild.title}"</strong> khỏi gói không?
+              Bạn có chắc chắn muốn xóa tài liệu{" "}
+              <strong>"{deletingChild.title}"</strong> khỏi gói không?
             </p>
             <div className="flex justify-end gap-3">
               <Button
@@ -707,10 +763,13 @@ export default function BundleDetailPage() {
               <div className="p-2 rounded-xl bg-orange-50">
                 <Unlink className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Tách khỏi gói?</h3>
+              <h3 className="text-lg font-bold text-gray-900">
+                Tách khỏi gói?
+              </h3>
             </div>
             <p className="text-sm text-gray-600 mb-6">
-              Tài liệu <strong>"{removingChild.title}"</strong> sẽ được tách ra khỏi gói và trở về kho cá nhân. Tài liệu sẽ không bị xóa.
+              Tài liệu <strong>"{removingChild.title}"</strong> sẽ được tách ra
+              khỏi gói và trở về kho cá nhân. Tài liệu sẽ không bị xóa.
             </p>
             <div className="flex justify-end gap-3">
               <Button
@@ -723,10 +782,14 @@ export default function BundleDetailPage() {
               <Button
                 variant="outline"
                 disabled={removeFromBundleMutation.isPending}
-                onClick={() => removeFromBundleMutation.mutate(removingChild.id)}
+                onClick={() =>
+                  removeFromBundleMutation.mutate(removingChild.id)
+                }
                 className="border-orange-200 text-orange-700 hover:bg-orange-50"
               >
-                {removeFromBundleMutation.isPending ? "Đang tách..." : "Tách khỏi gói"}
+                {removeFromBundleMutation.isPending
+                  ? "Đang tách..."
+                  : "Tách khỏi gói"}
               </Button>
             </div>
           </div>
@@ -738,6 +801,20 @@ export default function BundleDetailPage() {
         <div
           className="fixed inset-0 z-20"
           onClick={() => setIsAddMenuOpen(false)}
+        />
+      )}
+
+      {isContributeModalOpen && contributeDoc && (
+        <ContributeModal
+          documentId={contributeDoc.id}
+          documentTitle={contributeDoc.title}
+          onClose={() => {
+            setIsContributeModalOpen(false);
+            setContributeDoc(null);
+          }}
+          onSuccess={() => {
+            // Có thể gọi refetch/reload danh sách nếu cần
+          }}
         />
       )}
     </div>

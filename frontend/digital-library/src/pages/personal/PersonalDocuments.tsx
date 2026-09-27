@@ -1,5 +1,6 @@
 // src/pages/personal/PersonalDocuments.tsx
 import { useEffect } from "react"; 
+import { useQueryClient } from "@tanstack/react-query";
 
 // Hooks
 import { usePersonalFolders } from "./hooks/usePersonalFolders";
@@ -21,6 +22,8 @@ import { useHighlightElement } from "@/hooks/useHighlightElement";
 import { DocumentFilterBar } from "@/components/shared/DocumentFilterBar";
 
 export function PersonalDocuments() {
+  const queryClient = useQueryClient();
+
   // 1. Gọi Hook Folders
   const {
     folders,
@@ -46,7 +49,7 @@ export function PersonalDocuments() {
 
   useHighlightElement("highlight_doc");
 
-  // 2. Gọi Hook Documents (Bổ sung lấy các state lọc thời gian)
+  // 2. Gọi Hook Documents
   const {
     page,
     setPage,
@@ -105,7 +108,6 @@ export function PersonalDocuments() {
         fileTypes={fileTypes}
         selectedFileType={selectedFileType}
         setSelectedFileType={setSelectedFileType}
-        // Truyền state lọc thời gian vào Filter Bar
         selectedUploadTime={selectedUploadTime}
         setSelectedUploadTime={setSelectedUploadTime}
         selectedAccessTime={selectedAccessTime}
@@ -208,6 +210,9 @@ export function PersonalDocuments() {
           onClose={() => {
             setIsContributeModalOpen(false);
             setContributeDoc(null);
+          }}
+          onSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: ["documents"] });
           }}
         />
       )}
