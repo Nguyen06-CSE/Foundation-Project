@@ -1,12 +1,15 @@
+// frontend/digital-library/src/pages/library/admin/LibraryAdmin.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileCheck, FolderTree } from 'lucide-react';
-import useAuth from '@/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore'; // Dùng useAuthStore
 
 export const LibraryAdmin: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const isSystemAdmin = ['system_admin', 'school_admin'].includes(user?.role || '');
+  const { user } = useAuthStore();
+  
+  const userRole = (user?.role || '').toLowerCase().trim();
+  const isSystemAdmin = ['sysadmin', 'schooladmin', 'system_admin', 'school_admin'].includes(userRole);
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">

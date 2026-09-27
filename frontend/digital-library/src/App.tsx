@@ -40,8 +40,8 @@ import LibraryAdminSubmissions from "@/pages/library/admin/LibraryAdminSubmissio
 // Shared Components
 import { DocumentDetail } from "@/components/shared/DocumentDetail";
 
-import { LibraryAdmin } from '@/pages/library/admin/LibraryAdmin';
-import { LibraryAdminStructure } from '@/pages/library/admin/LibraryAdminStructure';
+import { LibraryAdmin } from "@/pages/library/admin/LibraryAdmin";
+import { LibraryAdminStructure } from "@/pages/library/admin/LibraryAdminStructure";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,7 +77,10 @@ function AppRoutes() {
       <Route path="/library" element={<LibraryHome />} />
       <Route path="/library/faculty/:facultyId" element={<LibraryFaculty />} />
       <Route path="/library/subject/:subjectId" element={<LibrarySubject />} />
-      <Route path="/library/document/:documentId" element={<LibraryDocumentDetail />} />
+      <Route
+        path="/library/document/:documentId"
+        element={<LibraryDocumentDetail />}
+      />
 
       {/* Protected routes — Bắt buộc đăng nhập */}
       <Route element={<ProtectedRoute />}>
@@ -118,17 +121,30 @@ function AppRoutes() {
           <Route
             element={
               <ProtectedRoute
-                allowedRoles={["faculty_admin", "school_admin", "system_admin"]}
+                allowedRoles={[
+                  "sysadmin",
+                  "schooladmin",
+                  "system_admin",
+                  "school_admin",
+                  "faculty_admin",
+                  "admin_cntt",
+                  "admin_kt",
+                  "admin_nn",
+                ]}
               />
             }
           >
             <Route path="/faculty" element={<FacultySpace />} />
             <Route path="/school" element={<SchoolSpace />} />
-
-            {/* Quản lý kho học liệu Routes */}
             <Route path="/library/admin" element={<LibraryAdmin />} />
-            <Route path="/library/admin/submissions" element={<LibraryAdminSubmissions />} />
-            <Route path="/library/admin/structure" element={<LibraryAdminStructure />} />
+            <Route
+              path="/library/admin/submissions"
+              element={<LibraryAdminSubmissions />}
+            />
+            <Route
+              path="/library/admin/structure"
+              element={<LibraryAdminStructure />}
+            />
           </Route>
         </Route>
       </Route>
