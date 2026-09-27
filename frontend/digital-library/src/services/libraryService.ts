@@ -105,4 +105,21 @@ export const libraryService = {
 
   rejectSubmission: (id: number, reason: string): Promise<Submission> =>
     api.post(`/library/admin/submissions/${id}/reject`, { reason }).then((r) => r.data),
+
+  // Admin: Khoa
+  createFaculty: (data: { code: string; name: string; description?: string }) =>
+    api.post('/library/admin/faculties/', data).then(r => r.data),
+  
+  updateFaculty: (facultyId: number, data: { name?: string; description?: string }) =>
+    api.put(`/library/admin/faculties/${facultyId}`, data).then(r => r.data),
+
+  // Admin: Môn học
+  createSubject: (data: { faculty_id: number; code: string; name: string; description?: string }) =>
+    api.post('/library/admin/subjects/', data).then(r => r.data),
+
+  updateSubject: (subjectId: number, data: { code?: string; name?: string; description?: string }) =>
+    api.put(`/library/admin/subjects/${subjectId}`, data).then(r => r.data),
+
+  deleteSubject: (subjectId: number) =>
+    api.delete(`/library/admin/subjects/${subjectId}`),
 };

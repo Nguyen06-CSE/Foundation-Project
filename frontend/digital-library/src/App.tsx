@@ -40,6 +40,9 @@ import LibraryAdminSubmissions from "@/pages/library/admin/LibraryAdminSubmissio
 // Shared Components
 import { DocumentDetail } from "@/components/shared/DocumentDetail";
 
+import { LibraryAdmin } from '@/pages/library/admin/LibraryAdmin';
+import { LibraryAdminStructure } from '@/pages/library/admin/LibraryAdminStructure';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -121,7 +124,11 @@ function AppRoutes() {
           >
             <Route path="/faculty" element={<FacultySpace />} />
             <Route path="/school" element={<SchoolSpace />} />
+
+            {/* Quản lý kho học liệu Routes */}
+            <Route path="/library/admin" element={<LibraryAdmin />} />
             <Route path="/library/admin/submissions" element={<LibraryAdminSubmissions />} />
+            <Route path="/library/admin/structure" element={<LibraryAdminStructure />} />
           </Route>
         </Route>
       </Route>
