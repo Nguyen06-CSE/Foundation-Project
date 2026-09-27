@@ -1189,150 +1189,122 @@ async def reject_submission(
 
 
 # ==================== KHOA (FACULTIES) - SYSTEM ADMIN ====================
-
+# --- 1. TẠO KHOA ---
 @router.post("/admin/faculties/", status_code=status.HTTP_201_CREATED)
-def create_faculty(
+async def create_faculty(
     payload: FacultyCreate,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if current_user.role not in ["system_admin", "school_admin"]:
-        raise HTTPException(status_code=403, detail="Chỉ system_admin mới có quyền thêm Khoa")
-    
-    existing = db.query(Faculty).filter(Faculty.code == payload.code).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Mã khoa đã tồn tại")
-        
-    faculty = Faculty(**payload.model_dump())
-    db.add(faculty)
-    db.commit()
-    db.refresh(faculty)
-    return faculty
-
-@router.put("/admin/faculties/{faculty_id}")
-def update_faculty(
-    faculty_id: int,
-    payload: FacultyUpdate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    if current_user.role not in ["system_admin", "school_admin"]:
-        raise HTTPException(status_code=403, detail="Chỉ system_admin mới có quyền sửa Khoa")
-        
-    faculty = db.query(Faculty).filter(Faculty.id == faculty_id).first()
-    if not faculty:
-        raise HTTPException(status_code=404, detail="Không tìm thấy khoa")
-        
-    for key, value in payload.model_dump(exclude_unset=True).items():
-        setattr(faculty, key, value)
-        
-    db.commit()
-    db.refresh(faculty)
-    return faculty
-
-
-# ==================== MÔN HỌC (SUBJECTS) - FACULTY ADMIN & SYSTEM ADMIN ====================
-# --- TẠO KHOA (Chỉ sysadmin / schooladmin) ---
-@router.post("/admin/faculties/", status_code=status.HTTP_201_CREATED)
-def create_faculty(
-    payload: FacultyCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    user_role = str(current_user.role).lower()
+    user_role = str(current_user.role).lower().strip()
     if user_role not in ["sysadmin", "schooladmin", "system_admin", "school_admin"]:
         raise HTTPException(status_code=403, detail="Chỉ Admin hệ thống mới có quyền thêm Khoa")
 
-    existing = db.query(Faculty).filter(Faculty.code == payload.code).first()
-    if existing:
+    result = await db.execute(select(Faculty).where(Faculty.code == payload.code))
+    if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Mã khoa đã tồn tại")
 
     faculty = Faculty(**payload.model_dump())
     db.add(faculty)
-    db.commit()
-    db.refresh(faculty)
+    await db.commit()
+    await db.refresh(faculty)
     return faculty
 
 
-# --- SỬA KHOA (Chỉ sysadmin / schooladmin) ---
+# --- 2. SỬA KHOA ---
 @router.put("/admin/faculties/{faculty_id}")
-def update_faculty(
+async def update_faculty(
     faculty_id: int,
     payload: FacultyUpdate,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    user_role = str(current_user.role).lower()
+    user_role = str(current_user.role).lower().strip()
     if user_role not in ["sysadmin", "schooladmin", "system_admin", "school_admin"]:
         raise HTTPException(status_code=403, detail="Chỉ Admin hệ thống mới có quyền sửa Khoa")
 
-    faculty = db.query(Faculty).filter(Faculty.id == faculty_id).first()
+    result = await db.execute(select(Faculty).where(Faculty.id == faculty_id))
+    faculty = result.scalar_one_or_none()
     if not faculty:
         raise HTTPException(status_code=404, detail="Không tìm thấy khoa")
 
     for key, value in payload.model_dump(exclude_unset=True).items():
         setattr(faculty, key, value)
 
-    db.commit()
-    db.refresh(faculty)
+    await db.commit()
+    await db.refresh(faculty)
     return faculty
 
 
-# --- MÔN HỌC (Thêm / Sửa / Xóa) ---
+# --- 3. TẠO MÔN HỌC (ĐÃ SỬA LỖI 500) ---
 @router.post("/admin/subjects/", response_model=SubjectOut, status_code=status.HTTP_201_CREATED)
-def create_subject(
+async def create_subject(
     payload: SubjectCreate,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    faculty = db.query(Faculty).filter(Faculty.id == payload.faculty_id).first()
+    # Lấy thông tin khoa theo dạng Async
+    result = await db.execute(select(Faculty).where(Faculty.id == payload.faculty_id))
+    faculty = result.scalar_one_or_none()
     if not faculty:
         raise HTTPException(status_code=404, detail="Không tìm thấy khoa tương ứng")
 
+    # Kiểm tra quyền thao tác trên Khoa
     verify_faculty_access(current_user, faculty.code)
+
+    # Kiểm tra trùng mã môn học
+    existing_sub = await db.execute(select(Subject).where(Subject.code == payload.code))
+    if existing_sub.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail=f"Mã môn học '{payload.code}' đã tồn tại")
 
     subject = Subject(**payload.model_dump())
     db.add(subject)
-    db.commit()
-    db.refresh(subject)
+    await db.commit()
+    await db.refresh(subject)
     return subject
 
 
+# --- 4. SỬA MÔN HỌC ---
 @router.put("/admin/subjects/{subject_id}", response_model=SubjectOut)
-def update_subject(
+async def update_subject(
     subject_id: int,
     payload: SubjectUpdate,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    subject = db.query(Subject).filter(Subject.id == subject_id).first()
+    result = await db.execute(select(Subject).where(Subject.id == subject_id))
+    subject = result.scalar_one_or_none()
     if not subject:
         raise HTTPException(status_code=404, detail="Không tìm thấy môn học")
 
-    faculty = db.query(Faculty).filter(Faculty.id == subject.faculty_id).first()
+    fac_res = await db.execute(select(Faculty).where(Faculty.id == subject.faculty_id))
+    faculty = fac_res.scalar_one_or_none()
     verify_faculty_access(current_user, faculty.code)
 
     for key, value in payload.model_dump(exclude_unset=True).items():
         setattr(subject, key, value)
 
-    db.commit()
-    db.refresh(subject)
+    await db.commit()
+    await db.refresh(subject)
     return subject
 
 
+# --- 5. XÓA MÔN HỌC ---
 @router.delete("/admin/subjects/{subject_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_subject(
+async def delete_subject(
     subject_id: int,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    subject = db.query(Subject).filter(Subject.id == subject_id).first()
+    result = await db.execute(select(Subject).where(Subject.id == subject_id))
+    subject = result.scalar_one_or_none()
     if not subject:
         raise HTTPException(status_code=404, detail="Không tìm thấy môn học")
 
-    faculty = db.query(Faculty).filter(Faculty.id == subject.faculty_id).first()
+    fac_res = await db.execute(select(Faculty).where(Faculty.id == subject.faculty_id))
+    faculty = fac_res.scalar_one_or_none()
     verify_faculty_access(current_user, faculty.code)
 
-    db.delete(subject)
-    db.commit()
+    await db.delete(subject)
+    await db.commit()
     return None
