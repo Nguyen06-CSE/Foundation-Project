@@ -10,10 +10,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response,
 from fastapi.responses import FileResponse
 from sqlalchemy import select, func, or_, and_, desc, asc, insert, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.database import get_db
-from app.core.dependencies import get_current_user, get_optional_user
+from app.core.dependencies import get_current_user, get_optional_user, verify_faculty_access
 from app.models.user import User
 from app.models.faculty import Faculty
 from app.models.subject import Subject
@@ -26,11 +26,15 @@ from app.models.tag import Tag
 from app.models.notification import Notification
 from app.utils.checksum import compute_file_checksum
 from app.schemas.library import (
+    FacultyCreate,
     FacultyLibraryOut,
+    FacultyUpdate,
+    SubjectCreate,
     SubjectOut,
     RatingCreate,
     RatingUpdate,
     RatingOut,
+    SubjectUpdate,
     SubmissionCreate,
     SubmissionOut,
     SubmissionRejectPayload,
@@ -1182,3 +1186,107 @@ async def reject_submission(
         reviewed_at=submission.reviewed_at,
         created_at=submission.created_at,
     )
+
+
+# ==================== KHOA (FACULTIES) - SYSTEM ADMIN ====================
+
+@router.post("/admin/faculties/", status_code=status.HTTP_201_CREATED)
+def create_faculty(
+    payload: FacultyCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role not in ["system_admin", "school_admin"]:
+        raise HTTPException(status_code=403, detail="Chỉ system_admin mới có quyền thêm Khoa")
+    
+    existing = db.query(Faculty).filter(Faculty.code == payload.code).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Mã khoa đã tồn tại")
+        
+    faculty = Faculty(**payload.model_dump())
+    db.add(faculty)
+    db.commit()
+    db.refresh(faculty)
+    return faculty
+
+@router.put("/admin/faculties/{faculty_id}")
+def update_faculty(
+    faculty_id: int,
+    payload: FacultyUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role not in ["system_admin", "school_admin"]:
+        raise HTTPException(status_code=403, detail="Chỉ system_admin mới có quyền sửa Khoa")
+        
+    faculty = db.query(Faculty).filter(Faculty.id == faculty_id).first()
+    if not faculty:
+        raise HTTPException(status_code=404, detail="Không tìm thấy khoa")
+        
+    for key, value in payload.model_dump(exclude_unset=True).items():
+        setattr(faculty, key, value)
+        
+    db.commit()
+    db.refresh(faculty)
+    return faculty
+
+
+# ==================== MÔN HỌC (SUBJECTS) - FACULTY ADMIN & SYSTEM ADMIN ====================
+
+@router.post("/admin/subjects/", response_model=SubjectOut, status_code=status.HTTP_201_CREATED)
+def create_subject(
+    payload: SubjectCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    faculty = db.query(Faculty).filter(Faculty.id == payload.faculty_id).first()
+    if not faculty:
+        raise HTTPException(status_code=404, detail="Không tìm thấy khoa tương ứng")
+        
+    # Xóa/Kiểm tra quyền của faculty_admin trên khoa này
+    verify_faculty_access(current_user, faculty.code)
+    
+    subject = Subject(**payload.model_dump())
+    db.add(subject)
+    db.commit()
+    db.refresh(subject)
+    return subject
+
+@router.put("/admin/subjects/{subject_id}", response_model=SubjectOut)
+def update_subject(
+    subject_id: int,
+    payload: SubjectUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    subject = db.query(Subject).filter(Subject.id == subject_id).first()
+    if not subject:
+        raise HTTPException(status_code=404, detail="Không tìm thấy môn học")
+        
+    faculty = db.query(Faculty).filter(Faculty.id == subject.faculty_id).first()
+    verify_faculty_access(current_user, faculty.code)
+    
+    for key, value in payload.model_dump(exclude_unset=True).items():
+        setattr(subject, key, value)
+        
+    db.commit()
+    db.refresh(subject)
+    return subject
+
+@router.delete("/admin/subjects/{subject_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_subject(
+    subject_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    subject = db.query(Subject).filter(Subject.id == subject_id).first()
+    if not subject:
+        raise HTTPException(status_code=404, detail="Không tìm thấy môn học")
+        
+    faculty = db.query(Faculty).filter(Faculty.id == subject.faculty_id).first()
+    verify_faculty_access(current_user, faculty.code)
+    
+    # Xóa cứng trong CSDL
+    db.delete(subject)
+    db.commit()
+    return None
