@@ -93,12 +93,12 @@ export function PublicLayout({ children }: PublicLayoutProps) {
 
                     {isAdmin && (
                       <Link
-                        to="/library/admin/submissions"
+                        to="/library/admin"
                         onClick={() => setDropdownOpen(false)}
                         className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-primary-700 hover:bg-primary-50 transition-colors"
                       >
                         <Shield className="h-4 w-4 text-primary-600" />
-                        <span>Quản lý duyệt tài liệu</span>
+                        <span>Quản lý kho học liệu</span>
                       </Link>
                     )}
 

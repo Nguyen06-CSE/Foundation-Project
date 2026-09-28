@@ -50,6 +50,8 @@ interface DocumentFilterBarProps {
   // Actions
   onUploadClick?: () => void;
   showUploadButton?: boolean;
+
+  onManageTags?: () => void;
 }
 
 export function DocumentFilterBar({
@@ -71,6 +73,7 @@ export function DocumentFilterBar({
   setSelectedUploaderId,
   onUploadClick,
   showUploadButton = true,
+  onManageTags,
 }: DocumentFilterBarProps) {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -100,12 +103,15 @@ export function DocumentFilterBar({
         {/* Lọc theo Nhãn dán */}
         <DynamicFilterDropdown
           label="Nhãn dán"
+          searchable={true} // Bật tính năng tìm kiếm cho Nhãn dán
+          searchPlaceholder="Tìm nhãn dán..." // Placeholder tuỳ chỉnh
           options={tags.map((t) => ({
             value: (t.tag_id ?? t.id) as number,
             label: t.name,
           }))}
           selectedValue={selectedTagId}
           onChange={(val) => setSelectedTagId(val as number | null)}
+          onManage={onManageTags}
         />
 
         {/* Lọc theo Ngày sửa/tải lên */}

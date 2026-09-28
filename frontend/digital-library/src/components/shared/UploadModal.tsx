@@ -1,7 +1,7 @@
 // frontend/digital-library/src/components/shared/UploadModal.tsx
 
 import { useState, useRef } from "react";
-import { X, Upload, FileText, AlertCircle, Search, Plus, Check, ArrowLeft, Package } from "lucide-react";
+import { X, Upload, FileText, AlertCircle, ArrowLeft, Package } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
@@ -9,13 +9,7 @@ import { mergeImagesToPdf } from "@/utils/pdfBuilder";
 import { documentService } from "@/services/documentService";
 import { groupService } from "@/services/groupService";
 import { formatSize } from "@/utils/formatSize";
-
-export interface TagItem {
-  id: number;
-  name: string;
-  color?: string;
-}
-
+import { TagSelector, type TagItem } from "./TagSelector";
 export interface UploadModalProps {
   onClose: () => void;
   availableTags?: TagItem[];
@@ -25,17 +19,6 @@ export interface UploadModalProps {
   isUploading: boolean;
   groupId?: number | string;
 }
-
-const COLORS = [
-  { hex: "#4CAF50", tw: "bg-green-500" },
-  { hex: "#2196F3", tw: "bg-blue-500" },
-  { hex: "#F59E0B", tw: "bg-amber-500" },
-  { hex: "#9C27B0", tw: "bg-purple-500" },
-  { hex: "#EF4444", tw: "bg-red-500" },
-  { hex: "#06B6D4", tw: "bg-cyan-500" },
-  { hex: "#F97316", tw: "bg-orange-500" },
-  { hex: "#64748B", tw: "bg-slate-500" },
-];
 
 const ACCEPTED_MIME = [
   "application/pdf",
@@ -66,17 +49,15 @@ export function UploadModal({
   // Tab mode
   const [uploadMode, setUploadMode] = useState<"single" | "batch">("single");
 
+  const safeTags = availableTags ?? [];
+
   // --- STATE TAB 1: SINGLE UPLOAD ---
   const [files, setFiles] = useState<File[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isProcessingPdf, setIsProcessingPdf] = useState(false);
-
-  const safeTags = availableTags ?? [];
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
-  const [tagSearchQuery, setTagSearchQuery] = useState("");
-  const [newTagColor, setNewTagColor] = useState(COLORS[0].hex);
   const [isCreatingTag, setIsCreatingTag] = useState(false);
 
   // --- STATE TAB 2: BATCH UPLOAD ---
@@ -85,8 +66,6 @@ export function UploadModal({
   const [bundleDescription, setBundleDescription] = useState("");
   const [batchStep, setBatchStep] = useState<"select" | "info">("select");
   const [selectedBatchTagIds, setSelectedBatchTagIds] = useState<number[]>([]);
-  const [batchTagSearchQuery, setBatchTagSearchQuery] = useState("");
-  const [batchNewTagColor, setBatchNewTagColor] = useState(COLORS[0].hex);
   const [isBatchCreatingTag, setIsBatchCreatingTag] = useState(false);
   const [isBatchUploading, setIsBatchUploading] = useState(false);
   const [batchError, setBatchError] = useState<string | null>(null);
@@ -107,7 +86,9 @@ export function UploadModal({
     const allImages = newFiles.every((f) => f.type.startsWith("image/"));
 
     if (newFiles.length > 1 && !allImages) {
-      return setError("Chỉ được tải lên nhiều file cùng lúc nếu tất cả đều là Hình ảnh (để gộp thành 1 PDF).");
+      return setError(
+        "Chỉ được tải lên nhiều file cùng lúc nếu tất cả đều là Hình ảnh (để gộp thành 1 PDF)."
+      );
     }
 
     if (newFiles.length === 1 && !newFiles[0].type.startsWith("image/")) {
@@ -119,7 +100,11 @@ export function UploadModal({
       setFiles(combined);
 
       if (!title) {
-        setTitle(combined.length === 1 ? combined[0].name.replace(/\.[^/.]+$/, "") : "Tai_Lieu_Anh_Gop");
+        setTitle(
+          combined.length === 1
+            ? combined[0].name.replace(/\.[^/.]+$/, "")
+            : "Tai_Lieu_Anh_Gop"
+        );
       }
     }
   };
@@ -140,7 +125,8 @@ export function UploadModal({
 
       if (files[0].type.startsWith("image/") && files.length > 1) {
         setIsProcessingPdf(true);
-        const pdfName = (title.trim() || "Tai_Lieu_Anh_Gop").replace(/\s+/g, "_") + ".pdf";
+        const pdfName =
+          (title.trim() || "Tai_Lieu_Anh_Gop").replace(/\s+/g, "_") + ".pdf";
         fileToUpload = await mergeImagesToPdf(files, pdfName);
         setIsProcessingPdf(false);
       }
@@ -157,28 +143,11 @@ export function UploadModal({
       onClose();
     } catch (err: any) {
       setIsProcessingPdf(false);
-      setError(err?.response?.status === 409 ? "Tài liệu này đã tồn tại trong thư viện của bạn" : "Tải lên thất bại, vui lòng thử lại");
-    }
-  };
-
-  const toggleTag = (tagId: number) => {
-    setSelectedTagIds((prev) => prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]);
-  };
-
-  const filteredTags = safeTags.filter((tag) => tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase()));
-  const isExactMatch = safeTags.some((tag) => tag.name.toLowerCase() === tagSearchQuery.toLowerCase().trim());
-
-  const handleCreateNewTag = async () => {
-    const name = tagSearchQuery.trim();
-    if (!name || !onCreateTag) return;
-    setIsCreatingTag(true);
-    try {
-      const newTag = await onCreateTag(name, newTagColor);
-      setSelectedTagIds((prev) => [...prev, newTag.id]);
-      setTagSearchQuery("");
-      setNewTagColor(COLORS[0].hex);
-    } finally {
-      setIsCreatingTag(false);
+      setError(
+        err?.response?.status === 409
+          ? "Tài liệu này đã tồn tại trong thư viện của bạn"
+          : "Tải lên thất bại, vui lòng thử lại"
+      );
     }
   };
 
@@ -206,35 +175,9 @@ export function UploadModal({
     }
   };
 
-  const toggleBatchTag = (tagId: number) => {
-    setSelectedBatchTagIds((prev) =>
-      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
-    );
-  };
-
-  const filteredBatchTags = safeTags.filter((tag) =>
-    tag.name.toLowerCase().includes(batchTagSearchQuery.toLowerCase())
-  );
-  const isBatchExactMatch = safeTags.some(
-    (tag) => tag.name.toLowerCase() === batchTagSearchQuery.toLowerCase().trim()
-  );
-
-  const handleCreateBatchNewTag = async () => {
-    const name = batchTagSearchQuery.trim();
-    if (!name || !onCreateTag) return;
-    setIsBatchCreatingTag(true);
-    try {
-      const newTag = await onCreateTag(name, batchNewTagColor);
-      setSelectedBatchTagIds((prev) => [...prev, newTag.id]);
-      setBatchTagSearchQuery("");
-      setBatchNewTagColor(COLORS[0].hex);
-    } finally {
-      setIsBatchCreatingTag(false);
-    }
-  };
-
   const handleBatchUploadSubmit = async () => {
-    if (!bundleTitle.trim() || batchFiles.length === 0 || batchFiles.length > 10) return;
+    if (!bundleTitle.trim() || batchFiles.length === 0 || batchFiles.length > 10)
+      return;
     try {
       setIsBatchUploading(true);
       setBatchError(null);
@@ -257,13 +200,16 @@ export function UploadModal({
 
       await queryClient.invalidateQueries({ queryKey: ["documents"] });
       if (groupId) {
-        await queryClient.invalidateQueries({ queryKey: ["group-documents", groupId] });
+        await queryClient.invalidateQueries({
+          queryKey: ["group-documents", groupId],
+        });
       }
       onClose();
     } catch (err: any) {
       setIsBatchUploading(false);
       setBatchError(
-        err?.response?.data?.detail || "Tải lên gói tài liệu thất bại, vui lòng thử lại."
+        err?.response?.data?.detail ||
+          "Tải lên gói tài liệu thất bại, vui lòng thử lại."
       );
     }
   };
@@ -275,10 +221,15 @@ export function UploadModal({
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 shrink-0">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold text-gray-900">
-              {uploadMode === "single" ? "Tải tài liệu lên" : "Tải lên gói tài liệu (Bundle)"}
+              {uploadMode === "single"
+                ? "Tải tài liệu lên"
+                : "Tải lên gói tài liệu (Bundle)"}
             </h2>
           </div>
-          <button onClick={onClose} className="rounded-full p-2 hover:bg-gray-100 transition-colors">
+          <button
+            onClick={onClose}
+            className="rounded-full p-2 hover:bg-gray-100 transition-colors"
+          >
             <X className="h-5 w-5 text-gray-500" />
           </button>
         </div>
@@ -337,25 +288,36 @@ export function UploadModal({
                 <div className="flex flex-col items-center gap-2 py-4">
                   <Upload className="h-10 w-10 text-gray-400" />
                   <p className="text-sm font-medium text-gray-700">
-                    Kéo thả hoặc <span className="text-primary-600">chọn file</span>
+                    Kéo thả hoặc{" "}
+                    <span className="text-primary-600">chọn file</span>
                   </p>
-                  <p className="text-xs text-gray-400">PDF, DOCX, hoặc NHIỀU ẢNH (để gộp thành PDF)</p>
+                  <p className="text-xs text-gray-400">
+                    PDF, DOCX, hoặc NHIỀU ẢNH (để gộp thành PDF)
+                  </p>
                 </div>
               )}
 
               {files.length === 1 && !files[0].type.startsWith("image/") && (
                 <div className="flex flex-col items-center gap-2 py-4">
                   <FileText className="h-10 w-10 text-primary-600" />
-                  <p className="text-sm font-medium text-gray-900 truncate max-w-[200px]">{files[0].name}</p>
-                  <p className="text-xs text-gray-400">{(files[0].size / 1024 / 1024).toFixed(2)} MB</p>
+                  <p className="text-sm font-medium text-gray-900 truncate max-w-[200px]">
+                    {files[0].name}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {(files[0].size / 1024 / 1024).toFixed(2)} MB
+                  </p>
                 </div>
               )}
 
               {files.length > 0 && files[0].type.startsWith("image/") && (
                 <div className="w-full text-left">
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">Đã chọn {files.length} ảnh</span>
-                    <span className="text-xs text-primary-600 font-semibold hover:underline">+ Thêm ảnh</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      Đã chọn {files.length} ảnh
+                    </span>
+                    <span className="text-xs text-primary-600 font-semibold hover:underline">
+                      + Thêm ảnh
+                    </span>
                   </div>
                   <div className="flex gap-2 overflow-x-auto py-2 custom-scrollbar">
                     {files.map((f, idx) => (
@@ -363,7 +325,11 @@ export function UploadModal({
                         key={idx}
                         className="relative h-20 w-20 shrink-0 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden group"
                       >
-                        <img src={URL.createObjectURL(f)} alt="preview" className="h-full w-full object-cover" />
+                        <img
+                          src={URL.createObjectURL(f)}
+                          alt="preview"
+                          className="h-full w-full object-cover"
+                        />
                         <button
                           onClick={(e) => removeFile(idx, e)}
                           className="absolute top-1 right-1 bg-black/50 p-1 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
@@ -373,7 +339,9 @@ export function UploadModal({
                       </div>
                     ))}
                   </div>
-                  <p className="mt-2 text-xs text-gray-500 text-center">Các ảnh sẽ được tự động gộp thành 1 file PDF.</p>
+                  <p className="mt-2 text-xs text-gray-500 text-center">
+                    Các ảnh sẽ được tự động gộp thành 1 file PDF.
+                  </p>
                 </div>
               )}
             </div>
@@ -385,7 +353,9 @@ export function UploadModal({
             )}
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">Tiêu đề</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Tiêu đề
+              </label>
               <input
                 type="text"
                 value={title}
@@ -395,94 +365,42 @@ export function UploadModal({
               />
             </div>
 
-            {/* Phần Tags kèm chọn màu tag mới */}
+            {/* TagSelector for single upload */}
             <div>
               <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-gray-700">
                 <span>Gắn nhãn dán (Tags)</span>
-                <span className="text-xs font-normal text-gray-400">Đã chọn {selectedTagIds.length}</span>
+                <span className="text-xs font-normal text-gray-400">
+                  Đã chọn {selectedTagIds.length}
+                </span>
               </label>
-              <div className="rounded-lg border border-gray-200 bg-gray-50/50 p-3">
-                <div className="relative mb-3">
-                  <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    value={tagSearchQuery}
-                    onChange={(e) => setTagSearchQuery(e.target.value)}
-                    placeholder="Tìm hoặc tạo tag mới..."
-                    className="w-full rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                  />
-                </div>
-
-                {tagSearchQuery.trim() !== "" && !isExactMatch && onCreateTag && (
-                  <div className="mb-3 rounded-lg border border-gray-200 bg-white p-2.5 shadow-sm">
-                    <label className="mb-2 block text-xs font-semibold text-gray-700">
-                      Màu sắc cho tag mới
-                    </label>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {COLORS.map((color) => {
-                        const isSelected = newTagColor === color.hex;
-                        return (
-                          <button
-                            key={color.hex}
-                            type="button"
-                            onClick={() => setNewTagColor(color.hex)}
-                            className={cn(
-                              `flex h-6 w-6 items-center justify-center rounded-full transition-transform hover:scale-110 ${color.tw}`,
-                              isSelected
-                                ? "ring-2 ring-gray-900 ring-offset-1"
-                                : "ring-1 ring-black/10"
-                            )}
-                          >
-                            {isSelected && <Check className="h-3 w-3 text-white" />}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                <div className="max-h-32 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
-                  {tagSearchQuery.trim() !== "" && !isExactMatch && onCreateTag && (
-                    <button
-                      type="button"
-                      onClick={handleCreateNewTag}
-                      disabled={isCreatingTag}
-                      className="flex items-center gap-1 rounded-full border border-dashed border-primary-500 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50"
-                    >
-                      <Plus className="h-3.5 w-3.5" />
-                      {isCreatingTag ? "Đang tạo..." : `Tạo mới "${tagSearchQuery.trim()}"`}
-                    </button>
-                  )}
-                  {filteredTags.length > 0 ? (
-                    filteredTags.map((tag) => {
-                      const isSelected = selectedTagIds.includes(tag.id);
-                      return (
-                        <button
-                          key={tag.id}
-                          type="button"
-                          onClick={() => toggleTag(tag.id)}
-                          className={cn(
-                            "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200",
-                            isSelected
-                              ? "bg-primary-600 text-white shadow-sm ring-1 ring-primary-600"
-                              : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600"
-                          )}
-                        >
-                          {tag.name}
-                          {isSelected && <Check className="h-3 w-3" />}
-                        </button>
-                      );
-                    })
-                  ) : isExactMatch || tagSearchQuery.trim() === "" ? null : (
-                    <div className="w-full text-center text-xs text-gray-500 py-2">Không tìm thấy tag phù hợp.</div>
-                  )}
-                </div>
-              </div>
+              <TagSelector
+                availableTags={safeTags}
+                selectedTagIds={selectedTagIds}
+                onToggleTag={(tag) => {
+                  setSelectedTagIds((prev) =>
+                    prev.includes(tag.id)
+                      ? prev.filter((id) => id !== tag.id)
+                      : [...prev, tag.id]
+                  );
+                }}
+                onCreateTag={async (name, color) => {
+                  if (!onCreateTag) return;
+                  setIsCreatingTag(true);
+                  try {
+                    const newTag = await onCreateTag(name, color);
+                    setSelectedTagIds((prev) => [...prev, newTag.id]);
+                  } finally {
+                    setIsCreatingTag(false);
+                  }
+                }}
+                isCreating={isCreatingTag}
+              />
             </div>
 
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
-                Mô tả <span className="font-normal text-gray-400">(tuỳ chọn)</span>
+                Mô tả{" "}
+                <span className="font-normal text-gray-400">(tuỳ chọn)</span>
               </label>
               <textarea
                 value={description}
@@ -494,15 +412,28 @@ export function UploadModal({
             </div>
 
             <div className="flex justify-end gap-2 pt-2 shrink-0 border-t border-gray-100 mt-2">
-              <Button variant="outline" onClick={onClose} disabled={isUploading || isProcessingPdf}>
+              <Button
+                variant="outline"
+                onClick={onClose}
+                disabled={isUploading || isProcessingPdf}
+              >
                 Huỷ
               </Button>
               <Button
                 variant="primary"
-                disabled={files.length === 0 || isUploading || isProcessingPdf || isCreatingTag}
+                disabled={
+                  files.length === 0 ||
+                  isUploading ||
+                  isProcessingPdf ||
+                  isCreatingTag
+                }
                 onClick={handleUploadSubmit}
               >
-                {isProcessingPdf ? "Đang xử lý ảnh..." : isUploading ? "Đang tải lên..." : "Tải lên"}
+                {isProcessingPdf
+                  ? "Đang xử lý ảnh..."
+                  : isUploading
+                    ? "Đang tải lên..."
+                    : "Tải lên"}
               </Button>
             </div>
           </div>
@@ -541,9 +472,12 @@ export function UploadModal({
                       <Upload className="h-6 w-6" />
                     </div>
                     <p className="text-sm font-semibold text-gray-800">
-                      Chọn nhiều tài liệu <span className="text-primary-600">(tối đa 10 file)</span>
+                      Chọn nhiều tài liệu{" "}
+                      <span className="text-primary-600">(tối đa 10 file)</span>
                     </p>
-                    <p className="text-xs text-gray-400">Kéo thả vào đây hoặc nhấn để chọn các tài liệu cho gói</p>
+                    <p className="text-xs text-gray-400">
+                      Kéo thả vào đây hoặc nhấn để chọn các tài liệu cho gói
+                    </p>
                   </div>
                 </div>
 
@@ -571,7 +505,10 @@ export function UploadModal({
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <FileText className="h-4 w-4 text-gray-400 shrink-0" />
-                            <span className="text-xs font-medium text-gray-800 truncate" title={file.name}>
+                            <span
+                              className="text-xs font-medium text-gray-800 truncate"
+                              title={file.name}
+                            >
                               {file.name}
                             </span>
                             <span className="text-[10px] text-gray-400 shrink-0">
@@ -602,7 +539,9 @@ export function UploadModal({
                     disabled={batchFiles.length === 0 || batchFiles.length > 10}
                     onClick={() => {
                       if (!bundleTitle && batchFiles.length > 0) {
-                        setBundleTitle(batchFiles[0].name.replace(/\.[^/.]+$/, "") + " (Gói)");
+                        setBundleTitle(
+                          batchFiles[0].name.replace(/\.[^/.]+$/, "") + " (Gói)"
+                        );
                       }
                       setBatchStep("info");
                     }}
@@ -631,7 +570,8 @@ export function UploadModal({
 
                 <div>
                   <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Mô tả <span className="font-normal text-gray-400">(tuỳ chọn)</span>
+                    Mô tả{" "}
+                    <span className="font-normal text-gray-400">(tuỳ chọn)</span>
                   </label>
                   <textarea
                     value={bundleDescription}
@@ -642,89 +582,36 @@ export function UploadModal({
                   />
                 </div>
 
-                {/* Tags áp dụng cho bundle */}
+                {/* TagSelector for batch upload */}
                 <div>
                   <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-gray-700">
                     <span>Tags (áp dụng cho tất cả file trong gói)</span>
-                    <span className="text-xs font-normal text-gray-400">Đã chọn {selectedBatchTagIds.length}</span>
+                    <span className="text-xs font-normal text-gray-400">
+                      Đã chọn {selectedBatchTagIds.length}
+                    </span>
                   </label>
-                  <div className="rounded-lg border border-gray-200 bg-gray-50/50 p-3">
-                    <div className="relative mb-3">
-                      <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="text"
-                        value={batchTagSearchQuery}
-                        onChange={(e) => setBatchTagSearchQuery(e.target.value)}
-                        placeholder="Tìm hoặc tạo tag mới..."
-                        className="w-full rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                      />
-                    </div>
-
-                    {batchTagSearchQuery.trim() !== "" && !isBatchExactMatch && onCreateTag && (
-                      <div className="mb-3 rounded-lg border border-gray-200 bg-white p-2.5 shadow-sm">
-                        <label className="mb-2 block text-xs font-semibold text-gray-700">
-                          Màu sắc cho tag mới
-                        </label>
-                        <div className="flex flex-wrap items-center gap-2">
-                          {COLORS.map((color) => {
-                            const isSelected = batchNewTagColor === color.hex;
-                            return (
-                              <button
-                                key={color.hex}
-                                type="button"
-                                onClick={() => setBatchNewTagColor(color.hex)}
-                                className={cn(
-                                  `flex h-6 w-6 items-center justify-center rounded-full transition-transform hover:scale-110 ${color.tw}`,
-                                  isSelected
-                                    ? "ring-2 ring-gray-900 ring-offset-1"
-                                    : "ring-1 ring-black/10"
-                                )}
-                              >
-                                {isSelected && <Check className="h-3 w-3 text-white" />}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="max-h-32 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
-                      {batchTagSearchQuery.trim() !== "" && !isBatchExactMatch && onCreateTag && (
-                        <button
-                          type="button"
-                          onClick={handleCreateBatchNewTag}
-                          disabled={isBatchCreatingTag}
-                          className="flex items-center gap-1 rounded-full border border-dashed border-primary-500 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50"
-                        >
-                          <Plus className="h-3.5 w-3.5" />
-                          {isBatchCreatingTag ? "Đang tạo..." : `Tạo mới "${batchTagSearchQuery.trim()}"`}
-                        </button>
-                      )}
-                      {filteredBatchTags.length > 0 ? (
-                        filteredBatchTags.map((tag) => {
-                          const isSelected = selectedBatchTagIds.includes(tag.id);
-                          return (
-                            <button
-                              key={tag.id}
-                              type="button"
-                              onClick={() => toggleBatchTag(tag.id)}
-                              className={cn(
-                                "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200",
-                                isSelected
-                                  ? "bg-primary-600 text-white shadow-sm ring-1 ring-primary-600"
-                                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                              )}
-                            >
-                              {tag.name}
-                              {isSelected && <Check className="h-3 w-3" />}
-                            </button>
-                          );
-                        })
-                      ) : isBatchExactMatch || batchTagSearchQuery.trim() === "" ? null : (
-                        <div className="w-full text-center text-xs text-gray-500 py-2">Không tìm thấy tag phù hợp.</div>
-                      )}
-                    </div>
-                  </div>
+                  <TagSelector
+                    availableTags={safeTags}
+                    selectedTagIds={selectedBatchTagIds}
+                    onToggleTag={(tag) => {
+                      setSelectedBatchTagIds((prev) =>
+                        prev.includes(tag.id)
+                          ? prev.filter((id) => id !== tag.id)
+                          : [...prev, tag.id]
+                      );
+                    }}
+                    onCreateTag={async (name, color) => {
+                      if (!onCreateTag) return;
+                      setIsBatchCreatingTag(true);
+                      try {
+                        const newTag = await onCreateTag(name, color);
+                        setSelectedBatchTagIds((prev) => [...prev, newTag.id]);
+                      } finally {
+                        setIsBatchCreatingTag(false);
+                      }
+                    }}
+                    isCreating={isBatchCreatingTag}
+                  />
                 </div>
 
                 {/* Preview danh sách file sẽ upload */}

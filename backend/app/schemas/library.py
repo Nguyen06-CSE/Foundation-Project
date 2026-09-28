@@ -104,3 +104,26 @@ class PaginatedSubmissions(BaseModel):
     page: int
     page_size: int
     total_pages: int
+
+# =========================feat-4-admin========================
+# --- Faculty Schemas ---
+class FacultyCreate(BaseModel):
+    code: str  # Ví dụ: "cntt", "kt"
+    name: str  # Ví dụ: "Khoa Công nghệ thông tin"
+    description: Optional[str] = None
+
+class FacultyUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+
+# --- Subject Schemas ---
+class SubjectCreate(BaseModel):
+    faculty_id: int
+    code: str  # Ví dụ: "CSDL", "CTDL"
+    name: str  # Ví dụ: "Cơ sở dữ liệu"
+    description: Optional[str] = None
+
+class SubjectUpdate(BaseModel):
+    code: Optional[str] = None
+    name: Optional[str] = None
+    description: Optional[str] = None

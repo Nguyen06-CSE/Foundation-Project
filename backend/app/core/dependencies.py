@@ -64,3 +64,30 @@ async def get_optional_user(
         return result.scalar_one_or_none()
     except Exception:
         return None
+    
+    
+
+
+def verify_faculty_access(current_user: User, faculty_code: str) -> bool:
+    """
+    1. sysadmin / schooladmin / system_admin / school_admin: Toàn quyền trên mọi Khoa.
+    2. faculty_admin: Lấy prefix của email (vd: cntt@school.edu.vn -> 'cntt') để so sánh với mã Khoa.
+    """
+    user_role = str(current_user.role).lower().strip()
+    target_faculty_code = faculty_code.lower().strip()
+
+    # 1. Admin hệ thống -> Cho phép luôn
+    if user_role in ["sysadmin", "schooladmin", "system_admin", "school_admin"]:
+        return True
+
+    # 2. Admin Khoa (role = "faculty_admin") -> Lấy prefix email
+    if user_role == "faculty_admin":
+        email_prefix = current_user.email.split("@")[0].lower().strip()
+        if email_prefix == target_faculty_code:
+            return True
+
+    # 3. Không hợp lệ -> Từ chối
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail=f"Tài khoản '{current_user.username}' không có quyền quản lý Khoa/Môn học '{faculty_code}'"
+    )

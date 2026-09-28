@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/stores/authStore";
 import { authService } from "@/services/authService";
 
-// Custom Google Icon SVG to match requirements without extra dependencies
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -20,12 +19,15 @@ const GoogleIcon = () => (
   </svg>
 );
 
+// Bổ sung các role Admin vào roleRoutes
 const roleRoutes: Record<string, string> = {
   student: '/personal',
   teacher: '/personal',
-  faculty_admin: '/faculty',
-  school_admin: '/school',
-  system_admin: '/personal',
+  sysadmin: '/library/admin',
+  schooladmin: '/library/admin',
+  system_admin: '/library/admin',
+  school_admin: '/library/admin',
+  faculty_admin: '/library/admin',
 };
 
 export function LoginPage() {
@@ -39,7 +41,6 @@ export function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Nếu đã đăng nhập thì redirect ngay
   useEffect(() => {
     if (isAuthenticated) {
       const redirect = sessionStorage.getItem('redirect_after_login');
@@ -76,12 +77,19 @@ export function LoginPage() {
     try {
       const data = await authService.login({ identifier, password });
       setAuth(data.access_token, data.user);
+      
       const redirect = sessionStorage.getItem('redirect_after_login');
       if (redirect) {
         sessionStorage.removeItem('redirect_after_login');
         navigate(redirect, { replace: true });
       } else {
-        navigate(roleRoutes[data.user.role] ?? '/personal', { replace: true });
+        const userRole = (data.user?.role || '').toLowerCase().trim();
+        // Kiểm tra nếu là Admin Khoa (admin_cntt, admin_kt,...)
+        const targetRoute = userRole.startsWith('admin_') 
+          ? '/library/admin' 
+          : (roleRoutes[userRole] ?? '/personal');
+          
+        navigate(targetRoute, { replace: true });
       }
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
@@ -238,3 +246,6 @@ export function LoginPage() {
     </div>
   );
 }
+
+// Bổ sung default export
+export default LoginPage;
