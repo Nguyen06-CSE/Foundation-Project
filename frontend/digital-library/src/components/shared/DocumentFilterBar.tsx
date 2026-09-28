@@ -100,6 +100,8 @@ export function DocumentFilterBar({
         {/* Lọc theo Nhãn dán */}
         <DynamicFilterDropdown
           label="Nhãn dán"
+          searchable={true} // Bật tính năng tìm kiếm cho Nhãn dán
+          searchPlaceholder="Tìm nhãn dán..." // Placeholder tuỳ chỉnh
           options={tags.map((t) => ({
             value: (t.tag_id ?? t.id) as number,
             label: t.name,

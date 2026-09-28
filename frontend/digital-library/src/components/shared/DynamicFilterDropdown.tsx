@@ -1,6 +1,5 @@
-// src/components/shared/DynamicFilterDropdown.tsx
-import { useState, useRef, useEffect } from "react"
-import { ChevronDown, Check } from "lucide-react"
+import { useState, useRef, useEffect, useMemo } from "react"
+import { ChevronDown, Check, Search } from "lucide-react" // Thêm import Search
 import { cn } from "@/utils/cn"
 
 export interface FilterOption {
@@ -13,6 +12,8 @@ export interface DynamicFilterDropdownProps {
   options: FilterOption[]
   selectedValue: string | number | null
   onChange: (value: string | number | null) => void
+  searchable?: boolean       // Thêm prop bật/tắt tìm kiếm
+  searchPlaceholder?: string // Thêm prop cho placeholder
 }
 
 export function DynamicFilterDropdown({
@@ -20,8 +21,11 @@ export function DynamicFilterDropdown({
   options,
   selectedValue,
   onChange,
+  searchable = false,
+  searchPlaceholder = "Tìm kiếm...",
 }: DynamicFilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("") // State lưu từ khóa tìm kiếm
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -33,6 +37,21 @@ export function DynamicFilterDropdown({
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
+
+  // Reset thanh tìm kiếm khi đóng dropdown
+  useEffect(() => {
+    if (!isOpen) {
+      setSearchQuery("")
+    }
+  }, [isOpen])
+
+  // Lọc options dựa trên từ khóa tìm kiếm
+  const filteredOptions = useMemo(() => {
+    if (!searchable || !searchQuery.trim()) return options
+    return options.filter((opt) =>
+      opt.label.toLowerCase().includes(searchQuery.toLowerCase().trim())
+    )
+  }, [options, searchQuery, searchable])
 
   const selectedOption = options.find((o) => o.value === selectedValue)
 
@@ -58,7 +77,26 @@ export function DynamicFilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 mt-1 max-h-60 w-48 overflow-y-auto rounded-lg border border-gray-100 bg-white py-1 shadow-lg custom-scrollbar animate-in fade-in zoom-in-95">
+        /* Mở rộng w-48 thành w-52 hoặc min-w-[14rem] để có đủ không gian cho ô search */
+        <div className="absolute left-0 top-full z-50 mt-1 max-h-60 min-w-[14rem] overflow-y-auto rounded-lg border border-gray-100 bg-white py-1 shadow-lg custom-scrollbar animate-in fade-in zoom-in-95">
+          
+          {/* Ô input tìm kiếm (chỉ hiển thị nếu searchable = true) */}
+          {searchable && (
+            <div className="sticky top-0 z-10 bg-white px-2 pb-1 border-b border-gray-50 mb-1">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={searchPlaceholder}
+                  className="w-full rounded-md border border-gray-200 py-1.5 pl-8 pr-3 text-sm outline-none placeholder:text-gray-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                  autoFocus
+                />
+              </div>
+            </div>
+          )}
+
           <button
             onClick={() => {
               onChange(null)
@@ -66,17 +104,19 @@ export function DynamicFilterDropdown({
             }}
             className="flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
           >
-            <span>Tất cả {label}</span>
+            <span className="font-medium text-primary-600">Tất cả {label.toLowerCase()}</span>
             {selectedValue === null && (
               <Check className="h-4 w-4 text-primary-600" />
             )}
           </button>
 
-          {options.length === 0 && (
-            <div className="px-3 py-2 text-sm text-gray-400 italic">Trống</div>
+          {filteredOptions.length === 0 && (
+            <div className="px-3 py-4 text-center text-sm text-gray-400 italic">
+              Không tìm thấy kết quả
+            </div>
           )}
 
-          {options.map((opt) => (
+          {filteredOptions.map((opt) => (
             <button
               key={opt.value}
               onClick={() => {
