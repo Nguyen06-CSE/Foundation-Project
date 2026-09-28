@@ -30,7 +30,9 @@ from sqlalchemy.orm import selectinload
 from app.core.database import AsyncSessionLocal, get_db
 from app.core.dependencies import get_current_user
 from app.models.document import Document
+from app.models.document_share import DocumentShare
 from app.models.folder import Folder
+from app.models.note import Note
 from app.models.tag import Tag
 from app.models.user import User
 from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments, SharedDocumentOut, PaginatedSharedDocuments
