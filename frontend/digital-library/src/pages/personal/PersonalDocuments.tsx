@@ -5,12 +5,16 @@ import { useQueryClient } from "@tanstack/react-query";
 // Hooks
 import { usePersonalFolders } from "./hooks/usePersonalFolders";
 import { usePersonalDocuments } from "./hooks/usePersonalDocuments";
+import { useTagManagement } from "@/hooks/useTagManagement";
+import { useHighlightElement } from "@/hooks/useHighlightElement";
 
 // Components
 import { DocumentTypeTabs } from "@/components/shared/DocumentTypeTabs";
 import { RenameDocumentModal } from "@/components/shared/RenameDocumentModal";
 import { ContributeModal } from "@/components/shared/ContributeModal";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import { DocumentFilterBar } from "@/components/shared/DocumentFilterBar";
+import { ManageTagsModal } from "@/components/shared/ManageTagsModal";
 
 // Sub-sections & Modals
 import { PersonalFoldersSection } from "./components/PersonalFoldersSection";
@@ -18,8 +22,6 @@ import { PersonalDocumentsSection } from "./components/PersonalDocumentsSection"
 import { PersonalFolderModalContainer } from "./components/PersonalFolderModalContainer";
 import { PersonalUploadModal } from "./components/PersonalUploadModal";
 import { DeleteFolderConfirmModal } from "./components/DeleteFolderConfirmModal";
-import { useHighlightElement } from "@/hooks/useHighlightElement";
-import { DocumentFilterBar } from "@/components/shared/DocumentFilterBar";
 
 export function PersonalDocuments() {
   const queryClient = useQueryClient();
@@ -49,7 +51,23 @@ export function PersonalDocuments() {
 
   useHighlightElement("highlight_doc");
 
-  // 2. Gọi Hook Documents
+  // 2. Hook Quản lý Tags (Đồng bộ danh sách tag & Modal quản lý)
+  const {
+    isManageModalOpen,
+    openManageModal,
+    closeManageModal,
+    handleCreateTag,
+    handleEditTag,
+    handleDeleteTag,
+  } = useTagManagement({
+    initialTags: tags,
+    onTagsChange: () => {
+      // Làm mới dữ liệu tag trên toàn bộ ứng dụng qua React Query
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
+    },
+  });
+
+  // 3. Gọi Hook Documents
   const {
     page,
     setPage,
@@ -85,7 +103,7 @@ export function PersonalDocuments() {
     filteredFolders,
   } = usePersonalDocuments(selectedFolderId, folders);
 
-  // 3. TỰ ĐỘNG BỎ LỌC NẾU THƯ MỤC ĐANG CHỌN BỊ XÓA KHỎI DANH SÁCH
+  // 4. TỰ ĐỘNG BỎ LỌC NẾU THƯ MỤC ĐANG CHỌN BỊ XÓA KHỎI DANH SÁCH
   useEffect(() => {
     if (
       selectedFolderId !== null &&
@@ -98,7 +116,7 @@ export function PersonalDocuments() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* 4. SỬ DỤNG COMPONENT FILTER BAR VỚI ĐẦY ĐỦ BỘ LỌC */}
+      {/* 5. SỬ DỤNG COMPONENT FILTER BAR VỚI ĐẦY ĐỦ BỘ LỌC + QUẢN LÝ TAG */}
       <DocumentFilterBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -113,6 +131,7 @@ export function PersonalDocuments() {
         selectedAccessTime={selectedAccessTime}
         setSelectedAccessTime={setSelectedAccessTime}
         onUploadClick={() => setIsUploadOpen(true)}
+        onManageTags={openManageModal}
       />
 
       <DocumentTypeTabs activeTab={activeTab} onChangeTab={setActiveTab} />
@@ -146,6 +165,15 @@ export function PersonalDocuments() {
       />
 
       {/* --- CÁC MODALS --- */}
+      <ManageTagsModal
+        isOpen={isManageModalOpen}
+        onClose={closeManageModal}
+        tags={tags}
+        onCreateTag={handleCreateTag}
+        onEditTag={handleEditTag}
+        onDeleteTag={handleDeleteTag}
+      />
+
       <PersonalFolderModalContainer
         isOpen={isModalOpen}
         editingFolder={editingFolder}

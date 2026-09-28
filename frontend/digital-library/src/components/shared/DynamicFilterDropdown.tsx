@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react"
-import { ChevronDown, Check, Search } from "lucide-react" // Thêm import Search
+import { ChevronDown, Check, Search, Plus } from "lucide-react"
 import { cn } from "@/utils/cn"
 
 export interface FilterOption {
@@ -12,8 +12,9 @@ export interface DynamicFilterDropdownProps {
   options: FilterOption[]
   selectedValue: string | number | null
   onChange: (value: string | number | null) => void
-  searchable?: boolean       // Thêm prop bật/tắt tìm kiếm
-  searchPlaceholder?: string // Thêm prop cho placeholder
+  searchable?: boolean
+  searchPlaceholder?: string
+  onManage?: () => void  
 }
 
 export function DynamicFilterDropdown({
@@ -23,9 +24,10 @@ export function DynamicFilterDropdown({
   onChange,
   searchable = false,
   searchPlaceholder = "Tìm kiếm...",
+  onManage, 
 }: DynamicFilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("") // State lưu từ khóa tìm kiếm
+  const [searchQuery, setSearchQuery] = useState("")
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -38,14 +40,12 @@ export function DynamicFilterDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  // Reset thanh tìm kiếm khi đóng dropdown
   useEffect(() => {
     if (!isOpen) {
       setSearchQuery("")
     }
   }, [isOpen])
 
-  // Lọc options dựa trên từ khóa tìm kiếm
   const filteredOptions = useMemo(() => {
     if (!searchable || !searchQuery.trim()) return options
     return options.filter((opt) =>
@@ -77,60 +77,77 @@ export function DynamicFilterDropdown({
       </button>
 
       {isOpen && (
-        /* Mở rộng w-48 thành w-52 hoặc min-w-[14rem] để có đủ không gian cho ô search */
-        <div className="absolute left-0 top-full z-50 mt-1 max-h-60 min-w-[14rem] overflow-y-auto rounded-lg border border-gray-100 bg-white py-1 shadow-lg custom-scrollbar animate-in fade-in zoom-in-95">
+        <div className="absolute left-0 top-full z-50 mt-1 flex max-h-60 min-w-[14rem] flex-col rounded-lg border border-gray-100 bg-white shadow-lg animate-in fade-in zoom-in-95">
           
-          {/* Ô input tìm kiếm (chỉ hiển thị nếu searchable = true) */}
-          {searchable && (
-            <div className="sticky top-0 z-10 bg-white px-2 pb-1 border-b border-gray-50 mb-1">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={searchPlaceholder}
-                  className="w-full rounded-md border border-gray-200 py-1.5 pl-8 pr-3 text-sm outline-none placeholder:text-gray-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
-                  autoFocus
-                />
+          <div className="overflow-y-auto py-1 custom-scrollbar">
+            {/* Ô input tìm kiếm (chỉ hiển thị nếu searchable = true) */}
+            {searchable && (
+              <div className="sticky top-0 z-10 bg-white px-2 pb-1 border-b border-gray-50 mb-1">
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={searchPlaceholder}
+                    className="w-full rounded-md border border-gray-200 py-1.5 pl-8 pr-3 text-sm outline-none placeholder:text-gray-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                    autoFocus
+                  />
+                </div>
               </div>
-            </div>
-          )}
-
-          <button
-            onClick={() => {
-              onChange(null)
-              setIsOpen(false)
-            }}
-            className="flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-          >
-            <span className="font-medium text-primary-600">Tất cả {label.toLowerCase()}</span>
-            {selectedValue === null && (
-              <Check className="h-4 w-4 text-primary-600" />
             )}
-          </button>
 
-          {filteredOptions.length === 0 && (
-            <div className="px-3 py-4 text-center text-sm text-gray-400 italic">
-              Không tìm thấy kết quả
-            </div>
-          )}
-
-          {filteredOptions.map((opt) => (
             <button
-              key={opt.value}
               onClick={() => {
-                onChange(selectedValue === opt.value ? null : opt.value)
+                onChange(null)
                 setIsOpen(false)
               }}
               className="flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
-              <span className="truncate pr-2">{opt.label}</span>
-              {selectedValue === opt.value && (
-                <Check className="h-4 w-4 shrink-0 text-primary-600" />
+              <span className="font-medium text-primary-600">Tất cả {label.toLowerCase()}</span>
+              {selectedValue === null && (
+                <Check className="h-4 w-4 text-primary-600" />
               )}
             </button>
-          ))}
+
+            {filteredOptions.length === 0 && (
+              <div className="px-3 py-4 text-center text-sm text-gray-400 italic">
+                Không tìm thấy kết quả
+              </div>
+            )}
+
+            {filteredOptions.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => {
+                  onChange(selectedValue === opt.value ? null : opt.value)
+                  setIsOpen(false)
+                }}
+                className="flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                <span className="truncate pr-2">{opt.label}</span>
+                {selectedValue === opt.value && (
+                  <Check className="h-4 w-4 shrink-0 text-primary-600" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* THÊM PHẦN CHÂN DROPDOWN CHO NÚT "QUẢN LÝ" */}
+          {onManage && (
+            <div className="border-t border-gray-100 bg-gray-50/50 p-1">
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  onManage()
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-primary-600 hover:bg-primary-50 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Thêm / Quản lý nhãn</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

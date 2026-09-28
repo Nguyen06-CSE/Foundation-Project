@@ -50,6 +50,8 @@ interface DocumentFilterBarProps {
   // Actions
   onUploadClick?: () => void;
   showUploadButton?: boolean;
+
+  onManageTags?: () => void;
 }
 
 export function DocumentFilterBar({
@@ -71,6 +73,7 @@ export function DocumentFilterBar({
   setSelectedUploaderId,
   onUploadClick,
   showUploadButton = true,
+  onManageTags,
 }: DocumentFilterBarProps) {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -108,6 +111,7 @@ export function DocumentFilterBar({
           }))}
           selectedValue={selectedTagId}
           onChange={(val) => setSelectedTagId(val as number | null)}
+          onManage={onManageTags}
         />
 
         {/* Lọc theo Ngày sửa/tải lên */}
