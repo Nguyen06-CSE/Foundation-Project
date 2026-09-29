@@ -1,5 +1,5 @@
-import { type ProcessingLegendItem } from "@/components/shared/ProcessingDonut";
-import { type TagDistributionItem } from "@/components/shared/TagDistribution";
+import { type ProcessingLegendItem } from "@/components/shared/feedback/ProcessingDonut";
+import { type TagDistributionItem } from "@/components/shared/feedback/TagDistribution";
 
 export interface PersonalStats {
   totalDocuments: number;

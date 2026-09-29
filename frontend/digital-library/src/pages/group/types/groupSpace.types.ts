@@ -2,7 +2,7 @@
 
 import type { Document } from "@/types/document";
 import type { PermissionLevel, WorkspaceInvitation, WorkspaceMember } from "@/types/group";
-import type { FolderAction } from "@/components/shared/FolderContextMenu";
+import type { FolderAction } from "@/components/shared/folders/FolderContextMenu";
 
 export type GroupTab = "documents" | "members" | "requests" | "settings" | "trash";
 

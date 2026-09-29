@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { FileX } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { DocumentCard } from "@/components/shared/DocumentCard";
-import { type DocumentAction } from "@/components/shared/DocumentContextMenu";
+import { DocumentCard } from "@/components/shared/documents/DocumentCard";
+import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import {
   DocumentListView,
   type DocumentListItem,
-} from "@/components/shared/DocumentListView";
-import { ViewToggle, type ViewMode } from "@/components/shared/ViewToggle";
-import EmptyState from "@/components/shared/EmptyState";
+} from "@/components/shared/documents/DocumentListView";
+import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
+import EmptyState from "@/components/shared/feedback/EmptyState";
 import { cn } from "@/utils/cn";
 import { documentService } from "@/services/documentService";
 

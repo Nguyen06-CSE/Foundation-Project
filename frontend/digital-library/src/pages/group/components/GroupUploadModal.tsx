@@ -1,6 +1,7 @@
 // src/pages/group/components/GroupUploadModal.tsx
 
-import { UploadModal, type TagItem } from "@/components/shared/UploadModal";
+import { UploadModal } from "@/components/shared/modals/UploadModal";
+import type { TagItem } from "@/components/shared/feedback/TagSelector";
 
 interface GroupUploadModalProps {
   onClose: () => void;

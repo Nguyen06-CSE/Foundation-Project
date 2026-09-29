@@ -2,7 +2,7 @@
 
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { DocumentDetail } from "@/components/shared/DocumentDetail";
+import { DocumentDetail } from "@/components/shared/documents/DocumentDetail";
 import { groupService } from "@/services/groupService";
 import { useAuthStore } from "@/stores/authStore";
 

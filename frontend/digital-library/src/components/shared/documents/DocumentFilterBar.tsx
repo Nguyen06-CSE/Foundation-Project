@@ -1,7 +1,7 @@
 // src/components/shared/DocumentFilterBar.tsx
 import { Search, Upload } from "lucide-react";
 import { Input } from "@/components/ui/Input";
-import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown";
+import { DynamicFilterDropdown } from "@/components/shared/feedback/DynamicFilterDropdown";
 import { Button } from "@/components/ui/Button";
 import { getNormalizedExtension } from "@/hooks/useDocumentFilters";
 import type { WorkspaceMember } from "@/types/group";

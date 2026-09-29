@@ -2,14 +2,14 @@
 
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/Input";
-import { DynamicFilterDropdown } from "@/components/shared/DynamicFilterDropdown";
-import { DocumentTypeTabs } from "@/components/shared/DocumentTypeTabs";
+import { DynamicFilterDropdown } from "@/components/shared/feedback/DynamicFilterDropdown";
+import { DocumentTypeTabs } from "@/components/shared/documents/DocumentTypeTabs";
 import { getNormalizedExtension, type TabKey } from "@/hooks/useDocumentFilters";
 import type { Document, Folder } from "@/types/document";
 import type { PermissionLevel, WorkspaceMember } from "@/types/group";
-import type { FolderAction } from "@/components/shared/FolderContextMenu";
+import type { FolderAction } from "@/components/shared/folders/FolderContextMenu";
 import DocumentsTab from "./DocumentsTab";
-import type { DocumentAction } from "@/components/shared/DocumentContextMenu";
+import type { DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 
 export interface WorkspaceTag {
   id?: number;

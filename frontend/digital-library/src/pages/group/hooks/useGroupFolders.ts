@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { groupService } from "@/services/groupService";
 import { groupFolderService } from "@/services/folderService";
-import type { FolderAction } from "@/components/shared/FolderContextMenu";
+import type { FolderAction } from "@/components/shared/folders/FolderContextMenu";
 
 export function useGroupFolders(
   groupId: number,

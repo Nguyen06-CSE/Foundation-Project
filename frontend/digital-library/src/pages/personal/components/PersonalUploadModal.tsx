@@ -1,6 +1,6 @@
 // frontend/digital-library/src/pages/personal/components/PersonalUploadModal.tsx
 
-import { UploadModal } from "@/components/shared/UploadModal"
+import { UploadModal } from "@/components/shared/modals/UploadModal"
 
 interface PersonalUploadModalProps {
   onClose: () => void

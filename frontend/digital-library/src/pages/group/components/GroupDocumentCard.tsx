@@ -1,7 +1,7 @@
 // src/pages/group/components/GroupDocumentCard.tsx
 
-import { DocumentCard } from "@/components/shared/DocumentCard";
-import type { DocumentAction, DocumentMenuItem } from "@/components/shared/DocumentContextMenu";
+import { DocumentCard } from "@/components/shared/documents/DocumentCard";
+import type { DocumentAction, DocumentMenuItem } from "@/components/shared/documents/DocumentContextMenu";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { formatSize } from "@/utils/formatSize";
 import { getFileExtension } from "@/utils/file";

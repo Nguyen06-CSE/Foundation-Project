@@ -1,7 +1,7 @@
 // src/hooks/useViewPreference.ts
 
 import { useState, useEffect } from 'react'
-import type { ViewMode } from '@/components/shared/ViewToggle'
+import type { ViewMode } from '@/components/shared/feedback/ViewToggle'
 
 /**
  * Hook to persist view mode preference in localStorage

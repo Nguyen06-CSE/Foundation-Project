@@ -2,7 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { Package } from "lucide-react";
-import { DocumentContextMenu } from "@/components/shared/DocumentContextMenu";
+import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
 import type { DocumentCardProps } from "./DocumentCard";
 
 export function BundleDocumentCard({

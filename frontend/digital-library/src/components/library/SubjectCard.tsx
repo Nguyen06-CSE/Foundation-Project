@@ -2,7 +2,7 @@
 
 import { BookOpen, ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { StarRating } from "@/components/shared/StarRating";
+import { StarRating } from "@/components/shared/feedback/StarRating";
 import type { Subject } from "@/types/library";
 
 export interface SubjectCardProps {

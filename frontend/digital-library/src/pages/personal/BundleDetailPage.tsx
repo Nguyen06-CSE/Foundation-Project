@@ -23,17 +23,17 @@ import {
 
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { DocumentCard } from "@/components/shared/DocumentCard";
+import { DocumentCard } from "@/components/shared/documents/DocumentCard";
 import {
   DocumentListView,
   type DocumentListItem,
-} from "@/components/shared/DocumentListView";
-import { ViewToggle, type ViewMode } from "@/components/shared/ViewToggle";
-import EmptyState from "@/components/shared/EmptyState";
-import { RenameDocumentModal } from "@/components/shared/RenameDocumentModal";
-import { CardSkeleton } from "@/components/shared/CardSkeleton";
-import { EditTagsModal } from "@/components/shared/EditTagsModal";
-import { AddToBundleModal } from "@/components/shared/AddToBundleModal";
+} from "@/components/shared/documents/DocumentListView";
+import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
+import EmptyState from "@/components/shared/feedback/EmptyState";
+import { RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
+import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
+import { EditTagsModal } from "@/components/shared/modals/EditTagsModal";
+import { AddToBundleModal } from "@/components/shared/modals/AddToBundleModal";
 
 import { documentService } from "@/services/documentService";
 import { groupService } from "@/services/groupService";
@@ -42,9 +42,9 @@ import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { cn } from "@/utils/cn";
 import type { Document } from "@/types/document";
-import type { DocumentAction } from "@/components/shared/DocumentContextMenu";
+import type { DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 
-import { ContributeModal } from "@/components/shared/ContributeModal";
+import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 
 export default function BundleDetailPage() {
   const [contributeDoc, setContributeDoc] = useState<{

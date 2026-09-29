@@ -24,7 +24,7 @@ import {
 // UI Components
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { FileIcon } from "@/components/shared/FileIcon";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
 
 // Services & Utils
 import { documentService } from "@/services/documentService";

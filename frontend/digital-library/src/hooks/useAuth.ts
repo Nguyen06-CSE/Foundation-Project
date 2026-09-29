@@ -23,7 +23,7 @@ const getUserFromStorage = (): User | null => {
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(getUserFromStorage);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
 
   useEffect(() => {
     // Hàm lắng nghe sự thay đổi của authState trên toàn hệ thống

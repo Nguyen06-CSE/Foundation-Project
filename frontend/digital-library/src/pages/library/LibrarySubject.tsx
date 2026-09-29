@@ -15,10 +15,10 @@ import {
   ArrowUpDown,
 } from "lucide-react";
 import { PublicLayout } from "@/components/library/PublicLayout";
-import { StarRating } from "@/components/shared/StarRating";
-import { FileIcon } from "@/components/shared/FileIcon";
-import { ViewToggle, type ViewMode } from "@/components/shared/ViewToggle";
-import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import { StarRating } from "@/components/shared/feedback/StarRating";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
+import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
+import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useAuthStore } from "@/stores/authStore";

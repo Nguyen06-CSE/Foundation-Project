@@ -17,10 +17,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { PublicLayout } from "@/components/library/PublicLayout";
-import { StarRating } from "@/components/shared/StarRating";
-import { RatingCard } from "@/components/shared/RatingCard";
-import { FileIcon } from "@/components/shared/FileIcon";
-import { ContributeModal } from "@/components/shared/ContributeModal";
+import { StarRating } from "@/components/shared/feedback/StarRating";
+import { RatingCard } from "@/components/shared/feedback/RatingCard";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
+import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useAuthStore } from "@/stores/authStore";

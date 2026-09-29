@@ -1,4 +1,4 @@
-import { type FileTypeMap } from "@/components/shared/FileIcon";
+import { type FileTypeMap } from "@/components/shared/documents/FileIcon";
 
 export interface MockDocument {
   id: string;

@@ -38,7 +38,7 @@ import LibraryDocumentDetail from "@/pages/library/LibraryDocumentDetail";
 import LibraryAdminSubmissions from "@/pages/library/admin/LibraryAdminSubmissions";
 
 // Shared Components
-import { DocumentDetail } from "@/components/shared/DocumentDetail";
+import { DocumentDetail } from "@/components/shared/documents/DocumentDetail";
 
 import { LibraryAdmin } from "@/pages/library/admin/LibraryAdmin";
 import { LibraryAdminStructure } from "@/pages/library/admin/LibraryAdminStructure";

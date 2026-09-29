@@ -1,8 +1,8 @@
 // src/pages/personal/components/PersonalFoldersSection.tsx
 
 import { FolderOpen, Plus } from "lucide-react";
-import { FolderCard } from "@/components/shared/FolderCard";
-import { type FolderAction } from "@/components/shared/FolderContextMenu";
+import { FolderCard } from "@/components/shared/folders/FolderCard";
+import { type FolderAction } from "@/components/shared/folders/FolderContextMenu";
 import { cn } from "@/utils/cn";
 
 // Khai báo kiểu cho Folder trả về từ API

@@ -7,7 +7,7 @@ import { Search, GraduationCap, BookOpen, Layers } from "lucide-react";
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { FacultyCard } from "@/components/library/FacultyCard";
 import { libraryService } from "@/services/libraryService";
-import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
 
 export function LibraryHome() {
   const navigate = useNavigate();

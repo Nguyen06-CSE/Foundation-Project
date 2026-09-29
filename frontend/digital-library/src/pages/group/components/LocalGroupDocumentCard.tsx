@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileIcon } from "@/components/shared/FileIcon";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
 import { GroupDocumentContextMenu } from "@/pages/group/components/GroupDocumentContextMenu";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";

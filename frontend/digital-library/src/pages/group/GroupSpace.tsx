@@ -29,10 +29,10 @@ import InviteModal from "./components/InviteModal";
 
 import { useGroupSpace } from "./hooks/useGroupSpace";
 import { GroupFolderModalContainer } from "./components/GroupFolderModalContainer";
-import { RenameDocumentModal } from "@/components/shared/RenameDocumentModal";
+import { RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
 import { GroupUploadModal } from "./components/GroupUploadModal";
 import { GroupDocumentsSection } from "./components/GroupDocumentsSection";
-import { CreateFolderModal } from "@/components/shared/CreateFolderModal";
+import { CreateFolderModal } from "@/components/shared/modals/CreateFolderModal";
 import { useHighlightElement } from "@/hooks/useHighlightElement";
 
 import GroupSwitcher from "./components/GroupSwitcher";

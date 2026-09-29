@@ -7,7 +7,7 @@ import { ChevronRight, Search, GraduationCap, ArrowLeft, BookOpen } from "lucide
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { SubjectCard } from "@/components/library/SubjectCard";
 import { libraryService } from "@/services/libraryService";
-import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
 import { Button } from "@/components/ui/Button";
 
 export function LibraryFaculty() {

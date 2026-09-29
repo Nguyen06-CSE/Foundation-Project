@@ -7,8 +7,6 @@ import {
   User,
   Users,
   BookOpen,
-  GraduationCap,
-  Building2,
   LayoutDashboard,
   FileText,
   Share2,

@@ -5,12 +5,12 @@ import { Upload, FileText, Share2, Star, HardDrive, FileX } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { StatCard } from "@/components/shared/StatCard";
-import { DocumentRow } from "@/components/shared/DocumentRow";
-import EmptyState from "@/components/shared/EmptyState";
-import { ProcessingDonut } from "@/components/shared/ProcessingDonut";
-import { TagDistribution } from "@/components/shared/TagDistribution";
-import { type DocumentAction } from "@/components/shared/DocumentContextMenu";
+import { StatCard } from "@/components/shared/feedback/StatCard";
+import { DocumentRow } from "@/components/shared/documents/DocumentRow";
+import EmptyState from "@/components/shared/feedback/EmptyState";
+import { ProcessingDonut } from "@/components/shared/feedback/ProcessingDonut";
+import { TagDistribution } from "@/components/shared/feedback/TagDistribution";
+import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import { documents } from "@/mocks/documents";
 import { personalStats, processingStats, tagDistribution } from "@/mocks/stats";
 

@@ -1,6 +1,6 @@
 // src/pages/group/components/GroupFolderModalContainer.tsx
 
-import { CreateFolderModal, type FolderInitialData, type FolderSubmitData } from "@/components/shared/CreateFolderModal";
+import { CreateFolderModal, type FolderInitialData, type FolderSubmitData } from "@/components/shared/modals/CreateFolderModal";
 
 interface GroupFolderModalContainerProps {
   isOpen: boolean;

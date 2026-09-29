@@ -1,5 +1,5 @@
-import { FileIcon, type FileTypeMap } from "@/components/shared/FileIcon";
-import { DocumentContextMenu, type DocumentAction } from "@/components/shared/DocumentContextMenu";
+import { FileIcon, type FileTypeMap } from "@/components/shared/documents/FileIcon";
+import { DocumentContextMenu, type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 
 export interface DocumentType {
   id: string;

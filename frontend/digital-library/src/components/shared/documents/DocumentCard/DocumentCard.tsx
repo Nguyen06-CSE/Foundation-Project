@@ -2,8 +2,8 @@
 
 import { FileDocumentCard } from "./FileDocumentCard";
 import { BundleDocumentCard } from "./BundleDocumentCard";
-import type { FileTypeMap } from "@/components/shared/FileIcon";
-import type { DocumentAction, DocumentMenuItem } from "@/components/shared/DocumentContextMenu";
+import type { FileTypeMap } from "@/components/shared/documents/FileIcon";
+import type { DocumentAction, DocumentMenuItem } from "@/components/shared/documents/DocumentContextMenu";
 
 // ======================================================
 // Types

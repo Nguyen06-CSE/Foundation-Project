@@ -10,12 +10,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Search, Upload, FolderPlus, FileX, FolderOpen } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { DocumentCard } from '@/components/shared/DocumentCard';
-import { FolderCard } from '@/components/shared/FolderCard';
-import EmptyState from '@/components/shared/EmptyState';
+import { DocumentCard } from '@/components/shared/documents/DocumentCard';
+import { FolderCard } from '@/components/shared/folders/FolderCard';
+import EmptyState from '@/components/shared/feedback/EmptyState';
 import { useWorkspaceOperations } from '@/hooks/useWorkspaceOperations';
 import type { WorkspaceConfig } from '@/services/workspaceService';
-import type { DocumentAction } from '@/components/shared/DocumentContextMenu';
+import type { DocumentAction } from '@/components/shared/documents/DocumentContextMenu';
 import { formatSize } from '@/utils/formatSize';
 import { formatRelativeDate } from '@/utils/formatDate';
 

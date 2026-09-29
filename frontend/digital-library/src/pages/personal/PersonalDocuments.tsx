@@ -9,12 +9,12 @@ import { useTagManagement } from "@/hooks/useTagManagement";
 import { useHighlightElement } from "@/hooks/useHighlightElement";
 
 // Components
-import { DocumentTypeTabs } from "@/components/shared/DocumentTypeTabs";
-import { RenameDocumentModal } from "@/components/shared/RenameDocumentModal";
-import { ContributeModal } from "@/components/shared/ContributeModal";
-import { CardSkeleton } from "@/components/shared/CardSkeleton";
-import { DocumentFilterBar } from "@/components/shared/DocumentFilterBar";
-import { ManageTagsModal } from "@/components/shared/ManageTagsModal";
+import { DocumentTypeTabs } from "@/components/shared/documents/DocumentTypeTabs";
+import { RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
+import { ContributeModal } from "@/components/shared/modals/ContributeModal";
+import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
+import { DocumentFilterBar } from "@/components/shared/documents/DocumentFilterBar";
+import { ManageTagsModal } from "@/components/shared/modals/ManageTagsModal";
 
 // Sub-sections & Modals
 import { PersonalFoldersSection } from "./components/PersonalFoldersSection";

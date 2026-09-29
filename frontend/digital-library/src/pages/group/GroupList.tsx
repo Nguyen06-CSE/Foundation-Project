@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
-import EmptyState from "@/components/shared/EmptyState";
+import EmptyState from "@/components/shared/feedback/EmptyState";
 import { groupService } from "@/services/groupService";
 import { tagService } from "@/services/tagService";
 import { NotificationsTab } from "./components/NotificationsTab";

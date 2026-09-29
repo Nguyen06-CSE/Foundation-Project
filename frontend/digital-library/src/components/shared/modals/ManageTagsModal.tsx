@@ -1,5 +1,5 @@
 // src/components/shared/ManageTagsModal.tsx
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { X, Search, Check, Plus, Edit2, Trash2, Tag } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";

@@ -9,7 +9,7 @@ import { mergeImagesToPdf } from "@/utils/pdfBuilder";
 import { documentService } from "@/services/documentService";
 import { groupService } from "@/services/groupService";
 import { formatSize } from "@/utils/formatSize";
-import { TagSelector, type TagItem } from "./TagSelector";
+import { TagSelector, type TagItem } from "../feedback/TagSelector";
 export interface UploadModalProps {
   onClose: () => void;
   availableTags?: TagItem[];

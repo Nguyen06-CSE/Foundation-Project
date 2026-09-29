@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { folderService } from "@/services/folderService";
 import { tagService } from "@/services/tagService";
-import type { FolderAction } from "@/components/shared/FolderContextMenu";
-import type { FolderInitialData } from "../../../components/shared/CreateFolderModal";
+import type { FolderAction } from "@/components/shared/folders/FolderContextMenu";
+import type { FolderInitialData } from "../../../components/shared/modals/CreateFolderModal";
 
 export function usePersonalFolders() {
   const queryClient = useQueryClient();

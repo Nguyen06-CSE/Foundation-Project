@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileIcon } from "@/components/shared/FileIcon";
-import { DocumentContextMenu } from "@/components/shared/DocumentContextMenu";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
+import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
 import type { DocumentCardProps } from "./DocumentCard";
 
 // ======================================================
