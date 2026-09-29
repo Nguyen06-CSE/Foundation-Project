@@ -18,11 +18,13 @@ const getFileExtension = (type: string) => {
   const mimeMap: Record<string, string> = {
     "application/pdf": "pdf",
     "application/msword": "doc",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      "docx",
     "application/vnd.ms-excel": "xls",
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
     "application/vnd.ms-powerpoint": "ppt",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+      "pptx",
     "image/jpeg": "jpg",
     "image/png": "png",
     "image/webp": "webp",
@@ -39,17 +41,72 @@ const FILE_TYPE_THEMES: Record<
   string,
   { bg: string; badgeBg: string; badgeText: string; border: string }
 > = {
-  pdf: { bg: "bg-rose-50/70 hover:bg-rose-50", badgeBg: "bg-rose-100/90", badgeText: "text-rose-700", border: "group-hover:border-rose-200" },
-  doc: { bg: "bg-blue-50/70 hover:bg-blue-50", badgeBg: "bg-blue-100/90", badgeText: "text-blue-700", border: "group-hover:border-blue-200" },
-  docx: { bg: "bg-blue-50/70 hover:bg-blue-50", badgeBg: "bg-blue-100/90", badgeText: "text-blue-700", border: "group-hover:border-blue-200" },
-  xls: { bg: "bg-emerald-50/70 hover:bg-emerald-50", badgeBg: "bg-emerald-100/90", badgeText: "text-emerald-700", border: "group-hover:border-emerald-200" },
-  xlsx: { bg: "bg-emerald-50/70 hover:bg-emerald-50", badgeBg: "bg-emerald-100/90", badgeText: "text-emerald-700", border: "group-hover:border-emerald-200" },
-  ppt: { bg: "bg-amber-50/70 hover:bg-amber-50", badgeBg: "bg-amber-100/90", badgeText: "text-amber-700", border: "group-hover:border-amber-200" },
-  pptx: { bg: "bg-amber-50/70 hover:bg-amber-50", badgeBg: "bg-amber-100/90", badgeText: "text-amber-700", border: "group-hover:border-amber-200" },
-  jpg: { bg: "bg-purple-50/70 hover:bg-purple-50", badgeBg: "bg-purple-100/90", badgeText: "text-purple-700", border: "group-hover:border-purple-200" },
-  png: { bg: "bg-purple-50/70 hover:bg-purple-50", badgeBg: "bg-purple-100/90", badgeText: "text-purple-700", border: "group-hover:border-purple-200" },
-  zip: { bg: "bg-slate-100/70 hover:bg-slate-100", badgeBg: "bg-slate-200/90", badgeText: "text-slate-700", border: "group-hover:border-slate-300" },
-  rar: { bg: "bg-slate-100/70 hover:bg-slate-100", badgeBg: "bg-slate-200/90", badgeText: "text-slate-700", border: "group-hover:border-slate-300" },
+  pdf: {
+    bg: "bg-rose-50/70 hover:bg-rose-50",
+    badgeBg: "bg-rose-100/90",
+    badgeText: "text-rose-700",
+    border: "group-hover:border-rose-200",
+  },
+  doc: {
+    bg: "bg-blue-50/70 hover:bg-blue-50",
+    badgeBg: "bg-blue-100/90",
+    badgeText: "text-blue-700",
+    border: "group-hover:border-blue-200",
+  },
+  docx: {
+    bg: "bg-blue-50/70 hover:bg-blue-50",
+    badgeBg: "bg-blue-100/90",
+    badgeText: "text-blue-700",
+    border: "group-hover:border-blue-200",
+  },
+  xls: {
+    bg: "bg-emerald-50/70 hover:bg-emerald-50",
+    badgeBg: "bg-emerald-100/90",
+    badgeText: "text-emerald-700",
+    border: "group-hover:border-emerald-200",
+  },
+  xlsx: {
+    bg: "bg-emerald-50/70 hover:bg-emerald-50",
+    badgeBg: "bg-emerald-100/90",
+    badgeText: "text-emerald-700",
+    border: "group-hover:border-emerald-200",
+  },
+  ppt: {
+    bg: "bg-amber-50/70 hover:bg-amber-50",
+    badgeBg: "bg-amber-100/90",
+    badgeText: "text-amber-700",
+    border: "group-hover:border-amber-200",
+  },
+  pptx: {
+    bg: "bg-amber-50/70 hover:bg-amber-50",
+    badgeBg: "bg-amber-100/90",
+    badgeText: "text-amber-700",
+    border: "group-hover:border-amber-200",
+  },
+  jpg: {
+    bg: "bg-purple-50/70 hover:bg-purple-50",
+    badgeBg: "bg-purple-100/90",
+    badgeText: "text-purple-700",
+    border: "group-hover:border-purple-200",
+  },
+  png: {
+    bg: "bg-purple-50/70 hover:bg-purple-50",
+    badgeBg: "bg-purple-100/90",
+    badgeText: "text-purple-700",
+    border: "group-hover:border-purple-200",
+  },
+  zip: {
+    bg: "bg-slate-100/70 hover:bg-slate-100",
+    badgeBg: "bg-slate-200/90",
+    badgeText: "text-slate-700",
+    border: "group-hover:border-slate-300",
+  },
+  rar: {
+    bg: "bg-slate-100/70 hover:bg-slate-100",
+    badgeBg: "bg-slate-200/90",
+    badgeText: "text-slate-700",
+    border: "group-hover:border-slate-300",
+  },
 };
 
 const DEFAULT_THEME = {
@@ -117,7 +174,10 @@ export function FileDocumentCard({
           />
         ) : (
           <div className="flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
-            <FileIcon type={document.type} className="h-14 w-14 drop-shadow-xs" />
+            <FileIcon
+              type={document.type}
+              className="h-14 w-14 drop-shadow-xs"
+            />
           </div>
         )}
       </div>
@@ -126,13 +186,20 @@ export function FileDocumentCard({
       <div className="relative flex flex-1 flex-col justify-between p-3.5 rounded-b-xl bg-white">
         <div>
           <div className="flex items-start justify-between gap-1.5">
-            <h3
-              onClick={() => navigate(targetUrl)}
-              className="line-clamp-2 flex-1 cursor-pointer text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 leading-snug"
-              title={document.name}
-            >
-              {document.name}
-            </h3>
+            {/* 1. Bọc h3 và Tooltip trong một div có className "relative" */}
+            <div className="relative flex-1 min-w-0">
+              <h3
+                onClick={() => navigate(targetUrl)}
+                className="line-clamp-2 cursor-pointer text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 leading-snug"
+                title={document.name}
+              >
+                {document.name}
+              </h3>
+
+              <div className="pointer-events-none absolute bottom-full left-0 mb-1.5 z-50 hidden max-w-xs rounded-md bg-gray-900/90 px-2.5 py-1 text-[11px] font-medium text-white shadow-lg opacity-0 transition-opacity duration-200 group-hover:block group-hover:opacity-100 whitespace-normal leading-tight">
+                {document.name}
+              </div>
+            </div>
 
             <div
               className="relative z-50 shrink-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-within:opacity-100"
@@ -172,7 +239,9 @@ export function FileDocumentCard({
               )}
             </div>
           ) : (
-            <span className="text-[11px] italic text-gray-300">Chưa có tag</span>
+            <span className="text-[11px] italic text-gray-300">
+              Chưa có tag
+            </span>
           )}
         </div>
       </div>

@@ -109,6 +109,10 @@ export function BundleDocumentCard({
             <span className="text-[11px] italic text-gray-300">Chưa có tag</span>
           )}
         </div>
+
+         <div className="pointer-events-none absolute bottom-full left-0 mb-1.5 z-50 hidden max-w-xs rounded-md bg-gray-900/90 px-2.5 py-1 text-[11px] font-medium text-white shadow-lg opacity-0 transition-opacity duration-200 group-hover:block group-hover:opacity-100 whitespace-normal leading-tight">
+                {document.name}
+              </div>
       </div>
     </div>
   );
