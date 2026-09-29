@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "docx-preview": "^0.4.1",
     "jspdf": "^4.2.1"
   }
 }

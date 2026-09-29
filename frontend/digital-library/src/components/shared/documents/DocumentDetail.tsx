@@ -3,9 +3,10 @@
 // ==========================================
 // 1. IMPORTS
 // ==========================================
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { renderAsync } from "docx-preview";
 import {
   ArrowLeft,
   Download,
@@ -19,6 +20,7 @@ import {
   Search,
   Check,
   ExternalLink,
+  Loader2,
 } from "lucide-react";
 
 // UI Components
@@ -109,8 +111,81 @@ export interface SharedDocumentDetailProps {
 }
 
 // ==========================================
-// 3. SUB-COMPONENTS
+// 3. SUB-COMPONENTS FOR PREVIEW
 // ==========================================
+
+// Sub-component xem trước file DOCX
+function DocxViewer({ fileUrl }: { fileUrl: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+
+    fetch(fileUrl)
+      .then((res) => {
+        if (!res.ok) throw new Error("Không thể tải tập tin Word");
+        return res.arrayBuffer();
+      })
+      .then((buffer) => {
+        if (containerRef.current && isMounted) {
+          containerRef.current.innerHTML = "";
+          return renderAsync(buffer, containerRef.current, undefined, {
+            className: "docx-preview-wrapper",
+            inWrapper: true,
+            ignoreWidth: false,
+            ignoreHeight: false,
+            breakPages: true,
+          });
+        }
+      })
+      .then(() => {
+        if (isMounted) setLoading(false);
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error("Lỗi xem trước DOCX:", err);
+          setError(
+            "Không thể xem trước tài liệu Word này. Định dạng file có thể không hợp lệ hoặc bị khóa.",
+          );
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fileUrl]);
+
+  return (
+    <div className="w-full min-h-[700px] max-h-[800px] overflow-auto bg-gray-200/70 p-4 rounded-xl flex flex-col items-center custom-scrollbar">
+      {loading && (
+        <div className="flex flex-col items-center justify-center my-auto py-20 text-gray-500 gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+          <span className="text-sm font-medium">
+            Đang tải và định dạng văn bản Word...
+          </span>
+        </div>
+      )}
+      {error && (
+        <div className="flex flex-col items-center justify-center my-auto py-20 text-red-500 gap-2">
+          <p className="text-sm text-center max-w-md">{error}</p>
+        </div>
+      )}
+      <div
+        ref={containerRef}
+        className={cn(
+          "w-full max-w-4xl bg-white shadow-md rounded-lg p-2 transition-opacity duration-300",
+          loading || error ? "hidden" : "block",
+        )}
+      />
+    </div>
+  );
+}
+
 interface InfoRowProps {
   label: string;
   value: string;
@@ -139,37 +214,45 @@ function StatItem({ label, value }: StatItemProps) {
   );
 }
 
-// Sub-component Tab Detail (Bản xem trước)
+// Sub-component Tab Detail (Bản xem trước tổng hợp)
 function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
-  const isImage = doc.file_type?.startsWith("image/");
-  const isPdf = doc.file_type === "application/pdf";
-  const canPreview = isImage || isPdf;
+  const fileType = doc.file_type?.toLowerCase() || "";
+  const filePath = doc.file_path?.toLowerCase() || "";
+
+  const isImage = fileType.startsWith("image/");
+  const isPdf = fileType === "application/pdf" || filePath.endsWith(".pdf");
+  const isDocx =
+    fileType ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+    fileType === "application/msword" ||
+    filePath.endsWith(".docx") ||
+    filePath.endsWith(".doc");
 
   const thumbnailUrl = doc.thumbnail_path
     ? `${import.meta.env.VITE_API_URL}/${doc.thumbnail_path}`
     : null;
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl bg-gray-100 p-2 min-h-[500px] border border-gray-200">
-      {canPreview ? (
-        isImage ? (
-          <img
-            src={fileUrl}
-            alt={doc.title}
-            className="max-w-full max-h-[700px] rounded object-contain shadow-sm"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-            }}
-          />
-        ) : (
-          <iframe
-            src={fileUrl}
-            className="w-full h-[700px] rounded shadow-sm bg-white"
-            title={doc.title}
-          />
-        )
+    <div className="flex flex-col items-center justify-center rounded-xl bg-gray-100/80 p-2 min-h-[500px] border border-gray-200">
+      {isImage ? (
+        <img
+          src={fileUrl}
+          alt={doc.title}
+          className="max-w-full max-h-[700px] rounded-lg object-contain shadow-sm bg-white"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+      ) : isPdf ? (
+        <iframe
+          src={`${fileUrl}#toolbar=1&navpanes=0`}
+          className="w-full h-[750px] rounded-lg shadow-sm bg-white border-0"
+          title={doc.title}
+        />
+      ) : isDocx ? (
+        <DocxViewer fileUrl={fileUrl} />
       ) : (
-        <div className="flex flex-col items-center justify-center space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-4 py-12">
           {thumbnailUrl ? (
             <img
               src={thumbnailUrl}
@@ -183,8 +266,10 @@ function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
               </span>
             </div>
           )}
-          <p className="text-sm text-gray-500 max-w-sm text-center">
-            Trình duyệt không hỗ trợ xem trước trực tiếp định dạng này. Vui lòng nhấn "Mở trong thẻ mới" hoặc "Tải xuống" để xem.
+          <p className="text-sm text-gray-500 max-w-sm text-center leading-relaxed">
+            Hệ thống hiện chưa hỗ trợ xem trước định dạng này trực tiếp. Vui
+            lòng nhấn <strong>"Mở trong thẻ mới"</strong> hoặc{" "}
+            <strong>"Tải xuống"</strong> để xem.
           </p>
         </div>
       )}
@@ -197,7 +282,9 @@ function TabContent({ content }: { content: string }) {
   if (!content) {
     return (
       <div className="py-12 flex flex-col items-center justify-center text-center">
-        <p className="text-sm text-gray-500">Tài liệu này chưa có dữ liệu văn bản (OCR).</p>
+        <p className="text-sm text-gray-500">
+          Tài liệu này chưa có dữ liệu văn bản (OCR).
+        </p>
       </div>
     );
   }
@@ -357,10 +444,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   };
 
   // Lấy danh sách Tag từ DB
-  const {
-    data: allTags = [],
-    isLoading: isLoadingTags,
-  } = useQuery<TagType[]>({
+  const { data: allTags = [], isLoading: isLoadingTags } = useQuery<TagType[]>({
     queryKey: ["all-tags"],
     queryFn: () => tagService.getAll(),
     staleTime: 5 * 60 * 1000,
@@ -666,7 +750,9 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
             {activeTab === "detail" && (
               <TabDetail doc={doc} fileUrl={fileDownloadUrl} />
             )}
-            {activeTab === "content" && <TabContent content={doc.content} />}
+            {activeTab === "content" && (
+              <TabContent content={doc.content || ""} />
+            )}
             {activeTab === "description" && (
               <TabDescription
                 description={doc.description ?? "Chưa có mô tả."}
