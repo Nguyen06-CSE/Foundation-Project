@@ -1,9 +1,11 @@
 // src/pages/personal/components/PersonalDocumentsSection.tsx
 
-import { useState } from "react";
-import { FileX } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { FileX, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DocumentCard } from "@/components/shared/documents/DocumentCard";
+import { BundleDocumentCard } from "@/components/shared/documents/DocumentCard/BundleDocumentCard";
+import { BundleExpandedFrame } from "./BundleExpandedFrame";
 import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import {
   DocumentListView,
@@ -13,6 +15,8 @@ import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewTogg
 import EmptyState from "@/components/shared/feedback/EmptyState";
 import { cn } from "@/utils/cn";
 import { documentService } from "@/services/documentService";
+import { formatSize } from "@/utils/formatSize";
+import { getFileExtension } from "@/utils/file";
 
 export interface DocCardType {
   id: string;
@@ -44,6 +48,9 @@ interface PersonalDocumentsSectionProps {
   onDocumentAction: (action: DocumentAction | string, documentId: string) => void;
   onOpenUploadModal: () => void;
   CardSkeleton: React.ComponentType<{ variant: "folder" | "document" }>;
+  isFilterActive: boolean;
+  searchQuery?: string;
+  selectedTagId?: number | null;
 }
 
 /**
@@ -99,17 +106,103 @@ export function PersonalDocumentsSection({
   onDocumentAction,
   onOpenUploadModal,
   CardSkeleton,
+  isFilterActive,
+  searchQuery = "",
+  selectedTagId = null,
 }: PersonalDocumentsSectionProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
+  // Local state cho Bundle Expanded Grid
+  const [isExpandedMode, setIsExpandedMode] = useState(false);
+  const [bundleChildrenMap, setBundleChildrenMap] = useState<Map<string, DocCardType[]>>(new Map());
+  const [loadingBundleIds, setLoadingBundleIds] = useState<Set<string>>(new Set());
+
+  // useEffect tự động expand khi filter active (không tự collapse khi filter tắt)
+  useEffect(() => {
+    if (isFilterActive) {
+      setIsExpandedMode(true);
+    }
+  }, [isFilterActive]);
+
+  // Lazy fetch bundle children
+  const fetchBundleChildren = useCallback(async (bundleId: string) => {
+    if (bundleChildrenMap.has(bundleId) || loadingBundleIds.has(bundleId)) return;
+
+    setLoadingBundleIds((prev) => new Set(prev).add(bundleId));
+    try {
+      const children = await documentService.getBundleChildren(Number(bundleId));
+      const mapped: DocCardType[] = children.map((c) => ({
+        id: String(c.id),
+        name: c.title,
+        type: c.file_type || "file",
+        updatedAt: c.updated_at || c.created_at,
+        size: formatSize(c.file_size || 0),
+        extension: getFileExtension(c.file_path, c.file_type, c.title),
+        thumbnail_path: c.thumbnail_path ?? null,
+        file_path: c.file_path ?? null,
+        rawType: c.file_type,
+        tags: c.tags || [],
+        is_bundle: false,
+        bundle_parent_id: Number(bundleId),
+        bundle_children_count: null,
+      }));
+      setBundleChildrenMap((prev) => new Map(prev).set(bundleId, mapped));
+    } finally {
+      setLoadingBundleIds((prev) => {
+        const next = new Set(prev);
+        next.delete(bundleId);
+        return next;
+      });
+    }
+  }, [bundleChildrenMap, loadingBundleIds]);
+
+  // useEffect trigger fetch khi expanded
+  useEffect(() => {
+    if (!isExpandedMode) return;
+    const bundles = filteredDocCards.filter((d) => d.is_bundle);
+    bundles.forEach((b) => fetchBundleChildren(b.id));
+  }, [isExpandedMode, filteredDocCards, fetchBundleChildren]);
+
+  // Filter children logic khi filter active
+  const getFilteredChildren = useCallback((bundleId: string): DocCardType[] => {
+    const children = bundleChildrenMap.get(bundleId) ?? [];
+    if (!isFilterActive) return children;
+
+    return children.filter((c) => {
+      if (searchQuery && !c.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      if (
+        selectedTagId !== null &&
+        !c.tags?.some((t: any) => (t.id ?? t.tag_id) === selectedTagId)
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }, [bundleChildrenMap, isFilterActive, searchQuery, selectedTagId]);
+
   const listItems = filteredDocCards.map(toListItem);
+  const hasBundle = filteredDocCards.some((d) => d.is_bundle);
 
   return (
     <section className="pb-70">
-      {/* Header: title + view toggle */}
+      {/* Header: title + toggle bundle button (nếu có bundle) + view toggle */}
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-gray-700">Tài liệu</h2>
-        <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+        <div className="flex items-center gap-2">
+          {viewMode === "grid" && hasBundle && (
+            <button
+              type="button"
+              onClick={() => setIsExpandedMode((v) => !v)}
+              className="flex items-center gap-1.5 text-xs font-medium text-purple-700 hover:text-purple-900 border border-purple-200 rounded-lg px-2.5 py-1 hover:bg-purple-50 transition-colors"
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              {isExpandedMode ? "Thu gọn bundle" : "Xem nội dung bundle"}
+            </button>
+          )}
+          <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+        </div>
       </div>
 
       {/* Grid view */}
@@ -125,13 +218,51 @@ export function PersonalDocumentsSection({
               <CardSkeleton key={index} variant="document" />
             ))
           ) : filteredDocCards.length > 0 ? (
-            filteredDocCards.map((doc) => (
-              <DocumentCard
-                key={doc.id}
-                document={doc}
-                onAction={onDocumentAction}
-              />
-            ))
+            filteredDocCards.map((doc) => {
+              if (!doc.is_bundle) {
+                // Document thường — render như cũ
+                return (
+                  <DocumentCard
+                    key={doc.id}
+                    document={doc}
+                    onAction={onDocumentAction}
+                  />
+                );
+              }
+
+              // Bundle
+              if (!isExpandedMode) {
+                // Chế độ thu gọn — BundleDocumentCard như cũ
+                return (
+                  <BundleDocumentCard
+                    key={doc.id}
+                    document={doc}
+                    onAction={onDocumentAction}
+                  />
+                );
+              }
+
+              // Chế độ mở rộng — BundleExpandedFrame, chiếm toàn bộ hàng
+              const filteredChildren = getFilteredChildren(doc.id);
+              const isLoading = loadingBundleIds.has(doc.id);
+
+              // Nếu filter active và không có con nào khớp → ẩn bundle này
+              if (isFilterActive && !isLoading && filteredChildren.length === 0) {
+                return null;
+              }
+
+              return (
+                <div key={doc.id} className="col-span-full">
+                  <BundleExpandedFrame
+                    bundle={doc}
+                    children={filteredChildren}
+                    isLoading={isLoading}
+                    onDocumentAction={onDocumentAction}
+                    CardSkeleton={CardSkeleton}
+                  />
+                </div>
+              );
+            })
           ) : (
             <div className="col-span-full">
               <EmptyState
@@ -155,15 +286,15 @@ export function PersonalDocumentsSection({
             }
             onToggleBundle={async (bundleId) => {
               const children = await documentService.getBundleChildren(Number(bundleId));
-              return children.map(c => ({
+              return children.map((c) => ({
                 id: String(c.id),
                 title: c.title,
-                type: c.file_type || 'file',
+                type: c.file_type || "file",
                 updatedAt: c.updated_at || c.created_at,
                 size: c.file_size,
                 thumbnail_path: c.thumbnail_path,
                 tags: c.tags,
-                workspace_type: 'personal',
+                workspace_type: "personal",
                 is_bundle: false,
               }));
             }}

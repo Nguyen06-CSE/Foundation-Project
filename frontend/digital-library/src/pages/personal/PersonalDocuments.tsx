@@ -114,6 +114,12 @@ export function PersonalDocuments() {
     }
   }, [folders, selectedFolderId, setSelectedFolderId]);
 
+  const isFilterActive =
+    !!searchQuery.trim() ||
+    selectedTagId !== null ||
+    selectedFileType !== null ||
+    activeTab !== "all";
+
   return (
     <div className="flex flex-col gap-6">
       {/* 5. SỬ DỤNG COMPONENT FILTER BAR VỚI ĐẦY ĐỦ BỘ LỌC + QUẢN LÝ TAG */}
@@ -162,6 +168,9 @@ export function PersonalDocuments() {
         onDocumentAction={handleDocumentAction}
         onOpenUploadModal={() => setIsUploadOpen(true)}
         CardSkeleton={CardSkeleton}
+        isFilterActive={isFilterActive}
+        searchQuery={searchQuery}
+        selectedTagId={selectedTagId}
       />
 
       {/* --- CÁC MODALS --- */}
