@@ -1,4 +1,4 @@
-```text
+Directory structure:
 └── nguyen06-cse-foundation-project/
     ├── README.md
     ├── alembic.ini
@@ -126,6 +126,7 @@
     ├── database/
     │   └── README.MD
     ├── docs/
+    │   ├── README.md
     │   ├── feat/
     │   │   ├── bundle/
     │   │   │   ├── README.md
@@ -135,12 +136,20 @@
     │   │   │   └── FRONTEND.md
     │   │   └── community-library/
     │   │       ├── implementation.md
+    │   │       ├── management-extension.md
     │   │       └── spec.md
     │   ├── project-management/
+    │   │   ├── backlog.md
+    │   │   ├── known-issues.md
     │   │   ├── mau-slide-thuyet-trinh.md
     │   │   ├── MoTaDuAn.MD
-    │   │   ├── PhanRaChucNang.md
-    │   │   └── PROJECT_STATUS_REPORT.md
+    │   │   ├── PROJECT_STATUS_REPORT.md
+    │   │   ├── roadmap.md
+    │   │   └── Task Assignment/
+    │   │       ├── BoSung-PhanRaChucNang.md
+    │   │       ├── PhanRaChucNang.md
+    │   │       ├── PhanRaCongViec_ChiTiet.xlsx
+    │   │       └── PhanRaCongViec_TongQuat.xlsx
     │   ├── references/
     │   │   └── sql/
     │   │       ├── AddModel.sql
@@ -188,37 +197,58 @@
     │   │       │   │   ├── PublicLayout.tsx
     │   │       │   │   └── SubjectCard.tsx
     │   │       │   ├── shared/
-    │   │       │   │   ├── AddToBundleModal.tsx
-    │   │       │   │   ├── CardSkeleton.tsx
-    │   │       │   │   ├── ContributeModal.tsx
-    │   │       │   │   ├── CreateFolderModal.tsx
-    │   │       │   │   ├── DocumentCard.tsx
-    │   │       │   │   ├── DocumentContextMenu.tsx
-    │   │       │   │   ├── DocumentDetail.tsx
-    │   │       │   │   ├── DocumentFilterBar.tsx
-    │   │       │   │   ├── DocumentListView.tsx
-    │   │       │   │   ├── DocumentRow.tsx
-    │   │       │   │   ├── DocumentTypeTabs.tsx
-    │   │       │   │   ├── DynamicFilterDropdown.tsx
-    │   │       │   │   ├── EditTagsModal.tsx
-    │   │       │   │   ├── EmptyState.tsx
-    │   │       │   │   ├── FileIcon.tsx
-    │   │       │   │   ├── FolderCard.tsx
-    │   │       │   │   ├── FolderContextMenu.tsx
-    │   │       │   │   ├── Header.tsx
-    │   │       │   │   ├── NotificationDropdown.tsx
+    │   │       │   │   ├── README.md
+    │   │       │   │   ├── index.ts
     │   │       │   │   ├── PermissionBadge.tsx
-    │   │       │   │   ├── ProcessingDonut.tsx
     │   │       │   │   ├── ProtectedRoute.tsx
-    │   │       │   │   ├── RatingCard.tsx
-    │   │       │   │   ├── RenameDocumentModal.tsx
-    │   │       │   │   ├── SearchBar.tsx
-    │   │       │   │   ├── Sidebar.tsx
-    │   │       │   │   ├── StarRating.tsx
-    │   │       │   │   ├── StatCard.tsx
-    │   │       │   │   ├── TagDistribution.tsx
-    │   │       │   │   ├── UploadModal.tsx
-    │   │       │   │   ├── ViewToggle.tsx
+    │   │       │   │   ├── documents/
+    │   │       │   │   │   ├── DocumentContextMenu.tsx
+    │   │       │   │   │   ├── DocumentDetail.tsx
+    │   │       │   │   │   ├── DocumentFilterBar.tsx
+    │   │       │   │   │   ├── DocumentListView.tsx
+    │   │       │   │   │   ├── DocumentRow.tsx
+    │   │       │   │   │   ├── DocumentTypeTabs.tsx
+    │   │       │   │   │   ├── FileIcon.tsx
+    │   │       │   │   │   ├── index.ts
+    │   │       │   │   │   └── DocumentCard/
+    │   │       │   │   │       ├── README.md
+    │   │       │   │   │       ├── BundleDocumentCard.tsx
+    │   │       │   │   │       ├── DocumentCard.tsx
+    │   │       │   │   │       ├── DocumentCard.types.ts
+    │   │       │   │   │       ├── fileCard.utils.ts
+    │   │       │   │   │       ├── FileDocumentCard.tsx
+    │   │       │   │   │       └── index.ts
+    │   │       │   │   ├── feedback/
+    │   │       │   │   │   ├── CardSkeleton.tsx
+    │   │       │   │   │   ├── DynamicFilterDropdown.tsx
+    │   │       │   │   │   ├── EmptyState.tsx
+    │   │       │   │   │   ├── index.ts
+    │   │       │   │   │   ├── ProcessingDonut.tsx
+    │   │       │   │   │   ├── RatingCard.tsx
+    │   │       │   │   │   ├── StarRating.tsx
+    │   │       │   │   │   ├── StatCard.tsx
+    │   │       │   │   │   ├── TagDistribution.tsx
+    │   │       │   │   │   ├── TagSelector.tsx
+    │   │       │   │   │   └── ViewToggle.tsx
+    │   │       │   │   ├── folders/
+    │   │       │   │   │   ├── FolderCard.tsx
+    │   │       │   │   │   ├── FolderContextMenu.tsx
+    │   │       │   │   │   └── index.ts
+    │   │       │   │   ├── layout/
+    │   │       │   │   │   ├── Header.tsx
+    │   │       │   │   │   ├── index.ts
+    │   │       │   │   │   ├── NotificationDropdown.tsx
+    │   │       │   │   │   ├── SearchBar.tsx
+    │   │       │   │   │   └── Sidebar.tsx
+    │   │       │   │   ├── modals/
+    │   │       │   │   │   ├── AddToBundleModal.tsx
+    │   │       │   │   │   ├── ContributeModal.tsx
+    │   │       │   │   │   ├── CreateFolderModal.tsx
+    │   │       │   │   │   ├── EditTagsModal.tsx
+    │   │       │   │   │   ├── index.ts
+    │   │       │   │   │   ├── ManageTagsModal.tsx
+    │   │       │   │   │   ├── RenameDocumentModal.tsx
+    │   │       │   │   │   └── UploadModal.tsx
     │   │       │   │   └── trash/
     │   │       │   │       ├── index.ts
     │   │       │   │       ├── MobileTrashBatch.tsx
@@ -246,6 +276,7 @@
     │   │       │   ├── useGroupSpace.ts
     │   │       │   ├── useHighlightElement.ts
     │   │       │   ├── useRestoreSession.ts
+    │   │       │   ├── useTagManagement.ts
     │   │       │   ├── useViewPreference.ts
     │   │       │   ├── useWorkspace.ts
     │   │       │   └── useWorkspaceOperations.ts
@@ -301,6 +332,8 @@
     │   │       │   │   ├── LibraryHome.tsx
     │   │       │   │   ├── LibrarySubject.tsx
     │   │       │   │   └── admin/
+    │   │       │   │       ├── LibraryAdmin.tsx
+    │   │       │   │       ├── LibraryAdminStructure.tsx
     │   │       │   │       └── LibraryAdminSubmissions.tsx
     │   │       │   ├── personal/
     │   │       │   │   ├── BundleDetailPage.tsx
@@ -379,4 +412,3 @@
         └── deps/
             ├── _metadata.json
             └── package.json
-```
