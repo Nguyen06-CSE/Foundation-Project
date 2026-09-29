@@ -145,6 +145,7 @@ export function usePersonalDocuments(
       extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
       thumbnail_path: doc.thumbnail_path ?? null,
       file_path: doc.file_path ?? null,
+      content: doc.content,
       owner: { name: "You", avatar: "" },
       rawType: doc.file_type,
       tags: doc.tags || [],
