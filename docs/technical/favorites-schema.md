@@ -21,6 +21,9 @@ Lưu thông tin tài liệu được người dùng đánh dấu yêu thích kè
 **Ràng buộc Check Constraint:**
 - `chk_favorite_reading_status`: `CHECK (reading_status IN ('to_read', 'reading', 'completed'))`
 
+**Cập nhật Khóa ngoại (CASCADE):**
+- Khóa ngoại `favorites_user_id_fkey` và `favorites_document_id_fkey` ban đầu không có `ON DELETE CASCADE`. Trong migration `e4d7b2a9c123`, hai khóa ngoại này đã được cập nhật thành `ON DELETE CASCADE` để khi tài liệu hoặc user bị xóa, các bản ghi yêu thích liên quan sẽ được tự động dọn dẹp sạch sẽ.
+
 **Lưu ý dữ liệu cũ:**
 - Khi chạy migration, tất cả bản ghi yêu thích đã tồn tại trước đó sẽ tự động nhận giá trị `reading_status = 'to_read'`.
 
