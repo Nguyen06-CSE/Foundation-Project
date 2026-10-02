@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
 import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
+import { useFavoriteStore } from "@/stores/favoriteStore";
 import type { DocumentCardProps } from "./DocumentCard";
 
 // ======================================================
@@ -89,11 +91,25 @@ export function FileDocumentCard({
       : null;
 
   const tags = document.tags || [];
+  const docNumId = Number(document.id);
+  const isFavorite = useFavoriteStore((state) => (isNaN(docNumId) ? false : state.isFavorite(docNumId)));
+  const toggleFavorite = useFavoriteStore((state) => state.toggleFavorite);
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isNaN(docNumId)) {
+      await toggleFavorite(docNumId);
+    }
+  };
 
   return (
     <div
       id={`doc-${document.id}`}
-      className={`group relative flex h-[280px] w-full flex-col rounded-xl border border-gray-200/80 bg-white shadow-xs transition-all duration-200 hover:z-30 hover:-translate-y-1 hover:shadow-md focus-within:z-30 ${theme.border}`}
+      className={`group relative flex h-[280px] w-full flex-col rounded-xl border bg-white shadow-xs transition-all duration-200 hover:z-30 hover:-translate-y-1 hover:shadow-md focus-within:z-30 ${
+        isFavorite
+          ? "border-rose-300 ring-1 ring-rose-200 shadow-rose-50"
+          : `border-gray-200/80 ${theme.border}`
+      }`}
     >
       {/* Khung Preview */}
       <div
@@ -134,15 +150,33 @@ export function FileDocumentCard({
               {document.name}
             </h3>
 
-            <div
-              className="relative z-50 shrink-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-within:opacity-100"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <DocumentContextMenu
-                onAction={handleAction}
-                allowedActions={allowedActions}
-                extraItems={extraItems}
-              />
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleFavoriteClick}
+                title={isFavorite ? "Bỏ yêu thích" : "Thêm vào yêu thích"}
+                className={`p-1 rounded-full transition-all duration-150 focus:outline-none ${
+                  isFavorite
+                    ? "opacity-100 text-rose-500 hover:text-rose-600 hover:bg-rose-50"
+                    : "opacity-0 group-hover:opacity-100 text-gray-400 hover:text-rose-500 hover:bg-gray-100"
+                }`}
+              >
+                <Heart
+                  className={`h-4 w-4 ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`}
+                />
+              </button>
+
+              <div
+                className="relative z-50 opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-within:opacity-100"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <DocumentContextMenu
+                  documentId={document.id}
+                  onAction={handleAction}
+                  allowedActions={allowedActions}
+                  extraItems={extraItems}
+                />
+              </div>
             </div>
           </div>
 

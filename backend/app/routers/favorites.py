@@ -17,8 +17,10 @@ from app.models.tag import Tag
 from app.models.user import User
 from app.models.workspace import Workspace
 from app.models.workspace_member import WorkspaceMember
+from app.schemas.document import DocumentOut
 from app.schemas.favorite import (
     FavoriteCreate,
+    FavoriteDocumentOut,
     FavoriteDocumentOwnerOut,
     FavoriteDocumentSummaryOut,
     FavoriteListOut,
@@ -168,6 +170,33 @@ async def list_favorite_tags(
     ]
 
 
+@router.get("/ids", response_model=list[int])
+async def list_favorite_ids(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Lấy danh sách ID các tài liệu đã yêu thích còn hợp lệ và có quyền truy cập của user."""
+    stmt = (
+        select(Favorite)
+        .join(Document, Favorite.document_id == Document.id)
+        .options(selectinload(Favorite.document))
+        .where(
+            Favorite.user_id == current_user.id,
+            Document.is_deleted == False,
+            Document.is_orphaned == False,
+            Document.trash_source.is_(None),
+        )
+    )
+    result = await db.execute(stmt)
+    favs = result.scalars().all()
+
+    valid_ids: list[int] = []
+    for fav in favs:
+        if fav.document and await _can_user_access_document(db, current_user.id, fav.document):
+            valid_ids.append(fav.document_id)
+    return valid_ids
+
+
 # =========================================================================
 # 2. ROUTE DANH SÁCH & TẠO: GET / & POST /
 # =========================================================================
@@ -251,7 +280,7 @@ async def list_favorites(
     fav_items = result.scalars().all()
 
     # Kiểm tra quyền truy cập cho từng document
-    items: list[FavoriteDocumentSummaryOut] = []
+    items: list[FavoriteDocumentOut] = []
     for fav in fav_items:
         doc = fav.document
         if not doc:
@@ -261,39 +290,26 @@ async def list_favorites(
         if not has_access:
             continue
 
-        owner_out = None
-        if doc.owner:
-            owner_out = FavoriteDocumentOwnerOut(
-                id=doc.owner.id,
-                username=doc.owner.username,
-                full_name=doc.owner.full_name,
-                avatar=getattr(doc.owner, "avatar", None),
-            )
+        if doc.is_important is None:
+            doc.is_important = False
+        if doc.is_bundle is None:
+            doc.is_bundle = False
+        if doc.is_deleted is None:
+            doc.is_deleted = False
+        if doc.is_orphaned is None:
+            doc.is_orphaned = False
 
-        items.append(
-            FavoriteDocumentSummaryOut(
-                id=doc.id,
-                title=doc.title,
-                description=doc.description,
-                file_type=doc.file_type,
-                file_size=doc.file_size,
-                file_path=doc.file_path,
-                thumbnail_path=doc.thumbnail_path,
-                owner_id=doc.owner_id,
-                owner=owner_out,
-                is_important=doc.is_important or False,
-                is_bundle=doc.is_bundle or False,
-                created_at=doc.created_at,
-                updated_at=getattr(doc, "updated_at", None),
-                favorited_at=fav.created_at,
-                reading_status=fav.reading_status,
-                notes=fav.notes,
-                tags=[
-                    FavoriteTagOut(id=t.id, name=t.name, color=t.color)
-                    for t in (fav.tags or [])
-                ],
-            )
-        )
+        doc_out = DocumentOut.model_validate(doc)
+        fav_doc_data = doc_out.model_dump()
+        fav_doc_data["favorited_at"] = fav.created_at
+        fav_doc_data["reading_status"] = fav.reading_status
+        fav_doc_data["notes"] = fav.notes
+        fav_doc_data["favorite_tags"] = [
+            FavoriteTagOut(id=t.id, name=t.name, color=t.color)
+            for t in (fav.tags or [])
+        ]
+
+        items.append(FavoriteDocumentOut(**fav_doc_data))
 
     total_pages = (total + page_size - 1) // page_size if total > 0 else 0
 

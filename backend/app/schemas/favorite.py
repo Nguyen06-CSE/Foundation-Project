@@ -2,6 +2,7 @@
 from datetime import datetime
 from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field
+from app.schemas.document import DocumentOut
 
 ReadingStatus = Literal["to_read", "reading", "completed"]
 
@@ -61,31 +62,21 @@ class FavoriteDocumentOwnerOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class FavoriteDocumentSummaryOut(BaseModel):
-    id: int
-    title: str
-    description: Optional[str] = None
-    file_type: Optional[str] = None
-    file_size: Optional[int] = None
-    file_path: Optional[str] = None
-    thumbnail_path: Optional[str] = None
-    owner_id: Optional[int] = None
-    owner: Optional[FavoriteDocumentOwnerOut] = None
-    is_important: bool = False
-    is_bundle: bool = False
-    created_at: datetime
-    updated_at: Optional[datetime] = None
-    # Favorite specific fields
+class FavoriteDocumentOut(DocumentOut):
     favorited_at: datetime
     reading_status: ReadingStatus = "to_read"
     notes: Optional[str] = None
-    tags: list[FavoriteTagOut] = Field(default_factory=list)
+    favorite_tags: list[FavoriteTagOut] = Field(default_factory=list)
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+
+
+# Giữ FavoriteDocumentSummaryOut để tương thích ngược 100%
+FavoriteDocumentSummaryOut = FavoriteDocumentOut
 
 
 class FavoriteListOut(BaseModel):
-    items: list[FavoriteDocumentSummaryOut]
+    items: list[FavoriteDocumentOut]
     total: int
     page: int
     page_size: int

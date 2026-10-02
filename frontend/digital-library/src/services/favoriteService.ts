@@ -17,6 +17,12 @@ export const favoriteService = {
     return response.data;
   },
 
+  /** Lấy danh sách ID các tài liệu đã yêu thích */
+  getFavoriteIds: async (): Promise<number[]> => {
+    const response = await api.get<number[]>("/favorites/ids");
+    return response.data;
+  },
+
   /** Lấy danh sách thẻ cá nhân & gợi ý tag */
   getTags: async (q?: string): Promise<FavoriteTagWithCount[]> => {
     const response = await api.get<FavoriteTagWithCount[]>("/favorites/tags", {

@@ -412,7 +412,7 @@ def test_list_favorites_with_pagination_and_filters(test_client, mock_db, auth_u
     assert data["items"][0]["id"] == 10
     assert data["items"][0]["title"] == "Tài liệu Học tập"
     assert data["items"][0]["reading_status"] == "reading"
-    assert data["items"][0]["tags"][0]["name"] == "Học Tập"
+    assert data["items"][0]["favorite_tags"][0]["name"] == "Học Tập"
 
 
 def test_list_favorites_user_with_zero_favorites(test_client, mock_db):
@@ -432,3 +432,99 @@ def test_list_favorites_user_with_zero_favorites(test_client, mock_db):
     assert data["total"] == 0
     assert data["items"] == []
     assert data["total_pages"] == 0
+
+
+# =========================================================================
+# 7. TEST LẤY DANH SÁCH ID (GET /favorites/ids)
+# =========================================================================
+
+
+def test_get_favorite_ids_success(test_client, mock_db, auth_user_1):
+    doc1 = Document(id=10, owner_id=auth_user_1.id, is_deleted=False, is_orphaned=False, is_public=False)
+    doc2 = Document(id=20, owner_id=auth_user_1.id, is_deleted=False, is_orphaned=False, is_public=False)
+    fav1 = Favorite(user_id=auth_user_1.id, document_id=10)
+    fav1.document = doc1
+    fav2 = Favorite(user_id=auth_user_1.id, document_id=20)
+    fav2.document = doc2
+
+    mock_db.query_handlers.append(lambda s: AsyncMockResult(scalars_list=[fav1, fav2]))
+
+    response = test_client.get("/favorites/ids")
+    assert response.status_code == 200
+    data = response.json()
+    assert data == [10, 20]
+
+
+def test_get_favorite_ids_zero_favorites(test_client, mock_db):
+    mock_db.query_handlers.append(lambda s: AsyncMockResult(scalars_list=[]))
+
+    response = test_client.get("/favorites/ids")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_favorite_document_out_full_fields(test_client, mock_db, auth_user_1):
+    now = datetime.now(timezone.utc)
+    owner = User(id=auth_user_1.id, username="user1", full_name="User One")
+    doc = Document(
+        id=10,
+        owner_id=auth_user_1.id,
+        title="Tài liệu Chi tiết",
+        description="Mô tả chi tiết",
+        file_path="/uploads/test.pdf",
+        file_type="application/pdf",
+        file_size=1024,
+        thumbnail_path="/thumbs/10.jpg",
+        checksum="checksum_abc_123",
+        content="Nội dung OCR",
+        metadata_={"pages": 5, "author": "Nguyễn Văn A"},
+        is_important=True,
+        is_deleted=False,
+        is_orphaned=False,
+        is_bundle=False,
+        created_at=now,
+    )
+    doc.owner = owner
+    doc.tags = [Tag(id=1, name="Tag Doc")]
+    fav = Favorite(
+        user_id=auth_user_1.id,
+        document_id=10,
+        reading_status="to_read",
+        notes="Ghi chú cá nhân",
+        created_at=now,
+    )
+    fav.document = doc
+    fav.tags = [Tag(id=2, name="Tag Fav")]
+
+    def handler(stmt):
+        sql = str(stmt)
+        if "count" in sql.lower():
+            return AsyncMockResult(scalar=1)
+        if "FROM favorites" in sql:
+            return AsyncMockResult(scalars_list=[fav])
+        return None
+
+    mock_db.query_handlers.append(handler)
+
+    response = test_client.get("/favorites/")
+    assert response.status_code == 200
+    data = response.json()
+    item = data["items"][0]
+
+    # Kiểm tra các trường DocumentOut đầy đủ
+    assert item["id"] == 10
+    assert item["title"] == "Tài liệu Chi tiết"
+    assert item["description"] == "Mô tả chi tiết"
+    assert item["file_type"] == "application/pdf"
+    assert item["file_size"] == 1024
+    assert item["checksum"] == "checksum_abc_123"
+    assert item["thumbnail_path"] == "/thumbs/10.jpg"
+    assert item["content"] == "Nội dung OCR"
+    assert item["metadata"] == {"pages": 5, "author": "Nguyễn Văn A"}
+    assert item["is_important"] is True
+    # Kiểm tra các trường Favorite
+    assert item["reading_status"] == "to_read"
+    assert item["notes"] == "Ghi chú cá nhân"
+    assert len(item["favorite_tags"]) == 1
+    assert item["favorite_tags"][0]["name"] == "Tag Fav"
+

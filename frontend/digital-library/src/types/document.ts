@@ -109,12 +109,18 @@ export interface FavoriteDocument {
   owner?: DocumentOwner | null;
   is_important: boolean;
   is_bundle?: boolean;
+  is_deleted?: boolean;
+  is_orphaned?: boolean;
+  checksum?: string | null;
+  content?: string | null;
+  metadata?: Record<string, any> | null;
   created_at: string;
   updated_at?: string | null;
   favorited_at: string;
   reading_status: ReadingStatus;
   notes?: string | null;
-  tags: FavoriteTag[];
+  favorite_tags: FavoriteTag[];
+  tags?: string[] | null;
 }
 
 export interface FavoriteStats {

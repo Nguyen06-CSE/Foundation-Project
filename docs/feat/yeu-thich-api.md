@@ -13,7 +13,18 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ## 2. Danh sách Endpoints
 
-### 2.1. Thống kê tiến độ đọc
+### 2.1. Lấy danh sách ID tài liệu đã yêu thích (Mới)
+- **Method:** `GET`
+- **Path:** `/favorites/ids`
+- **Mô tả:** Trả về danh sách các `document_id` hợp lệ (chưa bị xóa, không bị orphan/rác) mà `current_user` đã đánh dấu yêu thích. Dùng để nạp nhanh vào global store của frontend.
+- **Response mẫu (`200 OK`):**
+```json
+[10, 25, 42, 58]
+```
+
+---
+
+### 2.2. Thống kê tiến độ đọc
 - **Method:** `GET`
 - **Path:** `/favorites/stats`
 - **Mô tả:** Lấy tổng số lượng và số lượng tài liệu theo từng trạng thái đọc của user hiện tại (đã tự động lọc bỏ tài liệu bị xóa/gỡ).
@@ -29,7 +40,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.2. Danh sách thẻ cá nhân & Gợi ý (Autocomplete)
+### 2.3. Danh sách thẻ cá nhân & Gợi ý (Autocomplete)
 - **Method:** `GET`
 - **Path:** `/favorites/tags`
 - **Query Parameters:**
@@ -55,7 +66,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.3. Lấy danh sách tài liệu yêu thích
+### 2.4. Lấy danh sách tài liệu yêu thích (Kế thừa DocumentOut)
 - **Method:** `GET`
 - **Path:** `/favorites/`
 - **Query Parameters:**
@@ -87,18 +98,24 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
       },
       "is_important": false,
       "is_bundle": false,
+      "is_deleted": false,
+      "is_orphaned": false,
+      "checksum": "abc123hash",
+      "content": "Nội dung trích xuất...",
+      "metadata": {},
       "created_at": "2026-09-20T10:00:00Z",
       "updated_at": "2026-09-20T10:00:00Z",
       "favorited_at": "2026-10-02T14:30:00Z",
       "reading_status": "reading",
       "notes": "Đang đọc chương 3",
-      "tags": [
+      "favorite_tags": [
         {
           "id": 1,
           "name": "Toán Cao Cấp",
           "color": "#2E7D32"
         }
-      ]
+      ],
+      "tags": ["toan", "giao-trinh"]
     }
   ],
   "total": 1,
@@ -110,7 +127,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.4. Thêm tài liệu vào danh sách yêu thích
+### 2.5. Thêm tài liệu vào danh sách yêu thích
 - **Method:** `POST`
 - **Path:** `/favorites/`
 - **Request Body:**
@@ -134,7 +151,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
   "created_at": "2026-10-02T14:30:00Z",
   "reading_status": "to_read",
   "notes": "Cần xem trước kỳ thi",
-  "tags": [
+  "favorite_tags": [
     { "id": 1, "name": "Toán Cao Cấp", "color": "#2E7D32" }
   ]
 }
@@ -142,7 +159,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.5. Cập nhật yêu thích (Trạng thái đọc, Ghi chú, Thẻ)
+### 2.6. Cập nhật yêu thích (Trạng thái đọc, Ghi chú, Thẻ)
 - **Method:** `PATCH`
 - **Path:** `/favorites/{document_id}`
 - **Request Body:**
@@ -161,7 +178,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.6. Xóa tài liệu khỏi danh sách yêu thích
+### 2.7. Xóa tài liệu khỏi danh sách yêu thích
 - **Method:** `DELETE`
 - **Path:** `/favorites/{document_id}`
 - **Response:** `204 No Content`
@@ -169,7 +186,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.7. Gắn thẻ vào tài liệu yêu thích
+### 2.8. Gắn thẻ vào tài liệu yêu thích
 - **Method:** `POST`
 - **Path:** `/favorites/{document_id}/tags`
 - **Request Body (Một trong hai cách):**
@@ -188,7 +205,7 @@ Tài liệu mô tả chi tiết các RESTful API endpoints của hệ thống Y�
 
 ---
 
-### 2.8. Gỡ thẻ khỏi tài liệu yêu thích
+### 2.9. Gỡ thẻ khỏi tài liệu yêu thích
 - **Method:** `DELETE`
 - **Path:** `/favorites/{document_id}/tags/{tag_id}`
 - **Response:** `204 No Content`
@@ -204,7 +221,7 @@ cd backend
 venv\Scripts\pytest tests/test_favorites.py -v
 ```
 
-### Danh sách các trường hợp kiểm thử (16 tests):
+### Danh sách các trường hợp kiểm thử (19 tests):
 1. `test_add_favorite_success`: Thêm yêu thích thành công (201).
 2. `test_add_favorite_duplicate_returns_409`: Báo lỗi 409 khi thêm trùng.
 3. `test_add_favorite_nonexistent_document_returns_404`: Báo lỗi 404 khi doc không tồn tại.
@@ -221,3 +238,7 @@ venv\Scripts\pytest tests/test_favorites.py -v
 14. `test_remove_tag_from_favorite_keeps_original_tag`: Gỡ thẻ khỏi favorite chỉ xóa liên kết, giữ nguyên thẻ gốc (204).
 15. `test_list_favorites_with_pagination_and_filters`: Phân trang, lọc theo trạng thái đọc và lọc thẻ (200).
 16. `test_list_favorites_user_with_zero_favorites`: Trả về danh sách rỗng an toàn khi chưa có yêu thích (200).
+17. `test_get_favorite_ids_success`: Lấy mảng ID tài liệu đã yêu thích (200).
+18. `test_get_favorite_ids_zero_favorites`: Lấy mảng ID rỗng khi user chưa yêu thích tài liệu nào (200).
+19. `test_favorite_document_out_full_fields`: Đảm bảo FavoriteDocumentOut trả về đầy đủ các trường của DocumentOut (200).
+

@@ -15,8 +15,6 @@ import {
   X,
   Edit3,
   Trash2,
-  Download,
-  ExternalLink,
   ChevronLeft,
   ChevronRight,
   Sparkles,
@@ -29,9 +27,12 @@ import {
 
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { FileIcon } from "@/components/shared/documents/FileIcon";
+import { DocumentCard, type DocumentItem } from "@/components/shared/documents/DocumentCard";
+import { DocumentListView } from "@/components/shared/documents/DocumentListView";
+import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import { favoriteService } from "@/services/favoriteService";
 import { useAuthStore } from "@/stores/authStore";
+import { useFavoriteStore } from "@/stores/favoriteStore";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { cn } from "@/utils/cn";
@@ -95,6 +96,7 @@ export default function FavoritesPage() {
   const { token } = useAuthStore();
 
   // Filters state
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [selectedStatus, setSelectedStatus] = useState<ReadingStatus | "all">("all");
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
@@ -161,7 +163,8 @@ export default function FavoritesPage() {
 
   const removeFavoriteMutation = useMutation({
     mutationFn: (docId: number) => favoriteService.removeFavorite(docId),
-    onSuccess: () => {
+    onSuccess: (_, docId) => {
+      useFavoriteStore.getState().removeFavoriteId(docId);
       queryClient.invalidateQueries({ queryKey: ["favorites"] });
       queryClient.invalidateQueries({ queryKey: ["favorite-stats"] });
       queryClient.invalidateQueries({ queryKey: ["favorite-tags"] });
@@ -379,6 +382,9 @@ export default function FavoritesPage() {
                 ))}
               </select>
             </div>
+
+            {/* View Mode Toggle */}
+            <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
           </div>
         </div>
 
@@ -428,7 +434,7 @@ export default function FavoritesPage() {
       </div>
 
       {/* ============================================================
-          3. DANH SÁCH TÀI LIỆU YÊU THÍCH (GRID)
+          3. DANH SÁCH TÀI LIỆU YÊU THÍCH (GRID HOẶC LIST)
       ============================================================ */}
       {isListLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -500,68 +506,80 @@ export default function FavoritesPage() {
             </Button>
           )}
         </div>
+      ) : viewMode === "list" ? (
+        /* Dạng Danh Sách (Tái sử dụng DocumentListView) */
+        <DocumentListView
+          documents={filteredItems.map((doc) => ({
+            id: doc.id,
+            title: doc.title,
+            type: doc.file_type || "pdf",
+            size: doc.file_size || 0,
+            updatedAt: doc.favorited_at || doc.created_at,
+            thumbnail_path: doc.thumbnail_path,
+            is_bundle: doc.is_bundle,
+            tags: doc.favorite_tags || [],
+            owner: doc.owner
+              ? {
+                  username: doc.owner.username,
+                  full_name: doc.owner.full_name || undefined,
+                  avatar_url: doc.owner.avatar_url || undefined,
+                }
+              : undefined,
+          }))}
+          showOwner={true}
+          workspaceType="personal"
+          onAction={(action, docId) => {
+            const numId = Number(docId);
+            const foundDoc = filteredItems.find((d) => d.id === numId);
+            if (action === "view" && foundDoc) handlePreview(foundDoc);
+            else if (action === "download" && foundDoc) handleDownload(foundDoc);
+            else if (action === "favorite" && foundDoc) removeFavoriteMutation.mutate(numId);
+          }}
+        />
       ) : (
+        /* Dạng Lưới (Tái sử dụng DocumentCard + Thẻ quản lý tiến độ đọc/ghi chú/thẻ bên dưới) */
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filteredItems.map((doc) => {
             const statusCfg = READING_STATUS_CONFIG[doc.reading_status] || READING_STATUS_CONFIG.to_read;
             const StatusIcon = statusCfg.icon;
+            const favTags = doc.favorite_tags || [];
+
+            const docItem: DocumentItem = {
+              id: String(doc.id),
+              name: doc.title,
+              type: doc.file_type || "pdf",
+              updatedAt: formatRelativeDate(doc.favorited_at || doc.created_at),
+              size: formatSize(doc.file_size || 0),
+              thumbnail_path: doc.thumbnail_path,
+              is_bundle: doc.is_bundle,
+              tags: favTags.map((t) => ({ id: t.id, name: t.name })),
+            };
 
             return (
-              <Card
+              <div
                 key={doc.id}
-                className="group relative bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-gray-300 transition-all flex flex-col justify-between overflow-hidden"
+                className="flex flex-col bg-white border border-gray-200/90 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition-all"
               >
-                {/* Dải màu trạng thái trên đầu Card */}
-                <div
-                  className={cn(
-                    "absolute top-0 left-0 right-0 h-1.5 transition-colors",
-                    doc.reading_status === "completed"
-                      ? "bg-emerald-500"
-                      : doc.reading_status === "reading"
-                      ? "bg-blue-500"
-                      : "bg-amber-400"
-                  )}
-                />
+                {/* 1. Component DocumentCard chuẩn (hiển thị thông tin file y hệt trang Tài liệu) */}
+                <div className="p-2 bg-gray-50/30">
+                  <DocumentCard
+                    document={docItem}
+                    onAction={(action) => {
+                      if (action === "view") handlePreview(doc);
+                      else if (action === "download") handleDownload(doc);
+                      else if (action === "favorite") removeFavoriteMutation.mutate(doc.id);
+                    }}
+                    basePath="/personal/documents"
+                  />
+                </div>
 
-                <div className="space-y-4">
-                  {/* Header: FileIcon, Title, Size, Menu */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <div className="shrink-0">
-                        <FileIcon type={doc.file_type || "pdf"} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3
-                          onClick={() => handlePreview(doc)}
-                          title={doc.title}
-                          className="text-sm font-semibold text-gray-900 truncate hover:text-primary-600 cursor-pointer transition-colors"
-                        >
-                          {doc.title}
-                        </h3>
-                        <div className="flex items-center gap-2 text-[11px] text-gray-400 mt-1">
-                          <span>{formatSize(doc.file_size || 0)}</span>
-                          <span>•</span>
-                          <span>Đã lưu {formatRelativeDate(doc.favorited_at)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Nút Bỏ yêu thích nhanh */}
-                    <button
-                      type="button"
-                      title="Bỏ yêu thích"
-                      onClick={() => removeFavoriteMutation.mutate(doc.id)}
-                      className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors shrink-0"
-                    >
-                      <Heart className="h-4 w-4 fill-red-500" />
-                    </button>
-                  </div>
-
-                  {/* Trạng thái đọc (Interactive Dropdown / Select) */}
+                {/* 2. Phần mở rộng quản lý Tiến độ đọc, Ghi chú & Thẻ yêu thích */}
+                <div className="p-4 space-y-3 bg-white border-t border-gray-100 flex-1 flex flex-col justify-between">
+                  {/* Trạng thái đọc */}
                   <div className="flex items-center justify-between bg-gray-50/80 p-2 rounded-xl border border-gray-100">
                     <span className="text-[11px] font-medium text-gray-500 flex items-center gap-1.5">
                       <StatusIcon className={cn("h-3.5 w-3.5", statusCfg.textCls)} />
-                      Tiến độ:
+                      Tiến độ đọc:
                     </span>
                     <select
                       value={doc.reading_status}
@@ -586,7 +604,7 @@ export default function FavoritesPage() {
                   <div className="bg-amber-50/30 border border-amber-100/80 rounded-xl p-3 text-xs space-y-1 relative group/note">
                     <div className="flex items-center justify-between text-[11px] font-medium text-amber-900/70">
                       <span className="flex items-center gap-1">
-                        <Edit3 className="h-3 w-3" /> Ghi chú cá nhân:
+                        <Edit3 className="h-3 w-3" /> Ghi chú:
                       </span>
                       <button
                         type="button"
@@ -605,10 +623,10 @@ export default function FavoritesPage() {
                     )}
                   </div>
 
-                  {/* Danh sách thẻ (Tags) */}
-                  <div className="space-y-1.5">
+                  {/* Danh sách thẻ yêu thích */}
+                  <div className="space-y-1.5 pt-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-medium text-gray-400">Thẻ ({doc.tags?.length || 0}/10):</span>
+                      <span className="text-[11px] font-medium text-gray-400">Thẻ yêu thích ({favTags.length}/10):</span>
                       <button
                         type="button"
                         onClick={() => setTagModalDoc(doc)}
@@ -618,8 +636,8 @@ export default function FavoritesPage() {
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-1.5 min-h-6">
-                      {doc.tags && doc.tags.length > 0 ? (
-                        doc.tags.map((tag) => (
+                      {favTags.length > 0 ? (
+                        favTags.map((tag) => (
                           <span
                             key={tag.id}
                             className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] bg-gray-100 text-gray-700 border border-gray-200 group/tag"
@@ -646,29 +664,7 @@ export default function FavoritesPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* Footer: Xem chi tiết & Tải về */}
-                <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between gap-2">
-                  <Button
-                    onClick={() => handlePreview(doc)}
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 rounded-xl text-xs h-8"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                    Xem chi tiết
-                  </Button>
-                  <Button
-                    onClick={() => handleDownload(doc)}
-                    variant="ghost"
-                    size="sm"
-                    className="rounded-xl text-xs h-8 text-gray-600 hover:text-gray-900"
-                    title="Tải xuống tài liệu"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </Card>
+              </div>
             );
           })}
         </div>
@@ -876,7 +872,7 @@ function AddTagModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Suggestions filtered by inputVal
-  const currentAssignedTagIds = (doc.tags || []).map((t) => t.id);
+  const currentAssignedTagIds = (doc.favorite_tags || []).map((t) => t.id);
   const cleanInput = inputVal.trim().replace(/^#+/, "");
 
   const suggestions = availableTags.filter(
