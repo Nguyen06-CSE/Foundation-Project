@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Package, Heart } from "lucide-react";
 import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
 import { useFavoriteStore } from "@/stores/favoriteStore";
+import { navigateToBundle } from "@/utils/bundleNavigation";
 import type { DocumentCardProps } from "./DocumentCard";
 
 export function BundleDocumentCard({
@@ -12,13 +13,18 @@ export function BundleDocumentCard({
   extraItems,
 }: DocumentCardProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const targetUrl = basePath.startsWith("/groups/")
     ? `${basePath.split("/documents")[0]}/bundle/${document.id}`
     : `/personal/bundle/${document.id}`;
 
+  const handleOpenBundle = () => {
+    navigateToBundle(navigate, location, targetUrl);
+  };
+
   const handleAction = (action: string) => {
-    if (action === "view") navigate(targetUrl);
+    if (action === "view") handleOpenBundle();
     else onAction(action, document.id);
   };
 
@@ -47,7 +53,7 @@ export function BundleDocumentCard({
       {/* Khung Preview Bundle */}
       <div
         className="relative h-[135px] w-full shrink-0 cursor-pointer overflow-hidden rounded-t-xl bg-purple-100/40 flex items-center justify-center transition-colors"
-        onClick={() => navigate(targetUrl)}
+        onClick={handleOpenBundle}
       >
         <div className="absolute left-2.5 top-2.5 z-10">
           <span className="inline-flex items-center rounded-md bg-purple-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-purple-700 backdrop-blur-xs">
@@ -70,7 +76,7 @@ export function BundleDocumentCard({
         <div>
           <div className="flex items-start justify-between gap-1.5">
             <h3
-              onClick={() => navigate(targetUrl)}
+              onClick={handleOpenBundle}
               className="line-clamp-2 flex-1 cursor-pointer text-sm font-semibold text-gray-800 transition-colors hover:text-purple-600 leading-snug"
               title={document.name}
             >

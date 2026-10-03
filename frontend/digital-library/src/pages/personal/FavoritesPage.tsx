@@ -1,8 +1,7 @@
-// frontend/digital-library/src/pages/personal/FavoritesPage.tsx
-
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { navigateToBundle } from "@/utils/bundleNavigation";
 import {
   Heart,
   BookOpen,
@@ -27,9 +26,13 @@ import {
 
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { DocumentCard, type DocumentItem } from "@/components/shared/documents/DocumentCard";
 import { DocumentListView } from "@/components/shared/documents/DocumentListView";
-import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
+import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
+import {
+  ViewToggle,
+  type ViewMode,
+} from "@/components/shared/feedback/ViewToggle";
 import { favoriteService } from "@/services/favoriteService";
 import { useAuthStore } from "@/stores/authStore";
 import { useFavoriteStore } from "@/stores/favoriteStore";
@@ -60,7 +63,7 @@ const READING_STATUS_CONFIG: Record<
   to_read: {
     label: "Đọc sau",
     icon: Clock,
-    badgeCls: "bg-amber-100 text-amber-800 border-amber-200",
+    badgeCls: "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200",
     bgCls: "bg-amber-50",
     borderCls: "border-amber-300",
     textCls: "text-amber-700",
@@ -68,7 +71,7 @@ const READING_STATUS_CONFIG: Record<
   reading: {
     label: "Đang đọc",
     icon: BookOpen,
-    badgeCls: "bg-blue-100 text-blue-800 border-blue-200",
+    badgeCls: "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200",
     bgCls: "bg-blue-50",
     borderCls: "border-blue-300",
     textCls: "text-blue-700",
@@ -76,7 +79,8 @@ const READING_STATUS_CONFIG: Record<
   completed: {
     label: "Đã đọc",
     icon: CheckCircle2,
-    badgeCls: "bg-emerald-100 text-emerald-800 border-emerald-200",
+    badgeCls:
+      "bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200",
     bgCls: "bg-emerald-50",
     borderCls: "border-emerald-300",
     textCls: "text-emerald-700",
@@ -84,29 +88,70 @@ const READING_STATUS_CONFIG: Record<
 };
 
 const SORT_OPTIONS = [
-  { label: "Mới yêu thích nhất", sort_by: "created_at", sort_order: "desc" as const },
+  {
+    label: "Mới yêu thích nhất",
+    sort_by: "created_at",
+    sort_order: "desc" as const,
+  },
   { label: "Cũ nhất", sort_by: "created_at", sort_order: "asc" as const },
-  { label: "Tên tài liệu (A - Z)", sort_by: "title", sort_order: "asc" as const },
-  { label: "Tên tài liệu (Z - A)", sort_by: "title", sort_order: "desc" as const },
+  {
+    label: "Tên tài liệu (A - Z)",
+    sort_by: "title",
+    sort_order: "asc" as const,
+  },
+  {
+    label: "Tên tài liệu (Z - A)",
+    sort_by: "title",
+    sort_order: "desc" as const,
+  },
 ];
+
+const getFileExtension = (type?: string) => {
+  if (!type) return "FILE";
+  let cleanType = type.toLowerCase().trim();
+  if (cleanType.startsWith(".")) cleanType = cleanType.substring(1);
+  const mimeMap: Record<string, string> = {
+    "application/pdf": "pdf",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      "docx",
+    "application/vnd.ms-excel": "xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    "application/vnd.ms-powerpoint": "ppt",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+      "pptx",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+  };
+  return (
+    mimeMap[cleanType] ||
+    cleanType.split("/").pop() ||
+    cleanType
+  ).toUpperCase();
+};
 
 export default function FavoritesPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const { token } = useAuthStore();
 
   // Filters state
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [selectedStatus, setSelectedStatus] = useState<ReadingStatus | "all">("all");
+  const [selectedStatus, setSelectedStatus] = useState<ReadingStatus | "all">(
+    "all",
+  );
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [tagMode, setTagMode] = useState<"any" | "all">("any");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortIndex, setSortIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12;
+  const pageSize = 15;
 
   // Modals state
-  const [notesModalDoc, setNotesModalDoc] = useState<FavoriteDocument | null>(null);
+  const [notesModalDoc, setNotesModalDoc] = useState<FavoriteDocument | null>(
+    null,
+  );
   const [tagModalDoc, setTagModalDoc] = useState<FavoriteDocument | null>(null);
 
   // 1. Fetch Stats
@@ -183,7 +228,9 @@ export default function FavoritesPage() {
   // Handlers
   const handleToggleTagFilter = (tagId: number) => {
     setSelectedTagIds((prev) =>
-      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
+      prev.includes(tagId)
+        ? prev.filter((id) => id !== tagId)
+        : [...prev, tagId],
     );
     setCurrentPage(1);
   };
@@ -195,16 +242,20 @@ export default function FavoritesPage() {
   };
 
   const handlePreview = (doc: FavoriteDocument) => {
-    navigate(`/personal/documents/${doc.id}`);
+    if (doc.is_bundle) {
+      navigateToBundle(navigate, location, `/personal/bundle/${doc.id}`);
+    } else {
+      navigate(`/personal/documents/${doc.id}`);
+    }
   };
 
-  // Filter items in memory if client search query is typed
   const rawItems = favListResponse?.items || [];
   const filteredItems = searchQuery.trim()
     ? rawItems.filter(
         (doc) =>
           doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (doc.notes && doc.notes.toLowerCase().includes(searchQuery.toLowerCase()))
+          (doc.notes &&
+            doc.notes.toLowerCase().includes(searchQuery.toLowerCase())),
       )
     : rawItems;
 
@@ -213,9 +264,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-6 sm:p-8 space-y-8">
-      {/* ============================================================
-          1. HEADER & THỐNG KÊ TIẾN ĐỘ ĐỌC (STATS CARDS)
-      ============================================================ */}
+      {/* 1. HEADER & THỐNG KÊ TIẾN ĐỘ ĐỌC */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -231,7 +280,6 @@ export default function FavoritesPage() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {/* Tất cả */}
           <Card
             onClick={() => {
               setSelectedStatus("all");
@@ -241,20 +289,23 @@ export default function FavoritesPage() {
               "p-4 cursor-pointer transition-all border rounded-2xl hover:shadow-md",
               selectedStatus === "all"
                 ? "border-primary-500 ring-2 ring-primary-100 bg-white shadow-sm"
-                : "border-gray-200 bg-white hover:border-gray-300"
+                : "border-gray-200 bg-white hover:border-gray-300",
             )}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-500">Tất cả yêu thích</span>
+              <span className="text-xs font-medium text-gray-500">
+                Tất cả yêu thích
+              </span>
               <BookmarkCheck className="h-4 w-4 text-gray-400" />
             </div>
             <div className="text-2xl font-bold text-gray-900 mt-2">
-              {isStatsLoading ? "..." : stats?.total ?? 0}
+              {isStatsLoading ? "..." : (stats?.total ?? 0)}
             </div>
-            <p className="text-[11px] text-gray-400 mt-1">Tổng số tài liệu đã lưu</p>
+            <p className="text-[11px] text-gray-400 mt-1">
+              Tổng số tài liệu đã lưu
+            </p>
           </Card>
 
-          {/* Đọc sau */}
           <Card
             onClick={() => {
               setSelectedStatus("to_read");
@@ -264,20 +315,21 @@ export default function FavoritesPage() {
               "p-4 cursor-pointer transition-all border rounded-2xl hover:shadow-md",
               selectedStatus === "to_read"
                 ? "border-amber-500 ring-2 ring-amber-100 bg-amber-50/50 shadow-sm"
-                : "border-gray-200 bg-white hover:border-amber-200"
+                : "border-gray-200 bg-white hover:border-amber-200",
             )}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-amber-700">Đọc sau</span>
+              <span className="text-xs font-medium text-amber-700">
+                Đọc sau
+              </span>
               <Clock className="h-4 w-4 text-amber-500" />
             </div>
             <div className="text-2xl font-bold text-amber-900 mt-2">
-              {isStatsLoading ? "..." : stats?.to_read ?? 0}
+              {isStatsLoading ? "..." : (stats?.to_read ?? 0)}
             </div>
             <p className="text-[11px] text-amber-600/80 mt-1">Chờ đọc</p>
           </Card>
 
-          {/* Đang đọc */}
           <Card
             onClick={() => {
               setSelectedStatus("reading");
@@ -287,20 +339,21 @@ export default function FavoritesPage() {
               "p-4 cursor-pointer transition-all border rounded-2xl hover:shadow-md",
               selectedStatus === "reading"
                 ? "border-blue-500 ring-2 ring-blue-100 bg-blue-50/50 shadow-sm"
-                : "border-gray-200 bg-white hover:border-blue-200"
+                : "border-gray-200 bg-white hover:border-blue-200",
             )}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-blue-700">Đang đọc</span>
+              <span className="text-xs font-medium text-blue-700">
+                Đang đọc
+              </span>
               <BookOpen className="h-4 w-4 text-blue-500" />
             </div>
             <div className="text-2xl font-bold text-blue-900 mt-2">
-              {isStatsLoading ? "..." : stats?.reading ?? 0}
+              {isStatsLoading ? "..." : (stats?.reading ?? 0)}
             </div>
             <p className="text-[11px] text-blue-600/80 mt-1">Đang tiến hành</p>
           </Card>
 
-          {/* Đã đọc */}
           <Card
             onClick={() => {
               setSelectedStatus("completed");
@@ -310,27 +363,26 @@ export default function FavoritesPage() {
               "p-4 cursor-pointer transition-all border rounded-2xl hover:shadow-md",
               selectedStatus === "completed"
                 ? "border-emerald-500 ring-2 ring-emerald-100 bg-emerald-50/50 shadow-sm"
-                : "border-gray-200 bg-white hover:border-emerald-200"
+                : "border-gray-200 bg-white hover:border-emerald-200",
             )}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-emerald-700">Đã đọc</span>
+              <span className="text-xs font-medium text-emerald-700">
+                Đã đọc
+              </span>
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
             </div>
             <div className="text-2xl font-bold text-emerald-900 mt-2">
-              {isStatsLoading ? "..." : stats?.completed ?? 0}
+              {isStatsLoading ? "..." : (stats?.completed ?? 0)}
             </div>
             <p className="text-[11px] text-emerald-600/80 mt-1">Hoàn thành</p>
           </Card>
         </div>
       </div>
 
-      {/* ============================================================
-          2. THANH CÔNG CỤ LỌC, TÌM KIẾM & SẮP XẾP
-      ============================================================ */}
+      {/* 2. THANH CÔNG CỤ LỌC, TÌM KIẾM & SẮP XẾP */}
       <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
-          {/* Ô tìm kiếm nhanh */}
           <div className="relative w-full md:w-80">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
@@ -350,7 +402,6 @@ export default function FavoritesPage() {
             )}
           </div>
 
-          {/* Sắp xếp & Chế độ tag */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
             {selectedTagIds.length > 1 && (
               <div className="flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 px-2.5 py-1.5 rounded-xl border border-gray-200">
@@ -360,7 +411,9 @@ export default function FavoritesPage() {
                   onClick={() => setTagMode(tagMode === "any" ? "all" : "any")}
                   className="font-medium text-primary-600 hover:underline"
                 >
-                  {tagMode === "any" ? "Chứa một trong số thẻ" : "Chứa tất cả thẻ"}
+                  {tagMode === "any"
+                    ? "Chứa một trong số thẻ"
+                    : "Chứa tất cả thẻ"}
                 </button>
               </div>
             )}
@@ -383,12 +436,11 @@ export default function FavoritesPage() {
               </select>
             </div>
 
-            {/* View Mode Toggle */}
             <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
           </div>
         </div>
 
-        {/* Thanh lọc Thẻ (Tag Filter Bar) */}
+        {/* Thanh lọc Thẻ */}
         {availableTags.length > 0 && (
           <div className="pt-3 border-t border-gray-100 flex flex-wrap items-center gap-2">
             <span className="text-xs font-medium text-gray-400 flex items-center gap-1.5">
@@ -405,14 +457,16 @@ export default function FavoritesPage() {
                     "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all",
                     isSelected
                       ? "bg-primary-600 text-white shadow-sm ring-2 ring-primary-200"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200",
                   )}
                 >
                   <span>#{tag.name}</span>
                   <span
                     className={cn(
                       "text-[10px] px-1.5 py-0.2 rounded-full",
-                      isSelected ? "bg-primary-700 text-white" : "bg-gray-200 text-gray-600"
+                      isSelected
+                        ? "bg-primary-700 text-white"
+                        : "bg-gray-200 text-gray-600",
                     )}
                   >
                     {tag.document_count}
@@ -433,36 +487,36 @@ export default function FavoritesPage() {
         )}
       </div>
 
-      {/* ============================================================
-          3. DANH SÁCH TÀI LIỆU YÊU THÍCH (GRID HOẶC LIST)
-      ============================================================ */}
+      {/* 3. DANH SÁCH TÀI LIỆU YÊU THÍCH (GRID KHUÔN ĐỘ DÀI/RỘNG CHUẨN) */}
       {isListLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="h-64 bg-white border border-gray-200 rounded-2xl animate-pulse p-5 space-y-4"
+              className="h-72 bg-white border border-gray-200 rounded-2xl animate-pulse p-3 space-y-3"
             >
-              <div className="flex gap-3">
-                <div className="h-10 w-10 bg-gray-200 rounded-xl" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-200 rounded w-1/2" />
-                </div>
-              </div>
-              <div className="h-16 bg-gray-100 rounded-xl" />
-              <div className="h-6 bg-gray-200 rounded w-1/3" />
+              <div className="h-32 bg-gray-100 rounded-xl" />
+              <div className="h-4 bg-gray-200 rounded w-3/4" />
+              <div className="h-8 bg-gray-100 rounded-xl" />
             </div>
           ))}
         </div>
       ) : isListError ? (
         <div className="p-12 text-center bg-white border border-red-100 rounded-3xl space-y-4 shadow-sm">
           <AlertCircle className="h-10 w-10 text-red-500 mx-auto" />
-          <h3 className="text-base font-semibold text-gray-900">Không thể tải danh sách yêu thích</h3>
+          <h3 className="text-base font-semibold text-gray-900">
+            Không thể tải danh sách yêu thích
+          </h3>
           <p className="text-xs text-gray-500 max-w-sm mx-auto">
-            Đã có lỗi xảy ra khi kết nối máy chủ. Vui lòng kiểm tra lại kết nối mạng.
+            Đã có lỗi xảy ra khi kết nối máy chủ. Vui lòng kiểm tra lại kết nối
+            mạng.
           </p>
-          <Button onClick={() => refetchList()} variant="outline" size="sm" className="rounded-xl">
+          <Button
+            onClick={() => refetchList()}
+            variant="outline"
+            size="sm"
+            className="rounded-xl"
+          >
             Thử lại
           </Button>
         </div>
@@ -507,7 +561,7 @@ export default function FavoritesPage() {
           )}
         </div>
       ) : viewMode === "list" ? (
-        /* Dạng Danh Sách (Tái sử dụng DocumentListView) */
+        /* Dạng Danh Sách */
         <DocumentListView
           documents={filteredItems.map((doc) => ({
             id: doc.id,
@@ -532,53 +586,149 @@ export default function FavoritesPage() {
             const numId = Number(docId);
             const foundDoc = filteredItems.find((d) => d.id === numId);
             if (action === "view" && foundDoc) handlePreview(foundDoc);
-            else if (action === "download" && foundDoc) handleDownload(foundDoc);
-            else if (action === "favorite" && foundDoc) removeFavoriteMutation.mutate(numId);
+            else if (action === "download" && foundDoc)
+              handleDownload(foundDoc);
+            else if (action === "favorite" && foundDoc)
+              removeFavoriteMutation.mutate(numId);
           }}
         />
       ) : (
-        /* Dạng Lưới (Tái sử dụng DocumentCard + Thẻ quản lý tiến độ đọc/ghi chú/thẻ bên dưới) */
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        /* Dạng Lưới Chuẩn 5 Cột / Màn hình nhỏ 2-3 cột (Đúng kích thước trang Tài liệu) */
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {filteredItems.map((doc) => {
-            const statusCfg = READING_STATUS_CONFIG[doc.reading_status] || READING_STATUS_CONFIG.to_read;
+            const statusCfg =
+              READING_STATUS_CONFIG[doc.reading_status] ||
+              READING_STATUS_CONFIG.to_read;
             const StatusIcon = statusCfg.icon;
             const favTags = doc.favorite_tags || [];
-
-            const docItem: DocumentItem = {
-              id: String(doc.id),
-              name: doc.title,
-              type: doc.file_type || "pdf",
-              updatedAt: formatRelativeDate(doc.favorited_at || doc.created_at),
-              size: formatSize(doc.file_size || 0),
-              thumbnail_path: doc.thumbnail_path,
-              is_bundle: doc.is_bundle,
-              tags: favTags.map((t) => ({ id: t.id, name: t.name })),
-            };
+            const extLabel = getFileExtension(doc.file_type || undefined);
 
             return (
               <div
                 key={doc.id}
-                className="flex flex-col bg-white border border-gray-200/90 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition-all"
+                className="flex flex-col bg-white border border-rose-300 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all justify-between"
               >
-                {/* 1. Component DocumentCard chuẩn (hiển thị thông tin file y hệt trang Tài liệu) */}
-                <div className="p-2 bg-gray-50/30">
-                  <DocumentCard
-                    document={docItem}
-                    onAction={(action) => {
-                      if (action === "view") handlePreview(doc);
-                      else if (action === "download") handleDownload(doc);
-                      else if (action === "favorite") removeFavoriteMutation.mutate(doc.id);
-                    }}
-                    basePath="/personal/documents"
-                  />
+                {/* 1. KHUNG CHÍNH TÀI LIỆU */}
+                <div>
+                  {/* Thumbnail Box có Tag Loại File góc trái bên trong (Chuẩn Hình 2) */}
+                  <div
+                    onClick={() => handlePreview(doc)}
+                    className={cn(
+                      "relative h-32 w-full flex items-center justify-center cursor-pointer transition-colors overflow-hidden",
+                      extLabel === "PDF"
+                        ? "bg-rose-50/60"
+                        : extLabel === "DOCX" || extLabel === "DOC"
+                          ? "bg-blue-50/60"
+                          : doc.is_bundle
+                            ? "bg-purple-50/60"
+                            : "bg-gray-50/80",
+                    )}
+                  >
+                    {/* Badge loại file NẰM BÊN TRONG góc trái */}
+                    <span
+                      className={cn(
+                        "absolute top-2.5 left-2.5 z-10 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide shadow-2xs",
+                        doc.is_bundle
+                          ? "bg-purple-100 text-purple-700"
+                          : extLabel === "PDF"
+                            ? "bg-rose-100 text-rose-700"
+                            : extLabel === "DOCX" || extLabel === "DOC"
+                              ? "bg-blue-100 text-blue-700"
+                              : "bg-gray-200/90 text-gray-700",
+                      )}
+                    >
+                      {doc.is_bundle ? "BUNDLE" : extLabel}
+                    </span>
+
+                    {doc.thumbnail_path ? (
+                      <img
+                        src={`${import.meta.env.VITE_API_URL || ""}/${doc.thumbnail_path}`}
+                        alt={doc.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <FileIcon
+                        type={doc.file_type || "default"}
+                        className="h-10 w-10 text-gray-400"
+                      />
+                    )}
+                  </div>
+
+                  {/* Thông tin Tiêu đề, Dung lượng, Tim & Menu 3 chấm */}
+                  <div className="p-3 space-y-2">
+                    <div className="flex items-start justify-between gap-1.5">
+                      <div className="min-w-0 flex-1">
+                        <h3
+                          onClick={() => handlePreview(doc)}
+                          className="text-sm font-bold text-gray-900 truncate cursor-pointer hover:text-primary-600 leading-snug"
+                          title={doc.title}
+                        >
+                          {doc.title}
+                        </h3>
+                        <p className="text-[11px] text-gray-400 mt-1">
+                          {formatSize(doc.file_size || 0)} •{" "}
+                          {formatRelativeDate(
+                            doc.favorited_at || doc.created_at,
+                          )}
+                        </p>
+                      </div>
+
+                      {/* Nút Trái tim + 3 chấm (Chuẩn Hình 1) */}
+                      <div className="flex items-center gap-0.5 shrink-0 pt-0.5">
+                        <button
+                          onClick={() => removeFavoriteMutation.mutate(doc.id)}
+                          className="p-1 rounded-full text-red-500 hover:bg-red-50 transition-colors"
+                          title="Bỏ yêu thích"
+                        >
+                          <Heart className="h-4 w-4 fill-red-500 text-red-500" />
+                        </button>
+
+                        <DocumentContextMenu
+                          documentId={doc.id}
+                          onAction={(action) => {
+                            if (action === "view") handlePreview(doc);
+                            else if (action === "download") handleDownload(doc);
+                            else if (action === "favorite")
+                              removeFavoriteMutation.mutate(doc.id);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Tag mặc định nội bộ của tài liệu */}
+                    <div className="pt-1.5 border-t border-gray-100 text-xs min-h-6">
+                      {doc.tags && doc.tags.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {doc.tags.map((t: any, idx) => {
+                            const tagLabel = typeof t === "string" ? t : t?.name || "";
+                            const tagKey = typeof t === "string" ? `${t}-${idx}` : t?.id || idx;
+                            return (
+                              <span
+                                key={tagKey}
+                                className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.2 rounded"
+                              >
+                                #{tagLabel}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 italic text-[11px]">
+                          Chưa có tag
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* 2. Phần mở rộng quản lý Tiến độ đọc, Ghi chú & Thẻ yêu thích */}
-                <div className="p-4 space-y-3 bg-white border-t border-gray-100 flex-1 flex flex-col justify-between">
-                  {/* Trạng thái đọc */}
-                  <div className="flex items-center justify-between bg-gray-50/80 p-2 rounded-xl border border-gray-100">
-                    <span className="text-[11px] font-medium text-gray-500 flex items-center gap-1.5">
-                      <StatusIcon className={cn("h-3.5 w-3.5", statusCfg.textCls)} />
+                {/* 2. KHU VỰC TIẾN ĐỘ ĐỌC, GHI CHÚ & THẺ YÊU THÍCH */}
+                <div className="p-3 pt-0 space-y-2">
+                  {/* Tiến độ đọc */}
+                  <div className="flex items-center justify-between bg-gray-50/80 px-2.5 py-1.5 rounded-xl border border-gray-100">
+                    <span className="text-[11px] font-medium text-gray-500 flex items-center gap-1">
+                      <StatusIcon
+                        className={cn("h-3 w-3", statusCfg.textCls)}
+                      />
                       Tiến độ đọc:
                     </span>
                     <select
@@ -590,8 +740,8 @@ export default function FavoritesPage() {
                         })
                       }
                       className={cn(
-                        "text-xs font-semibold px-2.5 py-1 rounded-lg border focus:outline-none cursor-pointer transition-all",
-                        statusCfg.badgeCls
+                        "text-[11px] font-semibold px-2 py-0.5 rounded-lg border focus:outline-none cursor-pointer transition-all",
+                        statusCfg.badgeCls,
                       )}
                     >
                       <option value="to_read">Đọc sau</option>
@@ -600,47 +750,40 @@ export default function FavoritesPage() {
                     </select>
                   </div>
 
-                  {/* Ghi chú cá nhân */}
-                  <div className="bg-amber-50/30 border border-amber-100/80 rounded-xl p-3 text-xs space-y-1 relative group/note">
-                    <div className="flex items-center justify-between text-[11px] font-medium text-amber-900/70">
-                      <span className="flex items-center gap-1">
-                        <Edit3 className="h-3 w-3" /> Ghi chú:
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setNotesModalDoc(doc)}
-                        className="text-primary-600 hover:text-primary-700 font-medium hover:underline text-[11px]"
-                      >
-                        {doc.notes ? "Sửa" : "+ Thêm"}
-                      </button>
+                  {/* Ghi chú cá nhân viên thuốc */}
+                  <div className="bg-amber-50/40 border border-amber-200/80 rounded-full px-2.5 py-1 flex items-center justify-between text-[11px]">
+                    <div className="flex items-center gap-1 min-w-0 flex-1">
+                      <Edit3 className="h-3 w-3 text-amber-600 shrink-0" />
+                      {doc.notes ? (
+                        <span
+                          className="truncate italic text-gray-700"
+                          title={doc.notes}
+                        >
+                          "{doc.notes}"
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 italic">
+                          Chưa có ghi chú
+                        </span>
+                      )}
                     </div>
-                    {doc.notes ? (
-                      <p className="text-gray-700 italic line-clamp-2 leading-relaxed">
-                        "{doc.notes}"
-                      </p>
-                    ) : (
-                      <p className="text-gray-400 italic text-[11px]">Chưa có ghi chú nào cho tài liệu này.</p>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => setNotesModalDoc(doc)}
+                      className="text-primary-600 hover:text-primary-700 font-medium text-[11px] shrink-0 ml-1.5 hover:underline"
+                    >
+                      {doc.notes ? "Sửa" : "+ Ghi chú"}
+                    </button>
                   </div>
 
-                  {/* Danh sách thẻ yêu thích */}
-                  <div className="space-y-1.5 pt-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-medium text-gray-400">Thẻ yêu thích ({favTags.length}/10):</span>
-                      <button
-                        type="button"
-                        onClick={() => setTagModalDoc(doc)}
-                        className="text-[11px] font-medium text-primary-600 hover:text-primary-700 hover:underline flex items-center gap-0.5"
-                      >
-                        <Plus className="h-3 w-3" /> Gắn thẻ
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5 min-h-6">
+                  {/* Thẻ yêu thích */}
+                  <div className="flex items-center justify-between gap-1 pt-1 border-t border-gray-100">
+                    <div className="flex flex-wrap gap-1 min-w-0 flex-1">
                       {favTags.length > 0 ? (
                         favTags.map((tag) => (
                           <span
                             key={tag.id}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] bg-gray-100 text-gray-700 border border-gray-200 group/tag"
+                            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] bg-gray-100 text-gray-700 border border-gray-200"
                           >
                             <span>#{tag.name}</span>
                             <button
@@ -654,14 +797,24 @@ export default function FavoritesPage() {
                               }
                               className="text-gray-400 hover:text-red-500 transition-colors ml-0.5"
                             >
-                              <X className="h-3 w-3" />
+                              <X className="h-2.5 w-2.5" />
                             </button>
                           </span>
                         ))
                       ) : (
-                        <span className="text-[11px] text-gray-400 italic">Chưa gắn thẻ</span>
+                        <span className="text-[10px] text-gray-400 italic">
+                          Chưa gắn thẻ
+                        </span>
                       )}
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setTagModalDoc(doc)}
+                      className="text-[11px] font-medium text-primary-600 hover:text-primary-700 hover:underline flex items-center gap-0.5 shrink-0"
+                    >
+                      <Plus className="h-3 w-3" /> Gắn thẻ
+                    </button>
                   </div>
                 </div>
               </div>
@@ -670,14 +823,13 @@ export default function FavoritesPage() {
         </div>
       )}
 
-      {/* ============================================================
-          4. PHÂN TRANG (PAGINATION)
-      ============================================================ */}
+      {/* 4. PHÂN TRANG */}
       {!isListLoading && totalPages > 1 && (
         <div className="flex items-center justify-between border-t border-gray-200 pt-6">
           <div className="text-xs text-gray-500">
-            Hiển thị trang <span className="font-semibold">{currentPage}</span> /{" "}
-            <span className="font-semibold">{totalPages}</span> (Tổng số {totalCount} tài liệu)
+            Hiển thị trang <span className="font-semibold">{currentPage}</span>{" "}
+            / <span className="font-semibold">{totalPages}</span> (Tổng số{" "}
+            {totalCount} tài liệu)
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -702,9 +854,7 @@ export default function FavoritesPage() {
         </div>
       )}
 
-      {/* ============================================================
-          5. MODAL CHỈNH SỬA GHI CHÚ (EDIT NOTES MODAL)
-      ============================================================ */}
+      {/* 5. MODAL CHỈNH SỬA GHI CHÚ */}
       {notesModalDoc && (
         <EditNotesModal
           doc={notesModalDoc}
@@ -714,7 +864,6 @@ export default function FavoritesPage() {
               docId: notesModalDoc.id,
               status: notesModalDoc.reading_status,
             });
-            // Gọi update notes
             favoriteService
               .updateFavorite(notesModalDoc.id, { notes: newNotes })
               .then(() => {
@@ -725,9 +874,7 @@ export default function FavoritesPage() {
         />
       )}
 
-      {/* ============================================================
-          6. MODAL GẮN THẺ AUTOCOMPLETE (ADD TAG MODAL)
-      ============================================================ */}
+      {/* 6. MODAL GẮN THẺ */}
       {tagModalDoc && (
         <AddTagModal
           doc={tagModalDoc}
@@ -871,14 +1018,13 @@ function AddTagModal({
   const [inputVal, setInputVal] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Suggestions filtered by inputVal
   const currentAssignedTagIds = (doc.favorite_tags || []).map((t) => t.id);
   const cleanInput = inputVal.trim().replace(/^#+/, "");
 
   const suggestions = availableTags.filter(
     (t) =>
       !currentAssignedTagIds.includes(t.id) &&
-      (!cleanInput || t.name.toLowerCase().includes(cleanInput.toLowerCase()))
+      (!cleanInput || t.name.toLowerCase().includes(cleanInput.toLowerCase())),
   );
 
   const handleSelectExisting = (tagId: number) => {
@@ -934,7 +1080,6 @@ function AddTagModal({
             )}
           </div>
 
-          {/* Gợi ý thẻ đã có */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-gray-500">
               Gợi ý thẻ đã dùng:

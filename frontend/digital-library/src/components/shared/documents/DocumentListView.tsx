@@ -1,7 +1,7 @@
 // src/components/shared/DocumentListView.tsx
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import {
   ChevronDown,
   ChevronRight,
@@ -14,6 +14,7 @@ import { FileIcon, type FileTypeMap } from './FileIcon'
 import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
 import { GroupDocumentContextMenu } from '@/pages/group/components/GroupDocumentContextMenu'
 import { useFavoriteStore } from '@/stores/favoriteStore'
+import { navigateToBundle } from '@/utils/bundleNavigation'
 import { formatSize } from '@/utils/formatSize'
 import { formatRelativeDate } from '@/utils/formatDate'
 import { cn } from '@/utils/cn'
@@ -215,6 +216,7 @@ export function DocumentListView({
   onToggleBundle,
 }: DocumentListViewProps) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [imageErrors, setImageErrors] = useState<Record<string | number, boolean>>({})
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: 'date',
@@ -302,7 +304,10 @@ export function DocumentListView({
     if (navigationPath) {
       navigate(navigationPath(doc.id))
     } else if (doc.is_bundle) {
-      navigate(`/personal/bundle/${doc.id}`)
+      const bundleTargetUrl = workspaceType === 'group'
+        ? `/groups/bundle/${doc.id}`
+        : `/personal/bundle/${doc.id}`
+      navigateToBundle(navigate, location, bundleTargetUrl)
     } else {
       navigate(`/personal/documents/${doc.id}`)
     }
