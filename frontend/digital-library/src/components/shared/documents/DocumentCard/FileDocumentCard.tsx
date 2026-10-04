@@ -1,11 +1,12 @@
 // src/components/shared/FileDocumentCard.tsx
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
 import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
 import { useFavoriteStore } from "@/stores/favoriteStore";
+import { getCurrentFullPath } from "@/utils/bundleNavigation";
 import type { DocumentCardProps } from "./DocumentCard";
 
 // ======================================================
@@ -73,12 +74,17 @@ export function FileDocumentCard({
   extraItems,
 }: DocumentCardProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [imageError, setImageError] = useState(false);
 
   const targetUrl = `${basePath}/${document.id}`;
 
+  const handleOpenDoc = () => {
+    navigate(targetUrl, { state: { from: getCurrentFullPath(location) } });
+  };
+
   const handleAction = (action: string) => {
-    if (action === "view") navigate(targetUrl);
+    if (action === "view") handleOpenDoc();
     else onAction(action, document.id);
   };
 
@@ -114,7 +120,7 @@ export function FileDocumentCard({
       {/* Khung Preview */}
       <div
         className={`relative h-[135px] w-full shrink-0 cursor-pointer overflow-hidden rounded-t-xl transition-colors ${theme.bg} flex items-center justify-center`}
-        onClick={() => navigate(targetUrl)}
+        onClick={handleOpenDoc}
       >
         <div className="absolute left-2.5 top-2.5 z-10">
           <span
@@ -143,7 +149,7 @@ export function FileDocumentCard({
         <div>
           <div className="flex items-start justify-between gap-1.5">
             <h3
-              onClick={() => navigate(targetUrl)}
+              onClick={handleOpenDoc}
               className="line-clamp-2 flex-1 cursor-pointer text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 leading-snug"
               title={document.name}
             >

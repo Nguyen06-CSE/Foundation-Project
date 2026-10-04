@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { navigateToBundle } from "@/utils/bundleNavigation";
+import { navigateToBundle, getCurrentFullPath } from "@/utils/bundleNavigation";
 import {
   Heart,
   BookOpen,
@@ -26,9 +26,8 @@ import {
 
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { DocumentCard } from "@/components/shared/documents/DocumentCard";
 import { DocumentListView } from "@/components/shared/documents/DocumentListView";
-import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
-import { FileIcon } from "@/components/shared/documents/FileIcon";
 import {
   ViewToggle,
   type ViewMode,
@@ -105,30 +104,6 @@ const SORT_OPTIONS = [
     sort_order: "desc" as const,
   },
 ];
-
-const getFileExtension = (type?: string) => {
-  if (!type) return "FILE";
-  let cleanType = type.toLowerCase().trim();
-  if (cleanType.startsWith(".")) cleanType = cleanType.substring(1);
-  const mimeMap: Record<string, string> = {
-    "application/pdf": "pdf",
-    "application/msword": "doc",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-      "docx",
-    "application/vnd.ms-excel": "xls",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
-    "application/vnd.ms-powerpoint": "ppt",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-      "pptx",
-    "image/jpeg": "jpg",
-    "image/png": "png",
-  };
-  return (
-    mimeMap[cleanType] ||
-    cleanType.split("/").pop() ||
-    cleanType
-  ).toUpperCase();
-};
 
 export default function FavoritesPage() {
   const navigate = useNavigate();
@@ -245,7 +220,9 @@ export default function FavoritesPage() {
     if (doc.is_bundle) {
       navigateToBundle(navigate, location, `/personal/bundle/${doc.id}`);
     } else {
-      navigate(`/personal/documents/${doc.id}`);
+      navigate(`/personal/documents/${doc.id}`, {
+        state: { from: getCurrentFullPath(location) },
+      });
     }
   };
 
@@ -593,7 +570,7 @@ export default function FavoritesPage() {
           }}
         />
       ) : (
-        /* Dạng Lưới Chuẩn 5 Cột / Màn hình nhỏ 2-3 cột (Đúng kích thước trang Tài liệu) */
+        /* Dạng Lưới Chuẩn (Tái sử dụng DocumentCard + phần mở rộng PKM) */
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {filteredItems.map((doc) => {
             const statusCfg =
@@ -601,130 +578,45 @@ export default function FavoritesPage() {
               READING_STATUS_CONFIG.to_read;
             const StatusIcon = statusCfg.icon;
             const favTags = doc.favorite_tags || [];
-            const extLabel = getFileExtension(doc.file_type || undefined);
+
+            const formattedDoc = {
+              id: String(doc.id),
+              name: doc.title,
+              type: doc.file_type || "file",
+              updatedAt: formatRelativeDate(doc.favorited_at || doc.created_at),
+              size: formatSize(doc.file_size || 0),
+              thumbnail_path: doc.thumbnail_path,
+              tags: Array.isArray(doc.tags)
+                ? (doc.tags as any[]).map((t: any, idx: number) =>
+                    typeof t === "string" ? { id: idx, name: t } : { id: t.id ?? idx, name: t.name }
+                  )
+                : [],
+              is_bundle: Boolean(doc.is_bundle),
+              bundle_parent_id: (doc as any).bundle_parent_id,
+              bundle_children_count: (doc as any).bundle_children_count,
+            };
 
             return (
               <div
                 key={doc.id}
-                className="flex flex-col bg-white border border-rose-300 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all justify-between"
+                className="flex flex-col bg-white border border-rose-200/80 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all justify-between"
               >
-                {/* 1. KHUNG CHÍNH TÀI LIỆU */}
-                <div>
-                  {/* Thumbnail Box có Tag Loại File góc trái bên trong (Chuẩn Hình 2) */}
-                  <div
-                    onClick={() => handlePreview(doc)}
-                    className={cn(
-                      "relative h-32 w-full flex items-center justify-center cursor-pointer transition-colors overflow-hidden",
-                      extLabel === "PDF"
-                        ? "bg-rose-50/60"
-                        : extLabel === "DOCX" || extLabel === "DOC"
-                          ? "bg-blue-50/60"
-                          : doc.is_bundle
-                            ? "bg-purple-50/60"
-                            : "bg-gray-50/80",
-                    )}
-                  >
-                    {/* Badge loại file NẰM BÊN TRONG góc trái */}
-                    <span
-                      className={cn(
-                        "absolute top-2.5 left-2.5 z-10 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide shadow-2xs",
-                        doc.is_bundle
-                          ? "bg-purple-100 text-purple-700"
-                          : extLabel === "PDF"
-                            ? "bg-rose-100 text-rose-700"
-                            : extLabel === "DOCX" || extLabel === "DOC"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-gray-200/90 text-gray-700",
-                      )}
-                    >
-                      {doc.is_bundle ? "BUNDLE" : extLabel}
-                    </span>
+                {/* 1. TÁI SỬ DỤNG DOCUMENTCARD (Thừa hưởng tim đỏ, viền, thumbnail, bundle nav) */}
+                <DocumentCard
+                  document={formattedDoc}
+                  basePath="/personal/documents"
+                  onAction={(action) => {
+                    if (action === "view") handlePreview(doc);
+                    else if (action === "download") handleDownload(doc);
+                    else if (action === "favorite")
+                      removeFavoriteMutation.mutate(doc.id);
+                  }}
+                />
 
-                    {doc.thumbnail_path ? (
-                      <img
-                        src={`${import.meta.env.VITE_API_URL || ""}/${doc.thumbnail_path}`}
-                        alt={doc.title}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <FileIcon
-                        type={doc.file_type || "default"}
-                        className="h-10 w-10 text-gray-400"
-                      />
-                    )}
-                  </div>
-
-                  {/* Thông tin Tiêu đề, Dung lượng, Tim & Menu 3 chấm */}
-                  <div className="p-3 space-y-2">
-                    <div className="flex items-start justify-between gap-1.5">
-                      <div className="min-w-0 flex-1">
-                        <h3
-                          onClick={() => handlePreview(doc)}
-                          className="text-sm font-bold text-gray-900 truncate cursor-pointer hover:text-primary-600 leading-snug"
-                          title={doc.title}
-                        >
-                          {doc.title}
-                        </h3>
-                        <p className="text-[11px] text-gray-400 mt-1">
-                          {formatSize(doc.file_size || 0)} •{" "}
-                          {formatRelativeDate(
-                            doc.favorited_at || doc.created_at,
-                          )}
-                        </p>
-                      </div>
-
-                      {/* Nút Trái tim + 3 chấm (Chuẩn Hình 1) */}
-                      <div className="flex items-center gap-0.5 shrink-0 pt-0.5">
-                        <button
-                          onClick={() => removeFavoriteMutation.mutate(doc.id)}
-                          className="p-1 rounded-full text-red-500 hover:bg-red-50 transition-colors"
-                          title="Bỏ yêu thích"
-                        >
-                          <Heart className="h-4 w-4 fill-red-500 text-red-500" />
-                        </button>
-
-                        <DocumentContextMenu
-                          documentId={doc.id}
-                          onAction={(action) => {
-                            if (action === "view") handlePreview(doc);
-                            else if (action === "download") handleDownload(doc);
-                            else if (action === "favorite")
-                              removeFavoriteMutation.mutate(doc.id);
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Tag mặc định nội bộ của tài liệu */}
-                    <div className="pt-1.5 border-t border-gray-100 text-xs min-h-6">
-                      {doc.tags && doc.tags.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {doc.tags.map((t: any, idx) => {
-                            const tagLabel = typeof t === "string" ? t : t?.name || "";
-                            const tagKey = typeof t === "string" ? `${t}-${idx}` : t?.id || idx;
-                            return (
-                              <span
-                                key={tagKey}
-                                className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.2 rounded"
-                              >
-                                #{tagLabel}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 italic text-[11px]">
-                          Chưa có tag
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. KHU VỰC TIẾN ĐỘ ĐỌC, GHI CHÚ & THẺ YÊU THÍCH */}
-                <div className="p-3 pt-0 space-y-2">
+                {/* 2. KHU VỰC MỞ RỘNG PKM: TIẾN ĐỘ ĐỌC, GHI CHÚ & THẺ YÊU THÍCH */}
+                <div className="p-3 pt-2 bg-rose-50/20 border-t border-rose-100/60 space-y-2">
                   {/* Tiến độ đọc */}
-                  <div className="flex items-center justify-between bg-gray-50/80 px-2.5 py-1.5 rounded-xl border border-gray-100">
+                  <div className="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-xl border border-gray-100 shadow-2xs">
                     <span className="text-[11px] font-medium text-gray-500 flex items-center gap-1">
                       <StatusIcon
                         className={cn("h-3 w-3", statusCfg.textCls)}
@@ -751,7 +643,7 @@ export default function FavoritesPage() {
                   </div>
 
                   {/* Ghi chú cá nhân viên thuốc */}
-                  <div className="bg-amber-50/40 border border-amber-200/80 rounded-full px-2.5 py-1 flex items-center justify-between text-[11px]">
+                  <div className="bg-amber-50/50 border border-amber-200/80 rounded-full px-2.5 py-1 flex items-center justify-between text-[11px]">
                     <div className="flex items-center gap-1 min-w-0 flex-1">
                       <Edit3 className="h-3 w-3 text-amber-600 shrink-0" />
                       {doc.notes ? (

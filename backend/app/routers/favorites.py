@@ -279,6 +279,26 @@ async def list_favorites(
     result = await db.execute(paginated_stmt)
     fav_items = result.scalars().all()
 
+    # Tính bundle_children_count cho các bundle (cùng logic với trang Tài liệu)
+    bundle_ids = [
+        fav.document.id
+        for fav in fav_items
+        if fav.document and getattr(fav.document, "is_bundle", False)
+    ]
+    bundle_counts_map: dict[int, int] = {}
+    if bundle_ids:
+        counts_res = await db.execute(
+            select(Document.bundle_parent_id, func.count(Document.id))
+            .where(
+                Document.bundle_parent_id.in_(bundle_ids),
+                Document.is_deleted == False,
+                Document.is_orphaned == False,
+                Document.trash_source.is_(None),
+            )
+            .group_by(Document.bundle_parent_id)
+        )
+        bundle_counts_map = dict(counts_res.all())
+
     # Kiểm tra quyền truy cập cho từng document
     items: list[FavoriteDocumentOut] = []
     for fav in fav_items:
@@ -300,6 +320,10 @@ async def list_favorites(
             doc.is_orphaned = False
 
         doc_out = DocumentOut.model_validate(doc)
+        # Gán bundle_children_count cho bundle
+        if doc.is_bundle:
+            doc_out.bundle_children_count = bundle_counts_map.get(doc.id, 0)
+
         fav_doc_data = doc_out.model_dump()
         fav_doc_data["favorited_at"] = fav.created_at
         fav_doc_data["reading_status"] = fav.reading_status

@@ -14,7 +14,7 @@ import { FileIcon, type FileTypeMap } from './FileIcon'
 import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
 import { GroupDocumentContextMenu } from '@/pages/group/components/GroupDocumentContextMenu'
 import { useFavoriteStore } from '@/stores/favoriteStore'
-import { navigateToBundle } from '@/utils/bundleNavigation'
+import { navigateToBundle, getCurrentFullPath } from '@/utils/bundleNavigation'
 import { formatSize } from '@/utils/formatSize'
 import { formatRelativeDate } from '@/utils/formatDate'
 import { cn } from '@/utils/cn'
@@ -309,7 +309,9 @@ export function DocumentListView({
         : `/personal/bundle/${doc.id}`
       navigateToBundle(navigate, location, bundleTargetUrl)
     } else {
-      navigate(`/personal/documents/${doc.id}`)
+      navigate(`/personal/documents/${doc.id}`, {
+        state: { from: getCurrentFullPath(location) },
+      })
     }
   }
 

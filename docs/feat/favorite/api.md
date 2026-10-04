@@ -95,6 +95,7 @@ Lấy danh sách chi tiết tài liệu yêu thích có hỗ trợ phân trang, 
       },
       "is_important": false,
       "is_bundle": false,
+      "bundle_children_count": null,
       "is_deleted": false,
       "is_orphaned": false,
       "created_at": "2026-09-10T10:00:00Z",
@@ -106,14 +107,46 @@ Lấy danh sách chi tiết tài liệu yêu thích có hỗ trợ phân trang, 
         { "id": 1, "name": "khoa-hoc-may-tinh", "color": "#3B82F6" }
       ],
       "tags": []
+    },
+    {
+      "id": 200,
+      "title": "Bao_cao_tien_do_Digital_Library (Gói)",
+      "description": null,
+      "file_type": null,
+      "file_size": null,
+      "file_path": "uploads/bundles/200",
+      "thumbnail_path": null,
+      "owner_id": 1,
+      "owner": {
+        "id": 1,
+        "username": "admin",
+        "full_name": "Quản trị viên",
+        "avatar": null
+      },
+      "is_important": false,
+      "is_bundle": true,
+      "bundle_children_count": 2,
+      "is_deleted": false,
+      "is_orphaned": false,
+      "created_at": "2026-09-15T09:00:00Z",
+      "updated_at": null,
+      "favorited_at": "2026-10-02T10:00:00Z",
+      "reading_status": "to_read",
+      "notes": null,
+      "favorite_tags": [],
+      "tags": []
     }
   ],
-  "total": 1,
+  "total": 2,
   "page": 1,
   "page_size": 20,
   "total_pages": 1
 }
 ```
+
+> **Trường `bundle_children_count`:**
+> - Với tài liệu thường (`is_bundle: false`): luôn là `null`.
+> - Với tài liệu dạng gói (`is_bundle: true`): số lượng tài liệu con **hợp lệ** (chưa xóa, chưa vào thùng rác). Cùng quy tắc tính với trang Tài liệu cá nhân.
 
 ---
 

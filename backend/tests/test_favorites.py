@@ -528,3 +528,205 @@ def test_favorite_document_out_full_fields(test_client, mock_db, auth_user_1):
     assert len(item["favorite_tags"]) == 1
     assert item["favorite_tags"][0]["name"] == "Tag Fav"
 
+
+
+# =========================================================================
+# 8. TEST BUNDLE_CHILDREN_COUNT TRONG DANH SÁCH YÊU THÍCH
+# =========================================================================
+
+
+def test_list_favorites_bundle_with_children_count(test_client, mock_db, auth_user_1):
+    """Bundle yêu thích có 2 tài liệu con → bundle_children_count = 2."""
+    now = datetime.now(timezone.utc)
+    owner = User(id=auth_user_1.id, username="user1", full_name="User One")
+
+    bundle_doc = Document(
+        id=100,
+        owner_id=auth_user_1.id,
+        title="Gói tài liệu",
+        is_deleted=False,
+        is_orphaned=False,
+        is_public=False,
+        is_bundle=True,
+        checksum="bundle_h1",
+        file_path="/test_bundle",
+        created_at=now,
+    )
+    bundle_doc.owner = owner
+    bundle_doc.tags = []
+
+    fav = Favorite(
+        user_id=auth_user_1.id,
+        document_id=100,
+        reading_status="to_read",
+        created_at=now,
+    )
+    fav.document = bundle_doc
+    fav.tags = []
+
+    call_count = 0
+
+    def handler(stmt):
+        nonlocal call_count
+        sql = str(stmt)
+        if "count" in sql.lower() and "bundle_parent_id" not in sql:
+            return AsyncMockResult(scalar=1)
+        if "bundle_parent_id" in sql and "count" in sql.lower():
+            # Trả về 2 tài liệu con cho bundle 100
+            return AsyncMockResult(all_list=[(100, 2)])
+        if "FROM favorites" in sql:
+            return AsyncMockResult(scalars_list=[fav])
+        return None
+
+    mock_db.query_handlers.append(handler)
+
+    response = test_client.get("/favorites/")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data["items"]) == 1
+    assert data["items"][0]["is_bundle"] is True
+    assert data["items"][0]["bundle_children_count"] == 2
+
+
+def test_list_favorites_bundle_with_zero_children(test_client, mock_db, auth_user_1):
+    """Bundle yêu thích rỗng (0 tài liệu con) → bundle_children_count = 0."""
+    now = datetime.now(timezone.utc)
+    owner = User(id=auth_user_1.id, username="user1", full_name="User One")
+
+    bundle_doc = Document(
+        id=101,
+        owner_id=auth_user_1.id,
+        title="Gói rỗng",
+        is_deleted=False,
+        is_orphaned=False,
+        is_public=False,
+        is_bundle=True,
+        checksum="bundle_h2",
+        file_path="/test_bundle_empty",
+        created_at=now,
+    )
+    bundle_doc.owner = owner
+    bundle_doc.tags = []
+
+    fav = Favorite(
+        user_id=auth_user_1.id,
+        document_id=101,
+        reading_status="to_read",
+        created_at=now,
+    )
+    fav.document = bundle_doc
+    fav.tags = []
+
+    def handler(stmt):
+        sql = str(stmt)
+        if "count" in sql.lower() and "bundle_parent_id" not in sql:
+            return AsyncMockResult(scalar=1)
+        if "bundle_parent_id" in sql and "count" in sql.lower():
+            # Không có tài liệu con → trả về danh sách rỗng
+            return AsyncMockResult(all_list=[])
+        if "FROM favorites" in sql:
+            return AsyncMockResult(scalars_list=[fav])
+        return None
+
+    mock_db.query_handlers.append(handler)
+
+    response = test_client.get("/favorites/")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data["items"]) == 1
+    assert data["items"][0]["is_bundle"] is True
+    assert data["items"][0]["bundle_children_count"] == 0
+
+
+def test_list_favorites_non_bundle_no_children_count(test_client, mock_db, auth_user_1):
+    """Tài liệu thường (không phải bundle) → bundle_children_count = None."""
+    now = datetime.now(timezone.utc)
+    owner = User(id=auth_user_1.id, username="user1", full_name="User One")
+
+    normal_doc = Document(
+        id=102,
+        owner_id=auth_user_1.id,
+        title="Tài liệu thường",
+        is_deleted=False,
+        is_orphaned=False,
+        is_public=False,
+        is_bundle=False,
+        checksum="normal_h1",
+        file_path="/test_normal.pdf",
+        created_at=now,
+    )
+    normal_doc.owner = owner
+    normal_doc.tags = []
+
+    fav = Favorite(
+        user_id=auth_user_1.id,
+        document_id=102,
+        reading_status="reading",
+        created_at=now,
+    )
+    fav.document = normal_doc
+    fav.tags = []
+
+    def handler(stmt):
+        sql = str(stmt)
+        if "count" in sql.lower() and "bundle_parent_id" not in sql:
+            return AsyncMockResult(scalar=1)
+        if "FROM favorites" in sql:
+            return AsyncMockResult(scalars_list=[fav])
+        return None
+
+    mock_db.query_handlers.append(handler)
+
+    response = test_client.get("/favorites/")
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data["items"]) == 1
+    assert data["items"][0]["is_bundle"] is False
+    assert data["items"][0]["bundle_children_count"] is None
+
+
+def test_list_favorites_bundle_with_one_child(test_client, mock_db, auth_user_1):
+    """Bundle yêu thích có 1 tài liệu con → bundle_children_count = 1."""
+    now = datetime.now(timezone.utc)
+    owner = User(id=auth_user_1.id, username="user1", full_name="User One")
+
+    bundle_doc = Document(
+        id=103,
+        owner_id=auth_user_1.id,
+        title="Gói 1 tài liệu",
+        is_deleted=False,
+        is_orphaned=False,
+        is_public=False,
+        is_bundle=True,
+        checksum="bundle_h3",
+        file_path="/test_bundle_one",
+        created_at=now,
+    )
+    bundle_doc.owner = owner
+    bundle_doc.tags = []
+
+    fav = Favorite(
+        user_id=auth_user_1.id,
+        document_id=103,
+        reading_status="to_read",
+        created_at=now,
+    )
+    fav.document = bundle_doc
+    fav.tags = []
+
+    def handler(stmt):
+        sql = str(stmt)
+        if "count" in sql.lower() and "bundle_parent_id" not in sql:
+            return AsyncMockResult(scalar=1)
+        if "bundle_parent_id" in sql and "count" in sql.lower():
+            return AsyncMockResult(all_list=[(103, 1)])
+        if "FROM favorites" in sql:
+            return AsyncMockResult(scalars_list=[fav])
+        return None
+
+    mock_db.query_handlers.append(handler)
+
+    response = test_client.get("/favorites/")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["items"][0]["bundle_children_count"] == 1

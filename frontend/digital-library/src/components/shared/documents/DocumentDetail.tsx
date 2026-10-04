@@ -396,11 +396,14 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [tempTitle, setTempTitle] = useState("");
 
+  const stateFrom = (location.state as { from?: string } | null)?.from;
+  const effectiveBackUrl = stateFrom || backUrl || "/personal/documents";
+
   const handleBack = () => {
     if (onBack) {
       onBack();
-    } else if (backUrl) {
-      navigate(backUrl);
+    } else if (effectiveBackUrl) {
+      navigate(effectiveBackUrl);
     } else {
       navigate(-1);
     }
@@ -659,7 +662,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     const targetUrl = isGroup
       ? `/groups/${params.id}/bundle/${doc.id}`
       : `/personal/bundle/${doc.id}`;
-    const originFrom = getBundleOriginPath(location, doc.id, backUrl || "/personal/documents");
+    const originFrom = getBundleOriginPath(location, doc.id, effectiveBackUrl);
     return <Navigate to={targetUrl} state={{ from: originFrom }} replace />;
   }
 
