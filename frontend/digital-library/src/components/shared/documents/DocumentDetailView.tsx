@@ -34,9 +34,14 @@ export function DocumentDetailView({
   const [imageErrors, setImageErrors] = useState<Record<string | number, boolean>>({})
 
   const handleRowClick = (doc: DocumentListItem) => {
+    // ƯU TIÊN 1: Gọi navigationPath (Group, Class, Faculty sẽ truyền cái này)
     if (navigationPath) {
       navigate(navigationPath(doc.id))
-    } else if (doc.is_bundle) {
+      return; // <-- Phải có return ở đây
+    } 
+    
+    // NẾU KHÔNG TRUYỀN (Mặc định cho Kho Cá Nhân)
+    if (doc.is_bundle) {
       navigate(`/personal/bundle/${doc.id}`)
     } else {
       navigate(`/personal/documents/${doc.id}`)

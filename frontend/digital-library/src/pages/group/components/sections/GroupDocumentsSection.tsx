@@ -248,6 +248,10 @@ export function GroupDocumentsSection({
             <DocumentDetailView
               documents={listItems}
               isLoading={isLoading}
+              showOwner={true}
+              workspaceType="group"
+              permission={effectivePermission}
+              navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
               onAction={handleListAction}
             />
           )}

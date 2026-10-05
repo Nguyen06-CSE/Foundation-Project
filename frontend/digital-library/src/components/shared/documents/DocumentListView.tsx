@@ -1,12 +1,22 @@
 // src/components/shared/documents/DocumentListView.tsx
 
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ChevronDown, ChevronRight, User, Heart, Download, Package } from 'lucide-react'
-import { FileIcon } from './FileIcon'
-import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
-import { GroupDocumentContextMenu } from '@/pages/group/components/shared/GroupDocumentContextMenu'
-import { cn } from '@/utils/cn'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  ChevronDown,
+  ChevronRight,
+  User,
+  Heart,
+  Download,
+  Package,
+} from "lucide-react";
+import { FileIcon } from "./FileIcon";
+import {
+  DocumentContextMenu,
+  type DocumentAction,
+} from "./DocumentContextMenu";
+import { GroupDocumentContextMenu } from "@/pages/group/components/shared/GroupDocumentContextMenu";
+import { cn } from "@/utils/cn";
 import {
   type BaseDocumentViewProps,
   type DocumentListItem,
@@ -15,28 +25,28 @@ import {
   DEFAULT_THEME,
   safeFormatDate,
   safeFormatSize,
-} from './documentView.types'
+} from "./documentView.types";
 
 export interface DocumentListViewProps extends BaseDocumentViewProps {
-  onToggleBundle?: (bundleId: string | number) => Promise<DocumentListItem[]>
+  onToggleBundle?: (bundleId: string | number) => Promise<DocumentListItem[]>;
 }
 
 interface SortConfig {
-  key: 'name' | 'size' | 'date' | 'type'
-  direction: 'asc' | 'desc'
+  key: "name" | "size" | "date" | "type";
+  direction: "asc" | "desc";
 }
 
 function parseDateToNumber(dateStr?: string): number {
-  if (!dateStr) return 0
-  const timestamp = Date.parse(dateStr)
-  return isNaN(timestamp) ? 0 : timestamp
+  if (!dateStr) return 0;
+  const timestamp = Date.parse(dateStr);
+  return isNaN(timestamp) ? 0 : timestamp;
 }
 
 function parseSizeToNumber(size?: number | string): number {
-  if (typeof size === 'number') return size
-  if (!size) return 0
-  const num = parseFloat(String(size))
-  return isNaN(num) ? 0 : num
+  if (typeof size === "number") return size;
+  if (!size) return 0;
+  const num = parseFloat(String(size));
+  return isNaN(num) ? 0 : num;
 }
 
 export function DocumentListView({
@@ -45,107 +55,124 @@ export function DocumentListView({
   onAction,
   navigationPath,
   showOwner = false,
-  workspaceType = 'personal',
-  permission = 'view',
+  workspaceType = "personal",
+  permission = "view",
   extraItems,
   onToggleBundle,
 }: DocumentListViewProps) {
-  const navigate = useNavigate()
-  const [imageErrors, setImageErrors] = useState<Record<string | number, boolean>>({})
+  const navigate = useNavigate();
+  const [imageErrors, setImageErrors] = useState<
+    Record<string | number, boolean>
+  >({});
   const [sortConfig, setSortConfig] = useState<SortConfig>({
-    key: 'date',
-    direction: 'desc',
-  })
+    key: "date",
+    direction: "desc",
+  });
 
   // Bundle states
-  const [expandedBundles, setExpandedBundles] = useState<Set<string | number>>(new Set())
-  const [loadingBundles, setLoadingBundles] = useState<Set<string | number>>(new Set())
-  const [bundleChildren, setBundleChildren] = useState<Record<string | number, DocumentListItem[]>>({})
+  const [expandedBundles, setExpandedBundles] = useState<Set<string | number>>(
+    new Set(),
+  );
+  const [loadingBundles, setLoadingBundles] = useState<Set<string | number>>(
+    new Set(),
+  );
+  const [bundleChildren, setBundleChildren] = useState<
+    Record<string | number, DocumentListItem[]>
+  >({});
 
-  const handleToggleBundle = async (e: React.MouseEvent, bundleId: string | number) => {
-    e.stopPropagation()
-    if (!onToggleBundle) return
+  const handleToggleBundle = async (
+    e: React.MouseEvent,
+    bundleId: string | number,
+  ) => {
+    e.stopPropagation();
+    if (!onToggleBundle) return;
 
     if (expandedBundles.has(bundleId)) {
-      const next = new Set(expandedBundles)
-      next.delete(bundleId)
-      setExpandedBundles(next)
-      return
+      const next = new Set(expandedBundles);
+      next.delete(bundleId);
+      setExpandedBundles(next);
+      return;
     }
 
-    const next = new Set(expandedBundles)
-    next.add(bundleId)
-    setExpandedBundles(next)
+    const next = new Set(expandedBundles);
+    next.add(bundleId);
+    setExpandedBundles(next);
 
     if (!bundleChildren[bundleId] && !loadingBundles.has(bundleId)) {
       try {
-        setLoadingBundles((prev) => new Set(prev).add(bundleId))
-        const children = await onToggleBundle(bundleId)
-        setBundleChildren((prev) => ({ ...prev, [bundleId]: children }))
+        setLoadingBundles((prev) => new Set(prev).add(bundleId));
+        const children = await onToggleBundle(bundleId);
+        setBundleChildren((prev) => ({ ...prev, [bundleId]: children }));
       } catch (err) {
-        console.error('Lỗi khi tải tài liệu con của gói:', err)
+        console.error("Lỗi khi tải tài liệu con của gói:", err);
       } finally {
         setLoadingBundles((prev) => {
-          const s = new Set(prev)
-          s.delete(bundleId)
-          return s
-        })
+          const s = new Set(prev);
+          s.delete(bundleId);
+          return s;
+        });
       }
     }
-  }
+  };
 
   const sortedDocuments = [...documents].sort((a, b) => {
-    let aValue: any
-    let bValue: any
+    let aValue: any;
+    let bValue: any;
 
     switch (sortConfig.key) {
-      case 'name':
-        aValue = a.title.toLowerCase()
-        bValue = b.title.toLowerCase()
-        break
-      case 'size':
-        aValue = parseSizeToNumber(a.size)
-        bValue = parseSizeToNumber(b.size)
-        break
-      case 'date':
-        aValue = parseDateToNumber(a.updatedAt)
-        bValue = parseDateToNumber(b.updatedAt)
-        break
-      case 'type':
-        aValue = a.type?.toString().toLowerCase() || ''
-        bValue = b.type?.toString().toLowerCase() || ''
-        break
+      case "name":
+        aValue = a.title.toLowerCase();
+        bValue = b.title.toLowerCase();
+        break;
+      case "size":
+        aValue = parseSizeToNumber(a.size);
+        bValue = parseSizeToNumber(b.size);
+        break;
+      case "date":
+        aValue = parseDateToNumber(a.updatedAt);
+        bValue = parseDateToNumber(b.updatedAt);
+        break;
+      case "type":
+        aValue = a.type?.toString().toLowerCase() || "";
+        bValue = b.type?.toString().toLowerCase() || "";
+        break;
       default:
-        return 0
+        return 0;
     }
 
-    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1
-    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1
-    return 0
-  })
+    if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
 
-  const handleSort = (key: SortConfig['key']) => {
+  const handleSort = (key: SortConfig["key"]) => {
     setSortConfig((prev) => ({
       key,
-      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
-    }))
-  }
+      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+    }));
+  };
 
   const handleRowClick = (doc: DocumentListItem) => {
     if (navigationPath) {
-      navigate(navigationPath(doc.id))
-    } else if (doc.is_bundle) {
-      navigate(`/personal/bundle/${doc.id}`)
-    } else {
-      navigate(`/personal/documents/${doc.id}`)
+      navigate(navigationPath(doc.id));
+      return;
     }
-  }
+
+    if (doc.is_bundle) {
+      navigate(`/personal/bundle/${doc.id}`);
+    } else {
+      navigate(`/personal/documents/${doc.id}`);
+    }
+  };
 
   if (isLoading) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-xs divide-y divide-gray-100">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 px-4 py-3.5 animate-pulse">
+          <div
+            key={i}
+            className="flex items-center gap-4 px-4 py-3.5 animate-pulse"
+          >
             <div className="h-10 w-12 rounded-lg bg-gray-200 shrink-0" />
             <div className="flex-1 space-y-2">
               <div className="h-4 bg-gray-200 rounded w-1/3" />
@@ -156,16 +183,18 @@ export function DocumentListView({
           </div>
         ))}
       </div>
-    )
+    );
   }
 
   if (documents.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-2 rounded-xl border border-gray-200/80 bg-gray-50/50">
         <FileIcon type="default" className="h-10 w-10 text-gray-300" />
-        <p className="text-sm text-gray-500 font-medium">Chưa có tài liệu nào</p>
+        <p className="text-sm text-gray-500 font-medium">
+          Chưa có tài liệu nào
+        </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -173,18 +202,18 @@ export function DocumentListView({
       {/* HEADER BẢNG */}
       <div className="grid grid-cols-12 gap-3 px-4 py-2.5 bg-gray-50/80 border-b border-gray-200/80 text-xs font-semibold text-gray-500 select-none">
         <button
-          onClick={() => handleSort('name')}
+          onClick={() => handleSort("name")}
           className={cn(
-            'col-span-6 md:col-span-5 flex items-center gap-1.5 hover:text-gray-900 transition-colors text-left cursor-pointer',
-            sortConfig.key === 'name' && 'text-gray-900 font-bold'
+            "col-span-6 md:col-span-5 flex items-center gap-1.5 hover:text-gray-900 transition-colors text-left cursor-pointer",
+            sortConfig.key === "name" && "text-gray-900 font-bold",
           )}
         >
           Tên tài liệu
-          {sortConfig.key === 'name' && (
+          {sortConfig.key === "name" && (
             <ChevronDown
               className={cn(
-                'h-3.5 w-3.5 transition-transform text-primary-600',
-                sortConfig.direction === 'asc' && 'rotate-180'
+                "h-3.5 w-3.5 transition-transform text-primary-600",
+                sortConfig.direction === "asc" && "rotate-180",
               )}
             />
           )}
@@ -197,38 +226,40 @@ export function DocumentListView({
         )}
 
         <button
-          onClick={() => handleSort('date')}
+          onClick={() => handleSort("date")}
           className={cn(
-            showOwner ? 'col-span-3 md:col-span-2' : 'col-span-3 md:col-span-3',
-            'flex items-center justify-end md:justify-start gap-1.5 hover:text-gray-900 transition-colors cursor-pointer',
-            sortConfig.key === 'date' && 'text-gray-900 font-bold'
+            showOwner ? "col-span-3 md:col-span-2" : "col-span-3 md:col-span-3",
+            "flex items-center justify-end md:justify-start gap-1.5 hover:text-gray-900 transition-colors cursor-pointer",
+            sortConfig.key === "date" && "text-gray-900 font-bold",
           )}
         >
           Cập nhật
-          {sortConfig.key === 'date' && (
+          {sortConfig.key === "date" && (
             <ChevronDown
               className={cn(
-                'h-3.5 w-3.5 transition-transform text-primary-600',
-                sortConfig.direction === 'asc' && 'rotate-180'
+                "h-3.5 w-3.5 transition-transform text-primary-600",
+                sortConfig.direction === "asc" && "rotate-180",
               )}
             />
           )}
         </button>
 
         <button
-          onClick={() => handleSort('size')}
+          onClick={() => handleSort("size")}
           className={cn(
-            showOwner ? 'hidden md:flex col-span-2' : 'col-span-2 md:col-span-3',
-            'items-center justify-end gap-1.5 hover:text-gray-900 transition-colors cursor-pointer text-right',
-            sortConfig.key === 'size' && 'text-gray-900 font-bold'
+            showOwner
+              ? "hidden md:flex col-span-2"
+              : "col-span-2 md:col-span-3",
+            "items-center justify-end gap-1.5 hover:text-gray-900 transition-colors cursor-pointer text-right",
+            sortConfig.key === "size" && "text-gray-900 font-bold",
           )}
         >
           Kích thước
-          {sortConfig.key === 'size' && (
+          {sortConfig.key === "size" && (
             <ChevronDown
               className={cn(
-                'h-3.5 w-3.5 transition-transform text-primary-600',
-                sortConfig.direction === 'asc' && 'rotate-180'
+                "h-3.5 w-3.5 transition-transform text-primary-600",
+                sortConfig.direction === "asc" && "rotate-180",
               )}
             />
           )}
@@ -240,47 +271,47 @@ export function DocumentListView({
       {/* DANH SÁCH HÀNG */}
       <div className="divide-y divide-gray-100">
         {sortedDocuments.map((doc) => {
-          const displaySize = safeFormatSize(doc.size)
-          const displayDate = safeFormatDate(doc.updatedAt)
-          const ownerName = doc.owner?.full_name || doc.owner?.username
-          const ownerAvatar = doc.owner?.avatar_url || doc.owner?.avatar
+          const displaySize = safeFormatSize(doc.size);
+          const displayDate = safeFormatDate(doc.updatedAt);
+          const ownerName = doc.owner?.full_name || doc.owner?.username;
+          const ownerAvatar = doc.owner?.avatar_url || doc.owner?.avatar;
 
-          const isBundle = doc.is_bundle === true
-          const ext = getFileExtension(doc.extension || doc.type?.toString())
+          const isBundle = doc.is_bundle === true;
+          const ext = getFileExtension(doc.extension || doc.type?.toString());
           const theme = isBundle
             ? {
-                bg: 'bg-purple-50/70',
-                badgeBg: 'bg-purple-100',
-                badgeText: 'text-purple-700',
-                border: 'border-purple-200',
+                bg: "bg-purple-50/70",
+                badgeBg: "bg-purple-100",
+                badgeText: "text-purple-700",
+                border: "border-purple-200",
               }
-            : FILE_TYPE_THEMES[ext] || DEFAULT_THEME
+            : FILE_TYPE_THEMES[ext] || DEFAULT_THEME;
 
           const thumbnailUrl =
             !isBundle && doc.thumbnail_path && !imageErrors[doc.id]
-              ? `${import.meta.env.VITE_API_URL || ''}/${doc.thumbnail_path}`
-              : null
+              ? `${import.meta.env.VITE_API_URL || ""}/${doc.thumbnail_path}`
+              : null;
 
-          const isExpanded = expandedBundles.has(doc.id)
-          const isBundleLoading = loadingBundles.has(doc.id)
-          const childrenList = bundleChildren[doc.id] || []
+          const isExpanded = expandedBundles.has(doc.id);
+          const isBundleLoading = loadingBundles.has(doc.id);
+          const childrenList = bundleChildren[doc.id] || [];
 
           return (
             <div key={doc.id} className="flex flex-col">
               <div
                 onClick={(e) => {
                   if (isBundle && onToggleBundle) {
-                    handleToggleBundle(e, doc.id)
+                    handleToggleBundle(e, doc.id);
                   } else {
-                    handleRowClick(doc)
+                    handleRowClick(doc); // <-- Đảm bảo dòng này được gọi
                   }
                 }}
                 className={cn(
-                  'group grid grid-cols-12 gap-3 px-4 py-3 items-center',
+                  "group grid grid-cols-12 gap-3 px-4 py-3 items-center",
                   isBundle
-                    ? 'hover:bg-purple-50/40 bg-purple-50/10'
-                    : 'hover:bg-slate-50/80',
-                  'transition-all cursor-pointer'
+                    ? "hover:bg-purple-50/40 bg-purple-50/10"
+                    : "hover:bg-slate-50/80",
+                  "transition-all cursor-pointer",
                 )}
               >
                 {/* Tên tài liệu & Preview */}
@@ -295,8 +326,8 @@ export function DocumentListView({
                       ) : (
                         <ChevronRight
                           className={cn(
-                            'h-4 w-4 transition-transform',
-                            isExpanded && 'rotate-90'
+                            "h-4 w-4 transition-transform",
+                            isExpanded && "rotate-90",
                           )}
                         />
                       )}
@@ -307,8 +338,8 @@ export function DocumentListView({
 
                   <div
                     className={cn(
-                      'relative shrink-0 h-10 w-12 rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center transition-transform duration-200 group-hover:scale-105',
-                      theme.bg
+                      "relative shrink-0 h-10 w-12 rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center transition-transform duration-200 group-hover:scale-105",
+                      theme.bg,
                     )}
                   >
                     {isBundle ? (
@@ -319,24 +350,27 @@ export function DocumentListView({
                         alt={doc.title}
                         className="h-full w-full object-cover"
                         onError={() =>
-                          setImageErrors((prev) => ({ ...prev, [doc.id]: true }))
+                          setImageErrors((prev) => ({
+                            ...prev,
+                            [doc.id]: true,
+                          }))
                         }
                       />
                     ) : (
                       <FileIcon
-                        type={doc.type || 'default'}
+                        type={doc.type || "default"}
                         className="h-5 w-5 text-gray-600"
                       />
                     )}
 
                     <span
                       className={cn(
-                        'absolute bottom-0.5 right-0.5 px-1 rounded-sm text-[8px] font-bold uppercase tracking-tighter backdrop-blur-xs',
+                        "absolute bottom-0.5 right-0.5 px-1 rounded-sm text-[8px] font-bold uppercase tracking-tighter backdrop-blur-xs",
                         theme.badgeBg,
-                        theme.badgeText
+                        theme.badgeText,
                       )}
                     >
-                      {isBundle ? 'BUNDLE' : ext || 'FILE'}
+                      {isBundle ? "BUNDLE" : ext || "FILE"}
                     </span>
                   </div>
 
@@ -389,7 +423,7 @@ export function DocumentListView({
                       </div>
                     )}
                     <span className="text-xs text-gray-600 truncate">
-                      {ownerName || 'Thành viên'}
+                      {ownerName || "Thành viên"}
                     </span>
                   </div>
                 )}
@@ -397,8 +431,10 @@ export function DocumentListView({
                 {/* Ngày cập nhật */}
                 <div
                   className={cn(
-                    showOwner ? 'col-span-3 md:col-span-2' : 'col-span-3 md:col-span-3',
-                    'text-xs text-gray-500 text-right md:text-left truncate font-medium'
+                    showOwner
+                      ? "col-span-3 md:col-span-2"
+                      : "col-span-3 md:col-span-3",
+                    "text-xs text-gray-500 text-right md:text-left truncate font-medium",
                   )}
                 >
                   {displayDate}
@@ -407,8 +443,10 @@ export function DocumentListView({
                 {/* Dung lượng */}
                 <div
                   className={cn(
-                    showOwner ? 'hidden md:flex col-span-2' : 'col-span-2 md:col-span-3',
-                    'text-xs text-gray-500 justify-end text-right font-medium'
+                    showOwner
+                      ? "hidden md:flex col-span-2"
+                      : "col-span-2 md:col-span-3",
+                    "text-xs text-gray-500 justify-end text-right font-medium",
                   )}
                 >
                   {displaySize}
@@ -420,23 +458,23 @@ export function DocumentListView({
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="hidden group-hover:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {onAction && workspaceType === 'personal' && (
+                    {onAction && workspaceType === "personal" && (
                       <button
-                        onClick={() => onAction('favorite', doc.id)}
+                        onClick={() => onAction("favorite", doc.id)}
                         className="p-1 text-gray-400 hover:text-rose-500 rounded-md hover:bg-gray-100 transition-colors"
                         title="Yêu thích"
                       >
                         <Heart
                           className={cn(
-                            'h-3.5 w-3.5',
-                            doc.isFavorite && 'fill-rose-500 text-rose-500'
+                            "h-3.5 w-3.5",
+                            doc.isFavorite && "fill-rose-500 text-rose-500",
                           )}
                         />
                       </button>
                     )}
                     {onAction && (
                       <button
-                        onClick={() => onAction('download', doc.id)}
+                        onClick={() => onAction("download", doc.id)}
                         className="p-1 text-gray-400 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
                         title="Tải xuống"
                       >
@@ -445,14 +483,16 @@ export function DocumentListView({
                     )}
                   </div>
 
-                  {workspaceType === 'group' ? (
+                  {workspaceType === "group" ? (
                     <GroupDocumentContextMenu
                       permission={permission}
                       onAction={(action) => onAction?.(action, doc.id)}
                     />
                   ) : (
                     <DocumentContextMenu
-                      onAction={(action: DocumentAction) => onAction?.(action, doc.id)}
+                      onAction={(action: DocumentAction) =>
+                        onAction?.(action, doc.id)
+                      }
                       extraItems={extraItems}
                     />
                   )}
@@ -465,13 +505,13 @@ export function DocumentListView({
                   <div className="pl-8 border-l-2 border-purple-200 ml-4 my-2 flex flex-col gap-1">
                     {childrenList.map((childDoc) => {
                       const cExt = getFileExtension(
-                        childDoc.extension || childDoc.type?.toString()
-                      )
-                      const cTheme = FILE_TYPE_THEMES[cExt] || DEFAULT_THEME
+                        childDoc.extension || childDoc.type?.toString(),
+                      );
+                      const cTheme = FILE_TYPE_THEMES[cExt] || DEFAULT_THEME;
                       const cThumbnail =
                         childDoc.thumbnail_path && !imageErrors[childDoc.id]
-                          ? `${import.meta.env.VITE_API_URL || ''}/${childDoc.thumbnail_path}`
-                          : null
+                          ? `${import.meta.env.VITE_API_URL || ""}/${childDoc.thumbnail_path}`
+                          : null;
 
                       return (
                         <div
@@ -482,8 +522,8 @@ export function DocumentListView({
                           <div className="col-span-6 md:col-span-5 flex items-center gap-3 min-w-0">
                             <div
                               className={cn(
-                                'relative shrink-0 h-8 w-10 rounded border border-gray-200 overflow-hidden flex items-center justify-center',
-                                cTheme.bg
+                                "relative shrink-0 h-8 w-10 rounded border border-gray-200 overflow-hidden flex items-center justify-center",
+                                cTheme.bg,
                               )}
                             >
                               {cThumbnail ? (
@@ -492,12 +532,15 @@ export function DocumentListView({
                                   alt={childDoc.title}
                                   className="h-full w-full object-cover"
                                   onError={() =>
-                                    setImageErrors((p) => ({ ...p, [childDoc.id]: true }))
+                                    setImageErrors((p) => ({
+                                      ...p,
+                                      [childDoc.id]: true,
+                                    }))
                                   }
                                 />
                               ) : (
                                 <FileIcon
-                                  type={childDoc.type || 'default'}
+                                  type={childDoc.type || "default"}
                                   className="h-4 w-4 text-gray-500"
                                 />
                               )}
@@ -517,7 +560,7 @@ export function DocumentListView({
                               <span className="text-[11px] text-gray-500 truncate">
                                 {childDoc.owner?.full_name ||
                                   childDoc.owner?.username ||
-                                  'Thành viên'}
+                                  "Thành viên"}
                               </span>
                             </div>
                           )}
@@ -525,9 +568,9 @@ export function DocumentListView({
                           <div
                             className={cn(
                               showOwner
-                                ? 'col-span-3 md:col-span-2'
-                                : 'col-span-3 md:col-span-3',
-                              'text-[11px] text-gray-400 font-medium truncate text-right md:text-left'
+                                ? "col-span-3 md:col-span-2"
+                                : "col-span-3 md:col-span-3",
+                              "text-[11px] text-gray-400 font-medium truncate text-right md:text-left",
                             )}
                           >
                             {safeFormatDate(childDoc.updatedAt)}
@@ -536,9 +579,9 @@ export function DocumentListView({
                           <div
                             className={cn(
                               showOwner
-                                ? 'hidden md:flex col-span-2'
-                                : 'col-span-2 md:col-span-3',
-                              'text-[11px] text-gray-400 font-medium justify-end text-right'
+                                ? "hidden md:flex col-span-2"
+                                : "col-span-2 md:col-span-3",
+                              "text-[11px] text-gray-400 font-medium justify-end text-right",
                             )}
                           >
                             {safeFormatSize(childDoc.size)}
@@ -548,28 +591,32 @@ export function DocumentListView({
                             className="col-span-3 md:col-span-1 flex items-center justify-end"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            {workspaceType === 'group' ? (
+                            {workspaceType === "group" ? (
                               <GroupDocumentContextMenu
                                 permission={permission}
-                                onAction={(action) => onAction?.(action, childDoc.id)}
+                                onAction={(action) =>
+                                  onAction?.(action, childDoc.id)
+                                }
                               />
                             ) : (
                               <DocumentContextMenu
-                                onAction={(action) => onAction?.(action, childDoc.id)}
+                                onAction={(action) =>
+                                  onAction?.(action, childDoc.id)
+                                }
                                 extraItems={extraItems}
                               />
                             )}
                           </div>
                         </div>
-                      )
+                      );
                     })}
                   </div>
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
