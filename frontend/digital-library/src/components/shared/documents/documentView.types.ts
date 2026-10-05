@@ -12,6 +12,7 @@ export interface DocumentListItem {
   updatedAt?: string
   size?: number | string
   thumbnail_path?: string | null
+  markdown_path?: string | null
   description?: string
   content?: string | null
   pages?: number | null

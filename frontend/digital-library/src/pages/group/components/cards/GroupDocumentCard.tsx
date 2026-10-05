@@ -37,6 +37,7 @@ export function GroupDocumentCard({
       document.extension ||
       getFileExtension(document.file_path, document.file_type, document.title),
     thumbnail_path: document.thumbnail_path || null,
+    markdown_path: document.markdown_path || document.markdownPath || null,
     file_path: document.file_path || null,
     tags: document.tags || [],
     owner: document.owner

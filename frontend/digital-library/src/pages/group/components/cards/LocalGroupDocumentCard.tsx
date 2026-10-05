@@ -88,6 +88,24 @@ export default function LocalGroupDocumentCard({
         window.document.body.removeChild(link);
         break;
       }
+      case "download-markdown": {
+        const mdPath = document?.markdown_path;
+        if (!mdPath) {
+          console.warn("Tài liệu không có markdown_path, bỏ qua");
+          break;
+        }
+        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+        const url = `${apiBase}/${mdPath}`;
+        const link = window.document.createElement("a");
+        link.href = url;
+        link.download = `${document?.title || "document"}.md`;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        window.document.body.appendChild(link);
+        link.click();
+        window.document.body.removeChild(link);
+        break;
+      }
       case "save_personal":
       case "save":
         onSave?.(document.id);
@@ -168,7 +186,7 @@ export default function LocalGroupDocumentCard({
               className="shrink-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-within:opacity-100"
               onClick={(e) => e.stopPropagation()}
             >
-              <GroupDocumentContextMenu onAction={handleAction} permission={permission} />
+              <GroupDocumentContextMenu onAction={handleAction} permission={permission} markdownPath={document.markdown_path} />
             </div>
           </div>
 

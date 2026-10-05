@@ -37,6 +37,7 @@ os.makedirs("storage/personal", exist_ok=True)
 os.makedirs("storage/groups", exist_ok=True)
 os.makedirs("storage/orphaned", exist_ok=True)
 os.makedirs("storage/community", exist_ok=True)
+os.makedirs("storage/markdowns", exist_ok=True)
 app.mount("/storage", StaticFiles(directory="storage"), name="storage")
 
 app.add_middleware(

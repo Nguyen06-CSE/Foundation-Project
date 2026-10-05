@@ -97,6 +97,7 @@ export function GroupDocumentsSection({
     updatedAt: doc.created_at || doc.updated_at || doc.updatedAt,
     size: typeof doc.file_size === "number" ? doc.file_size : parseSizeToBytes(doc.size),
     thumbnail_path: doc.thumbnail_path ?? null,
+    markdown_path: doc.markdown_path ?? doc.markdownPath ?? null,
     owner: doc.owner
       ? {
           full_name: doc.owner.full_name || doc.owner.username || doc.owner.name,
@@ -143,6 +144,24 @@ export function GroupDocumentsSection({
         window.document.body.removeChild(link);
         break;
       }
+      case "download-markdown": {
+        const mdPath = doc?.markdown_path || (doc as any)?.markdownPath;
+        if (!mdPath) {
+          console.warn("Tài liệu không có markdown_path, bỏ qua");
+          break;
+        }
+        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+        const url = `${apiBase}/${mdPath}`;
+        const link = window.document.createElement("a");
+        link.href = url;
+        link.download = `${doc?.title || (doc as any)?.name || "document"}.md`;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        window.document.body.appendChild(link);
+        link.click();
+        window.document.body.removeChild(link);
+        break;
+      }
       default:
         break;
     }
@@ -164,6 +183,7 @@ export function GroupDocumentsSection({
         updatedAt: c.updated_at || c.created_at,
         size: c.file_size,
         thumbnail_path: c.thumbnail_path ?? null,
+        markdown_path: c.markdown_path ?? c.markdownPath ?? null,
         owner: c.owner
           ? { full_name: c.owner.full_name || c.owner.username }
           : undefined,

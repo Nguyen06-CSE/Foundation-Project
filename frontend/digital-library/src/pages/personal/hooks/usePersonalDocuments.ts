@@ -115,6 +115,22 @@ export function usePersonalDocuments(
       } else {
         alert("Không tìm thấy đường dẫn tệp để tải xuống.");
       }
+    } else if (action === "download-markdown") {
+      const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
+      const mdPath = targetDoc?.markdown_path;
+      if (mdPath) {
+        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${mdPath}`;
+        const link = document.createElement("a");
+        link.href = fileDownloadUrl;
+        link.download = `${targetDoc.title || "document"}.md`;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert("Tài liệu không có tệp Markdown để tải xuống.");
+      }
     } else if (action === "rename") {
       const docToRename = docData?.items.find((d) => d.id.toString() === documentId);
       if (docToRename) {
@@ -144,6 +160,8 @@ export function usePersonalDocuments(
       size: formatSize(doc.file_size || 0),
       extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
       thumbnail_path: doc.thumbnail_path ?? null,
+      markdown_path: doc.markdown_path ?? null,
+      markdownPath: doc.markdown_path ?? null,
       file_path: doc.file_path ?? null,
       content: doc.content,
       owner: { name: "You", avatar: "" },

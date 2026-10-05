@@ -9,7 +9,36 @@ logger = logging.getLogger(__name__)
 
 STORAGE_DIR = Path("storage")
 THUMBNAIL_DIR = STORAGE_DIR / "thumbnails"
+MARKDOWN_DIR = STORAGE_DIR / "markdowns"
 THUMBNAIL_DIR.mkdir(parents=True, exist_ok=True)
+MARKDOWN_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def generate_markdown(file_path: str, doc_id: int) -> Optional[str]:
+    """
+    Convert file sang Markdown bằng anydoc và lưu vào storage/markdowns/<doc_id>.md.
+    Trả về đường dẫn tương đối (để lưu vào DB) hoặc None nếu thất bại.
+    """
+    try:
+        import anydoc  # lazy import — không crash nếu chưa cài
+
+        path = Path(file_path)
+        if not path.exists():
+            return None
+
+        markdown_content = anydoc.to_markdown(str(path))
+        if not markdown_content or not markdown_content.strip():
+            return None
+
+        out_path = MARKDOWN_DIR / f"{doc_id}.md"
+        out_path.write_text(markdown_content, encoding="utf-8")
+        return f"storage/markdowns/{doc_id}.md"
+
+    except Exception as e:
+        # Bắt NeedsOcrError, UnsupportedError và mọi exception khác — không block luồng chính
+        logger.warning(f"generate_markdown skip doc_id={doc_id}: {e}")
+        return None
+
 
 # Map MIME type → extension nhóm
 MIME_TO_GROUP = {

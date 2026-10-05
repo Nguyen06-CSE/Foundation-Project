@@ -486,10 +486,12 @@ export function DocumentListView({
                   {workspaceType === "group" ? (
                     <GroupDocumentContextMenu
                       permission={permission}
+                      markdownPath={doc.markdown_path}
                       onAction={(action) => onAction?.(action, doc.id)}
                     />
                   ) : (
                     <DocumentContextMenu
+                      markdownPath={doc.markdown_path}
                       onAction={(action: DocumentAction) =>
                         onAction?.(action, doc.id)
                       }
@@ -594,12 +596,14 @@ export function DocumentListView({
                             {workspaceType === "group" ? (
                               <GroupDocumentContextMenu
                                 permission={permission}
+                                markdownPath={childDoc.markdown_path}
                                 onAction={(action) =>
                                   onAction?.(action, childDoc.id)
                                 }
                               />
                             ) : (
                               <DocumentContextMenu
+                                markdownPath={childDoc.markdown_path}
                                 onAction={(action) =>
                                   onAction?.(action, childDoc.id)
                                 }

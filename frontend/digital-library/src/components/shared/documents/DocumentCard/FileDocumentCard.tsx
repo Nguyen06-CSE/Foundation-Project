@@ -206,6 +206,7 @@ export function FileDocumentCard({
               onClick={(e) => e.stopPropagation()}
             >
               <DocumentContextMenu
+                markdownPath={document.markdownPath || document.markdown_path}
                 onAction={handleAction}
                 allowedActions={allowedActions}
                 extraItems={extraItems}

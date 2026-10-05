@@ -27,6 +27,7 @@ export interface DocCardType {
   size: string;
   extension?: string;
   thumbnail_path?: string | null;
+  markdown_path?: string | null;
   file_path?: string | null;
   owner?: { name: string; avatar: string };
   rawType?: string | null;
@@ -91,6 +92,7 @@ function toListItem(doc: DocCardType): DocumentListItem {
     updatedAt: doc.updatedAt,
     size: parseSizeToBytes(doc.size),
     thumbnail_path: doc.thumbnail_path,
+    markdown_path: doc.markdown_path ?? null,
     owner: doc.owner ? { full_name: doc.owner.name } : undefined,
     tags: doc.tags,
     workspace_type: "personal",
@@ -145,6 +147,7 @@ export function PersonalDocumentsSection({
         size: formatSize(c.file_size || 0),
         extension: getFileExtension(c.file_path, c.file_type, c.title),
         thumbnail_path: c.thumbnail_path ?? null,
+        markdown_path: c.markdown_path ?? null,
         file_path: c.file_path ?? null,
         rawType: c.file_type,
         tags: c.tags || [],
@@ -298,6 +301,7 @@ export function PersonalDocumentsSection({
                 updatedAt: c.updated_at || c.created_at,
                 size: c.file_size,
                 thumbnail_path: c.thumbnail_path,
+                markdown_path: c.markdown_path ?? null,
                 tags: c.tags,
                 workspace_type: "personal",
                 is_bundle: false,

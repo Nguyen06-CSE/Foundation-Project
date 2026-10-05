@@ -73,6 +73,22 @@ export function DocumentBrowser({
       if (window.confirm('Xóa tài liệu này?')) {
         deleteDocMutation.mutate(Number(docId));
       }
+    } else if (action === 'download-markdown') {
+      const targetDoc = rawDocs.find((d: any) => d.id.toString() === docId.toString());
+      const mdPath = targetDoc?.markdown_path || targetDoc?.markdownPath;
+      if (mdPath) {
+        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${mdPath}`;
+        const link = document.createElement('a');
+        link.href = fileDownloadUrl;
+        link.download = `${targetDoc.title || targetDoc.name || 'document'}.md`;
+        link.target = '_blank';
+        link.rel = 'noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert('Không tìm thấy đường dẫn tệp Markdown để tải xuống.');
+      }
     }
   };
 
@@ -85,6 +101,7 @@ export function DocumentBrowser({
     updatedAt: doc.created_at ? formatRelativeDate(doc.created_at) : '',
     size: doc.file_size ? formatSize(doc.file_size) : '0 B',
     thumbnail_path: doc.thumbnail_path,
+    markdown_path: doc.markdown_path ?? doc.markdownPath ?? null,
     tags: doc.tags || [],
   }));
 

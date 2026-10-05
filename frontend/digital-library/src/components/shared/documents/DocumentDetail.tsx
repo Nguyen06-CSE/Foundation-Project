@@ -4,6 +4,9 @@
 // 1. IMPORTS
 // ==========================================
 import { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { renderAsync } from "docx-preview";
@@ -186,6 +189,52 @@ function DocxViewer({ fileUrl }: { fileUrl: string }) {
   );
 }
 
+// Sub-component xem tài liệu Markdown
+function MarkdownViewer({ markdownPath }: { markdownPath: string }) {
+  const [content, setContent] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+
+    fetch(`${import.meta.env.VITE_API_URL}/${markdownPath}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Không thể tải file Markdown");
+        return res.text();
+      })
+      .then((text) => {
+        if (isMounted) { setContent(text); setLoading(false); }
+      })
+      .catch((err) => {
+        if (isMounted) { setError(err.message); setLoading(false); }
+      });
+
+    return () => { isMounted = false; };
+  }, [markdownPath]);
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center py-20 text-gray-500 gap-3">
+        <Loader2 className="h-6 w-6 animate-spin text-primary-600" />
+        <span className="text-sm">Đang tải nội dung Markdown...</span>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="py-12 text-center text-sm text-red-500">{error}</div>
+    );
+
+  return (
+    <div className="prose prose-sm max-w-none overflow-auto max-h-[750px] p-5 bg-white rounded-xl border border-gray-200 custom-scrollbar">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content ?? ""}</ReactMarkdown>
+    </div>
+  );
+}
+
 interface InfoRowProps {
   label: string;
   value: string;
@@ -216,6 +265,7 @@ function StatItem({ label, value }: StatItemProps) {
 
 // Sub-component Tab Detail (Bản xem trước tổng hợp)
 function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
+  const { defaultPreviewMode } = useSettingsStore();
   const fileType = doc.file_type?.toLowerCase() || "";
   const filePath = doc.file_path?.toLowerCase() || "";
 
@@ -228,54 +278,93 @@ function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
     filePath.endsWith(".docx") ||
     filePath.endsWith(".doc");
 
+  const hasMarkdown = !isImage && !!doc.markdown_path;
+  // If markdown not available, always show original regardless of stored pref
+  const [viewMode, setViewMode] = useState<"original" | "markdown">(
+    hasMarkdown && defaultPreviewMode === "markdown" ? "markdown" : "original",
+  );
+
   const thumbnailUrl = doc.thumbnail_path
     ? `${import.meta.env.VITE_API_URL}/${doc.thumbnail_path}`
     : null;
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl bg-gray-100/80 p-2 min-h-[500px] border border-gray-200">
-      {isImage ? (
-        <img
-          src={fileUrl}
-          alt={doc.title}
-          className="max-w-full max-h-[700px] rounded-lg object-contain shadow-sm bg-white"
-          onError={(e) => {
-            e.currentTarget.style.display = "none";
-          }}
-        />
-      ) : isPdf ? (
-        <iframe
-          src={`${fileUrl}#toolbar=1&navpanes=0`}
-          className="w-full h-[750px] rounded-lg shadow-sm bg-white border-0"
-          title={doc.title}
-        />
-      ) : isDocx ? (
-        <DocxViewer fileUrl={fileUrl} />
-      ) : (
-        <div className="flex flex-col items-center justify-center space-y-4 py-12">
-          {thumbnailUrl ? (
-            <img
-              src={thumbnailUrl}
-              alt={doc.title}
-              className="h-60 rounded object-contain shadow"
-            />
-          ) : (
-            <div className="flex h-40 w-32 flex-col items-center justify-center rounded-xl bg-gradient-to-b from-gray-400 to-gray-500 text-white shadow">
-              <span className="text-xs font-bold text-center px-2">
-                {doc.title}
-              </span>
-            </div>
-          )}
-          <p className="text-sm text-gray-500 max-w-sm text-center leading-relaxed">
-            Hệ thống hiện chưa hỗ trợ xem trước định dạng này trực tiếp. Vui
-            lòng nhấn <strong>"Mở trong thẻ mới"</strong> hoặc{" "}
-            <strong>"Tải xuống"</strong> để xem.
-          </p>
+    <div className="flex flex-col gap-3">
+      {/* Toggle pill — only when markdown is available */}
+      {hasMarkdown && (
+        <div className="flex items-center self-end bg-gray-100 rounded-full p-0.5 text-xs font-medium">
+          <button
+            onClick={() => setViewMode("original")}
+            className={cn(
+              "px-3 py-1 rounded-full transition-colors",
+              viewMode === "original"
+                ? "bg-white text-primary-600 shadow-sm"
+                : "text-gray-500 hover:text-gray-700",
+            )}
+          >
+            Bản gốc
+          </button>
+          <button
+            onClick={() => setViewMode("markdown")}
+            className={cn(
+              "px-3 py-1 rounded-full transition-colors",
+              viewMode === "markdown"
+                ? "bg-white text-primary-600 shadow-sm"
+                : "text-gray-500 hover:text-gray-700",
+            )}
+          >
+            Markdown
+          </button>
         </div>
       )}
+
+      <div className="flex flex-col items-center justify-center rounded-xl bg-gray-100/80 p-2 min-h-[500px] border border-gray-200">
+        {viewMode === "markdown" && hasMarkdown ? (
+          <MarkdownViewer markdownPath={doc.markdown_path} />
+        ) : isImage ? (
+          <img
+            src={fileUrl}
+            alt={doc.title}
+            className="max-w-full max-h-[700px] rounded-lg object-contain shadow-sm bg-white"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        ) : isPdf ? (
+          <iframe
+            src={`${fileUrl}#toolbar=1&navpanes=0`}
+            className="w-full h-[750px] rounded-lg shadow-sm bg-white border-0"
+            title={doc.title}
+          />
+        ) : isDocx ? (
+          <DocxViewer fileUrl={fileUrl} />
+        ) : (
+          <div className="flex flex-col items-center justify-center space-y-4 py-12">
+            {thumbnailUrl ? (
+              <img
+                src={thumbnailUrl}
+                alt={doc.title}
+                className="h-60 rounded object-contain shadow"
+              />
+            ) : (
+              <div className="flex h-40 w-32 flex-col items-center justify-center rounded-xl bg-gradient-to-b from-gray-400 to-gray-500 text-white shadow">
+                <span className="text-xs font-bold text-center px-2">
+                  {doc.title}
+                </span>
+              </div>
+            )}
+            <p className="text-sm text-gray-500 max-w-sm text-center leading-relaxed">
+              Hệ thống hiện chưa hỗ trợ xem trước định dạng này trực tiếp. Vui
+              lòng nhấn <strong>"Mở trong thẻ mới"</strong> hoặc{" "}
+              <strong>"Tải xuống"</strong> để xem.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
 
 // Sub-component Tab Content (Nội dung OCR)
 function TabContent({ content }: { content: string }) {
@@ -384,6 +473,9 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   const [activeTab, setActiveTab] = useState<TabKey>("detail");
 
+  // State cho menu tải xuống (Bản gốc / Markdown)
+  const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
+
   // States cho quản lý Tag
   const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
   const [originalTags, setOriginalTags] = useState<TagType[]>([]);
@@ -393,6 +485,22 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   const [isRenaming, setIsRenaming] = useState(false);
   const [tempTitle, setTempTitle] = useState("");
+
+  // Đóng menu tải xuống khi click ra ngoài
+  const downloadMenuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isDownloadMenuOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        downloadMenuRef.current &&
+        !downloadMenuRef.current.contains(e.target as Node)
+      ) {
+        setIsDownloadMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDownloadMenuOpen]);
 
   const handleBack = () => {
     if (onBack) {
@@ -669,6 +777,11 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const fileDownloadUrl = doc.file_path
     ? `${import.meta.env.VITE_API_URL}/${doc.file_path}`
     : "#";
+
+  // URL tải Markdown (nếu có)
+  const markdownDownloadUrl = doc.markdown_path
+    ? `${import.meta.env.VITE_API_URL}/${doc.markdown_path}`
+    : null;
 
   return (
     <div className="flex flex-col gap-6 pb-10">
@@ -985,21 +1098,66 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
           {/* Actions Card */}
           <Card className="flex flex-col gap-3">
-            <a
-              href={fileDownloadUrl}
-              download={doc.title}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full block"
-            >
+            {/* ── Nút Tải xuống có lựa chọn định dạng ── */}
+            <div className="relative" ref={downloadMenuRef}>
               <Button
                 variant="primary"
-                className="w-full py-3 h-auto text-base"
+                className="w-full py-3 h-auto text-base flex items-center justify-center gap-2"
+                onClick={() => {
+                  if (markdownDownloadUrl) {
+                    setIsDownloadMenuOpen((prev) => !prev);
+                  } else {
+                    // Tải bản gốc trực tiếp
+                    const link = window.document.createElement("a");
+                    link.href = fileDownloadUrl;
+                    link.download = doc.title;
+                    link.target = "_blank";
+                    link.click();
+                  }
+                }}
                 icon={<Download className="h-5 w-5" />}
               >
-                Tải xuống tài liệu
+                <span>Tải xuống tài liệu</span>
+                {markdownDownloadUrl && (
+                  <span className="text-xs bg-primary-700 px-1.5 py-0.5 rounded ml-1">
+                    Tùy chọn ▼
+                  </span>
+                )}
               </Button>
-            </a>
+
+              {/* Popup Menu lựa chọn định dạng */}
+              {isDownloadMenuOpen && markdownDownloadUrl && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-50 animate-in fade-in zoom-in-95 flex flex-col gap-1">
+                  <a
+                    href={fileDownloadUrl}
+                    download={doc.title}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setIsDownloadMenuOpen(false)}
+                    className="flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <span>Tải về bản gốc</span>
+                    <span className="text-xs text-gray-400 uppercase">
+                      {fileTypeLabel.split(" ")[0]}
+                    </span>
+                  </a>
+
+                  <a
+                    href={markdownDownloadUrl}
+                    download={`${doc.title}.md`}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setIsDownloadMenuOpen(false)}
+                    className="flex items-center justify-between px-3 py-2 text-sm font-medium text-primary-600 hover:bg-primary-50 rounded-lg transition-colors border-t border-gray-100"
+                  >
+                    <span>Tải về định dạng Markdown</span>
+                    <span className="text-xs font-bold bg-primary-100 text-primary-700 px-1.5 py-0.5 rounded">
+                      .MD
+                    </span>
+                  </a>
+                </div>
+              )}
+            </div>
 
             <div className="flex flex-col mt-1">
               {[

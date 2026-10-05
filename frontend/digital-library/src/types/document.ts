@@ -41,6 +41,7 @@ export interface Document {
   category_id?: number;
   description?: string;
   thumbnail_path?: string | null;
+  markdown_path?: string | null;
   content?: string | null;
   tags?: Tag[];
   is_deleted?: boolean;

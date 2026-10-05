@@ -8,15 +8,16 @@ export type GroupPermission = "owner" | "full" | "view";
 export interface GroupDocumentContextMenuProps {
   onAction: (action: DocumentAction | string) => void;
   permission: GroupPermission;
+  markdownPath?: string | null;
 }
 
-export function GroupDocumentContextMenu({ onAction, permission }: GroupDocumentContextMenuProps) {
+export function GroupDocumentContextMenu({ onAction, permission, markdownPath }: GroupDocumentContextMenuProps) {
   let allowedActions: DocumentAction[] = [];
 
   if (permission === "owner" || permission === "full") {
-    allowedActions = ["view", "download", "share", "favorite", "rename", "move", "delete"];
+    allowedActions = ["view", "download", "download-markdown", "share", "favorite", "rename", "move", "delete"];
   } else if (permission === "view") {
-    allowedActions = ["view", "download", "favorite"];
+    allowedActions = ["view", "download", "download-markdown", "favorite"];
   }
 
   const extraItems: DocumentMenuItem[] = [
@@ -32,6 +33,7 @@ export function GroupDocumentContextMenu({ onAction, permission }: GroupDocument
       onAction={onAction}
       allowedActions={allowedActions}
       extraItems={extraItems}
+      markdownPath={markdownPath}
     />
   );
 }

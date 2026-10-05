@@ -36,7 +36,7 @@ from app.models.user import User
 from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
 from app.schemas.tag import TagOut
 from app.services.document_service import create_document_from_upload
-from app.services.file_processor import create_thumbnail, extract_text
+from app.services.file_processor import create_thumbnail, extract_text, generate_markdown
 from app.services.folder_service import get_documents_by_folder
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -47,7 +47,7 @@ class AddFromPersonalPayload(BaseModel):
 
 
 async def _process_document_background(doc_id: int, file_path: str, mime_type: str):
-    """Chạy nền: extract text + tạo thumbnail, dùng session riêng"""
+    """Chạy nền: extract text + tạo thumbnail + generate markdown, dùng session riêng"""
     async with AsyncSessionLocal() as db:
         try:
             doc = await db.get(Document, doc_id)
@@ -61,9 +61,13 @@ async def _process_document_background(doc_id: int, file_path: str, mime_type: s
             thumbnail_path = await loop.run_in_executor(
                 None, create_thumbnail, file_path, mime_type, doc_id
             )
+            markdown_path = await loop.run_in_executor(
+                None, generate_markdown, file_path, doc_id
+            )
 
             doc.content = content
             doc.thumbnail_path = thumbnail_path
+            doc.markdown_path = markdown_path
             await db.commit()
         except Exception as e:
             logging.getLogger(__name__).error(

@@ -46,6 +46,7 @@ class DocumentOut(DocumentBase):
     file_type: Optional[str] = None
     file_size: Optional[int] = None
     thumbnail_path: Optional[str] = None
+    markdown_path: Optional[str] = None
     checksum: str
     content: Optional[str] = None
     # Đổi alias thành serialization_alias để Pydantic đọc doc.metadata_ từ ORM

@@ -261,6 +261,24 @@ export default function BundleDetailPage() {
           window.open(downloadUrl, "_blank");
         }
         break;
+      case "download-markdown": {
+        const mdPath = child?.markdown_path;
+        if (!mdPath) {
+          console.warn("Tài liệu không có markdown_path, bỏ qua");
+          break;
+        }
+        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+        const url = `${apiBase}/${mdPath}`;
+        const link = window.document.createElement("a");
+        link.href = url;
+        link.download = `${child?.title || "document"}.md`;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        window.document.body.appendChild(link);
+        link.click();
+        window.document.body.removeChild(link);
+        break;
+      }
       case "rename":
         setRenamingChild(child);
         break;
@@ -330,6 +348,7 @@ export default function BundleDetailPage() {
     updatedAt: child.updated_at || child.created_at,
     size: formatSize(child.file_size || 0),
     thumbnail_path: child.thumbnail_path,
+    markdown_path: child.markdown_path,
     tags: child.tags,
     is_bundle: false,
   }));
@@ -341,6 +360,7 @@ export default function BundleDetailPage() {
     updatedAt: child.updated_at || child.created_at,
     size: child.file_size,
     thumbnail_path: child.thumbnail_path,
+    markdown_path: child.markdown_path,
     owner: child.owner
       ? { full_name: child.owner.full_name || child.owner.username }
       : undefined,
