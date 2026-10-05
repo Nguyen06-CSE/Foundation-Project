@@ -1,0 +1,39 @@
+/* frontend/digital-library/src/index.css */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --color-primary-50: #EFF8F1;
+  --color-primary-100: #DCEFE0;
+  --color-primary-500: #3A8348;
+  --color-primary-600: #2F6B3C;
+  --color-primary-700: #245530;
+}
+
+html {
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f9fafb; /* Thay thế hàm theme() cũ */
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* custom-scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
