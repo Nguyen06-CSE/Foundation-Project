@@ -9,7 +9,7 @@ import { Dropdown } from "@/components/ui/Dropdown";
 import { groupService } from "@/services/groupService";
 import { formatRelativeDate } from "@/utils/formatDate";
 import type { PermissionLevel } from "@/types/group";
-import type { MembersTabProps } from "../types/groupSpace.types";
+import type { MembersTabProps } from "../../types/groupSpace.types";
 
 export default function MembersTab({
   members,

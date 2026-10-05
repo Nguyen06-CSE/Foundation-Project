@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { User, Heart, Download, Sparkles } from 'lucide-react'
 import { FileIcon } from './FileIcon'
 import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
-import { GroupDocumentContextMenu } from '@/pages/group/components/GroupDocumentContextMenu'
+import { GroupDocumentContextMenu } from '@/pages/group/components/shared/GroupDocumentContextMenu'
 import { extractSummary } from '@/utils/textUtils'
 import { cn } from '@/utils/cn'
 import {

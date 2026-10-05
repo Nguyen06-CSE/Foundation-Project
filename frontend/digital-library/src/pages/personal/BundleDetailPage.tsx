@@ -27,7 +27,7 @@ import { DocumentCard } from "@/components/shared/documents/DocumentCard";
 import {
   DocumentListView,
   type DocumentListItem,
-} from "@/components/shared/documents/DocumentListView";
+} from "@/components/shared/documents";
 import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import EmptyState from "@/components/shared/feedback/EmptyState";
 import { RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";

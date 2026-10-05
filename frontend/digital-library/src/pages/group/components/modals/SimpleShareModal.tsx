@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
-import type { SimpleShareModalProps } from "../types/groupSpace.types";
+import type { SimpleShareModalProps } from "../../types/groupSpace.types";
 
 export default function SimpleShareModal({
   title,

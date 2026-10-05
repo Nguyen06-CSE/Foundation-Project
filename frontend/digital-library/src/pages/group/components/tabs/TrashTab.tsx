@@ -13,7 +13,7 @@ import {
   TrashBatchRow,
   MobileTrashBatch,
 } from "@/components/shared/trash";
-import type { TrashTabProps } from "../types/groupSpace.types";
+import type { TrashTabProps } from "../../types/groupSpace.types";
 
 export default function TrashTab({ documents, groupId }: TrashTabProps) {
   const queryClient = useQueryClient();

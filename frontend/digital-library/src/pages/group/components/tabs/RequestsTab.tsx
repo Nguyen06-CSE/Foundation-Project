@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { groupService } from "@/services/groupService";
 import { formatRelativeDate } from "@/utils/formatDate";
-import type { RequestsTabProps } from "../types/groupSpace.types";
+import type { RequestsTabProps } from "../../types/groupSpace.types";
 
 export default function RequestsTab({ invitations }: RequestsTabProps) {
   const queryClient = useQueryClient();

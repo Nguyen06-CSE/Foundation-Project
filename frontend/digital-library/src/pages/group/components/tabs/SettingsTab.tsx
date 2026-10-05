@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
-import type { SettingsTabProps } from "../types/groupSpace.types";
+import type { SettingsTabProps } from "../../types/groupSpace.types";
 
 export default function SettingsTab({
   groupName,

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronDown, ChevronRight, User, Heart, Download, Package } from 'lucide-react'
 import { FileIcon } from './FileIcon'
 import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
-import { GroupDocumentContextMenu } from '@/pages/group/components/GroupDocumentContextMenu'
+import { GroupDocumentContextMenu } from '@/pages/group/components/shared/GroupDocumentContextMenu'
 import { cn } from '@/utils/cn'
 import {
   type BaseDocumentViewProps,

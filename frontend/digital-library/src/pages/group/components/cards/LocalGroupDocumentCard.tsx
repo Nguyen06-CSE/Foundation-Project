@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
-import { GroupDocumentContextMenu } from "@/pages/group/components/GroupDocumentContextMenu";
+import { GroupDocumentContextMenu } from "@/pages/group/components/shared/GroupDocumentContextMenu";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { Avatar } from "@/components/ui/Avatar"; // <-- 1. Import Component Avatar
-import type { LocalGroupDocumentCardProps } from "../types/groupSpace.types";
+import type { LocalGroupDocumentCardProps } from "../../types/groupSpace.types";
 
 // ======================================================
 // Helpers & File Type Themes (Giữ nguyên)
