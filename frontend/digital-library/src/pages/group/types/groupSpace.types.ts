@@ -33,6 +33,8 @@ export interface DocumentsTabProps {
   onRename?: (docId: string | number, currentTitle: string) => void;
   onAddFolder: () => void;
   onFolderAction: (action: FolderAction, folderId: number) => void;
+
+  currentView?: "grid" | "list" | "detail";
 }
 
 export interface LocalGroupDocumentCardProps {

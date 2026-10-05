@@ -10,6 +10,7 @@ import type { PermissionLevel, WorkspaceMember } from "@/types/group";
 import type { FolderAction } from "@/components/shared/folders/FolderContextMenu";
 import DocumentsTab from "./DocumentsTab";
 import type { DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
+import { useState } from "react";
 
 export interface WorkspaceTag {
   id?: number;
@@ -100,6 +101,7 @@ export function GroupDocumentsSection({
   handleFolderAction,
   onDocumentAction: _onDocumentAction,
 }: GroupDocumentsSectionProps) {
+  const [currentView, setCurrentView] = useState<"grid" | "list" | "detail">("detail");
   return (
     <div className="flex flex-col gap-4">
       {/* Dynamic Tabs lọc theo định dạng tệp */}
@@ -200,6 +202,7 @@ export function GroupDocumentsSection({
           setIsFolderModalOpen(true);
         }}
         onFolderAction={handleFolderAction}
+        currentView={currentView}
       />
     </div>
   );
