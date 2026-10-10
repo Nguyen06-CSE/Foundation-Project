@@ -460,6 +460,7 @@ async def upload_group_document(
     description: Optional[str] = Form(None),
     category_id: Optional[int] = Form(None),
     tag_ids: list[int] = Form(default=[]),
+    thumbnail_path: Optional[str] = Form(None),
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -474,6 +475,7 @@ async def upload_group_document(
         category_id=category_id,
         workspace_id=group_id,
         tag_ids=tag_ids,
+        thumbnail_path=thumbnail_path,
     )
     await db.commit()
     await db.refresh(document)
@@ -534,6 +536,8 @@ async def update_group_document(
         document.description = payload.description
     if hasattr(payload, 'category_id') and payload.category_id is not None:
         document.category_id = payload.category_id
+    if hasattr(payload, 'thumbnail_path') and payload.thumbnail_path is not None:
+        document.thumbnail_path = payload.thumbnail_path
         
     await db.commit()
     await db.refresh(document)

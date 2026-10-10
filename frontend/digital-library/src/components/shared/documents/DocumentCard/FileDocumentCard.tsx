@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
 import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
 import type { DocumentCardProps } from "./DocumentCard";
+import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 
 // ======================================================
 // Helpers & Themes
@@ -140,10 +141,9 @@ export function FileDocumentCard({
   const ext = getFileExtension(document.extension || document.type);
   const theme = FILE_TYPE_THEMES[ext] || DEFAULT_THEME;
 
-  const thumbnailUrl =
-    document.thumbnail_path && !imageError
-      ? `${import.meta.env.VITE_API_URL}/${document.thumbnail_path}`
-      : null;
+  const thumbnailUrl = !imageError
+    ? getThumbnailUrl(document.thumbnail_path)
+    : null;
 
   const tags = document.tags || [];
 

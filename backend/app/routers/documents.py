@@ -66,7 +66,8 @@ async def _process_document_background(doc_id: int, file_path: str, mime_type: s
             )
 
             doc.content = content
-            doc.thumbnail_path = thumbnail_path
+            if thumbnail_path:
+                doc.thumbnail_path = thumbnail_path
             doc.markdown_path = markdown_path
             await db.commit()
         except Exception as e:
@@ -83,6 +84,7 @@ async def upload_document(
     category_id: Optional[int] = Form(None),
     workspace_id: Optional[int] = Form(None),
     tag_ids: list[int] = Form(default=[]),
+    thumbnail_path: Optional[str] = Form(None),
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -97,6 +99,7 @@ async def upload_document(
             category_id=category_id,
             workspace_id=workspace_id,
             tag_ids=tag_ids,
+            thumbnail_path=thumbnail_path,
         )
     except ValueError as exc:
         if str(exc).startswith("duplicate_document:"):

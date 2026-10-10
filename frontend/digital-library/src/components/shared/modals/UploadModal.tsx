@@ -10,6 +10,7 @@ import { documentService } from "@/services/documentService";
 import { groupService } from "@/services/groupService";
 import { formatSize } from "@/utils/formatSize";
 import { TagSelector, type TagItem } from "../feedback/TagSelector";
+import { generateDocxThumbnail, isDocxFile } from "@/utils/docxThumbnail";
 export interface UploadModalProps {
   onClose: () => void;
   availableTags?: TagItem[];
@@ -137,6 +138,17 @@ export function UploadModal({
 
       if (description.trim()) {
         fd.append("description", description.trim());
+      }
+
+      if (isDocxFile(fileToUpload)) {
+        try {
+          const thumbnailBase64 = await generateDocxThumbnail(fileToUpload, 1);
+          if (thumbnailBase64) {
+            fd.append("thumbnail_path", thumbnailBase64);
+          }
+        } catch (thumbErr) {
+          console.warn("Không thể tự động tạo ảnh bìa DOCX:", thumbErr);
+        }
       }
 
       await onUpload(fd, selectedTagIds);

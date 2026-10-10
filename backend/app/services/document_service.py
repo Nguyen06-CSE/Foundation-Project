@@ -24,7 +24,8 @@ async def create_document_from_upload(
     category_id: int | None, 
     workspace_id: int | None = None,
     tag_ids: list[int] | None = None,  # <-- Thêm tham số tag_ids
-    content: str | None = None
+    content: str | None = None,
+    thumbnail_path: str | None = None,
 ):
     file_path = save_upload_file(upload, owner_id)
     checksum = checksum_for_file(file_path)
@@ -52,6 +53,7 @@ async def create_document_from_upload(
         title=title,
         description=description,
         file_path=file_path,
+        thumbnail_path=thumbnail_path,
         file_type=upload.content_type,
         file_size=getattr(upload, "size", None),
         checksum=checksum,

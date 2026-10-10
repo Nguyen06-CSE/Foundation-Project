@@ -154,7 +154,7 @@ export const groupService = {
   getDocumentById: (groupId: number, docId: number) =>
     api.get<Document>(`/groups/${groupId}/documents/${docId}`).then((r) => r.data),
 
-  updateDocument: (groupId: number, docId: number, payload: { title: string }) =>
+  updateDocument: (groupId: number, docId: number, payload: Partial<Document>) =>
     api.patch<Document>(`/groups/${groupId}/documents/${docId}`, payload).then((r) => r.data),
 
   updateTags: (groupId: number, docId: number, tagIds: number[]) =>

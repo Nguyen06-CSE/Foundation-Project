@@ -10,6 +10,7 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { renderAsync } from "docx-preview";
+import html2canvas from "html2canvas";
 import {
   ArrowLeft,
   Download,
@@ -24,6 +25,8 @@ import {
   Check,
   ExternalLink,
   Loader2,
+  Camera,
+  Image as ImageIcon,
 } from "lucide-react";
 
 // UI Components
@@ -37,6 +40,8 @@ import { tagService } from "@/services/tagService";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { cn } from "@/utils/cn";
+import type { Document } from "@/types/document";
+import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 
 // ==========================================
 // 2. TYPES & CONSTANTS
@@ -102,7 +107,7 @@ export interface DocumentDetailPermissions {
 export interface SharedDocumentDetailProps {
   documentId?: number;
   fetchDocumentFn?: (id: number) => Promise<any>;
-  updateDocumentFn?: (id: number, data: { title: string }) => Promise<any>;
+  updateDocumentFn?: (id: number, data: Partial<Document>) => Promise<any>;
   deleteDocumentFn?: (id: number) => Promise<any>;
   updateTagsFn?: (id: number, tagIds: number[]) => Promise<any>;
   removeTagFn?: (id: number, tagId: number) => Promise<any>;
@@ -117,14 +122,62 @@ export interface SharedDocumentDetailProps {
 // 3. SUB-COMPONENTS FOR PREVIEW
 // ==========================================
 
+interface DocxViewerProps {
+  fileUrl: string;
+  hasThumbnail: boolean;
+  onUpdateThumbnail?: (base64Thumbnail: string) => void;
+  isUpdatingThumbnail?: boolean;
+}
+
 // Sub-component xem trước file DOCX
-function DocxViewer({ fileUrl }: { fileUrl: string }) {
+function DocxViewer({
+  fileUrl,
+  hasThumbnail,
+  onUpdateThumbnail,
+  isUpdatingThumbnail = false,
+}: DocxViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedPage, setSelectedPage] = useState(1);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const hasThumbnailRef = useRef(hasThumbnail);
+  const onUpdateThumbnailRef = useRef(onUpdateThumbnail);
+
+  useEffect(() => {
+    hasThumbnailRef.current = hasThumbnail;
+    onUpdateThumbnailRef.current = onUpdateThumbnail;
+  }, [hasThumbnail, onUpdateThumbnail]);
+
+  const capturePage = async (pageNumber: number): Promise<string | null> => {
+    if (!containerRef.current) return null;
+
+    const pages = containerRef.current.querySelectorAll("section");
+    const targetElement =
+      pages.length > 0
+        ? (pages[Math.max(0, Math.min(pageNumber - 1, pages.length - 1))] as HTMLElement)
+        : (containerRef.current.firstElementChild as HTMLElement) || containerRef.current;
+
+    if (!targetElement) return null;
+
+    try {
+      const canvas = await html2canvas(targetElement, {
+        scale: 0.6,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+      });
+      return canvas.toDataURL("image/webp", 0.75);
+    } catch (err) {
+      console.error("Lỗi khi chụp trang tài liệu:", err);
+      return null;
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
+    let captureTimeout: ReturnType<typeof setTimeout> | undefined;
     setLoading(true);
     setError(null);
 
@@ -146,7 +199,24 @@ function DocxViewer({ fileUrl }: { fileUrl: string }) {
         }
       })
       .then(() => {
-        if (isMounted) setLoading(false);
+        if (!isMounted) return;
+        setLoading(false);
+
+        captureTimeout = setTimeout(async () => {
+          if (!isMounted || !containerRef.current) return;
+
+          const pages = containerRef.current.querySelectorAll("section");
+          const pageCount = pages.length || 1;
+          setTotalPages(pageCount);
+          setSelectedPage((page) => Math.min(page, pageCount));
+
+          if (!hasThumbnailRef.current && onUpdateThumbnailRef.current) {
+            const firstPageThumbnail = await capturePage(1);
+            if (isMounted && firstPageThumbnail) {
+              onUpdateThumbnailRef.current?.(firstPageThumbnail);
+            }
+          }
+        }, 600);
       })
       .catch((err) => {
         if (isMounted) {
@@ -160,31 +230,104 @@ function DocxViewer({ fileUrl }: { fileUrl: string }) {
 
     return () => {
       isMounted = false;
+      if (captureTimeout) clearTimeout(captureTimeout);
     };
   }, [fileUrl]);
 
+  const handleSetCover = async () => {
+    setIsCapturing(true);
+    try {
+      const base64 = await capturePage(selectedPage);
+      if (base64 && onUpdateThumbnail) {
+        onUpdateThumbnail(base64);
+      } else {
+        alert("Không thể chụp trang đã chọn. Vui lòng thử lại!");
+      }
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
   return (
-    <div className="w-full min-h-[700px] max-h-[800px] overflow-auto bg-gray-200/70 p-4 rounded-xl flex flex-col items-center custom-scrollbar">
-      {loading && (
-        <div className="flex flex-col items-center justify-center my-auto py-20 text-gray-500 gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
-          <span className="text-sm font-medium">
-            Đang tải và định dạng văn bản Word...
-          </span>
+    <div className="w-full flex flex-col items-center gap-3">
+      {!loading && !error && (
+        <div className="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 bg-white px-4 py-2.5 rounded-lg border border-gray-200 shadow-xs">
+          <div className="flex items-center gap-2 text-xs text-gray-600">
+            <ImageIcon className="h-4 w-4 text-primary-600" />
+            <span>
+              Tổng số trang:{" "}
+              <strong className="text-gray-900">{totalPages}</strong>
+            </span>
+          </div>
+
+          {onUpdateThumbnail && (
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="docx-cover-page"
+                className="text-xs text-gray-500 font-medium"
+              >
+                Chọn trang bìa:
+              </label>
+              <input
+                id="docx-cover-page"
+                type="number"
+                min={1}
+                max={totalPages}
+                value={selectedPage}
+                onChange={(event) => {
+                  const page = Number.parseInt(event.target.value, 10);
+                  if (!Number.isNaN(page)) {
+                    setSelectedPage(Math.max(1, Math.min(page, totalPages)));
+                  }
+                }}
+                className="w-16 px-2 py-1 text-center text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 font-semibold"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSetCover}
+                disabled={isCapturing || isUpdatingThumbnail}
+                className="h-8 text-xs flex items-center gap-1.5 border-primary-500 text-primary-600 hover:bg-primary-50"
+              >
+                {isCapturing || isUpdatingThumbnail ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Đang lưu...</span>
+                  </>
+                ) : (
+                  <>
+                    <Camera className="h-3.5 w-3.5" />
+                    <span>Đặt trang {selectedPage} làm ảnh bìa</span>
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
         </div>
       )}
-      {error && (
-        <div className="flex flex-col items-center justify-center my-auto py-20 text-red-500 gap-2">
-          <p className="text-sm text-center max-w-md">{error}</p>
-        </div>
-      )}
-      <div
-        ref={containerRef}
-        className={cn(
-          "w-full max-w-4xl bg-white shadow-md rounded-lg p-2 transition-opacity duration-300",
-          loading || error ? "hidden" : "block",
+
+      <div className="w-full min-h-[700px] max-h-[800px] overflow-auto bg-gray-200/70 p-4 rounded-xl flex flex-col items-center custom-scrollbar">
+        {loading && (
+          <div className="flex flex-col items-center justify-center my-auto py-20 text-gray-500 gap-3">
+            <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+            <span className="text-sm font-medium">
+              Đang tải và định dạng văn bản Word...
+            </span>
+          </div>
         )}
-      />
+        {error && (
+          <div className="flex flex-col items-center justify-center my-auto py-20 text-red-500 gap-2">
+            <p className="text-sm text-center max-w-md">{error}</p>
+          </div>
+        )}
+        <div
+          ref={containerRef}
+          className={cn(
+            "w-full max-w-4xl bg-white shadow-md rounded-lg p-2 transition-opacity duration-300",
+            loading || error ? "hidden" : "block",
+          )}
+        />
+      </div>
     </div>
   );
 }
@@ -264,7 +407,17 @@ function StatItem({ label, value }: StatItemProps) {
 }
 
 // Sub-component Tab Detail (Bản xem trước tổng hợp)
-function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
+function TabDetail({
+  doc,
+  fileUrl,
+  onUpdateThumbnail,
+  isUpdatingThumbnail,
+}: {
+  doc: any;
+  fileUrl: string;
+  onUpdateThumbnail?: (base64: string) => void;
+  isUpdatingThumbnail?: boolean;
+}) {
   const { defaultPreviewMode } = useSettingsStore();
   const fileType = doc.file_type?.toLowerCase() || "";
   const filePath = doc.file_path?.toLowerCase() || "";
@@ -284,9 +437,7 @@ function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
     hasMarkdown && defaultPreviewMode === "markdown" ? "markdown" : "original",
   );
 
-  const thumbnailUrl = doc.thumbnail_path
-    ? `${import.meta.env.VITE_API_URL}/${doc.thumbnail_path}`
-    : null;
+  const thumbnailUrl = getThumbnailUrl(doc.thumbnail_path);
 
   return (
     <div className="flex flex-col gap-3">
@@ -337,7 +488,12 @@ function TabDetail({ doc, fileUrl }: { doc: any; fileUrl: string }) {
             title={doc.title}
           />
         ) : isDocx ? (
-          <DocxViewer fileUrl={fileUrl} />
+          <DocxViewer
+            fileUrl={fileUrl}
+            hasThumbnail={!!doc.thumbnail_path}
+            onUpdateThumbnail={onUpdateThumbnail}
+            isUpdatingThumbnail={isUpdatingThumbnail}
+          />
         ) : (
           <div className="flex flex-col items-center justify-center space-y-4 py-12">
             {thumbnailUrl ? (
@@ -533,6 +689,24 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     },
     onError: (error) => {
       console.error("Lỗi khi đổi tên tài liệu:", error);
+    },
+  });
+
+  const updateThumbnailMutation = useMutation({
+    mutationFn: (base64: string) =>
+      updateDocumentFn(id, { thumbnail_path: base64 } as any),
+    onSuccess: (updated, base64) => {
+      queryClient.setQueryData([...queryKeyPrefix, id], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          thumbnail_path: updated?.thumbnail_path || base64,
+        };
+      });
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    },
+    onError: (error) => {
+      console.error("Không thể lưu ảnh bìa:", error);
     },
   });
 
@@ -861,7 +1035,18 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
           <div className="pt-1">
             {activeTab === "detail" && (
-              <TabDetail doc={doc} fileUrl={fileDownloadUrl} />
+              <TabDetail
+                doc={doc}
+                fileUrl={fileDownloadUrl}
+                onUpdateThumbnail={
+                  canEdit
+                    ? (base64) => updateThumbnailMutation.mutate(base64)
+                    : undefined
+                }
+                isUpdatingThumbnail={
+                  canEdit ? updateThumbnailMutation.isPending : false
+                }
+              />
             )}
             {activeTab === "content" && (
               <TabContent content={doc.content || ""} />

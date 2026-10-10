@@ -25,6 +25,7 @@ class DocumentUpdate(BaseModel):
     category_id: Optional[int] = None
     workspace_id: Optional[int] = None
     is_important: Optional[bool] = None
+    thumbnail_path: Optional[str] = None
 
 class DocumentTagsUpdate(BaseModel):
     tag_ids: list[int] = Field(default_factory=list)

@@ -8,6 +8,7 @@ import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
 import { GroupDocumentContextMenu } from '@/pages/group/components/shared/GroupDocumentContextMenu'
 import { extractSummary } from '@/utils/textUtils'
 import { cn } from '@/utils/cn'
+import { getThumbnailUrl } from '@/utils/getThumbnailUrl'
 import {
   type BaseDocumentViewProps,
   type DocumentListItem,
@@ -84,10 +85,9 @@ export function DocumentDetailView({
 
         const ext = getFileExtension(doc.extension || doc.type?.toString())
         const theme = FILE_TYPE_THEMES[ext] || DEFAULT_THEME
-        const thumbnailUrl =
-          doc.thumbnail_path && !imageErrors[doc.id]
-            ? `${import.meta.env.VITE_API_URL || ''}/${doc.thumbnail_path}`
-            : null
+        const thumbnailUrl = !imageErrors[doc.id]
+          ? getThumbnailUrl(doc.thumbnail_path)
+          : null
 
         return (
           <div

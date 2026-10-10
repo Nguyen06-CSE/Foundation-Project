@@ -7,6 +7,7 @@ import { GroupDocumentContextMenu } from "@/pages/group/components/shared/GroupD
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { Avatar } from "@/components/ui/Avatar"; // <-- 1. Import Component Avatar
+import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 import type { LocalGroupDocumentCardProps } from "../../types/groupSpace.types";
 
 // ======================================================
@@ -124,10 +125,9 @@ export default function LocalGroupDocumentCard({
   const ext = getFileExtension(document.file_type, document.title);
   const theme = FILE_TYPE_THEMES[ext] || DEFAULT_THEME;
 
-  const thumbnailUrl =
-    document.thumbnail_path && !imageError
-      ? `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/${document.thumbnail_path}`
-      : null;
+  const thumbnailUrl = !imageError
+    ? getThumbnailUrl(document.thumbnail_path)
+    : null;
 
   const tags = document.tags || [];
 

@@ -17,6 +17,7 @@ import {
 } from "./DocumentContextMenu";
 import { GroupDocumentContextMenu } from "@/pages/group/components/shared/GroupDocumentContextMenu";
 import { cn } from "@/utils/cn";
+import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 import {
   type BaseDocumentViewProps,
   type DocumentListItem,
@@ -288,8 +289,8 @@ export function DocumentListView({
             : FILE_TYPE_THEMES[ext] || DEFAULT_THEME;
 
           const thumbnailUrl =
-            !isBundle && doc.thumbnail_path && !imageErrors[doc.id]
-              ? `${import.meta.env.VITE_API_URL || ""}/${doc.thumbnail_path}`
+            !isBundle && !imageErrors[doc.id]
+              ? getThumbnailUrl(doc.thumbnail_path)
               : null;
 
           const isExpanded = expandedBundles.has(doc.id);
@@ -510,10 +511,9 @@ export function DocumentListView({
                         childDoc.extension || childDoc.type?.toString(),
                       );
                       const cTheme = FILE_TYPE_THEMES[cExt] || DEFAULT_THEME;
-                      const cThumbnail =
-                        childDoc.thumbnail_path && !imageErrors[childDoc.id]
-                          ? `${import.meta.env.VITE_API_URL || ""}/${childDoc.thumbnail_path}`
-                          : null;
+                      const cThumbnail = !imageErrors[childDoc.id]
+                        ? getThumbnailUrl(childDoc.thumbnail_path)
+                        : null;
 
                       return (
                         <div

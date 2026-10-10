@@ -2,6 +2,7 @@
 
 import { UploadModal } from "@/components/shared/modals/UploadModal";
 import type { TagItem } from "@/components/shared/feedback/TagSelector";
+import { documentService } from "@/services/documentService";
 
 interface GroupUploadModalProps {
   onClose: () => void;
@@ -30,7 +31,15 @@ export function GroupUploadModal({
       });
     }
 
-    await uploadMutation.mutateAsync(formData);
+    const res = await uploadMutation.mutateAsync(formData);
+    const thumbnailPath = formData.get("thumbnail_path") as string | null;
+    if (res?.id && thumbnailPath && !res.thumbnail_path) {
+      try {
+        await documentService.update(res.id, { thumbnail_path: thumbnailPath });
+      } catch (err) {
+        console.warn("Lỗi cập nhật ảnh bìa DOCX:", err);
+      }
+    }
     onClose();
   };
 
