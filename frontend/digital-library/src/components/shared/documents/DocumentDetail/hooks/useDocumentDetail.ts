@@ -44,7 +44,9 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const id = propDocumentId ?? Number(params.id);
+  const id =
+    propDocumentId ??
+    (params.docId ? Number(params.docId) : params.id ? Number(params.id) : 0);
 
   // --- STATE GIAO DIỆN ---
   const [activeTab, setActiveTab] = useState<TabKey>("detail");
@@ -114,7 +116,7 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
   /**
    * Chọn số trang trong tài liệu PDF để làm ảnh bìa
    */
-  const updateThumbnailPageMutation = useMutation({
+ const updateThumbnailPageMutation = useMutation({
     mutationFn: (pageNumber: number) => {
       if (!updateThumbnailPageFn) {
         throw new Error("Không hỗ trợ tính năng này.");
@@ -124,11 +126,22 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
     onSuccess: (updated) => {
       queryClient.setQueryData([...queryKeyPrefix, id], (old: any) => {
         if (!old) return old;
+
+        // Ép đổi đường dẫn thumbnail kèm timestamp để buộc UI re-render ảnh
+        const rawPath = updated?.thumbnail_path || old.thumbnail_path;
+        const freshThumbnailPath = rawPath
+          ? `${rawPath.split("?")[0]}?t=${Date.now()}`
+          : rawPath;
+
         return {
           ...old,
-          thumbnail_path: updated?.thumbnail_path,
+          ...updated,
+          thumbnail_path: freshThumbnailPath,
         };
       });
+
+      // Invalidate các query liên quan để đồng bộ danh sách tài liệu
+      queryClient.invalidateQueries({ queryKey: [...queryKeyPrefix, id] });
       queryClient.invalidateQueries({ queryKey: ["documents"] });
     },
     onError: (error) => {
@@ -275,38 +288,66 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
       }))
     : [];
 
-  return {
-    id,
-    doc,
-    isLoading,
-    isError,
-    params,
-    permissions: {
-      canEdit,
-      canDelete,
-      canManageTags,
-    },
-    activeTab,
-    setActiveTab,
-    isRenaming,
-    tempTitle,
-    setTempTitle,
-    handleStartRename,
-    handleConfirmRename,
-    handleCancelRename,
-    handleBack,
-    currentTags,
-    allTags,
-    isLoadingTags,
-    handleCreateTag,
-    isCreatingTag: createTagMutation.isPending,
-    handleSaveTags,
-    isSavingTags: saveTagsMutation.isPending,
-    handleRemoveTag,
-    isRemovingTag: removeTagMutation.isPending,
-    renameMutation,
-    updateThumbnailMutation,
-    updateThumbnailPageMutation,
-    deleteMutation,
+
+  const handleUpdateThumbnail = (base64: string) => {
+    if (!id || updateThumbnailMutation.isPending) return;
+    updateThumbnailMutation.mutate(base64);
   };
+
+  const handleUpdateThumbnailPage = (pageNumber: number) => {
+    if (!id || updateThumbnailPageMutation.isPending) return;
+    updateThumbnailPageMutation.mutate(pageNumber);
+  };
+
+  const handleDelete = () => {
+    if (!id || deleteMutation.isPending) return;
+    deleteMutation.mutate();
+  };
+
+
+return {
+  id,
+  doc,
+  isLoading,
+  isError,
+  params,
+  permissions: {
+    canEdit,
+    canDelete,
+    canManageTags,
+  },
+  activeTab,
+  setActiveTab,
+  isRenaming,
+  tempTitle,
+  setTempTitle,
+  handleStartRename,
+  handleConfirmRename,
+  handleCancelRename,
+  handleBack,
+  currentTags,
+  allTags,
+  isLoadingTags,
+  handleCreateTag,
+  isCreatingTag: createTagMutation.isPending,
+  handleSaveTags,
+  isSavingTags: saveTagsMutation.isPending,
+  handleRemoveTag,
+  isRemovingTag: removeTagMutation.isPending,
+  renameMutation,
+
+  // ✅ HANDLER MỚI — dùng cho DocumentDetail.tsx
+  handleUpdateThumbnail,
+  isUpdatingThumbnail: updateThumbnailMutation.isPending,
+  handleUpdateThumbnailPage,
+  isUpdatingThumbnailPage: updateThumbnailPageMutation.isPending,
+  handleDelete,
+  isDeleting: deleteMutation.isPending,
+
+  // ⚠️ GIỮ LẠI để không phá vỡ chỗ khác (nếu có component khác đang dùng)
+  // Nếu chắc chắn không ai dùng nữa thì có thể xóa 3 dòng dưới
+  updateThumbnailMutation,
+  updateThumbnailPageMutation,
+  deleteMutation,
+};
 }

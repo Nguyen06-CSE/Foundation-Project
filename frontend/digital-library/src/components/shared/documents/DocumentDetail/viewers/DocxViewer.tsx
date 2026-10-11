@@ -21,6 +21,10 @@ export function DocxViewer({
   hasThumbnail,
   onUpdateThumbnail,
   isUpdatingThumbnail = false,
+  onUpdateThumbnailPage,
+  isUpdatingThumbnailPage = false,
+  onUpdateCover,
+  isUpdatingCover = false,
 }: DocxViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -135,18 +139,38 @@ export function DocxViewer({
    */
   const handleSetCover = async (page: number) => {
     setSelectedPage(page);
-    setIsCapturing(true);
-    try {
-      const base64 = await capturePage(page);
-      if (base64 && onUpdateThumbnail) {
-        onUpdateThumbnail(base64);
-      } else {
-        alert("Không thể chụp trang đã chọn. Vui lòng thử lại!");
+
+    // Ưu tiên 1: Chụp ảnh trang hiện tại từ DOM canvas và gửi base64
+    if (onUpdateThumbnail) {
+      setIsCapturing(true);
+      try {
+        const base64 = await capturePage(page);
+        if (base64) {
+          onUpdateThumbnail(base64);
+          return;
+        }
+      } catch (err) {
+        console.error("Lỗi chụp thumbnail DOCX:", err);
+      } finally {
+        setIsCapturing(false);
       }
-    } finally {
-      setIsCapturing(false);
+    }
+
+    // Ưu tiên 2: Gọi callback page number trực tiếp nếu có
+    const onPageCoverFn = onUpdateCover || onUpdateThumbnailPage;
+    if (onPageCoverFn) {
+      onPageCoverFn(page);
     }
   };
+
+  const hasCoverHandler = Boolean(
+    onUpdateThumbnail || onUpdateCover || onUpdateThumbnailPage,
+  );
+  const isCoverUpdating =
+    isCapturing ||
+    isUpdatingThumbnail ||
+    isUpdatingThumbnailPage ||
+    isUpdatingCover;
 
   return (
     <div className="w-full flex flex-col items-center gap-3">
@@ -161,13 +185,13 @@ export function DocxViewer({
             </span>
           </div>
 
-          {onUpdateThumbnail && (
+          {hasCoverHandler && (
             <DocumentCoverSelector
               variant="page"
               totalPages={totalPages}
               initialPage={selectedPage}
               onSetPageCover={handleSetCover}
-              isUpdating={isCapturing || isUpdatingThumbnail}
+              isUpdating={isCoverUpdating}
             />
           )}
         </div>

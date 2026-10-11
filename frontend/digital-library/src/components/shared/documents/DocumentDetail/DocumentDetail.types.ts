@@ -117,6 +117,10 @@ export interface DocxViewerProps {
   hasThumbnail: boolean;
   onUpdateThumbnail?: (base64Thumbnail: string) => void;
   isUpdatingThumbnail?: boolean;
+  onUpdateCover?: (page: number) => void;
+  isUpdatingCover?: boolean;
+  onUpdateThumbnailPage?: (page: number) => void;
+  isUpdatingThumbnailPage?: boolean;
 }
 
 export interface PdfViewerProps {
@@ -124,6 +128,8 @@ export interface PdfViewerProps {
   fileUrl: string;
   onUpdateCover?: (page: number) => void;
   isUpdatingCover?: boolean;
+  onUpdateThumbnailPage?: (page: number) => void;
+  isUpdatingThumbnailPage?: boolean;
 }
 
 export interface CodeViewerProps {

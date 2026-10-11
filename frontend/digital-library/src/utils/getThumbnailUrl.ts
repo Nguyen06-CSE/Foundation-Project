@@ -7,5 +7,11 @@ export function getThumbnailUrl(path?: string | null): string | null {
   ) {
     return path;
   }
-  return `${import.meta.env.VITE_API_URL || ""}/${path}`;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+    return path;
+  }
+  
+  const baseUrl = import.meta.env.VITE_API_URL || "";
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${baseUrl}${cleanPath}?t=${Date.now()}`;
 }

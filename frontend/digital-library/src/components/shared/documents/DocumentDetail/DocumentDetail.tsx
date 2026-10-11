@@ -45,9 +45,13 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     handleRemoveTag,
     isRemovingTag,
     renameMutation,
-    updateThumbnailMutation,
-    updateThumbnailPageMutation,
-    deleteMutation,
+
+    handleUpdateThumbnail,
+    isUpdatingThumbnail,
+    handleUpdateThumbnailPage,
+    isUpdatingThumbnailPage,
+    handleDelete,
+    isDeleting,
   } = useDocumentDetail(props);
 
   const [viewMode, setViewMode] = useState<"original" | "markdown">("original");
@@ -154,7 +158,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
             {/* Phía bên phải: Nút toggle sidebar + ViewMode buttons */}
             <div className="flex items-center gap-2 pb-2">
-              {/* ViewMode: chỉ hiện ở tab "detail" và có markdown */}
               {activeTab === "detail" && markdownDownloadUrl && (
                 <div className="flex items-center gap-1">
                   <button
@@ -181,7 +184,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                   >
                     Markdown
                   </button>
-                  {/* Nút ẩn/hiện bảng thông tin - luôn hiển thị, đặt BÊN TRÁI khung chọn */}
                   <button
                     type="button"
                     onClick={() => setSidebarOpen((v) => !v)}
@@ -212,25 +214,18 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                 doc={doc}
                 fileUrl={fileDownloadUrl}
                 viewMode={viewMode}
+                // ✅ FIX: dùng handler ổn định từ hook
                 onUpdateThumbnail={
-                  permissions.canEdit
-                    ? (base64) => updateThumbnailMutation.mutate(base64)
-                    : undefined
+                  permissions.canEdit ? handleUpdateThumbnail : undefined
                 }
                 isUpdatingThumbnail={
-                  permissions.canEdit
-                    ? updateThumbnailMutation.isPending
-                    : false
+                  permissions.canEdit ? isUpdatingThumbnail : false
                 }
                 onUpdateThumbnailPage={
-                  permissions.canEdit
-                    ? (page) => updateThumbnailPageMutation.mutate(page)
-                    : undefined
+                  permissions.canEdit ? handleUpdateThumbnailPage : undefined
                 }
                 isUpdatingThumbnailPage={
-                  permissions.canEdit
-                    ? updateThumbnailPageMutation.isPending
-                    : false
+                  permissions.canEdit ? isUpdatingThumbnailPage : false
                 }
               />
             )}
@@ -275,9 +270,9 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               canEdit={permissions.canEdit}
               canDelete={permissions.canDelete}
               isRenamePending={renameMutation.isPending}
-              isDeletePending={deleteMutation.isPending}
+              isDeletePending={isDeleting}   // ✅ FIX
               onStartRename={handleStartRename}
-              onDelete={() => deleteMutation.mutate()}
+              onDelete={handleDelete}        // ✅ FIX
             />
           </div>
         )}

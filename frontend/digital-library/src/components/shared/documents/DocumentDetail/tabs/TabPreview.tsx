@@ -106,6 +106,8 @@ export function TabPreview({
               fileUrl={fileUrl}
               onUpdateCover={onUpdateThumbnailPage}
               isUpdatingCover={isUpdatingThumbnailPage}
+              onUpdateThumbnailPage={onUpdateThumbnailPage}
+              isUpdatingThumbnailPage={isUpdatingThumbnailPage}
             />
           ) : isDocx ? (
             <DocxViewer
@@ -113,6 +115,10 @@ export function TabPreview({
               hasThumbnail={!!doc.thumbnail_path}
               onUpdateThumbnail={onUpdateThumbnail}
               isUpdatingThumbnail={isUpdatingThumbnail}
+              onUpdateThumbnailPage={onUpdateThumbnailPage}
+              isUpdatingThumbnailPage={isUpdatingThumbnailPage}
+              onUpdateCover={onUpdateThumbnailPage}
+              isUpdatingCover={isUpdatingThumbnailPage}
             />
           ) : isCode ? (
             <CodeViewer

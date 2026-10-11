@@ -1,6 +1,6 @@
 // src/components/shared/documents/DocumentDetail/components/DocumentCoverSelector.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
@@ -52,6 +52,10 @@ export function PageCoverSelector({
 }: PageCoverSelectorProps) {
   const [selectedPage, setSelectedPage] = useState<number>(initialPage);
 
+  useEffect(() => {
+    setSelectedPage(initialPage);
+  }, [initialPage]);
+
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const page = Number.parseInt(e.target.value, 10);
     if (!Number.isNaN(page)) {
@@ -74,6 +78,7 @@ export function PageCoverSelector({
         className="w-16 px-2 py-1 text-center text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 font-semibold"
       />
       <Button
+        type="button"
         variant="outline"
         size="sm"
         onClick={() => onSetPageCover(selectedPage)}
