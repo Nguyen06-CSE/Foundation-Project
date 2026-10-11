@@ -442,28 +442,33 @@ async def get_document_raw(
         select(Document)
         .where(
             Document.id == document_id,
-            Document.owner_id == current_user.id,
             Document.is_deleted == False,
-            Document.is_public == False,
         )
     )
     document = result.scalar_one_or_none()
     if not document:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
     
-    if not document.content:
-        # Fallback to reading file if content is somehow empty but file exists
+    # Kiểm tra quyền truy cập: chủ sở hữu, tài liệu công khai, hoặc thành viên nhóm
+    if document.owner_id != current_user.id and not document.is_public:
+        if document.workspace_id:
+            from app.services.group_service import require_member
+            await require_member(db, document.workspace_id, current_user.id)
+        else:
+            raise HTTPException(status_code=403, detail="Không có quyền truy cập tài liệu này")
+
+    content = document.content
+    if not content:
+        # Fallback đọc trực tiếp file nếu cột content trống nhưng file vật lý tồn tại
         if document.file_path and os.path.exists(document.file_path):
             with open(document.file_path, "rb") as f:
                 content = f.read().decode('utf-8', errors='replace')
         else:
             raise HTTPException(status_code=404, detail="Tài liệu không có nội dung text")
-    else:
-        content = document.content
 
     return StreamingResponse(
         io.StringIO(content),
-        media_type="text/plain",
+        media_type="text/plain; charset=utf-8",
         headers={"Content-Disposition": f'inline; filename="{document.title}"'}
     )
 
