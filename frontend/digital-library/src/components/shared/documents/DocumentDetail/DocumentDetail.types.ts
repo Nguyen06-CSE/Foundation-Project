@@ -47,6 +47,9 @@ export const FILE_TYPE_LABELS: Record<string, string> = {
   "application/msword": "Word Document",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
     "Word Document",
+  "application/vnd.ms-excel": "Excel Document",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+    "Excel Document",
   "application/vnd.ms-powerpoint": "PowerPoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation":
     "PowerPoint",
@@ -60,6 +63,9 @@ export const MIME_TO_ICON_TYPE: Record<string, string> = {
   "application/msword": "docx",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
     "docx",
+  "application/vnd.ms-excel": "xlsx",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+    "xlsx",
   "application/vnd.ms-powerpoint": "pptx",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation":
     "pptx",
@@ -137,4 +143,5 @@ export interface TabPreviewProps {
   isUpdatingThumbnail?: boolean;
   onUpdateThumbnailPage?: (page: number) => void;
   isUpdatingThumbnailPage?: boolean;
+  viewMode?: "original" | "markdown";
 }

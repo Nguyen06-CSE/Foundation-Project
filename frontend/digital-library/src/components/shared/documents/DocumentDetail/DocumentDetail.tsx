@@ -1,11 +1,10 @@
-// src/components/shared/documents/DocumentDetail/DocumentDetail.tsx
-
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/utils/cn";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
+import { Info } from "lucide-react";
 import {
   TABS,
   FILE_TYPE_LABELS,
@@ -18,22 +17,8 @@ import { DocumentInfoCard } from "./components/DocumentInfoCard";
 import { DocumentActionCard } from "./components/DocumentActionCard";
 import { TabPreview } from "./tabs/TabPreview";
 import { TabContent } from "./tabs/TabContent";
-import {
-  TabDescription,
-  TabNote,
-  TabActivity,
-} from "./tabs/TabPanels";
+import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
 
-/**
- * DocumentDetail - Màn hình xem chi tiết tài liệu dùng chung
- *
- * Tính năng chính:
- * 1. Hiển thị thông tin tệp, các nhãn dán (tags) và thống kê
- * 2. Hỗ trợ xem trước đa định dạng (PDF, DOCX, Code, Markdown, Ảnh, Office PPTX/XLSX...)
- * 3. Hỗ trợ 5 tab nội dung: Bản xem trước, Nội dung OCR, Mô tả, Ghi chú, Lịch sử hoạt động
- * 4. Các tác vụ tài liệu: Đổi tên inline, Tải xuống (bản gốc/markdown), Xóa, Chọn ảnh bìa
- * 5. Tự động chuyển hướng nếu tài liệu là Gói tài liệu (Bundle)
- */
 export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const {
     doc,
@@ -65,12 +50,15 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     deleteMutation,
   } = useDocumentDetail(props);
 
+  const [viewMode, setViewMode] = useState<"original" | "markdown">("original");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   // --- TRẠNG THÁI LOADING ---
   if (isLoading) {
     return (
       <div className="flex flex-col gap-6">
         <div className="h-6 w-24 rounded bg-gray-200 animate-pulse" />
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-4">
           <div className="h-96 rounded-xl bg-gray-200 animate-pulse" />
           <div className="h-96 rounded-xl bg-gray-200 animate-pulse" />
         </div>
@@ -118,19 +106,16 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   return (
     <div className="flex flex-col gap-6 pb-10">
-      {/* Nút quay lại */}
-      <button
-        type="button"
-        onClick={handleBack}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors w-fit"
+      <div
+        className={cn(
+          "grid grid-cols-1 items-start gap-4",
+          sidebarOpen ? "lg:grid-cols-[1fr_260px]" : "lg:grid-cols-[1fr]",
+        )}
       >
-        <ArrowLeft className="h-4 w-4" /> Quay lại
-      </button>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
         {/* ── Cột trái: Header, Tabs & Xem trước nội dung ── */}
-        <Card className="flex flex-col gap-4 min-w-0">
+        <Card className="flex flex-col min-w-0">
           <DocumentTitleHeader
+            onBack={handleBack}
             title={doc.title}
             iconType={iconType}
             sizeLabel={sizeLabel}
@@ -142,25 +127,82 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
             onConfirmRename={handleConfirmRename}
             onCancelRename={handleCancelRename}
             isRenamePending={renameMutation.isPending}
+            sidebarOpen={sidebarOpen}
+            onToggleSidebar={() => setSidebarOpen((v) => !v)}
           />
 
           {/* Thanh chuyển tab */}
-          <div className="flex items-center border-b border-gray-200 -mx-5 px-5 gap-6">
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setActiveTab(tab.key)}
-                className={cn(
-                  "pb-3 text-sm font-medium transition-colors focus:outline-none",
-                  activeTab === tab.key
-                    ? "border-b-2 border-primary-600 text-primary-600"
-                    : "text-gray-500 hover:text-gray-900",
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
+          <div className="-mx-5 flex items-center justify-between border-b border-gray-200 px-5">
+            {/* Tabs bên trái */}
+            <div className="flex items-center gap-6">
+              {TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setActiveTab(tab.key)}
+                  className={cn(
+                    "pb-3 text-sm font-medium transition-colors focus:outline-none",
+                    activeTab === tab.key
+                      ? "border-b-2 border-primary-600 text-primary-600"
+                      : "text-gray-500 hover:text-gray-900",
+                  )}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Phía bên phải: Nút toggle sidebar + ViewMode buttons */}
+            <div className="flex items-center gap-2 pb-2">
+              {/* ViewMode: chỉ hiện ở tab "detail" và có markdown */}
+              {activeTab === "detail" && markdownDownloadUrl && (
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("original")}
+                    className={cn(
+                      "px-3 py-1 text-xs rounded-md border transition-colors",
+                      viewMode === "original"
+                        ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+                    )}
+                  >
+                    Bản gốc
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("markdown")}
+                    className={cn(
+                      "px-3 py-1 text-xs rounded-md border transition-colors",
+                      viewMode === "markdown"
+                        ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+                    )}
+                  >
+                    Markdown
+                  </button>
+                  {/* Nút ẩn/hiện bảng thông tin - luôn hiển thị, đặt BÊN TRÁI khung chọn */}
+                  <button
+                    type="button"
+                    onClick={() => setSidebarOpen((v) => !v)}
+                    className={cn(
+                      "flex-shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
+                      sidebarOpen
+                        ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
+                        : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
+                    )}
+                    title={
+                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                    }
+                    aria-label={
+                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                    }
+                  >
+                    <Info className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Nội dung tương ứng theo từng tab */}
@@ -169,6 +211,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               <TabPreview
                 doc={doc}
                 fileUrl={fileDownloadUrl}
+                viewMode={viewMode}
                 onUpdateThumbnail={
                   permissions.canEdit
                     ? (base64) => updateThumbnailMutation.mutate(base64)
@@ -205,39 +248,42 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
         </Card>
 
         {/* ── Cột phải: Thông tin tệp, Nhãn dán & Hành động ── */}
-        <div className="flex flex-col gap-4">
-          <DocumentInfoCard
-            title={doc.title}
-            fileTypeLabel={fileTypeLabel}
-            sizeLabel={sizeLabel}
-            uploadedAt={uploadedAt}
-            tags={currentTags}
-            canManageTags={permissions.canManageTags}
-            allTags={allTags}
-            isLoadingTags={isLoadingTags}
-            onSaveTags={handleSaveTags}
-            isSavingTags={isSavingTags}
-            onCreateTag={handleCreateTag}
-            isCreatingTag={isCreatingTag}
-            onRemoveTag={handleRemoveTag}
-            isRemovingTag={isRemovingTag}
-          />
+        {sidebarOpen && (
+          <div className="flex flex-col gap-4 min-w-0 w-full">
+            <DocumentInfoCard
+              title={doc.title}
+              fileTypeLabel={fileTypeLabel}
+              sizeLabel={sizeLabel}
+              uploadedAt={uploadedAt}
+              tags={currentTags}
+              canManageTags={permissions.canManageTags}
+              allTags={allTags}
+              isLoadingTags={isLoadingTags}
+              onSaveTags={handleSaveTags}
+              isSavingTags={isSavingTags}
+              onCreateTag={handleCreateTag}
+              isCreatingTag={isCreatingTag}
+              onRemoveTag={handleRemoveTag}
+              isRemovingTag={isRemovingTag}
+            />
 
-          <DocumentActionCard
-            fileTitle={doc.title}
-            fileDownloadUrl={fileDownloadUrl}
-            markdownDownloadUrl={markdownDownloadUrl}
-            fileTypeLabel={fileTypeLabel}
-            canEdit={permissions.canEdit}
-            canDelete={permissions.canDelete}
-            isRenamePending={renameMutation.isPending}
-            isDeletePending={deleteMutation.isPending}
-            onStartRename={handleStartRename}
-            onDelete={() => deleteMutation.mutate()}
-          />
-        </div>
+            <DocumentActionCard
+              fileTitle={doc.title}
+              fileDownloadUrl={fileDownloadUrl}
+              markdownDownloadUrl={markdownDownloadUrl}
+              fileTypeLabel={fileTypeLabel}
+              canEdit={permissions.canEdit}
+              canDelete={permissions.canDelete}
+              isRenamePending={renameMutation.isPending}
+              isDeletePending={deleteMutation.isPending}
+              onStartRename={handleStartRename}
+              onDelete={() => deleteMutation.mutate()}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
 export default DocumentDetail;

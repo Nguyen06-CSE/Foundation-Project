@@ -10,3 +10,4 @@ export * from "./viewers/MarkdownViewer";
 export * from "./tabs/TabPreview";
 export * from "./tabs/TabContent";
 export * from "./tabs/TabPanels";
+export * from "./components/DocumentCoverSelector";

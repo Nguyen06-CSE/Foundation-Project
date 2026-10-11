@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import {
   Download,
+  ChevronDown,
   ExternalLink,
   Share2,
   Star,
@@ -11,7 +12,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { cn } from "@/utils/cn";
 
 interface DocumentActionCardProps {
   fileTitle: string;
@@ -74,19 +75,14 @@ export function DocumentActionCard({
   }, [isDownloadMenuOpen]);
 
   /**
-   * Xử lý khi nhấn nút Tải xuống
+   * Tải bản gốc trực tiếp
    */
-  const handleDownloadClick = () => {
-    if (markdownDownloadUrl) {
-      setIsDownloadMenuOpen((prev) => !prev);
-    } else {
-      // Tải bản gốc trực tiếp nếu không có Markdown
-      const link = window.document.createElement("a");
-      link.href = fileDownloadUrl;
-      link.download = fileTitle;
-      link.target = "_blank";
-      link.click();
-    }
+  const handleDownloadOriginal = () => {
+    const link = window.document.createElement("a");
+    link.href = fileDownloadUrl;
+    link.download = fileTitle;
+    link.target = "_blank";
+    link.click();
   };
 
   /**
@@ -103,22 +99,53 @@ export function DocumentActionCard({
   };
 
   return (
-    <Card className="flex flex-col gap-3">
+    <Card className="flex flex-col gap-3 min-w-0 overflow-hidden">
       {/* Nút Tải xuống có lựa chọn định dạng */}
-      <div className="relative" ref={downloadMenuRef}>
-        <Button
-          variant="primary"
-          className="w-full py-3 h-auto text-base flex items-center justify-center gap-2"
-          onClick={handleDownloadClick}
-          icon={<Download className="h-5 w-5" />}
-        >
-          <span>Tải xuống tài liệu</span>
-          {markdownDownloadUrl && (
-            <span className="text-xs bg-primary-700 px-1.5 py-0.5 rounded ml-1">
-              Tùy chọn ▼
-            </span>
-          )}
-        </Button>
+      <div className="relative w-full" ref={downloadMenuRef}>
+        {markdownDownloadUrl ? (
+          <div className="flex w-full rounded-lg shadow-xs overflow-hidden border border-primary-600 bg-primary-600">
+            {/* Nút tải xuống chính */}
+            <button
+              type="button"
+              onClick={handleDownloadOriginal}
+              className="flex-1 min-w-0 flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-semibold text-white hover:bg-primary-700 transition-colors focus:outline-none"
+              title="Tải xuống tài liệu bản gốc"
+            >
+              <Download className="h-4 w-4 shrink-0" />
+              <span className="truncate">Tải xuống</span>
+            </button>
+
+            {/* Nút tùy chọn định dạng */}
+            <button
+              type="button"
+              onClick={() => setIsDownloadMenuOpen((prev) => !prev)}
+              aria-expanded={isDownloadMenuOpen}
+              aria-label="Tùy chọn định dạng tải xuống"
+              title="Tùy chọn tải xuống"
+              className={cn(
+                "flex-shrink-0 flex items-center justify-center gap-1 px-2.5 border-l border-primary-500/50 bg-primary-700 hover:bg-primary-800 text-white text-xs font-medium transition-colors focus:outline-none",
+                isDownloadMenuOpen && "bg-primary-800"
+              )}
+            >
+              <span className="text-[11px] font-medium hidden xs:inline">Tùy chọn</span>
+              <ChevronDown
+                className={cn(
+                  "h-3.5 w-3.5 transition-transform duration-200",
+                  isDownloadMenuOpen && "rotate-180"
+                )}
+              />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleDownloadOriginal}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold transition-colors shadow-xs focus:outline-none"
+          >
+            <Download className="h-4 w-4 shrink-0" />
+            <span className="truncate">Tải xuống tài liệu</span>
+          </button>
+        )}
 
         {/* Menu chọn định dạng tải về */}
         {isDownloadMenuOpen && markdownDownloadUrl && (

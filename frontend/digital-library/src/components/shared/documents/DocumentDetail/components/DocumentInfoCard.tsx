@@ -7,13 +7,17 @@ import { DocumentTagSection } from "./DocumentTagSection";
 interface InfoRowProps {
   label: string;
   value: string;
+  title?: string;
 }
 
-export function InfoRow({ label, value }: InfoRowProps) {
+export function InfoRow({ label, value, title }: InfoRowProps) {
   return (
-    <div className="flex items-start justify-between gap-4 py-2 border-b border-gray-100 last:border-0">
-      <span className="text-sm text-gray-500 shrink-0 w-24">{label}</span>
-      <span className="text-sm font-semibold text-gray-900 text-right">
+    <div className="flex items-start justify-between gap-3 py-2 border-b border-gray-100 last:border-0 min-w-0">
+      <span className="text-sm text-gray-500 shrink-0 w-22">{label}</span>
+      <span
+        className="text-sm font-semibold text-gray-900 text-right min-w-0 flex-1 break-words [overflow-wrap:anywhere]"
+        title={title || value}
+      >
         {value}
       </span>
     </div>
@@ -70,16 +74,16 @@ export function DocumentInfoCard({
   onRemoveTag,
   isRemovingTag,
 }: DocumentInfoCardProps) {
-  const displayTitle = title.length > 22 ? title.slice(0, 22) + "…" : title;
+  const displayTitle = title.length > 25 ? title.slice(0, 25) + "…" : title;
 
   return (
-    <Card>
+    <Card className="min-w-0 overflow-hidden">
       <h2 className="text-base font-semibold text-gray-900 mb-3">
         Thông tin tệp
       </h2>
 
       <div>
-        <InfoRow label="Tên tệp" value={displayTitle} />
+        <InfoRow label="Tên tệp" value={displayTitle} title={title} />
         <InfoRow label="Loại tệp" value={fileTypeLabel} />
         <InfoRow label="Dung lượng" value={sizeLabel} />
         <InfoRow label="Ngày tải lên" value={uploadedAt} />

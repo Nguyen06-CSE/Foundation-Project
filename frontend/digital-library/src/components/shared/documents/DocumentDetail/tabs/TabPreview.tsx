@@ -1,10 +1,7 @@
 // src/components/shared/documents/DocumentDetail/tabs/TabPreview.tsx
 
-import { useState } from "react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
-import { Camera, Loader2 } from "lucide-react";
-import { useSettingsStore } from "@/stores/settingsStore";
 import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 import { cn } from "@/utils/cn";
 import { CODE_EXTENSIONS, type TabPreviewProps } from "../DocumentDetail.types";
@@ -12,6 +9,7 @@ import { DocxViewer } from "../viewers/DocxViewer";
 import { PdfViewer } from "../viewers/PdfViewer";
 import { CodeViewer } from "../viewers/CodeViewer";
 import { MarkdownViewer } from "../viewers/MarkdownViewer";
+import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
  * TabPreview - Tab "Bản xem trước" tổng hợp của tài liệu
@@ -29,9 +27,8 @@ export function TabPreview({
   isUpdatingThumbnail,
   onUpdateThumbnailPage,
   isUpdatingThumbnailPage,
+  viewMode = "original",
 }: TabPreviewProps) {
-  const { defaultPreviewMode } = useSettingsStore();
-
   const fileType = doc.file_type?.toLowerCase() || "";
   const filePath = doc.file_path?.toLowerCase() || "";
 
@@ -67,65 +64,12 @@ export function TabPreview({
 
   const hasMarkdown = !isImage && !!doc.markdown_path;
 
-  // Chế độ xem: ưu tiên markdown nếu được cấu hình hoặc file pptx/xlsx
-  const [viewMode, setViewMode] = useState<"original" | "markdown">(
-    hasMarkdown && !isCode && (isPptx || isXlsx || defaultPreviewMode === "markdown")
-      ? "markdown"
-      : "original",
-  );
-
   const thumbnailUrl = getThumbnailUrl(doc.thumbnail_path);
-
-  /**
-   * Đọc file ảnh upload từ máy tính và chuyển sang chuỗi Base64
-   */
-  const handleUploadCover = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && onUpdateThumbnail) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (ev.target?.result) {
-          onUpdateThumbnail(ev.target.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   return (
     <div className="flex flex-col gap-3 min-w-0 w-full">
-      {/* Nút chuyển đổi Bản gốc / Markdown khi tài liệu có OCR markdown */}
-      {hasMarkdown && (
-        <div className="flex items-center self-end bg-gray-100 rounded-full p-0.5 text-xs font-medium">
-          <button
-            type="button"
-            onClick={() => setViewMode("original")}
-            className={cn(
-              "px-3 py-1 rounded-full transition-colors",
-              viewMode === "original"
-                ? "bg-white text-primary-600 shadow-sm"
-                : "text-gray-500 hover:text-gray-700",
-            )}
-          >
-            Bản gốc
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode("markdown")}
-            className={cn(
-              "px-3 py-1 rounded-full transition-colors",
-              viewMode === "markdown"
-                ? "bg-white text-primary-600 shadow-sm"
-                : "text-gray-500 hover:text-gray-700",
-            )}
-          >
-            Markdown
-          </button>
-        </div>
-      )}
-
       {/* Vùng xem trước chính */}
-      <div className="w-full min-w-0 flex flex-col items-center justify-center rounded-xl bg-gray-100/80 p-2 min-h-[500px] border border-gray-200 overflow-hidden">
+      <div className="w-full min-w-0 flex flex-col">
         {/* Chế độ Markdown: Giữ trong DOM, ẩn/hiện bằng CSS để tránh re-fetch */}
         {hasMarkdown && (
           <div
@@ -146,14 +90,16 @@ export function TabPreview({
           )}
         >
           {isImage ? (
-            <img
-              src={fileUrl}
-              alt={doc.title}
-              className="max-w-full max-h-[700px] mx-auto rounded-lg object-contain shadow-sm bg-white"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
+            <div className="w-full flex items-center justify-center p-4 bg-gray-50/60 rounded-xl border border-gray-200">
+              <img
+                src={fileUrl}
+                alt={doc.title}
+                className="max-w-full max-h-[700px] mx-auto rounded-lg object-contain shadow-sm bg-white"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
           ) : isPdf ? (
             <PdfViewer
               doc={doc}
@@ -175,40 +121,49 @@ export function TabPreview({
               title={doc.title}
             />
           ) : isPptx || isXlsx ? (
-            <div className="w-full h-[800px] min-h-[750px] bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col gap-3">
+            <div
+              id="office-viewer-container"
+              className="w-full h-[650px] sm:h-[720px] lg:h-[780px] min-h-[500px] bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col shadow-2xs"
+            >
+              <style>{`
+                #office-viewer-container #react-doc-viewer,
+                #office-viewer-container #proxy-renderer,
+                #office-viewer-container #msdoc-renderer {
+                  width: 100% !important;
+                  height: 100% !important;
+                  display: flex !important;
+                  flex-direction: column !important;
+                  flex: 1 1 0% !important;
+                  background: transparent !important;
+                }
+                #office-viewer-container #msdoc-iframe {
+                  width: 100% !important;
+                  height: 100% !important;
+                  flex: 1 1 0% !important;
+                  border: 0 !important;
+                }
+              `}</style>
               {onUpdateThumbnail && (
-                <div className="w-full flex items-center justify-end px-4 py-2 border-b border-gray-200">
-                  <label className="text-xs text-gray-500 font-medium mr-2">
-                    Ảnh bìa:
-                  </label>
-                  <label className="cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleUploadCover}
-                    />
-                    <span className="inline-flex items-center gap-1.5 h-8 px-3 text-xs border border-primary-500 text-primary-600 rounded-md hover:bg-primary-50">
-                      {isUpdatingThumbnail ? (
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      ) : (
-                        <Camera className="h-3.5 w-3.5" />
-                      )}
-                      {isUpdatingThumbnail ? "Đang lưu..." : "Tải lên ảnh bìa"}
-                    </span>
-                  </label>
+                <div className="w-full shrink-0 flex items-center justify-end px-4 py-2 border-b border-gray-200 bg-gray-50/60">
+                  <DocumentCoverSelector
+                    variant="upload"
+                    onUploadCover={onUpdateThumbnail}
+                    isUpdating={isUpdatingThumbnail}
+                  />
                 </div>
               )}
-              <DocViewer
-                documents={[{ uri: fileUrl }]}
-                pluginRenderers={DocViewerRenderers}
-                style={{ width: "100%", height: "750px", minHeight: "750px" }}
-                config={{ header: { disableHeader: true } }}
-              />
+              <div className="w-full flex-1 min-h-0">
+                <DocViewer
+                  documents={[{ uri: fileUrl, fileType: doc.file_type || undefined, fileName: doc.title }]}
+                  pluginRenderers={DocViewerRenderers}
+                  style={{ width: "100%", height: "100%" }}
+                  config={{ header: { disableHeader: true } }}
+                />
+              </div>
             </div>
           ) : (
             /* Fallback đối với các định dạng khác */
-            <div className="flex flex-col items-center justify-center space-y-4 py-12">
+            <div className="w-full flex flex-col items-center justify-center space-y-4 py-16 bg-gray-50/60 rounded-xl border border-gray-200">
               {thumbnailUrl ? (
                 <img
                   src={thumbnailUrl}
@@ -228,22 +183,13 @@ export function TabPreview({
                 <strong>"Tải xuống"</strong> để xem.
               </p>
               {onUpdateThumbnail && (
-                <label className="cursor-pointer mt-4">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleUploadCover}
+                <div className="mt-4">
+                  <DocumentCoverSelector
+                    variant="upload"
+                    onUploadCover={onUpdateThumbnail}
+                    isUpdating={isUpdatingThumbnail}
                   />
-                  <span className="inline-flex items-center gap-2 h-9 px-4 text-sm border border-primary-500 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">
-                    {isUpdatingThumbnail ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Camera className="h-4 w-4" />
-                    )}
-                    {isUpdatingThumbnail ? "Đang lưu..." : "Tải lên ảnh bìa"}
-                  </span>
-                </label>
+                </div>
               )}
             </div>
           )}

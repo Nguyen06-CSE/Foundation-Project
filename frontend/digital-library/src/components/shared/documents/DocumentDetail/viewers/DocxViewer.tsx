@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { renderAsync } from "docx-preview";
 import html2canvas from "html2canvas";
-import { Loader2, Camera, Image as ImageIcon } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Loader2, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/utils/cn";
 import type { DocxViewerProps } from "../DocumentDetail.types";
+import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
  * DocxViewer - Hiển thị bản xem trước tài liệu Word (.docx / .doc)
@@ -133,10 +133,11 @@ export function DocxViewer({
   /**
    * Xử lý khi người dùng nhấn đặt trang đang chọn làm ảnh bìa
    */
-  const handleSetCover = async () => {
+  const handleSetCover = async (page: number) => {
+    setSelectedPage(page);
     setIsCapturing(true);
     try {
-      const base64 = await capturePage(selectedPage);
+      const base64 = await capturePage(page);
       if (base64 && onUpdateThumbnail) {
         onUpdateThumbnail(base64);
       } else {
@@ -161,47 +162,13 @@ export function DocxViewer({
           </div>
 
           {onUpdateThumbnail && (
-            <div className="flex items-center gap-2">
-              <label
-                htmlFor="docx-cover-page"
-                className="text-xs text-gray-500 font-medium"
-              >
-                Chọn trang bìa:
-              </label>
-              <input
-                id="docx-cover-page"
-                type="number"
-                min={1}
-                max={totalPages}
-                value={selectedPage}
-                onChange={(event) => {
-                  const page = Number.parseInt(event.target.value, 10);
-                  if (!Number.isNaN(page)) {
-                    setSelectedPage(Math.max(1, Math.min(page, totalPages)));
-                  }
-                }}
-                className="w-16 px-2 py-1 text-center text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 font-semibold"
-              />
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSetCover}
-                disabled={isCapturing || isUpdatingThumbnail}
-                className="h-8 text-xs flex items-center gap-1.5 border-primary-500 text-primary-600 hover:bg-primary-50"
-              >
-                {isCapturing || isUpdatingThumbnail ? (
-                  <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    <span>Đang lưu...</span>
-                  </>
-                ) : (
-                  <>
-                    <Camera className="h-3.5 w-3.5" />
-                    <span>Đặt trang {selectedPage} làm ảnh bìa</span>
-                  </>
-                )}
-              </Button>
-            </div>
+            <DocumentCoverSelector
+              variant="page"
+              totalPages={totalPages}
+              initialPage={selectedPage}
+              onSetPageCover={handleSetCover}
+              isUpdating={isCapturing || isUpdatingThumbnail}
+            />
           )}
         </div>
       )}
