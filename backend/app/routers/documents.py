@@ -90,6 +90,13 @@ async def upload_document(
     current_user: User = Depends(get_current_user),
 ):
     try:
+        content = None
+        from app.services.file_processor import get_file_group
+        if get_file_group(file.content_type or "", file.filename or "") == "text":
+            file_bytes = await file.read()
+            content = file_bytes.decode('utf-8', errors='replace')
+            await file.seek(0)
+            
         document = await create_document_from_upload(
             db,
             upload=file,
@@ -100,6 +107,7 @@ async def upload_document(
             workspace_id=workspace_id,
             tag_ids=tag_ids,
             thumbnail_path=thumbnail_path,
+            content=content,
         )
     except ValueError as exc:
         if str(exc).startswith("duplicate_document:"):
@@ -127,6 +135,7 @@ async def upload_document(
 
 @router.post("/upload-batch", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
 async def upload_batch_documents(
+    background_tasks: BackgroundTasks,
     bundle_title: str = Form(...),
     bundle_description: Optional[str] = Form(None),
     tag_ids: str = Form(""),
@@ -191,6 +200,11 @@ async def upload_batch_documents(
 
             checksum = hashlib.sha256(content).hexdigest()
             
+            from app.services.file_processor import get_file_group
+            text_content = None
+            if get_file_group(file.content_type or "", file.filename or "") == "text":
+                text_content = content.decode("utf-8", errors="replace")
+            
             child = Document(
                 owner_id=current_user.id,
                 workspace_id=None,  
@@ -200,14 +214,21 @@ async def upload_batch_documents(
                 file_type=file.content_type or "application/octet-stream",
                 file_size=len(content),
                 checksum=checksum,
+                content=text_content,
                 is_bundle=False,
                 bundle_parent_id=bundle.id,
                 is_deleted=False,
                 is_public=False,
-                tags=tags_list,  
+                tags=tags_list,
             )
             db.add(child)
             await db.flush()
+            background_tasks.add_task(
+                _process_document_background,
+                child.id,
+                child.file_path,
+                child.file_type or "",
+            )
 
         bundle.file_size = total_size
 
@@ -411,6 +432,42 @@ async def get_document(
     return doc_out
 
 
+@router.get("/{document_id}/raw")
+async def get_document_raw(
+    document_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(Document)
+        .where(
+            Document.id == document_id,
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+            Document.is_public == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+    
+    if not document.content:
+        # Fallback to reading file if content is somehow empty but file exists
+        if document.file_path and os.path.exists(document.file_path):
+            with open(document.file_path, "rb") as f:
+                content = f.read().decode('utf-8', errors='replace')
+        else:
+            raise HTTPException(status_code=404, detail="Tài liệu không có nội dung text")
+    else:
+        content = document.content
+
+    return StreamingResponse(
+        io.StringIO(content),
+        media_type="text/plain",
+        headers={"Content-Disposition": f'inline; filename="{document.title}"'}
+    )
+
+
 @router.get("/{document_id}/tags", response_model=list[TagOut])
 async def get_document_tags(
     document_id: int,
@@ -579,6 +636,12 @@ async def add_files_to_bundle(
             saved_paths.append(file_path)
 
             checksum = hashlib.sha256(content).hexdigest()
+            
+            from app.services.file_processor import get_file_group
+            text_content = None
+            if get_file_group(file.content_type or "", file.filename or "") == "text":
+                text_content = content.decode("utf-8", errors="replace")
+
             child = Document(
                 owner_id=current_user.id,
                 workspace_id=None,
@@ -587,6 +650,7 @@ async def add_files_to_bundle(
                 file_type=file.content_type or "application/octet-stream",
                 file_size=len(content),
                 checksum=checksum,
+                content=text_content,
                 is_bundle=False,
                 bundle_parent_id=bundle_id,
                 is_deleted=False,
@@ -752,6 +816,45 @@ async def remove_from_bundle(
     doc.bundle_parent_id = None
     await db.commit()
     return {"success": True}
+
+
+@router.post("/{document_id}/thumbnail", response_model=DocumentOut)
+async def update_document_thumbnail(
+    document_id: int,
+    page_number: int = Form(1),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(Document)
+        .options(selectinload(Document.tags))
+        .where(
+            Document.id == document_id,
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+            Document.is_public == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    if not document.file_type or "pdf" not in document.file_type.lower():
+        raise HTTPException(status_code=400, detail="Tính năng này chỉ hỗ trợ PDF")
+
+    loop = asyncio.get_event_loop()
+    thumbnail_path = await loop.run_in_executor(
+        None, create_thumbnail, document.file_path, document.file_type, document.id, page_number
+    )
+    
+    if thumbnail_path:
+        document.thumbnail_path = thumbnail_path
+        await db.commit()
+        await db.refresh(document)
+    else:
+        raise HTTPException(status_code=500, detail="Không thể tạo ảnh bìa")
+        
+    return document
 
 
 @router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)

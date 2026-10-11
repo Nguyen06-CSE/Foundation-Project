@@ -39,7 +39,7 @@ export function DocumentBrowser({
   const ops = useWorkspaceOperations(workspace);
   const queryClient = useQueryClient();
 
-  const [activeTab, setActiveTab] = useState<'all' | 'document' | 'image' | 'pdf' | 'other'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'document' | 'image' | 'pdf' | 'code' | 'other'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
@@ -109,9 +109,16 @@ export function DocumentBrowser({
     if (searchQuery && !doc.name.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
-    if (activeTab === 'image' && !doc.type.includes('image')) return false;
-    if (activeTab === 'pdf' && !doc.type.includes('pdf')) return false;
-    if (activeTab === 'document' && !doc.type.includes('word') && !doc.type.includes('document')) return false;
+    const isImage = doc.type.includes('image');
+    const isPdf = doc.type.includes('pdf');
+    const isDocument = doc.type.includes('word') || doc.type.includes('document') || doc.type.includes('excel') || doc.type.includes('powerpoint');
+    const isCode = doc.type.includes('text') || doc.name.toLowerCase().endsWith('.py') || doc.name.toLowerCase().endsWith('.js') || doc.name.toLowerCase().endsWith('.cpp') || doc.name.toLowerCase().endsWith('.sql') || doc.name.toLowerCase().endsWith('.json') || doc.name.toLowerCase().endsWith('.html') || doc.name.toLowerCase().endsWith('.css'); // simplified check for code
+
+    if (activeTab === 'image' && !isImage) return false;
+    if (activeTab === 'pdf' && !isPdf) return false;
+    if (activeTab === 'document' && !isDocument) return false;
+    if (activeTab === 'code' && !isCode) return false;
+    if (activeTab === 'other' && (isImage || isPdf || isDocument || isCode)) return false;
     return true;
   });
 
@@ -140,7 +147,7 @@ export function DocumentBrowser({
 
       {/* Tabs */}
       <div className="flex items-center gap-6 border-b border-gray-200">
-        {(['all', 'document', 'image', 'pdf', 'other'] as const).map((tab) => (
+        {(['all', 'document', 'image', 'pdf', 'code', 'other'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -154,6 +161,7 @@ export function DocumentBrowser({
             {tab === 'document' && 'Tài liệu'}
             {tab === 'image' && 'Hình ảnh'}
             {tab === 'pdf' && 'PDF'}
+            {tab === 'code' && 'Code mẫu'}
             {tab === 'other' && 'Khác'}
           </button>
         ))}

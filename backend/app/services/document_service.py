@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+import os
 
 from app.models.document import Document
 from app.models.document_version import DocumentVersion
@@ -55,7 +56,7 @@ async def create_document_from_upload(
         file_path=file_path,
         thumbnail_path=thumbnail_path,
         file_type=upload.content_type,
-        file_size=getattr(upload, "size", None),
+        file_size=os.path.getsize(file_path) if file_path else getattr(upload, "size", None),
         checksum=checksum,
         content=content,
     )

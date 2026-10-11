@@ -163,6 +163,14 @@ export const groupService = {
   removeTag: (groupId: number, docId: number, tagId: number) =>
     api.delete<Document>(`/groups/${groupId}/documents/${docId}/tags/${tagId}`).then((r) => r.data),
 
+  updateThumbnailPage: (groupId: number, docId: number, pageNumber: number) => {
+    const formData = new FormData();
+    formData.append("page_number", pageNumber.toString());
+    return api.post<Document>(`/groups/${groupId}/documents/${docId}/thumbnail`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }).then((r) => r.data);
+  },
+
   async getWorkspaceTags(groupId: number | string): Promise<any[]> {
     const response = await api.get(`/groups/${groupId}/tags/`);
     return response.data;

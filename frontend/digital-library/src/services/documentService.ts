@@ -66,6 +66,14 @@ export const createDocumentService = (getBaseUrl: (groupId?: number | string) =>
       payload
     ).then(r => r.data),
 
+  updateThumbnailPage: (documentId: number, pageNumber: number, groupId?: number | string) => {
+    const formData = new FormData()
+    formData.append('page_number', pageNumber.toString())
+    return api.post<Document>(`${getBaseUrl(groupId)}/${documentId}/thumbnail`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(r => r.data)
+  },
+
   updateTags: (
     documentId: number,
     tagIds: number[],

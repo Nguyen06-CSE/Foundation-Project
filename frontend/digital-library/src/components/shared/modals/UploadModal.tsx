@@ -27,10 +27,29 @@ const ACCEPTED_MIME = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "image/jpeg",
   "image/png",
   "image/webp",
   "text/plain",
+  "text/x-python",
+  "text/javascript",
+  "text/typescript",
+  "text/x-c",
+  "text/x-c++",
+  "text/x-java-source",
+  "application/json",
+  "text/html",
+  "text/css",
+  "text/markdown",
+  "text/x-sql",
+  "text/x-shellscript",
+  ".py", ".js", ".ts", ".jsx", ".tsx", ".cpp", ".c", ".h", ".java", ".cs", ".go",
+  ".rs", ".php", ".rb", ".swift", ".kt", ".scala", ".r", ".m", ".sql", ".yaml",
+  ".yml", ".toml", ".csv", ".html", ".css", ".scss", ".sass", ".less", ".svelte",
+  ".vue", ".sh", ".bash", ".zsh", ".fish", ".ps1", ".bat", ".cmd", ".md", ".mdx",
+  ".rst", ".tex", ".env", ".gitignore", ".dockerignore", ".mk", ".xlsx", ".xls"
 ];
 const MAX_MB = 50;
 
@@ -78,8 +97,13 @@ export function UploadModal({
 
     const newFiles = Array.from(selectedFiles);
 
-    const invalid = newFiles.find((f) => !ACCEPTED_MIME.includes(f.type));
-    if (invalid) return setError("Tồn tại định dạng file không được hỗ trợ.");
+    const invalid = newFiles.find((f) => {
+      const isAcceptedMime = ACCEPTED_MIME.includes(f.type);
+      const isAcceptedExt = ACCEPTED_MIME.some(ext => ext.startsWith('.') && f.name.toLowerCase().endsWith(ext));
+      // Trình duyệt có thể trả f.type rỗng cho file code, nên cho qua nếu đuôi file đúng hoặc mime rỗng
+      return !isAcceptedMime && !isAcceptedExt && f.type !== "";
+    });
+    if (invalid) return setError("Tồn tại định dạng file không được hỗ trợ: " + invalid.name);
 
     const oversized = newFiles.find((f) => f.size > MAX_MB * 1024 * 1024);
     if (oversized) return setError(`File "${oversized.name}" vượt quá ${MAX_MB}MB.`);

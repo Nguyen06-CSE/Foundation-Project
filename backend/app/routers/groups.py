@@ -42,6 +42,7 @@ from app.schemas.group import (
 from app.schemas.tag import TagCreate, TagOut, TagUpdate
 from app.services.document_service import create_document_from_upload
 from app.services.folder_service import get_folders_with_stats
+from app.services.file_processor import create_thumbnail
 from app.services.group_service import require_write_permission
 from app.services.group_service import (
     mark_group_document_deleted,
@@ -339,6 +340,7 @@ async def get_group_bundle_children(
 @router.post("/groups/{group_id}/documents/upload-batch", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
 async def upload_group_batch_documents(
     group_id: int,
+    background_tasks: BackgroundTasks,
     bundle_title: str = Form(...),
     bundle_description: Optional[str] = Form(None),
     tag_ids: str = Form(""),
@@ -401,6 +403,12 @@ async def upload_group_batch_documents(
             saved_file_paths.append(file_path)
 
             checksum = hashlib.sha256(content).hexdigest()
+            
+            from app.services.file_processor import get_file_group
+            text_content = None
+            if get_file_group(file.content_type or "", file.filename or "") == "text":
+                text_content = content.decode("utf-8", errors="replace")
+                
             child = Document(
                 owner_id=current_user.id,
                 workspace_id=group_id,
@@ -410,11 +418,19 @@ async def upload_group_batch_documents(
                 file_type=file.content_type or "application/octet-stream",
                 file_size=len(content),
                 checksum=checksum,
+                content=text_content,
                 is_bundle=False,
                 bundle_parent_id=bundle.id,
                 is_deleted=False,
             )
             db.add(child)
+            await db.flush()
+            background_tasks.add_task(
+                _process_document_background,
+                child.id,
+                child.file_path,
+                child.file_type or "",
+            )
 
         bundle.file_size = total_size
 
@@ -466,6 +482,14 @@ async def upload_group_document(
     current_user: User = Depends(get_current_user),
 ):
     await require_full_permission(db, group_id, current_user.id)
+    
+    content = None
+    from app.services.file_processor import get_file_group
+    if get_file_group(file.content_type or "", file.filename or "") == "text":
+        file_bytes = await file.read()
+        content = file_bytes.decode('utf-8', errors='replace')
+        await file.seek(0)
+        
     document = await create_document_from_upload(
         db,
         upload=file,
@@ -476,6 +500,7 @@ async def upload_group_document(
         workspace_id=group_id,
         tag_ids=tag_ids,
         thumbnail_path=thumbnail_path,
+        content=content,
     )
     await db.commit()
     await db.refresh(document)
@@ -543,6 +568,56 @@ async def update_group_document(
     await db.refresh(document)
     
     return document
+
+@router.post("/groups/{group_id}/documents/{document_id}/thumbnail", response_model=DocumentOut)
+async def update_group_document_thumbnail(
+    group_id: int,
+    document_id: int,
+    page_number: int = Form(1),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Cập nhật ảnh bìa từ một trang PDF (cho tài liệu nhóm)"""
+    await require_full_permission(db, group_id, current_user.id)
+
+    result = await db.execute(
+        select(Document)
+        .options(selectinload(Document.tags))
+        .where(
+            Document.id == document_id,
+            Document.workspace_id == group_id,
+            Document.is_deleted == False
+        )
+    )
+    document = result.scalar_one_or_none()
+    
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Không tìm thấy tài liệu trong nhóm này"
+        )
+        
+    if not document.file_type or "pdf" not in document.file_type.lower():
+        raise HTTPException(status_code=400, detail="Chỉ hỗ trợ tạo ảnh bìa từ PDF")
+        
+    if not os.path.exists(document.file_path):
+        raise HTTPException(status_code=404, detail="File không tồn tại trên server")
+        
+    import asyncio
+    try:
+        loop = asyncio.get_event_loop()
+        thumbnail_path = await loop.run_in_executor(
+            None, create_thumbnail, document.file_path, document.file_type, document.id, page_number
+        )
+        if thumbnail_path:
+            document.thumbnail_path = thumbnail_path
+            await db.commit()
+            await db.refresh(document)
+            return document
+        else:
+            raise HTTPException(status_code=500, detail="Không thể tạo ảnh bìa")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/groups/{group_id}/share/folder", response_model=ShareResult)
 async def share_folder(

@@ -145,6 +145,18 @@ export function FileDocumentCard({
     ? getThumbnailUrl(document.thumbnail_path)
     : null;
 
+  const CODE_EXTENSIONS = [
+    ".py", ".js", ".ts", ".jsx", ".tsx", ".cpp", ".c", ".h", ".java", ".cs", 
+    ".go", ".rs", ".php", ".rb", ".swift", ".kt", ".scala", ".r", ".m",
+    ".sql", ".json", ".yaml", ".yml", ".toml", ".xml", ".csv",
+    ".html", ".css", ".scss", ".sass", ".less", ".svelte", ".vue",
+    ".sh", ".bash", ".zsh", ".fish", ".ps1", ".bat", ".cmd",
+    ".md", ".mdx", ".rst", ".tex",
+    ".env", ".gitignore", ".dockerignore", ".makefile", ".mk", "dockerfile"
+  ];
+  
+  const isCode = document.type?.startsWith("text/") || CODE_EXTENSIONS.some(e => document.name?.toLowerCase().endsWith(e)) || document.name?.toLowerCase().includes("dockerfile");
+
   const tags = document.tags || [];
 
   return (
@@ -172,6 +184,10 @@ export function FileDocumentCard({
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={() => setImageError(true)}
           />
+        ) : isCode && (document as any).content ? (
+          <div className="h-full w-full bg-gray-900 text-green-400 p-3 pt-8 text-[9px] font-mono overflow-hidden leading-snug text-left opacity-90 group-hover:opacity-100 transition-opacity">
+            <pre className="whitespace-pre-wrap">{(document as any).content.split('\n').slice(0, 6).join('\n')}</pre>
+          </div>
         ) : (
           <div className="flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
             <FileIcon

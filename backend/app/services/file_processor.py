@@ -16,17 +16,34 @@ MARKDOWN_DIR.mkdir(parents=True, exist_ok=True)
 
 def generate_markdown(file_path: str, doc_id: int) -> Optional[str]:
     """
-    Convert file sang Markdown bằng anydoc và lưu vào storage/markdowns/<doc_id>.md.
-    Trả về đường dẫn tương đối (để lưu vào DB) hoặc None nếu thất bại.
+    Convert file sang Markdown. Với file text/code thì bọc trong block code.
     """
     try:
-        import anydoc  # lazy import — không crash nếu chưa cài
-
         path = Path(file_path)
         if not path.exists():
             return None
 
-        markdown_content = anydoc.to_markdown(str(path))
+        import mimetypes
+        mime_type, _ = mimetypes.guess_type(file_path)
+        group = get_file_group(mime_type or "", file_path)
+
+        if group == "text":
+            content = path.read_text(encoding="utf-8", errors="replace")
+            from pygments.lexers import guess_lexer_for_filename, guess_lexer
+            from pygments.util import ClassNotFound
+            try:
+                lexer = guess_lexer_for_filename(path.name, content)
+            except ClassNotFound:
+                try:
+                    lexer = guess_lexer(content)
+                except ClassNotFound:
+                    lexer = None
+            lang = lexer.aliases[0] if lexer and lexer.aliases else "text"
+            markdown_content = f"```{lang}\n{content}\n```"
+        else:
+            import anydoc
+            markdown_content = anydoc.to_markdown(str(path))
+
         if not markdown_content or not markdown_content.strip():
             return None
 
@@ -35,7 +52,6 @@ def generate_markdown(file_path: str, doc_id: int) -> Optional[str]:
         return f"storage/markdowns/{doc_id}.md"
 
     except Exception as e:
-        # Bắt NeedsOcrError, UnsupportedError và mọi exception khác — không block luồng chính
         logger.warning(f"generate_markdown skip doc_id={doc_id}: {e}")
         return None
 
@@ -47,6 +63,8 @@ MIME_TO_GROUP = {
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
     "application/vnd.ms-powerpoint": "pptx",
     "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "application/vnd.ms-excel": "xlsx",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
     "image/jpeg": "image",
     "image/png": "image",
     "image/webp": "image",
@@ -55,39 +73,48 @@ MIME_TO_GROUP = {
 }
 
 
-def get_file_group(mime_type: str) -> str:
-    return MIME_TO_GROUP.get(mime_type, "other")
+def get_file_group(mime_type: str, file_path: str = "") -> str:
+    group = MIME_TO_GROUP.get(mime_type)
+    if group:
+        return group
+        
+    if mime_type.startswith("text/") or mime_type in ["application/json", "application/xml"]:
+        return "text"
+        
+    ext = Path(file_path).suffix.lower()
+    code_exts = {
+        ".py", ".js", ".ts", ".jsx", ".tsx", ".cpp", ".c", ".h", ".java", ".cs", ".go",
+        ".rs", ".php", ".rb", ".swift", ".kt", ".scala", ".r", ".m", ".sql", ".yaml",
+        ".yml", ".toml", ".csv", ".html", ".css", ".scss", ".sass", ".less", ".svelte",
+        ".vue", ".sh", ".bash", ".zsh", ".fish", ".ps1", ".bat", ".cmd", ".md", ".mdx",
+        ".rst", ".tex", ".env", ".gitignore", ".dockerignore", ".mk"
+    }
+    if ext in code_exts:
+        return "text"
+        
+    return "other"
 
 
 def extract_text(file_path: str, mime_type: str) -> str:
     """
-    Extract text từ file. Trả về string rỗng nếu lỗi.
-    - PDF có text: dùng pdfplumber
-    - PDF scan (text rỗng): fallback OCR pytesseract
-    - DOCX: python-docx
-    - PPTX: python-pptx  
-    - Image: OCR pytesseract
-    - Text: đọc trực tiếp
+    Extract text từ file.
     """
     path = Path(file_path)
     if not path.exists():
         logger.warning(f"File không tồn tại: {file_path}")
         return ""
 
-    group = get_file_group(mime_type)
+    group = get_file_group(mime_type, file_path)
 
     try:
         if group == "pdf":
             import pdfplumber
             with pdfplumber.open(path) as pdf:
-                text = "\n".join(
-                    page.extract_text() or "" for page in pdf.pages
-                )
-            # Nếu PDF scan (không có text layer) → OCR
+                text = "\n".join(page.extract_text() or "" for page in pdf.pages)
             if not text.strip():
                 logger.info(f"PDF không có text layer, chuyển sang OCR: {file_path}")
                 text = _ocr_pdf(path)
-            return text[:100_000]  # giới hạn 100k ký tự
+            return text[:100_000]
 
         elif group == "docx":
             from docx import Document as DocxDocument
@@ -108,7 +135,7 @@ def extract_text(file_path: str, mime_type: str) -> str:
             return _ocr_image(path)
 
         elif group == "text":
-            return path.read_text(encoding="utf-8", errors="ignore")[:100_000]
+            return path.read_text(encoding="utf-8", errors="replace")[:2_000_000]
 
     except Exception as e:
         logger.error(f"extract_text lỗi [{file_path}]: {e}")
@@ -116,10 +143,10 @@ def extract_text(file_path: str, mime_type: str) -> str:
     return ""
 
 
-def create_thumbnail(file_path: str, mime_type: str, doc_id: int) -> Optional[str]:
+def create_thumbnail(file_path: str, mime_type: str, doc_id: int, page_number: int = 1) -> Optional[str]:
     """
     Tạo thumbnail JPG. Trả về đường dẫn tương đối hoặc None nếu không hỗ trợ.
-    - PDF: render trang đầu tiên
+    - PDF: render trang chỉ định
     - Image: resize giữ tỉ lệ
     - DOCX/PPTX/khác: trả None (FE dùng icon mặc định theo loại file)
     """
@@ -133,7 +160,7 @@ def create_thumbnail(file_path: str, mime_type: str, doc_id: int) -> Optional[st
     try:
         if group == "pdf":
             from pdf2image import convert_from_path
-            images = convert_from_path(str(path), first_page=1, last_page=1, dpi=150)
+            images = convert_from_path(str(path), first_page=page_number, last_page=page_number, dpi=150)
             if images:
                 images[0].convert("RGB").save(str(out_path), "JPEG", quality=85)
                 return f"storage/thumbnails/{doc_id}.jpg"

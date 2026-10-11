@@ -11,6 +11,8 @@ import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { renderAsync } from "docx-preview";
 import html2canvas from "html2canvas";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import "@cyntler/react-doc-viewer/dist/index.css";
 import {
   ArrowLeft,
   Download,
@@ -111,6 +113,7 @@ export interface SharedDocumentDetailProps {
   deleteDocumentFn?: (id: number) => Promise<any>;
   updateTagsFn?: (id: number, tagIds: number[]) => Promise<any>;
   removeTagFn?: (id: number, tagId: number) => Promise<any>;
+  updateThumbnailPageFn?: (id: number, page: number) => Promise<any>;
   queryKeyPrefix?: string[];
   permissions?: DocumentDetailPermissions;
   backUrl?: string;
@@ -378,6 +381,98 @@ function MarkdownViewer({ markdownPath }: { markdownPath: string }) {
   );
 }
 
+// Sub-component xem mã nguồn (Code)
+function CodeViewer({ documentId, filePath }: { documentId: number; filePath?: string }) {
+  const [htmlContent, setHtmlContent] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+
+    const fetchAndHighlight = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/documents/${documentId}/raw`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+        });
+        
+        if (!res.ok) throw new Error("Không thể tải nội dung file code");
+        
+        const text = await res.text();
+        if (!isMounted) return;
+
+        // Map extension to shiki language
+        let lang = "text";
+        if (filePath) {
+          const ext = filePath.split('.').pop()?.toLowerCase() || "";
+          const langMap: Record<string, string> = {
+            py: "python", js: "javascript", ts: "typescript", jsx: "jsx", tsx: "tsx",
+            cpp: "cpp", c: "c", h: "c", java: "java", cs: "csharp", go: "go", rs: "rust",
+            php: "php", rb: "ruby", swift: "swift", kt: "kotlin", scala: "scala", r: "r", m: "objective-c",
+            sql: "sql", json: "json", yaml: "yaml", yml: "yaml", toml: "toml", xml: "xml", csv: "csv",
+            html: "html", css: "css", scss: "scss", sass: "sass", less: "less", svelte: "svelte", vue: "vue",
+            sh: "bash", bash: "bash", zsh: "bash", fish: "fish", ps1: "powershell", bat: "bat", cmd: "bat",
+            md: "markdown", mdx: "mdx", rst: "rst", tex: "tex",
+            env: "ini", gitignore: "ignore", dockerignore: "ignore", makefile: "makefile", mk: "makefile"
+          };
+          if (langMap[ext]) lang = langMap[ext];
+          else if (filePath.toLowerCase().includes("dockerfile")) lang = "dockerfile";
+        }
+
+        // Dynamically import shiki to avoid bundle bloat
+        const { codeToHtml } = await import("shiki");
+        const highlightedHtml = await codeToHtml(text, {
+          lang,
+          theme: "github-light",
+        }).catch(() => {
+           // fallback if lang not supported
+           return codeToHtml(text, { lang: "text", theme: "github-light" }).catch(() => `<pre><code>${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>`);
+        });
+
+        if (isMounted) {
+          setHtmlContent(highlightedHtml);
+          setLoading(false);
+        }
+      } catch (err: any) {
+        if (isMounted) {
+          setError(err.message);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchAndHighlight();
+
+    return () => { isMounted = false; };
+  }, [documentId]);
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center py-20 text-gray-500 gap-3">
+        <Loader2 className="h-6 w-6 animate-spin text-primary-600" />
+        <span className="text-sm">Đang tải mã nguồn...</span>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="py-12 text-center text-sm text-red-500">{error}</div>
+    );
+
+  return (
+    <div className="w-full max-w-full h-full min-h-[500px] max-h-[750px] overflow-hidden bg-[#f6f8fa] rounded-xl border border-gray-200 text-sm flex flex-col">
+      <div 
+        className="w-full h-full overflow-auto p-5 custom-scrollbar [&>pre]:!bg-transparent [&>pre]:!m-0 [&>pre]:!p-0"
+        dangerouslySetInnerHTML={{ __html: htmlContent || "" }} 
+      />
+    </div>
+  );
+}
+
 interface InfoRowProps {
   label: string;
   value: string;
@@ -406,17 +501,78 @@ function StatItem({ label, value }: StatItemProps) {
   );
 }
 
+function PdfViewer({ doc, fileUrl, onUpdateCover, isUpdatingCover }: { doc: any; fileUrl: string; onUpdateCover?: (page: number) => void; isUpdatingCover?: boolean }) {
+  const [selectedPage, setSelectedPage] = useState(1);
+  return (
+    <div className="w-full flex flex-col items-center gap-3">
+      {onUpdateCover && (
+        <div className="w-full max-w-4xl flex flex-wrap items-center justify-end gap-3 bg-white px-4 py-2.5 rounded-lg border border-gray-200 shadow-xs">
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="pdf-cover-page"
+              className="text-xs text-gray-500 font-medium"
+            >
+              Chọn trang bìa:
+            </label>
+            <input
+              id="pdf-cover-page"
+              type="number"
+              min={1}
+              value={selectedPage}
+              onChange={(event) => {
+                const page = Number.parseInt(event.target.value, 10);
+                if (!Number.isNaN(page)) {
+                  setSelectedPage(Math.max(1, page));
+                }
+              }}
+              className="w-16 px-2 py-1 text-center text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 font-semibold"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onUpdateCover(selectedPage)}
+              disabled={isUpdatingCover}
+              className="h-8 text-xs flex items-center gap-1.5 border-primary-500 text-primary-600 hover:bg-primary-50"
+            >
+              {isUpdatingCover ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>Đang lưu...</span>
+                </>
+              ) : (
+                <>
+                  <Camera className="h-3.5 w-3.5" />
+                  <span>Đặt trang {selectedPage} làm ảnh bìa</span>
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
+      <iframe
+        src={`${fileUrl}#toolbar=1&navpanes=0`}
+        className="w-full h-[750px] rounded-lg shadow-sm bg-white border-0"
+        title={doc.title}
+      />
+    </div>
+  );
+}
+
 // Sub-component Tab Detail (Bản xem trước tổng hợp)
 function TabDetail({
   doc,
   fileUrl,
   onUpdateThumbnail,
   isUpdatingThumbnail,
+  onUpdateThumbnailPage,
+  isUpdatingThumbnailPage,
 }: {
   doc: any;
   fileUrl: string;
   onUpdateThumbnail?: (base64: string) => void;
   isUpdatingThumbnail?: boolean;
+  onUpdateThumbnailPage?: (page: number) => void;
+  isUpdatingThumbnailPage?: boolean;
 }) {
   const { defaultPreviewMode } = useSettingsStore();
   const fileType = doc.file_type?.toLowerCase() || "";
@@ -431,10 +587,35 @@ function TabDetail({
     filePath.endsWith(".docx") ||
     filePath.endsWith(".doc");
 
+  const isPptx =
+    fileType ===
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+    fileType === "application/vnd.ms-powerpoint" ||
+    filePath.endsWith(".pptx") ||
+    filePath.endsWith(".ppt");
+
+  const isXlsx =
+    fileType ===
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    fileType === "application/vnd.ms-excel" ||
+    filePath.endsWith(".xlsx") ||
+    filePath.endsWith(".xls");
+
+  const CODE_EXTENSIONS = [
+    ".py", ".js", ".ts", ".jsx", ".tsx", ".cpp", ".c", ".h", ".java", ".cs", 
+    ".go", ".rs", ".php", ".rb", ".swift", ".kt", ".scala", ".r", ".m",
+    ".sql", ".json", ".yaml", ".yml", ".toml", ".xml", ".csv",
+    ".html", ".css", ".scss", ".sass", ".less", ".svelte", ".vue",
+    ".sh", ".bash", ".zsh", ".fish", ".ps1", ".bat", ".cmd",
+    ".md", ".mdx", ".rst", ".tex",
+    ".env", ".gitignore", ".dockerignore", ".makefile", ".mk", "dockerfile"
+  ];
+  const isCode = fileType.startsWith("text/") || CODE_EXTENSIONS.some(ext => filePath.endsWith(ext)) || filePath.includes("dockerfile");
+
   const hasMarkdown = !isImage && !!doc.markdown_path;
   // If markdown not available, always show original regardless of stored pref
   const [viewMode, setViewMode] = useState<"original" | "markdown">(
-    hasMarkdown && defaultPreviewMode === "markdown" ? "markdown" : "original",
+    hasMarkdown && !isCode && (isPptx || isXlsx || defaultPreviewMode === "markdown") ? "markdown" : "original",
   );
 
   const thumbnailUrl = getThumbnailUrl(doc.thumbnail_path);
@@ -482,10 +663,11 @@ function TabDetail({
             }}
           />
         ) : isPdf ? (
-          <iframe
-            src={`${fileUrl}#toolbar=1&navpanes=0`}
-            className="w-full h-[750px] rounded-lg shadow-sm bg-white border-0"
-            title={doc.title}
+          <PdfViewer
+            doc={doc}
+            fileUrl={fileUrl}
+            onUpdateCover={onUpdateThumbnailPage}
+            isUpdatingCover={isUpdatingThumbnailPage}
           />
         ) : isDocx ? (
           <DocxViewer
@@ -494,6 +676,45 @@ function TabDetail({
             onUpdateThumbnail={onUpdateThumbnail}
             isUpdatingThumbnail={isUpdatingThumbnail}
           />
+        ) : isCode ? (
+          <CodeViewer documentId={doc.id} filePath={doc.file_path} />
+        ) : (isPptx || isXlsx) ? (
+          <div className="w-full h-full min-h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col gap-3">
+             {onUpdateThumbnail && (
+               <div className="w-full flex items-center justify-end px-4 py-2 border-b border-gray-200">
+                 <label className="text-xs text-gray-500 font-medium mr-2">Ảnh bìa:</label>
+                 <label className="cursor-pointer">
+                   <input
+                     type="file"
+                     accept="image/*"
+                     className="hidden"
+                     onChange={(e) => {
+                       const file = e.target.files?.[0];
+                       if (file) {
+                         const reader = new FileReader();
+                         reader.onload = (ev) => {
+                           if (ev.target?.result) {
+                             onUpdateThumbnail(ev.target.result as string);
+                           }
+                         };
+                         reader.readAsDataURL(file);
+                       }
+                     }}
+                   />
+                   <span className="inline-flex items-center gap-1.5 h-8 px-3 text-xs border border-primary-500 text-primary-600 rounded-md hover:bg-primary-50">
+                     {isUpdatingThumbnail ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Camera className="h-3.5 w-3.5" />}
+                     {isUpdatingThumbnail ? "Đang lưu..." : "Tải lên ảnh bìa"}
+                   </span>
+                 </label>
+               </div>
+             )}
+             <DocViewer 
+               documents={[{ uri: fileUrl }]} 
+               pluginRenderers={DocViewerRenderers} 
+               style={{ width: "100%", height: "100%", minHeight: "600px" }}
+               config={{ header: { disableHeader: true } }}
+             />
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center space-y-4 py-12">
             {thumbnailUrl ? (
@@ -514,6 +735,31 @@ function TabDetail({
               lòng nhấn <strong>"Mở trong thẻ mới"</strong> hoặc{" "}
               <strong>"Tải xuống"</strong> để xem.
             </p>
+            {onUpdateThumbnail && (
+              <label className="cursor-pointer mt-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (ev) => {
+                        if (ev.target?.result) {
+                          onUpdateThumbnail(ev.target.result as string);
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+                <span className="inline-flex items-center gap-2 h-9 px-4 text-sm border border-primary-500 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">
+                  {isUpdatingThumbnail ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+                  {isUpdatingThumbnail ? "Đang lưu..." : "Tải lên ảnh bìa"}
+                </span>
+              </label>
+            )}
           </div>
         )}
       </div>
@@ -610,6 +856,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     deleteDocumentFn = documentService.delete,
     updateTagsFn = documentService.updateTags,
     removeTagFn = documentService.removeTag,
+    updateThumbnailPageFn = documentService.updateThumbnailPage,
     queryKeyPrefix = ["document"],
     permissions = {},
     backUrl = "/personal/documents",
@@ -707,6 +954,29 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     },
     onError: (error) => {
       console.error("Không thể lưu ảnh bìa:", error);
+    },
+  });
+
+  const updateThumbnailPageMutation = useMutation({
+    mutationFn: (pageNumber: number) => {
+      if (!updateThumbnailPageFn) {
+        throw new Error("Không hỗ trợ tính năng này.");
+      }
+      return updateThumbnailPageFn(id, pageNumber);
+    },
+    onSuccess: (updated) => {
+      queryClient.setQueryData([...queryKeyPrefix, id], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          thumbnail_path: updated?.thumbnail_path,
+        };
+      });
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    },
+    onError: (error) => {
+      console.error("Không thể lưu ảnh bìa PDF:", error);
+      alert("Lỗi khi cập nhật ảnh bìa PDF");
     },
   });
 
@@ -1045,6 +1315,16 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                 }
                 isUpdatingThumbnail={
                   canEdit ? updateThumbnailMutation.isPending : false
+                }
+                onUpdateThumbnailPage={
+                  canEdit
+                    ? (page) => updateThumbnailPageMutation.mutate(page)
+                    : undefined
+                }
+                isUpdatingThumbnailPage={
+                  canEdit
+                    ? updateThumbnailPageMutation.isPending
+                    : false
                 }
               />
             )}
