@@ -11,3 +11,4 @@ export * from "./tabs/TabPreview";
 export * from "./tabs/TabContent";
 export * from "./tabs/TabPanels";
 export * from "./components/DocumentCoverSelector";
+export * from "./components/SetCoverModal";

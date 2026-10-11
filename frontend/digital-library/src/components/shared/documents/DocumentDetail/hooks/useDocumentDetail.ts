@@ -289,14 +289,14 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
     : [];
 
 
-  const handleUpdateThumbnail = (base64: string) => {
+  const handleUpdateThumbnail = async (base64: string) => {
     if (!id || updateThumbnailMutation.isPending) return;
-    updateThumbnailMutation.mutate(base64);
+    return updateThumbnailMutation.mutateAsync(base64);
   };
 
-  const handleUpdateThumbnailPage = (pageNumber: number) => {
+  const handleUpdateThumbnailPage = async (pageNumber: number) => {
     if (!id || updateThumbnailPageMutation.isPending) return;
-    updateThumbnailPageMutation.mutate(pageNumber);
+    return updateThumbnailPageMutation.mutateAsync(pageNumber);
   };
 
   const handleDelete = () => {

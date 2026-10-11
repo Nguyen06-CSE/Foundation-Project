@@ -15,6 +15,7 @@ import { useDocumentDetail } from "./hooks/useDocumentDetail";
 import { DocumentTitleHeader } from "./components/DocumentTitleHeader";
 import { DocumentInfoCard } from "./components/DocumentInfoCard";
 import { DocumentActionCard } from "./components/DocumentActionCard";
+import { SetCoverModal } from "./components/SetCoverModal";
 import { TabPreview } from "./tabs/TabPreview";
 import { TabContent } from "./tabs/TabContent";
 import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
@@ -56,6 +57,22 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   const [viewMode, setViewMode] = useState<"original" | "markdown">("original");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isCoverModalOpen, setIsCoverModalOpen] = useState(false);
+
+  const isPdfOrDoc =
+    doc?.file_type === "application/pdf" ||
+    doc?.file_type?.includes("wordprocessingml") ||
+    doc?.file_type?.includes("msword") ||
+    doc?.file_path?.toLowerCase().endsWith(".pdf") ||
+    doc?.file_path?.toLowerCase().endsWith(".docx") ||
+    doc?.file_path?.toLowerCase().endsWith(".doc");
+
+  /**
+   * Kích hoạt thao tác đổi ảnh bìa bằng Modal đa năng
+   */
+  const handleSetCover = () => {
+    setIsCoverModalOpen(true);
+  };
 
   // --- TRẠNG THÁI LOADING ---
   if (isLoading) {
@@ -110,6 +127,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   return (
     <div className="flex flex-col gap-6 pb-10">
+
       <div
         className={cn(
           "grid grid-cols-1 items-start gap-4",
@@ -137,7 +155,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
           {/* Thanh chuyển tab */}
           <div className="-mx-5 flex items-center justify-between border-b border-gray-200 px-5">
-            {/* Tabs bên trái */}
             <div className="flex items-center gap-6">
               {TABS.map((tab) => (
                 <button
@@ -156,7 +173,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               ))}
             </div>
 
-            {/* Phía bên phải: Nút toggle sidebar + ViewMode buttons */}
             <div className="flex items-center gap-2 pb-2">
               {activeTab === "detail" && markdownDownloadUrl && (
                 <div className="flex items-center gap-1">
@@ -188,7 +204,8 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                     type="button"
                     onClick={() => setSidebarOpen((v) => !v)}
                     className={cn(
-                      "flex-shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
+                      // FIX 3: Đổi flex-shrink-0 thành shrink-0
+                      "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
                       sidebarOpen
                         ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
                         : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
@@ -214,7 +231,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                 doc={doc}
                 fileUrl={fileDownloadUrl}
                 viewMode={viewMode}
-                // ✅ FIX: dùng handler ổn định từ hook
                 onUpdateThumbnail={
                   permissions.canEdit ? handleUpdateThumbnail : undefined
                 }
@@ -270,13 +286,24 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               canEdit={permissions.canEdit}
               canDelete={permissions.canDelete}
               isRenamePending={renameMutation.isPending}
-              isDeletePending={isDeleting}   // ✅ FIX
+              isDeletePending={isDeleting}
               onStartRename={handleStartRename}
-              onDelete={handleDelete}        // ✅ FIX
+              onDelete={handleDelete}
+              onSetCover={handleSetCover}
             />
           </div>
         )}
       </div>
+
+      {/* Modal cập nhật ảnh bìa đa năng (chọn trang hoặc tải ảnh từ máy) */}
+      <SetCoverModal
+        isOpen={isCoverModalOpen}
+        onClose={() => setIsCoverModalOpen(false)}
+        hasPages={Boolean(isPdfOrDoc)}
+        onSetPageCover={handleUpdateThumbnailPage}
+        onUploadCover={handleUpdateThumbnail}
+        isUpdating={isUpdatingThumbnail || isUpdatingThumbnailPage}
+      />
     </div>
   );
 }

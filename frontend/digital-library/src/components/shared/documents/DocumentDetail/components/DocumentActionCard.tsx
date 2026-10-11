@@ -10,6 +10,7 @@ import {
   FolderInput,
   Edit2,
   Trash2,
+  Image as ImageIcon, // <-- Thêm icon Image từ lucide-react
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/utils/cn";
@@ -25,23 +26,9 @@ interface DocumentActionCardProps {
   isDeletePending: boolean;
   onStartRename: () => void;
   onDelete: () => void;
+  onSetCover: () => void; // <-- Thêm prop để xử lý khi bấm nút "Cài ảnh bìa"
 }
 
-/**
- * DocumentActionCard - Card thực hiện các hành động với tài liệu
- *
- * Tính năng chính:
- * 1. Nút Tải xuống:
- *    - Tải bản gốc trực tiếp hoặc mở dropdown chọn giữa Bản gốc và Markdown
- *    - Tự động đóng dropdown khi nhấn ra ngoài
- * 2. Các nút hành động nhanh:
- *    - Mở trong thẻ mới
- *    - Chia sẻ tài liệu
- *    - Thêm vào yêu thích
- *    - Di chuyển tệp
- *    - Đổi tên tệp (nếu có quyền sửa)
- *    - Xóa tài liệu kèm hộp thoại xác nhận (nếu có quyền xóa)
- */
 export function DocumentActionCard({
   fileTitle,
   fileDownloadUrl,
@@ -53,13 +40,11 @@ export function DocumentActionCard({
   isDeletePending,
   onStartRename,
   onDelete,
+  onSetCover, // <-- Nhận prop
 }: DocumentActionCardProps) {
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const downloadMenuRef = useRef<HTMLDivElement>(null);
 
-  /**
-   * Đóng menu tải xuống khi click ra ngoài vùng dropdown
-   */
   useEffect(() => {
     if (!isDownloadMenuOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
@@ -74,9 +59,6 @@ export function DocumentActionCard({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isDownloadMenuOpen]);
 
-  /**
-   * Tải bản gốc trực tiếp
-   */
   const handleDownloadOriginal = () => {
     const link = window.document.createElement("a");
     link.href = fileDownloadUrl;
@@ -85,9 +67,6 @@ export function DocumentActionCard({
     link.click();
   };
 
-  /**
-   * Xử lý xác nhận xóa tài liệu
-   */
   const handleDeleteClick = () => {
     if (
       window.confirm(
@@ -104,7 +83,6 @@ export function DocumentActionCard({
       <div className="relative w-full" ref={downloadMenuRef}>
         {markdownDownloadUrl ? (
           <div className="flex w-full rounded-lg shadow-xs overflow-hidden border border-primary-600 bg-primary-600">
-            {/* Nút tải xuống chính */}
             <button
               type="button"
               onClick={handleDownloadOriginal}
@@ -115,7 +93,6 @@ export function DocumentActionCard({
               <span className="truncate">Tải xuống</span>
             </button>
 
-            {/* Nút tùy chọn định dạng */}
             <button
               type="button"
               onClick={() => setIsDownloadMenuOpen((prev) => !prev)}
@@ -215,6 +192,13 @@ export function DocumentActionCard({
                   label: isRenamePending ? "Đang lưu..." : "Đổi tên tệp",
                   onClick: onStartRename,
                   disabled: isRenamePending,
+                  show: true,
+                },
+                {
+                  icon: ImageIcon,  
+                  label: "Cập nhật ảnh bìa", 
+                  onClick: onSetCover,  
+                  disabled: false,
                   show: true,
                 },
               ]

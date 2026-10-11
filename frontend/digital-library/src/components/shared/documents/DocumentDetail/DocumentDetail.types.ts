@@ -150,4 +150,5 @@ export interface TabPreviewProps {
   onUpdateThumbnailPage?: (page: number) => void;
   isUpdatingThumbnailPage?: boolean;
   viewMode?: "original" | "markdown";
+  showPageSelector?: boolean;
 }

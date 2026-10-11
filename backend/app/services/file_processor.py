@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -53,6 +54,58 @@ def generate_markdown(file_path: str, doc_id: int) -> Optional[str]:
 
     except Exception as e:
         logger.warning(f"generate_markdown skip doc_id={doc_id}: {e}")
+        return None
+
+
+def extract_first_image_from_markdown(markdown_path: str, doc_id: Optional[int] = None) -> Optional[str]:
+    """
+    Tìm ảnh đầu tiên trong file Markdown (nếu có).
+    Hỗ trợ cả cú pháp Markdown ![alt](url) và thẻ HTML <img src="url">.
+    Nếu ảnh là file local, cố gắng convert sang storage/thumbnails/{doc_id}.jpg.
+    """
+    try:
+        path = Path(markdown_path)
+        if not path.exists():
+            return None
+
+        content = path.read_text(encoding="utf-8", errors="replace")
+
+        img_url = None
+        # 1. Tìm cú pháp Markdown: ![alt](url)
+        match_md = re.search(r'!\[.*?\]\(([^)\s]+)(?:\s+["\'].*?["\'])?\)', content)
+        if match_md:
+            img_url = match_md.group(1).strip()
+
+        # 2. Tìm thẻ HTML: <img src="url" ...>
+        if not img_url:
+            match_html = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', content, re.IGNORECASE)
+            if match_html:
+                img_url = match_html.group(1).strip()
+
+        if not img_url:
+            return None
+
+        # Nếu là local path và tồn tại trên disk
+        local_candidate = Path(img_url)
+        if not local_candidate.is_absolute():
+            candidate_relative = path.parent / img_url
+            if candidate_relative.exists():
+                local_candidate = candidate_relative
+
+        if local_candidate.exists() and local_candidate.is_file() and doc_id:
+            try:
+                from PIL import Image
+                out_path = THUMBNAIL_DIR / f"{doc_id}.jpg"
+                img = Image.open(local_candidate).convert("RGB")
+                img.thumbnail((800, 800))
+                img.save(str(out_path), "JPEG", quality=85)
+                return f"storage/thumbnails/{doc_id}.jpg"
+            except Exception as e:
+                logger.warning(f"Không thể convert local image sang thumbnail: {e}")
+
+        return img_url
+    except Exception as e:
+        logger.error(f"extract_first_image_from_markdown lỗi [{markdown_path}]: {e}")
         return None
 
 

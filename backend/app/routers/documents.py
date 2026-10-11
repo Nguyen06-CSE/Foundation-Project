@@ -36,7 +36,12 @@ from app.models.user import User
 from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
 from app.schemas.tag import TagOut
 from app.services.document_service import create_document_from_upload
-from app.services.file_processor import create_thumbnail, extract_text, generate_markdown
+from app.services.file_processor import (
+    create_thumbnail,
+    extract_first_image_from_markdown,
+    extract_text,
+    generate_markdown,
+)
 from app.services.folder_service import get_documents_by_folder
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -68,6 +73,14 @@ async def _process_document_background(doc_id: int, file_path: str, mime_type: s
             doc.content = content
             if thumbnail_path:
                 doc.thumbnail_path = thumbnail_path
+            elif markdown_path:
+                # Nếu không convert được ảnh bìa từ file gốc, lấy ảnh đầu tiên trong markdown
+                first_md_img = await loop.run_in_executor(
+                    None, extract_first_image_from_markdown, markdown_path, doc_id
+                )
+                if first_md_img:
+                    doc.thumbnail_path = first_md_img
+
             doc.markdown_path = markdown_path
             await db.commit()
         except Exception as e:
