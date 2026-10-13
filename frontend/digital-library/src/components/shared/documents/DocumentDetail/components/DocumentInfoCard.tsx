@@ -77,7 +77,7 @@ export function DocumentInfoCard({
   const displayTitle = title.length > 25 ? title.slice(0, 25) + "…" : title;
 
   return (
-    <Card className="min-w-0 overflow-hidden">
+    <Card className="min-w-0 ">
       <h2 className="text-base font-semibold text-gray-900 mb-3">
         Thông tin tệp
       </h2>

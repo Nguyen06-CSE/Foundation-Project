@@ -48,6 +48,68 @@ def checksum_for_file(file_input: str | bytes | UploadFile) -> str:
         return compute_file_checksum(file_input)
 
 
+def get_r2_key_from_path(file_path: str | None) -> str:
+    """
+    Chuẩn hóa URL hoặc đường dẫn thành S3/R2 Key (ví dụ: storage/6/abc.docx)
+    """
+    if not file_path:
+        return ""
+    key = file_path
+    if key.startswith("http://") or key.startswith("https://"):
+        if "/storage/" in key:
+            key = "storage/" + key.split("/storage/", 1)[1]
+        else:
+            key = key.split("/", 3)[-1]
+    return key.lstrip("/")
+
+
+def download_file_from_r2(key_or_url: str) -> bytes | None:
+    """
+    Tải nội dung binary của tệp tin từ Cloudflare R2
+    """
+    key = get_r2_key_from_path(key_or_url)
+    if not key:
+        return None
+    try:
+        s3_obj = s3_client.get_object(Bucket=settings.BUCKET_NAME, Key=key)
+        return s3_obj["Body"].read()
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Lỗi khi tải file từ R2 ({key}): {e}")
+        return None
+
+
+def upload_bytes_to_r2(key: str, data: bytes, content_type: str = "application/octet-stream") -> str:
+    """
+    Đẩy dữ liệu binary lên Cloudflare R2 theo key chỉ định
+    """
+    clean_key = key.lstrip("/")
+    s3_client.put_object(
+        Bucket=settings.BUCKET_NAME,
+        Key=clean_key,
+        Body=data,
+        ContentType=content_type,
+    )
+    return clean_key
+
+
+def download_r2_to_temp_file(key_or_url: str, suffix: str = "") -> Path | None:
+    """
+    Tải file từ R2 và lưu vào thư mục temp local để các thư viện (pdfplumber, docx, pptx) có thể xử lý
+    """
+    data = download_file_from_r2(key_or_url)
+    if data is None:
+        return None
+    temp_dir = Path("storage/temp")
+    temp_dir.mkdir(parents=True, exist_ok=True)
+    if not suffix:
+        clean_key = get_r2_key_from_path(key_or_url)
+        suffix = Path(clean_key).suffix
+    temp_file = temp_dir / f"{uuid.uuid4().hex}{suffix}"
+    temp_file.write_bytes(data)
+    return temp_file
+
+
 def get_file_url(file_key: str | None) -> str | None:
     """
     Helper chuẩn hóa file_key thành Full R2 Public URL gửi về Frontend.

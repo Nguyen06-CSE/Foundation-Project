@@ -114,6 +114,7 @@ export interface SharedDocumentDetailProps {
 
 export interface DocxViewerProps {
   fileUrl: string;
+  documentId?: number;
   hasThumbnail: boolean;
   onUpdateThumbnail?: (base64Thumbnail: string) => void;
   isUpdatingThumbnail?: boolean;
@@ -121,6 +122,13 @@ export interface DocxViewerProps {
   isUpdatingCover?: boolean;
   onUpdateThumbnailPage?: (page: number) => void;
   isUpdatingThumbnailPage?: boolean;
+}
+
+export interface OfficeViewerProps {
+  doc: any;
+  fileUrl: string;
+  onUpdateThumbnail?: (base64Thumbnail: string) => void;
+  isUpdatingThumbnail?: boolean;
 }
 
 export interface PdfViewerProps {

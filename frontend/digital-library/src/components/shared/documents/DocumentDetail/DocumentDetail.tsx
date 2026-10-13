@@ -47,7 +47,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     handleRemoveTag,
     isRemovingTag,
     renameMutation,
-
     handleUpdateThumbnail,
     isUpdatingThumbnail,
     handleUpdateThumbnailPage,
@@ -175,6 +174,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
             </div>
 
             <div className="flex items-center gap-2 pb-2">
+              {/* Nút chuyển đổi Bản gốc / Markdown (chỉ hiển thị khi ở tab Xem trước và tài liệu có bản Markdown) */}
               {activeTab === "detail" && markdownDownloadUrl && (
                 <div className="flex items-center gap-1">
                   <button
@@ -201,27 +201,28 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                   >
                     Markdown
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setSidebarOpen((v) => !v)}
-                    className={cn(
-                      // FIX 3: Đổi flex-shrink-0 thành shrink-0
-                      "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
-                      sidebarOpen
-                        ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
-                        : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
-                    )}
-                    title={
-                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
-                    }
-                    aria-label={
-                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
-                    }
-                  >
-                    <Info className="h-4 w-4" />
-                  </button>
                 </div>
               )}
+
+              {/* Nút toggle ẩn/hiện bảng thông tin sidebar (Info icon) — Luôn luôn hiển thị */}
+              <button
+                type="button"
+                onClick={() => setSidebarOpen((v) => !v)}
+                className={cn(
+                  "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
+                  sidebarOpen
+                    ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
+                    : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
+                )}
+                title={
+                  sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                }
+                aria-label={
+                  sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                }
+              >
+                <Info className="h-4 w-4" />
+              </button>
             </div>
           </div>
 

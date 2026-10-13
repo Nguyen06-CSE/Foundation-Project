@@ -1,23 +1,25 @@
-// src/components/shared/documents/DocumentDetail/viewers/DocxViewer.tsx
-
 import { useState, useEffect, useRef } from "react";
 import { renderAsync } from "docx-preview";
 import html2canvas from "html2canvas";
-import { Loader2, Image as ImageIcon } from "lucide-react";
+import { Loader2, Image as ImageIcon, Download, ExternalLink } from "lucide-react";
 import { cn } from "@/utils/cn";
 import type { DocxViewerProps } from "../DocumentDetail.types";
 import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
+import { API_BASE_URL } from "@/services/api";
+import { useAuthStore } from "@/stores/authStore";
 
 /**
- * DocxViewer - Hiển thị bản xem trước tài liệu Word (.docx / .doc)
+ * DocxViewer - Hiển thị bản xem trước tài liệu Word (.docx)
  *
  * Tính năng chính:
  * 1. Tải và biên dịch nội dung DOCX sang DOM bằng thư viện docx-preview
- * 2. Tự động chụp trang 1 làm ảnh bìa (thumbnail) nếu tài liệu chưa có ảnh bìa
- * 3. Cho phép người dùng chọn bất kỳ trang nào và chụp ảnh làm bìa đại diện
+ * 2. Hỗ trợ fallback tải qua backend proxy nếu fetch trực tiếp từ R2 gặp lỗi mạng/CORS
+ * 3. Tự động chụp trang 1 làm ảnh bìa (thumbnail) nếu tài liệu chưa có ảnh bìa
+ * 4. Cho phép người dùng chọn bất kỳ trang nào và chụp ảnh làm bìa đại diện
  */
 export function DocxViewer({
   fileUrl,
+  documentId,
   hasThumbnail,
   onUpdateThumbnail,
   isUpdatingThumbnail = false,
@@ -80,11 +82,33 @@ export function DocxViewer({
     setLoading(true);
     setError(null);
 
-    fetch(fileUrl)
-      .then((res) => {
-        if (!res.ok) throw new Error("Không thể tải tập tin Word");
-        return res.arrayBuffer();
-      })
+    const fetchBuffer = async (): Promise<ArrayBuffer> => {
+      // 1. Thử tải trực tiếp từ Cloudflare R2
+      try {
+        const res = await fetch(fileUrl);
+        if (res.ok) {
+          return await res.arrayBuffer();
+        }
+      } catch (directErr) {
+        console.warn("Direct fetch từ R2 không thành công, thử fallback qua API backend:", directErr);
+      }
+
+      // 2. Dự phòng: Tải qua Backend API proxy endpoint
+      if (documentId) {
+        const fallbackUrl = `${API_BASE_URL}/documents/${documentId}/file`;
+        const token = useAuthStore.getState().token;
+        const fallbackRes = await fetch(fallbackUrl, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (fallbackRes.ok) {
+          return await fallbackRes.arrayBuffer();
+        }
+      }
+
+      throw new Error("Không thể tải tập tin Word");
+    };
+
+    fetchBuffer()
       .then((buffer) => {
         if (containerRef.current && isMounted) {
           containerRef.current.innerHTML = "";
@@ -122,7 +146,7 @@ export function DocxViewer({
         if (isMounted) {
           console.error("Lỗi xem trước DOCX:", err);
           setError(
-            "Không thể xem trước tài liệu Word này. Định dạng file có thể không hợp lệ hoặc bị khóa.",
+            "Không thể xem trước tài liệu Word này trực tiếp. Bạn có thể mở trong thẻ mới hoặc tải về máy để xem.",
           );
           setLoading(false);
         }
@@ -132,7 +156,7 @@ export function DocxViewer({
       isMounted = false;
       if (captureTimeout) clearTimeout(captureTimeout);
     };
-  }, [fileUrl]);
+  }, [fileUrl, documentId]);
 
   /**
    * Xử lý khi người dùng nhấn đặt trang đang chọn làm ảnh bìa
@@ -208,8 +232,27 @@ export function DocxViewer({
           </div>
         )}
         {error && (
-          <div className="flex flex-col items-center justify-center my-auto py-20 text-red-500 gap-2">
+          <div className="flex flex-col items-center justify-center my-auto py-20 text-red-500 gap-3">
             <p className="text-sm text-center max-w-md">{error}</p>
+            <div className="flex items-center gap-2 mt-2">
+              <a
+                href={fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-2xs hover:bg-gray-50 transition-colors"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span>Mở trong thẻ mới</span>
+              </a>
+              <a
+                href={fileUrl}
+                download
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-2xs transition-colors"
+              >
+                <Download className="h-3.5 w-3.5" />
+                <span>Tải về máy</span>
+              </a>
+            </div>
           </div>
         )}
         <div

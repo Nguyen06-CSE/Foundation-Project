@@ -41,6 +41,7 @@ from app.schemas.group import (
 )
 from app.schemas.tag import TagCreate, TagOut, TagUpdate
 from app.services.document_service import create_document_from_upload
+from app.services.file_service import save_upload_file, checksum_for_file, download_r2_to_temp_file, upload_bytes_to_r2
 from app.services.folder_service import get_folders_with_stats
 from app.services.file_processor import create_thumbnail
 from app.services.group_service import require_write_permission
@@ -390,20 +391,16 @@ async def upload_group_batch_documents(
         await db.flush()
 
         total_size = 0
-        storage_dir = f"storage/groups/{group_id}"
-        os.makedirs(storage_dir, exist_ok=True)
 
         for file in files:
             content = await file.read()
+            await file.seek(0)
             total_size += len(content)
-            unique_name = f"{uuid.uuid4().hex}_{file.filename}"
-            file_path = f"{storage_dir}/{unique_name}"
-            with open(file_path, "wb") as f:
-                f.write(content)
+            checksum = checksum_for_file(content)
+
+            file_path = await save_upload_file(file, current_user.id)
             saved_file_paths.append(file_path)
 
-            checksum = hashlib.sha256(content).hexdigest()
-            
             from app.services.file_processor import get_file_group
             text_content = None
             if get_file_group(file.content_type or "", file.filename or "") == "text":
@@ -600,24 +597,40 @@ async def update_group_document_thumbnail(
     if not document.file_type or "pdf" not in document.file_type.lower():
         raise HTTPException(status_code=400, detail="Chỉ hỗ trợ tạo ảnh bìa từ PDF")
         
-    if not os.path.exists(document.file_path):
-        raise HTTPException(status_code=404, detail="File không tồn tại trên server")
-        
     import asyncio
+    loop = asyncio.get_event_loop()
+    effective_path = document.file_path
+    temp_file = None
+    if not os.path.exists(effective_path):
+        temp_file = download_r2_to_temp_file(document.file_path, suffix=".pdf")
+        if temp_file and temp_file.exists():
+            effective_path = str(temp_file)
+
     try:
-        loop = asyncio.get_event_loop()
         thumbnail_path = await loop.run_in_executor(
-            None, create_thumbnail, document.file_path, document.file_type, document.id, page_number
+            None, create_thumbnail, effective_path, document.file_type, document.id, page_number
         )
-        if thumbnail_path:
-            document.thumbnail_path = thumbnail_path
-            await db.commit()
-            await db.refresh(document)
-            return document
-        else:
-            raise HTTPException(status_code=500, detail="Không thể tạo ảnh bìa")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if temp_file and temp_file.exists():
+            try:
+                temp_file.unlink()
+            except Exception:
+                pass
+
+    if thumbnail_path:
+        if os.path.exists(thumbnail_path):
+            try:
+                with open(thumbnail_path, "rb") as f:
+                    upload_bytes_to_r2(thumbnail_path, f.read(), "image/jpeg")
+            except Exception as up_err:
+                import logging
+                logging.getLogger(__name__).warning(f"Lỗi upload thumbnail lên R2: {up_err}")
+        document.thumbnail_path = thumbnail_path
+        await db.commit()
+        await db.refresh(document)
+        return document
+    else:
+        raise HTTPException(status_code=500, detail="Không thể tạo ảnh bìa")
 
 @router.post("/groups/{group_id}/share/folder", response_model=ShareResult)
 async def share_folder(

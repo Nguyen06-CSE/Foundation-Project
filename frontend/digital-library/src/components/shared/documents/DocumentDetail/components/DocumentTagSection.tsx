@@ -13,7 +13,10 @@ interface DocumentTagSectionProps {
   isLoadingTags: boolean;
   onSaveTags: (tagIds: number[]) => void;
   isSavingTags: boolean;
-  onCreateTag: (newTag: { name: string; color: string }, onCreated?: (tag: TagType) => void) => void;
+  onCreateTag: (
+    newTag: { name: string; color: string },
+    onCreated?: (tag: TagType) => void,
+  ) => void;
   isCreatingTag: boolean;
   onRemoveTag: (tagId: number) => void;
   isRemovingTag: boolean;
@@ -70,18 +73,15 @@ export function DocumentTagSection({
     const trimmed = tagSearchQuery.trim();
     if (!trimmed) return;
 
-    onCreateTag(
-      { name: trimmed, color: selectedColor },
-      (createdTag) => {
-        // Tự động thêm tag vừa tạo vào danh sách đã chọn
-        setSelectedTags((prev) => {
-          if (prev.some((t) => t.id === createdTag.id)) return prev;
-          return [...prev, createdTag];
-        });
-        setTagSearchQuery("");
-        setSelectedColor(COLORS[0].hex);
-      },
-    );
+    onCreateTag({ name: trimmed, color: selectedColor }, (createdTag) => {
+      // Tự động thêm tag vừa tạo vào danh sách đã chọn
+      setSelectedTags((prev) => {
+        if (prev.some((t) => t.id === createdTag.id)) return prev;
+        return [...prev, createdTag];
+      });
+      setTagSearchQuery("");
+      setSelectedColor(COLORS[0].hex);
+    });
   };
 
   /**
@@ -175,7 +175,8 @@ export function DocumentTagSection({
 
       {/* POPUP TAG EDITOR */}
       {isTagEditorOpen && canManageTags && (
-        <div className="absolute top-full left-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50 animate-in fade-in zoom-in-95">
+        <div className="absolute top-full left-0 -translate-x-5 mt-2 w-65 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50 animate-in fade-in zoom-in-95">
+          {" "}
           <div className="mb-4">
             <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-gray-700">
               <span>Gắn nhãn dán (Tags)</span>
@@ -246,7 +247,6 @@ export function DocumentTagSection({
               </div>
             </div>
           </div>
-
           {/* Chọn màu sắc cho tag mới */}
           {tagSearchQuery.trim() !== "" && !isExactMatch && (
             <div className="mb-4 pt-2 border-t border-gray-100">
@@ -277,7 +277,6 @@ export function DocumentTagSection({
               </div>
             </div>
           )}
-
           {/* Footer nút Lưu / Hủy */}
           <div className="flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
             <button

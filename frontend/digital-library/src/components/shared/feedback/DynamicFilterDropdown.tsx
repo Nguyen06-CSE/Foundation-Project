@@ -77,7 +77,7 @@ export function DynamicFilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 mt-1 flex max-h-60 min-w-[14rem] flex-col rounded-lg border border-gray-100 bg-white shadow-lg animate-in fade-in zoom-in-95">
+        <div className="absolute left-0 top-full z-50 mt-1 flex max-h-100 min-w-[14rem] flex-col rounded-lg border border-gray-100 bg-white shadow-lg animate-in fade-in zoom-in-95">
           
           <div className="overflow-y-auto py-1 custom-scrollbar">
             {/* Ô input tìm kiếm (chỉ hiển thị nếu searchable = true) */}

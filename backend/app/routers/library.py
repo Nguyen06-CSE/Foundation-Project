@@ -6,12 +6,15 @@ from datetime import datetime
 from typing import Optional, List
 from uuid import uuid4
 
+from urllib.parse import quote
+
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy import select, func, or_, and_, desc, asc, insert, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, selectinload
 
+from app.core.config import s3_client, settings
 from app.core.database import get_db
 from app.core.dependencies import get_current_user, get_optional_user, verify_faculty_access
 from app.models.user import User
@@ -391,15 +394,55 @@ async def download_community_document(
         db.add(log_entry)
         await db.commit()
 
-    if not os.path.exists(doc.file_path):
-        raise HTTPException(status_code=404, detail="File vật lý không tồn tại trên hệ thống")
+    file_path = doc.file_path
+    if not file_path:
+        raise HTTPException(status_code=404, detail="Tài liệu không có tệp tin đính kèm")
 
     filename = f"{doc.title}.{doc.file_type}" if doc.file_type and not doc.title.endswith(f".{doc.file_type}") else doc.title
-    return FileResponse(
-        path=doc.file_path,
-        filename=filename,
-        media_type="application/octet-stream",
-    )
+    encoded_filename = quote(filename)
+
+    # 1. Thử lấy từ Cloudflare R2 / S3
+    if not os.path.exists(file_path):
+        key = file_path
+        if key.startswith("http://") or key.startswith("https://"):
+            if "/storage/" in key:
+                key = "storage/" + key.split("/storage/", 1)[1]
+            else:
+                key = key.split("/", 3)[-1]
+
+        try:
+            s3_obj = s3_client.get_object(Bucket=settings.BUCKET_NAME, Key=key)
+            content_type = doc.file_type or s3_obj.get("ContentType") or "application/octet-stream"
+
+            def iterfile():
+                for chunk in s3_obj["Body"].iter_chunks(chunk_size=64 * 1024):
+                    yield chunk
+
+            headers = {
+                "Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}",
+                "Access-Control-Allow-Origin": "*",
+            }
+            if s3_obj.get("ContentLength"):
+                headers["Content-Length"] = str(s3_obj["ContentLength"])
+
+            return StreamingResponse(
+                iterfile(),
+                media_type=content_type,
+                headers=headers,
+            )
+        except Exception:
+            pass
+
+    # 2. Thử đọc từ local disk
+    if os.path.exists(file_path):
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type="application/octet-stream",
+            content_disposition_type="attachment",
+        )
+
+    raise HTTPException(status_code=404, detail="File vật lý không tồn tại trên hệ thống lưu trữ")
 
 
 @router.get("/search/", response_model=PaginatedCommunityDocuments)

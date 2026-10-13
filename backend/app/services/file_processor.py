@@ -208,7 +208,7 @@ def create_thumbnail(file_path: str, mime_type: str, doc_id: int, page_number: i
         return None
 
     out_path = THUMBNAIL_DIR / f"{doc_id}.jpg"
-    group = get_file_group(mime_type)
+    group = get_file_group(mime_type, file_path)
 
     try:
         if group == "pdf":

@@ -100,7 +100,7 @@ export function usePersonalDocuments(
   // --- 5. HANDLERS ---
   const handleDocumentAction = (action: DocumentAction | string, documentId: string) => {
     if (action === "view") {
-      navigate(`/ca-nhan/tai-lieu/${documentId}`);
+      navigate(`/personal/documents/${documentId}`);
     } else if (action === "download") {
       const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
       if (targetDoc?.file_path) {

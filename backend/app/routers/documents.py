@@ -8,7 +8,9 @@ import os
 import uuid
 import zipfile
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
+from urllib.parse import quote
 
 from fastapi import (
     APIRouter,
@@ -21,14 +23,16 @@ from fastapi import (
     UploadFile,
     status,
 )
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.core.config import s3_client, settings
 from app.core.database import AsyncSessionLocal, get_db
-from app.core.dependencies import get_current_user
+from app.core.dependencies import get_current_user, get_optional_user
+from app.core.security import decode_access_token
 from app.models.document import Document
 from app.models.folder import Folder
 from app.models.tag import Tag
@@ -36,7 +40,15 @@ from app.models.user import User
 from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
 from app.schemas.tag import TagOut
 from app.services.document_service import create_document_from_upload
-from app.services.file_service import get_file_url
+from app.services.file_service import (
+    checksum_for_file,
+    download_file_from_r2,
+    download_r2_to_temp_file,
+    get_file_url,
+    get_r2_key_from_path,
+    save_upload_file,
+    upload_bytes_to_r2,
+)
 from app.services.file_processor import (
     create_thumbnail,
     extract_first_image_from_markdown,
@@ -53,41 +65,81 @@ class AddFromPersonalPayload(BaseModel):
 
 
 async def _process_document_background(doc_id: int, file_path: str, mime_type: str):
-    """Chạy nền: extract text + tạo thumbnail + generate markdown, dùng session riêng"""
+    """Chạy nền: extract text + tạo thumbnail + generate markdown, hỗ trợ file lưu trên Cloudflare R2"""
     async with AsyncSessionLocal() as db:
+        temp_file = None
         try:
             doc = await db.get(Document, doc_id)
             if not doc:
                 return
 
+            effective_path = file_path
+            # Nếu file không tồn tại trên ổ đĩa local, tải tạm thời từ Cloudflare R2 về để xử lý
+            if not os.path.exists(effective_path):
+                suffix = Path(file_path).suffix or (Path(doc.title).suffix if doc.title else "")
+                temp_file = download_r2_to_temp_file(file_path, suffix=suffix)
+                if temp_file and temp_file.exists():
+                    effective_path = str(temp_file)
+
             loop = asyncio.get_event_loop()
             content = await loop.run_in_executor(
-                None, extract_text, file_path, mime_type
+                None, extract_text, effective_path, mime_type
             )
             thumbnail_path = await loop.run_in_executor(
-                None, create_thumbnail, file_path, mime_type, doc_id
+                None, create_thumbnail, effective_path, mime_type, doc_id
             )
             markdown_path = await loop.run_in_executor(
-                None, generate_markdown, file_path, doc_id
+                None, generate_markdown, effective_path, doc_id
             )
 
-            doc.content = content
-            if thumbnail_path:
+            # Chỉ ghi đè content nếu trích xuất được nội dung mới, không xóa trắng nội dung đã có
+            if content and content.strip():
+                doc.content = content
+
+            if thumbnail_path and os.path.exists(thumbnail_path):
+                # Đồng bộ thumbnail lên Cloudflare R2
+                try:
+                    with open(thumbnail_path, "rb") as f:
+                        upload_bytes_to_r2(thumbnail_path, f.read(), "image/jpeg")
+                except Exception as up_err:
+                    logging.getLogger(__name__).warning(f"Lỗi upload thumbnail lên R2: {up_err}")
                 doc.thumbnail_path = thumbnail_path
-            elif markdown_path:
-                # Nếu không convert được ảnh bìa từ file gốc, lấy ảnh đầu tiên trong markdown
+            elif not doc.thumbnail_path and markdown_path:
+                # Nếu không convert được ảnh bìa từ file gốc và doc chưa có thumbnail, lấy ảnh đầu tiên trong markdown
                 first_md_img = await loop.run_in_executor(
                     None, extract_first_image_from_markdown, markdown_path, doc_id
                 )
                 if first_md_img:
+                    if os.path.exists(first_md_img):
+                        try:
+                            with open(first_md_img, "rb") as f:
+                                upload_bytes_to_r2(first_md_img, f.read(), "image/jpeg")
+                        except Exception:
+                            pass
                     doc.thumbnail_path = first_md_img
 
-            doc.markdown_path = markdown_path
+            if markdown_path and os.path.exists(markdown_path):
+                # Đồng bộ markdown lên Cloudflare R2
+                try:
+                    with open(markdown_path, "rb") as f:
+                        upload_bytes_to_r2(markdown_path, f.read(), "text/markdown")
+                except Exception as md_err:
+                    logging.getLogger(__name__).warning(f"Lỗi upload markdown lên R2: {md_err}")
+                doc.markdown_path = markdown_path
+
             await db.commit()
         except Exception as e:
             logging.getLogger(__name__).error(
                 f"Background processing lỗi doc {doc_id}: {e}"
             )
+        finally:
+            # Xóa file temp sau khi hoàn tất xử lý
+            if temp_file and temp_file.exists():
+                try:
+                    temp_file.unlink()
+                except Exception:
+                    pass
+
 
 
 @router.post("/upload", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
@@ -135,7 +187,7 @@ async def upload_document(
         .options(selectinload(Document.tags))
         .where(Document.id == document.id)
     )
-    document = result.scalar_one()
+    document = result.scalar_one_or_none() or document
 
     background_tasks.add_task(
         _process_document_background,
@@ -199,21 +251,16 @@ async def upload_batch_documents(
         await db.flush()
 
         total_size = 0
-        storage_dir = f"storage/personal/{current_user.id}"
-        os.makedirs(storage_dir, exist_ok=True)
 
         for file in files:
             content = await file.read()
+            await file.seek(0)
             total_size += len(content)
-            unique_name = f"{uuid.uuid4().hex}_{file.filename}"
-            file_path = f"{storage_dir}/{unique_name}"
-            
-            with open(file_path, "wb") as f:
-                f.write(content)
+            checksum = checksum_for_file(content)
+
+            file_path = await save_upload_file(file, current_user.id)
             saved_file_paths.append(file_path)
 
-            checksum = hashlib.sha256(content).hexdigest()
-            
             from app.services.file_processor import get_file_group
             text_content = None
             if get_file_group(file.content_type or "", file.filename or "") == "text":
@@ -417,22 +464,33 @@ async def get_document_file_types(
 @router.get("/{document_id}", response_model=DocumentOut)
 async def get_document(
     document_id: int,
+    include_deleted: bool = Query(False),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    result = await db.execute(
+    query = (
         select(Document)
         .options(selectinload(Document.tags))
         .where(
             Document.id == document_id,
-            Document.owner_id == current_user.id,
-            Document.is_deleted == False,
-            Document.is_public == False,
         )
     )
+    if not include_deleted:
+        query = query.where(Document.is_deleted == False)
+
+    result = await db.execute(query)
     document = result.scalar_one_or_none()
     if not document:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    # Kiểm tra quyền: chủ sở hữu, tài liệu công khai, hoặc thành viên workspace
+    if document.owner_id != current_user.id and not document.is_public:
+        if document.workspace_id:
+            from app.services.group_service import require_member
+            await require_member(db, document.workspace_id, current_user.id)
+        else:
+            raise HTTPException(status_code=403, detail="Không có quyền truy cập tài liệu này")
+
 
     doc_out = DocumentOut.model_validate(document)
     if document.is_bundle:
@@ -444,6 +502,96 @@ async def get_document(
         )
         doc_out.bundle_children_count = cnt or 0
     return doc_out
+
+
+@router.get("/{document_id}/file")
+async def get_document_file(
+    document_id: int,
+    download: bool = Query(False),
+    token: Optional[str] = Query(None),
+    db: AsyncSession = Depends(get_db),
+    bearer_user: Optional[User] = Depends(get_optional_user),
+):
+    current_user = bearer_user
+    if not current_user and token:
+        payload = decode_access_token(token)
+        if payload and payload.get("sub"):
+            try:
+                res = await db.execute(select(User).where(User.id == int(payload["sub"])))
+                current_user = res.scalar_one_or_none()
+            except Exception:
+                pass
+
+    doc = await db.get(Document, document_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
+
+    # Kiểm tra quyền truy cập: chủ sở hữu, tài liệu công khai, hoặc thành viên nhóm
+    if not doc.is_public:
+        if not current_user:
+            raise HTTPException(status_code=401, detail="Vui lòng đăng nhập để truy cập tài liệu")
+        if doc.owner_id != current_user.id:
+            if doc.workspace_id:
+                from app.services.group_service import require_member
+                await require_member(db, doc.workspace_id, current_user.id)
+            else:
+                raise HTTPException(status_code=403, detail="Không có quyền truy cập tài liệu này")
+
+    file_path = doc.file_path
+    if not file_path:
+        raise HTTPException(status_code=404, detail="Tài liệu không có tệp tin đính kèm")
+
+    filename = doc.title
+    ext = Path(file_path).suffix
+    if ext and not filename.endswith(ext):
+        filename = f"{filename}{ext}"
+
+    disposition = "attachment" if download else "inline"
+    encoded_filename = quote(filename)
+
+    # 1. Thử lấy từ Cloudflare R2 / S3
+    if not os.path.exists(file_path):
+        key = file_path
+        if key.startswith("http://") or key.startswith("https://"):
+            if "/storage/" in key:
+                key = "storage/" + key.split("/storage/", 1)[1]
+            else:
+                key = key.split("/", 3)[-1]
+
+        try:
+            s3_obj = s3_client.get_object(Bucket=settings.BUCKET_NAME, Key=key)
+            content_type = doc.file_type or s3_obj.get("ContentType") or "application/octet-stream"
+
+            def iterfile():
+                for chunk in s3_obj["Body"].iter_chunks(chunk_size=64 * 1024):
+                    yield chunk
+
+            headers = {
+                "Content-Disposition": f"{disposition}; filename*=UTF-8''{encoded_filename}",
+                "Access-Control-Allow-Origin": "*",
+            }
+            if s3_obj.get("ContentLength"):
+                headers["Content-Length"] = str(s3_obj["ContentLength"])
+
+            return StreamingResponse(
+                iterfile(),
+                media_type=content_type,
+                headers=headers,
+            )
+        except Exception as e:
+            logging.warning(f"Không thể đọc file từ R2 ({key}): {e}")
+
+    # 2. Thử đọc từ local disk
+    if os.path.exists(file_path):
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type=doc.file_type or "application/octet-stream",
+            content_disposition_type=disposition,
+        )
+
+    raise HTTPException(status_code=404, detail="Tệp tin không tồn tại trên hệ thống lưu trữ")
+
 
 
 @router.get("/{document_id}/raw")
@@ -473,12 +621,28 @@ async def get_document_raw(
 
     content = document.content
     if not content:
-        # Fallback đọc trực tiếp file nếu cột content trống nhưng file vật lý tồn tại
+        # Fallback 1: đọc trực tiếp file nếu tồn tại trên ổ đĩa local
         if document.file_path and os.path.exists(document.file_path):
-            with open(document.file_path, "rb") as f:
-                content = f.read().decode('utf-8', errors='replace')
-        else:
-            raise HTTPException(status_code=404, detail="Tài liệu không có nội dung text")
+            try:
+                with open(document.file_path, "rb") as f:
+                    content = f.read().decode('utf-8', errors='replace')
+            except Exception as read_err:
+                logging.warning(f"Lỗi đọc file local ({document.file_path}): {read_err}")
+
+        # Fallback 2: đọc từ Cloudflare R2
+        if not content and document.file_path:
+            file_bytes = download_file_from_r2(document.file_path)
+            if file_bytes is not None:
+                content = file_bytes.decode('utf-8', errors='replace')
+                # Cache lại vào database để các lần sau không cần gọi lại R2
+                document.content = content
+                try:
+                    await db.commit()
+                except Exception:
+                    pass
+
+    if not content:
+        raise HTTPException(status_code=404, detail="Tài liệu không có nội dung text")
 
     return StreamingResponse(
         io.StringIO(content),
@@ -616,6 +780,7 @@ async def update_document_tags(
 @router.post("/{bundle_id}/add-files", response_model=list[DocumentOut], status_code=status.HTTP_201_CREATED)
 async def add_files_to_bundle(
     bundle_id: int,
+    background_tasks: BackgroundTasks,
     files: list[UploadFile] = File(...),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -639,8 +804,6 @@ async def add_files_to_bundle(
         raise HTTPException(status_code=400, detail="Phải chọn ít nhất 1 file")
 
     bundle_tags = list(bundle.tags)
-    storage_dir = f"storage/personal/{current_user.id}"
-    os.makedirs(storage_dir, exist_ok=True)
     saved_paths = []
     new_children = []
     added_size = 0
@@ -648,14 +811,13 @@ async def add_files_to_bundle(
     try:
         for file in files:
             content = await file.read()
-            unique_name = f"{uuid.uuid4().hex}_{file.filename}"
-            file_path = f"{storage_dir}/{unique_name}"
-            with open(file_path, "wb") as f:
-                f.write(content)
+            await file.seek(0)
+            added_size += len(content)
+            checksum = checksum_for_file(content)
+
+            file_path = await save_upload_file(file, current_user.id)
             saved_paths.append(file_path)
 
-            checksum = hashlib.sha256(content).hexdigest()
-            
             from app.services.file_processor import get_file_group
             text_content = None
             if get_file_group(file.content_type or "", file.filename or "") == "text":
@@ -678,7 +840,12 @@ async def add_files_to_bundle(
             )
             db.add(child)
             new_children.append(child)
-            added_size += len(content)
+            background_tasks.add_task(
+                _process_document_background,
+                child.id,
+                child.file_path,
+                child.file_type or "",
+            )
 
         bundle.file_size = (bundle.file_size or 0) + added_size
         await db.commit()
@@ -791,12 +958,18 @@ async def download_bundle_zip(
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
         for child in children:
-            if child.file_path and os.path.exists(child.file_path):
-                fname = child.title
-                ext = os.path.splitext(child.file_path)[1]
-                if ext and not fname.endswith(ext):
-                    fname = fname + ext
+            if not child.file_path:
+                continue
+            fname = child.title
+            ext = os.path.splitext(child.file_path)[1]
+            if ext and not fname.endswith(ext):
+                fname = fname + ext
+            if os.path.exists(child.file_path):
                 zf.write(child.file_path, arcname=fname)
+            else:
+                data = download_file_from_r2(child.file_path)
+                if data:
+                    zf.writestr(fname, data)
 
     zip_buffer.seek(0)
     safe_name = bundle.title.replace(' ', '_').replace('/', '_')
@@ -862,11 +1035,31 @@ async def update_document_thumbnail(
         raise HTTPException(status_code=400, detail="Tính năng này chỉ hỗ trợ PDF")
 
     loop = asyncio.get_event_loop()
-    thumbnail_path = await loop.run_in_executor(
-        None, create_thumbnail, document.file_path, document.file_type, document.id, page_number
-    )
+    effective_path = document.file_path
+    temp_file = None
+    if not os.path.exists(effective_path):
+        temp_file = download_r2_to_temp_file(document.file_path, suffix=".pdf")
+        if temp_file and temp_file.exists():
+            effective_path = str(temp_file)
+
+    try:
+        thumbnail_path = await loop.run_in_executor(
+            None, create_thumbnail, effective_path, document.file_type, document.id, page_number
+        )
+    finally:
+        if temp_file and temp_file.exists():
+            try:
+                temp_file.unlink()
+            except Exception:
+                pass
     
     if thumbnail_path:
+        if os.path.exists(thumbnail_path):
+            try:
+                with open(thumbnail_path, "rb") as f:
+                    upload_bytes_to_r2(thumbnail_path, f.read(), "image/jpeg")
+            except Exception as up_err:
+                logging.warning(f"Lỗi upload thumbnail lên R2: {up_err}")
         document.thumbnail_path = thumbnail_path
         await db.commit()
         await db.refresh(document)
