@@ -1,18 +1,14 @@
 # backend/app/services/document_service.py
-
 from __future__ import annotations
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-import os
 
 from app.models.document import Document
 from app.models.document_version import DocumentVersion
 from app.models.download_log import DownloadLog
-from app.models.tag import Tag  # <-- Thêm dòng này
+from app.models.tag import Tag
 from app.services.file_service import checksum_for_file, save_upload_file
-
-
 
 
 async def create_document_from_upload(
@@ -24,14 +20,18 @@ async def create_document_from_upload(
     description: str | None, 
     category_id: int | None, 
     workspace_id: int | None = None,
-    tag_ids: list[int] | None = None,  # <-- Thêm tham số tag_ids
+    tag_ids: list[int] | None = None,
     content: str | None = None,
     thumbnail_path: str | None = None,
 ):
-    file_path = save_upload_file(upload, owner_id)
-    checksum = checksum_for_file(file_path)
+    # 1. Đọc nội dung file để lấy size và checksum từ memory (không qua local disk)
+    file_bytes = upload.file.read()
+    upload.file.seek(0)  # Reset con trỏ file
     
-    # Kiểm tra file trùng lặp (Bỏ qua các file đã xóa mềm)
+    file_size = len(file_bytes)
+    checksum = checksum_for_file(file_bytes)
+    
+    # 2. Kiểm tra file trùng lặp (Bỏ qua các file đã xóa mềm)
     query = select(Document).where(
         Document.checksum == checksum, 
         Document.is_deleted == False
@@ -47,6 +47,9 @@ async def create_document_from_upload(
     if existing:
         raise ValueError(f"duplicate_document:{existing.id}")
         
+    # 3. Upload trực tiếp lên Cloudflare R2
+    file_path = save_upload_file(upload, owner_id)
+        
     document = Document(
         owner_id=owner_id,
         category_id=category_id,
@@ -56,7 +59,7 @@ async def create_document_from_upload(
         file_path=file_path,
         thumbnail_path=thumbnail_path,
         file_type=upload.content_type,
-        file_size=os.path.getsize(file_path) if file_path else getattr(upload, "size", None),
+        file_size=file_size,  # Dùng dung lượng lấy từ memory thay cho os.path.getsize
         checksum=checksum,
         content=content,
     )
@@ -71,6 +74,7 @@ async def create_document_from_upload(
     db.add(document)
     await db.flush()
     return document
+
 
 async def add_document_version(db: AsyncSession, *, document: Document, file_path: str, uploaded_by: int | None, note: str | None, checksum: str | None = None):
     result = await db.execute(
@@ -95,6 +99,7 @@ async def log_download(db: AsyncSession, *, document_id: int, user_id: int, acti
     db.add(log)
     await db.flush()
     return log
+
 
 async def get_document_file_types(db: AsyncSession, owner_id: int) -> list[str]:
     result = await db.execute(
