@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Loader2 } from "lucide-react";
 import type { MarkdownViewerProps } from "../DocumentDetail.types";
+import { getFullFileUrl } from "@/services/api";
 
 /**
  * MarkdownViewer - Hiển thị nội dung tài liệu định dạng Markdown
@@ -23,7 +24,8 @@ export function MarkdownViewer({ markdownPath }: MarkdownViewerProps) {
     setLoading(true);
     setError(null);
 
-    fetch(`${import.meta.env.VITE_API_URL}/${markdownPath}`)
+    const fullUrl = getFullFileUrl(markdownPath);
+    fetch(fullUrl)
       .then((res) => {
         if (!res.ok) throw new Error("Không thể tải file Markdown");
         return res.text();

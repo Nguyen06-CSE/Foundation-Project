@@ -38,6 +38,7 @@ import { AddToBundleModal } from "@/components/shared/modals/AddToBundleModal";
 import { documentService } from "@/services/documentService";
 import { groupService } from "@/services/groupService";
 import { useAuthStore } from "@/stores/authStore";
+import { getFullFileUrl } from "@/services/api";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { cn } from "@/utils/cn";
@@ -257,7 +258,7 @@ export default function BundleDetailPage() {
         break;
       case "download":
         if (child.file_path) {
-          const downloadUrl = `${import.meta.env.VITE_API_URL}/${child.file_path}`;
+          const downloadUrl = getFullFileUrl(child.file_path);
           window.open(downloadUrl, "_blank");
         }
         break;
@@ -267,8 +268,7 @@ export default function BundleDetailPage() {
           console.warn("Tài liệu không có markdown_path, bỏ qua");
           break;
         }
-        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
-        const url = `${apiBase}/${mdPath}`;
+        const url = getFullFileUrl(mdPath);
         const link = window.document.createElement("a");
         link.href = url;
         link.download = `${child?.title || "document"}.md`;

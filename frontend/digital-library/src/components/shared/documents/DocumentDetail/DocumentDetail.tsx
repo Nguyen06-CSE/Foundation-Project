@@ -19,6 +19,7 @@ import { SetCoverModal } from "./components/SetCoverModal";
 import { TabPreview } from "./tabs/TabPreview";
 import { TabContent } from "./tabs/TabContent";
 import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
+import { getFullFileUrl } from "@/services/api";
 
 export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const {
@@ -119,10 +120,10 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const sizeLabel = formatSize(doc.file_size ?? 0);
   const uploadedAt = formatRelativeDate(doc.created_at);
   const fileDownloadUrl = doc.file_path
-    ? `${import.meta.env.VITE_API_URL}/${doc.file_path}`
+    ? getFullFileUrl(doc.file_path)
     : "#";
   const markdownDownloadUrl = doc.markdown_path
-    ? `${import.meta.env.VITE_API_URL}/${doc.markdown_path}`
+    ? getFullFileUrl(doc.markdown_path)
     : null;
 
   return (

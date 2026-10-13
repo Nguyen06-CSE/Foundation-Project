@@ -18,6 +18,7 @@ import type { WorkspaceConfig } from '@/services/workspaceService';
 import type { DocumentAction } from '@/components/shared/documents/DocumentContextMenu';
 import { formatSize } from '@/utils/formatSize';
 import { formatRelativeDate } from '@/utils/formatDate';
+import { getFullFileUrl } from '@/services/api';
 
 interface DocumentBrowserProps {
   workspace: WorkspaceConfig;
@@ -77,7 +78,7 @@ export function DocumentBrowser({
       const targetDoc = rawDocs.find((d: any) => d.id.toString() === docId.toString());
       const mdPath = targetDoc?.markdown_path || targetDoc?.markdownPath;
       if (mdPath) {
-        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${mdPath}`;
+        const fileDownloadUrl = getFullFileUrl(mdPath);
         const link = document.createElement('a');
         link.href = fileDownloadUrl;
         link.download = `${targetDoc.title || targetDoc.name || 'document'}.md`;

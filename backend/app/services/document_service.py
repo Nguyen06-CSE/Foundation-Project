@@ -1,4 +1,3 @@
-# backend/app/services/document_service.py
 from __future__ import annotations
 
 from sqlalchemy import func, select
@@ -24,9 +23,9 @@ async def create_document_from_upload(
     content: str | None = None,
     thumbnail_path: str | None = None,
 ):
-    # 1. Đọc nội dung file để lấy size và checksum từ memory (không qua local disk)
-    file_bytes = upload.file.read()
-    upload.file.seek(0)  # Reset con trỏ file
+    # 1. Đọc nội dung file bất đồng bộ từ UploadFile
+    file_bytes = await upload.read()
+    await upload.seek(0)  # Reset con trỏ file sau khi đọc
     
     file_size = len(file_bytes)
     checksum = checksum_for_file(file_bytes)
@@ -48,7 +47,7 @@ async def create_document_from_upload(
         raise ValueError(f"duplicate_document:{existing.id}")
         
     # 3. Upload trực tiếp lên Cloudflare R2
-    file_path = save_upload_file(upload, owner_id)
+    file_path = await save_upload_file(upload, owner_id)
         
     document = Document(
         owner_id=owner_id,
@@ -59,7 +58,7 @@ async def create_document_from_upload(
         file_path=file_path,
         thumbnail_path=thumbnail_path,
         file_type=upload.content_type,
-        file_size=file_size,  # Dùng dung lượng lấy từ memory thay cho os.path.getsize
+        file_size=file_size,
         checksum=checksum,
         content=content,
     )

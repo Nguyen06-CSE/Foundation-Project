@@ -2,8 +2,9 @@
 
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from app.schemas.tag import TagOut
+from app.services.file_service import get_file_url
 
 
 
@@ -70,6 +71,20 @@ class DocumentOut(DocumentBase):
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
+    @field_validator("file_path", "thumbnail_path", "markdown_path", mode="before")
+    @classmethod
+    def convert_to_public_url(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return v
+        if isinstance(v, str) and v.startswith("__") and v.endswith("__"):
+            return v
+        return get_file_url(v)
+
+
+# Aliases tương thích
+DocumentResponse = DocumentOut
+DocumentDetailResponse = DocumentOut
+
 
 class PaginatedDocuments(BaseModel):
     items: list[DocumentOut]
@@ -77,3 +92,4 @@ class PaginatedDocuments(BaseModel):
     page: int
     page_size: int
     total_pages: int
+

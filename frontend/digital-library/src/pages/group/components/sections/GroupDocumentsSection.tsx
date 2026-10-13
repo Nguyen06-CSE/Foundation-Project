@@ -11,6 +11,7 @@ import {
 } from "@/components/shared/documents";
 import LocalGroupDocumentCard from "../cards/LocalGroupDocumentCard";
 import { groupDocumentService } from "@/services/documentService";
+import { getFullFileUrl } from "@/services/api";
 import type { Document, Folder } from "@/types/document";
 import type { PermissionLevel } from "@/types/group";
 
@@ -131,7 +132,8 @@ export function GroupDocumentsSection({
         if (doc) onRename?.(numericId, doc.title || (doc as any).name);
         break;
       case "download": {
-        const downloadUrl = `${
+        const fileUrl = doc?.file_path ? getFullFileUrl(doc.file_path) : "";
+        const downloadUrl = fileUrl || `${
           import.meta.env.VITE_API_URL || "http://localhost:8000"
         }/groups/${groupId}/documents/${numericId}/download`;
         const link = window.document.createElement("a");
@@ -150,8 +152,7 @@ export function GroupDocumentsSection({
           console.warn("Tài liệu không có markdown_path, bỏ qua");
           break;
         }
-        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
-        const url = `${apiBase}/${mdPath}`;
+        const url = getFullFileUrl(mdPath);
         const link = window.document.createElement("a");
         link.href = url;
         link.download = `${doc?.title || (doc as any)?.name || "document"}.md`;

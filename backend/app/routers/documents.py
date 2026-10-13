@@ -36,6 +36,7 @@ from app.models.user import User
 from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
 from app.schemas.tag import TagOut
 from app.services.document_service import create_document_from_upload
+from app.services.file_service import get_file_url
 from app.services.file_processor import (
     create_thumbnail,
     extract_first_image_from_markdown,

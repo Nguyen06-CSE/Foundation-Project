@@ -7,6 +7,7 @@ import type { DocumentAction } from "@/components/shared/documents/DocumentConte
 import { getFileExtension } from "@/utils/file";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
+import { getFullFileUrl } from "@/services/api";
 import type { FolderType } from "../components/PersonalFoldersSection";
 import type { TabKey } from "@/hooks/useDocumentFilters";
 
@@ -103,7 +104,7 @@ export function usePersonalDocuments(
     } else if (action === "download") {
       const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
       if (targetDoc?.file_path) {
-        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${targetDoc.file_path}`;
+        const fileDownloadUrl = getFullFileUrl(targetDoc.file_path);
         const link = document.createElement("a");
         link.href = fileDownloadUrl;
         link.download = targetDoc.title;
@@ -119,7 +120,7 @@ export function usePersonalDocuments(
       const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
       const mdPath = targetDoc?.markdown_path;
       if (mdPath) {
-        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${mdPath}`;
+        const fileDownloadUrl = getFullFileUrl(mdPath);
         const link = document.createElement("a");
         link.href = fileDownloadUrl;
         link.download = `${targetDoc.title || "document"}.md`;
