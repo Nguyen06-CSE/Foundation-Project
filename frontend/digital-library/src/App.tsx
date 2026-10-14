@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Layouts & Auth
@@ -52,11 +52,6 @@ const queryClient = new QueryClient({
   },
 });
 
-function LegacyPersonalDocRedirect() {
-  const { id } = useParams<{ id: string }>();
-  return <Navigate to={`/personal/documents/${id}`} replace />;
-}
-
 function AppRoutes() {
   const { isRestoring } = useRestoreSession();
 
@@ -95,7 +90,6 @@ function AppRoutes() {
           <Route path="/personal/dashboard" element={<PersonalDashboard />} />
           <Route path="/personal/documents" element={<PersonalDocuments />} />
           <Route path="/personal/documents/:id" element={<DocumentDetail />} />
-          <Route path="/ca-nhan/tai-lieu/:id" element={<LegacyPersonalDocRedirect />} />
           <Route path="/personal/bundle/:id" element={<BundleDetailPage />} />
           <Route path="/personal/shared" element={<SharedWithMe />} />
           <Route path="/personal/favorites" element={<FavoritesPage />} />

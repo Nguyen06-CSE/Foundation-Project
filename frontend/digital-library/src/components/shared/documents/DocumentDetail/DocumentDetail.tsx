@@ -19,7 +19,6 @@ import { SetCoverModal } from "./components/SetCoverModal";
 import { TabPreview } from "./tabs/TabPreview";
 import { TabContent } from "./tabs/TabContent";
 import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
-import { getFullFileUrl } from "@/services/api";
 
 export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const {
@@ -47,6 +46,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     handleRemoveTag,
     isRemovingTag,
     renameMutation,
+
     handleUpdateThumbnail,
     isUpdatingThumbnail,
     handleUpdateThumbnailPage,
@@ -119,10 +119,10 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const sizeLabel = formatSize(doc.file_size ?? 0);
   const uploadedAt = formatRelativeDate(doc.created_at);
   const fileDownloadUrl = doc.file_path
-    ? getFullFileUrl(doc.file_path)
+    ? `${import.meta.env.VITE_API_URL}/${doc.file_path}`
     : "#";
   const markdownDownloadUrl = doc.markdown_path
-    ? getFullFileUrl(doc.markdown_path)
+    ? `${import.meta.env.VITE_API_URL}/${doc.markdown_path}`
     : null;
 
   return (
@@ -174,7 +174,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
             </div>
 
             <div className="flex items-center gap-2 pb-2">
-              {/* Nút chuyển đổi Bản gốc / Markdown (chỉ hiển thị khi ở tab Xem trước và tài liệu có bản Markdown) */}
               {activeTab === "detail" && markdownDownloadUrl && (
                 <div className="flex items-center gap-1">
                   <button
@@ -201,28 +200,27 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                   >
                     Markdown
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setSidebarOpen((v) => !v)}
+                    className={cn(
+                      // FIX 3: Đổi flex-shrink-0 thành shrink-0
+                      "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
+                      sidebarOpen
+                        ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
+                        : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
+                    )}
+                    title={
+                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                    }
+                    aria-label={
+                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                    }
+                  >
+                    <Info className="h-4 w-4" />
+                  </button>
                 </div>
               )}
-
-              {/* Nút toggle ẩn/hiện bảng thông tin sidebar (Info icon) — Luôn luôn hiển thị */}
-              <button
-                type="button"
-                onClick={() => setSidebarOpen((v) => !v)}
-                className={cn(
-                  "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
-                  sidebarOpen
-                    ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
-                    : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
-                )}
-                title={
-                  sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
-                }
-                aria-label={
-                  sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
-                }
-              >
-                <Info className="h-4 w-4" />
-              </button>
             </div>
           </div>
 

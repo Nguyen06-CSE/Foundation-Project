@@ -8,7 +8,6 @@ import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { Avatar } from "@/components/ui/Avatar"; // <-- 1. Import Component Avatar
 import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
-import { getFullFileUrl } from "@/services/api";
 import type { LocalGroupDocumentCardProps } from "../../types/groupSpace.types";
 
 // ======================================================
@@ -79,8 +78,7 @@ export default function LocalGroupDocumentCard({
         handleViewDetail();
         break;
       case "download": {
-        const fileUrl = document.file_path ? getFullFileUrl(document.file_path) : "";
-        const downloadUrl = fileUrl || `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/groups/${groupId}/documents/${document.id}/download`;
+        const downloadUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/groups/${groupId}/documents/${document.id}/download`;
         const link = window.document.createElement("a");
         link.href = downloadUrl;
         link.download = document.title;
@@ -97,7 +95,8 @@ export default function LocalGroupDocumentCard({
           console.warn("Tài liệu không có markdown_path, bỏ qua");
           break;
         }
-        const url = getFullFileUrl(mdPath);
+        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+        const url = `${apiBase}/${mdPath}`;
         const link = window.document.createElement("a");
         link.href = url;
         link.download = `${document?.title || "document"}.md`;

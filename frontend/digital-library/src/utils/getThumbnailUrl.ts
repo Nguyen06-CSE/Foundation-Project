@@ -1,12 +1,17 @@
-import { getFullFileUrl } from "@/services/api";
-
 export function getThumbnailUrl(path?: string | null): string | null {
   if (!path) return null;
-  if (path.startsWith("data:")) {
+  if (
+    path.startsWith("data:") ||
+    path.startsWith("http://") ||
+    path.startsWith("https://")
+  ) {
     return path;
   }
-  const fullUrl = getFullFileUrl(path);
-  if (!fullUrl) return null;
-  return fullUrl.includes("?") ? `${fullUrl}&t=${Date.now()}` : `${fullUrl}?t=${Date.now()}`;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
+    return path;
+  }
+  
+  const baseUrl = import.meta.env.VITE_API_URL || "";
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${baseUrl}${cleanPath}?t=${Date.now()}`;
 }
-

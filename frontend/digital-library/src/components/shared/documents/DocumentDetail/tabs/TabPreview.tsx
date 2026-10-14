@@ -1,5 +1,7 @@
 // src/components/shared/documents/DocumentDetail/tabs/TabPreview.tsx
 
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import "@cyntler/react-doc-viewer/dist/index.css";
 import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 import { cn } from "@/utils/cn";
 import { CODE_EXTENSIONS, type TabPreviewProps } from "../DocumentDetail.types";
@@ -7,14 +9,13 @@ import { DocxViewer } from "../viewers/DocxViewer";
 import { PdfViewer } from "../viewers/PdfViewer";
 import { CodeViewer } from "../viewers/CodeViewer";
 import { MarkdownViewer } from "../viewers/MarkdownViewer";
-import { OfficeViewer } from "../viewers/OfficeViewer";
 import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
  * TabPreview - Tab "Bản xem trước" tổng hợp của tài liệu
  *
  * Tính năng chính:
- * 1. Nhận diện định dạng file (ảnh, pdf, docx, code, pptx, xlsx, doc, hoặc các file khác)
+ * 1. Nhận diện định dạng file (ảnh, pdf, docx, code, pptx, xlsx, hoặc các file khác)
  * 2. Điều phối render component viewer phù hợp
  * 3. Hỗ trợ chuyển đổi linh hoạt giữa "Bản gốc" và "Markdown" (nếu có markdown_path)
  * 4. Hỗ trợ tải lên ảnh bìa đại diện cho PPTX, XLSX và các định dạng fallback
@@ -29,73 +30,37 @@ export function TabPreview({
   viewMode = "original",
 }: TabPreviewProps) {
   const fileType = doc.file_type?.toLowerCase() || "";
-
-  // Helper bóc tách phần mở rộng chính xác (tránh lỗi url chứa chuỗi như .r trong .r2.dev)
-  const getExtension = (pathOrUrl?: string, title?: string): string => {
-    const raw = pathOrUrl || "";
-    try {
-      const url = new URL(raw);
-      const pathname = url.pathname;
-      const lastDot = pathname.lastIndexOf(".");
-      if (lastDot !== -1) return pathname.substring(lastDot).toLowerCase();
-    } catch {
-      const clean = raw.split("?")[0].split("#")[0];
-      const lastDot = clean.lastIndexOf(".");
-      if (lastDot !== -1) return clean.substring(lastDot).toLowerCase();
-    }
-    if (title) {
-      const clean = title.split("?")[0].split("#")[0];
-      const lastDot = clean.lastIndexOf(".");
-      if (lastDot !== -1) return clean.substring(lastDot).toLowerCase();
-    }
-    return "";
-  };
-
-  const fileExt = getExtension(doc.file_path, doc.title);
+  const filePath = doc.file_path?.toLowerCase() || "";
 
   // Nhận diện loại tệp
-  const isImage =
-    fileType.startsWith("image/") ||
-    [".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".bmp"].includes(fileExt);
-
-  const isPdf = fileType === "application/pdf" || fileExt === ".pdf";
-  
-  // DOCX chuẩn (XML zip) render cục bộ bằng docx-preview
+  const isImage = fileType.startsWith("image/");
+  const isPdf = fileType === "application/pdf" || filePath.endsWith(".pdf");
   const isDocx =
     fileType ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-    fileExt === ".docx";
-
-  // DOC cũ (Word 97-2003 binary) không hỗ trợ bởi docx-preview, hiển thị bằng OfficeViewer
-  const isLegacyDoc =
     fileType === "application/msword" ||
-    fileExt === ".doc";
+    filePath.endsWith(".docx") ||
+    filePath.endsWith(".doc");
 
   const isPptx =
     fileType ===
       "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
     fileType === "application/vnd.ms-powerpoint" ||
-    fileExt === ".pptx" ||
-    fileExt === ".ppt";
+    filePath.endsWith(".pptx") ||
+    filePath.endsWith(".ppt");
 
   const isXlsx =
     fileType ===
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
     fileType === "application/vnd.ms-excel" ||
-    fileExt === ".xlsx" ||
-    fileExt === ".xls";
+    filePath.endsWith(".xlsx") ||
+    filePath.endsWith(".xls");
 
-  // Chỉ nhận diện là Code nếu không thuộc các loại tài liệu Office/Media ở trên
+  const targetCheck = `${filePath} ${doc.title || ""}`.toLowerCase();
   const isCode =
-    !isImage &&
-    !isPdf &&
-    !isDocx &&
-    !isLegacyDoc &&
-    !isPptx &&
-    !isXlsx &&
-    (fileType.startsWith("text/") ||
-      CODE_EXTENSIONS.includes(fileExt) ||
-      (doc.title || "").toLowerCase().includes("dockerfile"));
+    fileType.startsWith("text/") ||
+    CODE_EXTENSIONS.some((ext) => targetCheck.includes(ext)) ||
+    targetCheck.includes("dockerfile");
 
   const hasMarkdown = !isImage && !!doc.markdown_path;
 
@@ -147,7 +112,6 @@ export function TabPreview({
           ) : isDocx ? (
             <DocxViewer
               fileUrl={fileUrl}
-              documentId={doc.id}
               hasThumbnail={!!doc.thumbnail_path}
               onUpdateThumbnail={onUpdateThumbnail}
               isUpdatingThumbnail={isUpdatingThumbnail}
@@ -162,13 +126,47 @@ export function TabPreview({
               filePath={doc.file_path}
               title={doc.title}
             />
-          ) : isPptx || isXlsx || isLegacyDoc ? (
-            <OfficeViewer
-              doc={doc}
-              fileUrl={fileUrl}
-              onUpdateThumbnail={onUpdateThumbnail}
-              isUpdatingThumbnail={isUpdatingThumbnail}
-            />
+          ) : isPptx || isXlsx ? (
+            <div
+              id="office-viewer-container"
+              className="w-full h-[650px] sm:h-[720px] lg:h-[780px] min-h-[500px] bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col shadow-2xs"
+            >
+              <style>{`
+                #office-viewer-container #react-doc-viewer,
+                #office-viewer-container #proxy-renderer,
+                #office-viewer-container #msdoc-renderer {
+                  width: 100% !important;
+                  height: 100% !important;
+                  display: flex !important;
+                  flex-direction: column !important;
+                  flex: 1 1 0% !important;
+                  background: transparent !important;
+                }
+                #office-viewer-container #msdoc-iframe {
+                  width: 100% !important;
+                  height: 100% !important;
+                  flex: 1 1 0% !important;
+                  border: 0 !important;
+                }
+              `}</style>
+              {onUpdateThumbnail && (
+                <div className="w-full shrink-0 flex items-center justify-end px-4 py-2 border-b border-gray-200 bg-gray-50/60">
+                  <DocumentCoverSelector
+                    variant="upload"
+                    onUploadCover={onUpdateThumbnail}
+                    isUpdating={isUpdatingThumbnail}
+                  />
+                </div>
+              )}
+              <div className="w-full flex-1 min-h-0">
+                <DocViewer
+                  documents={[{ uri: fileUrl, fileType: doc.file_type || undefined, fileName: doc.title }]}
+                  pluginRenderers={DocViewerRenderers}
+                  style={{ width: "100%", height: "100%" }}
+                  config={{ header: { disableHeader: true } }}
+                />
+              </div>
+            </div>
           ) : (
             /* Fallback đối với các định dạng khác */
             <div className="w-full flex flex-col items-center justify-center space-y-4 py-16 bg-gray-50/60 rounded-xl border border-gray-200">

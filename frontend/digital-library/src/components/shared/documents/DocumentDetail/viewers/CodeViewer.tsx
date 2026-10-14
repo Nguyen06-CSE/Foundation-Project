@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader2, Copy, Check } from "lucide-react";
-import api, { getFullFileUrl } from "@/services/api";
+import api from "@/services/api";
 import { cn } from "@/utils/cn";
 import type { CodeViewerProps } from "../DocumentDetail.types";
 
@@ -99,27 +99,12 @@ export function CodeViewer({ documentId, filePath, title }: CodeViewerProps) {
 
     const fetchAndHighlight = async () => {
       try {
-        let text = "";
-        try {
-          const res = await api.get<string>(`/documents/${documentId}/raw`, {
-            responseType: "text",
-          });
-          text = typeof res.data === "string" ? res.data : String(res.data || "");
-        } catch (apiErr) {
-          // Dự phòng: Tải trực tiếp từ Cloudflare R2
-          if (filePath) {
-            const directUrl = getFullFileUrl(filePath);
-            const directRes = await fetch(directUrl);
-            if (directRes.ok) {
-              text = await directRes.text();
-            } else {
-              throw apiErr;
-            }
-          } else {
-            throw apiErr;
-          }
-        }
+        const res = await api.get<string>(`/documents/${documentId}/raw`, {
+          responseType: "text",
+        });
 
+        const text =
+          typeof res.data === "string" ? res.data : String(res.data || "");
         if (!isMounted) return;
 
         setRawCode(text);
