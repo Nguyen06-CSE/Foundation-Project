@@ -18,6 +18,8 @@ class GroupCreate(BaseModel):
 class GroupUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=150)
     description: Optional[str] = None
+    avatar_url: Optional[str] = None
+    cover_url: Optional[str] = None
 
 
 class WorkspaceOut(BaseModel):
@@ -32,6 +34,8 @@ class WorkspaceOut(BaseModel):
     dissolve_at: Optional[datetime] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
+    avatar_url: Optional[str] = None
+    cover_url: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 

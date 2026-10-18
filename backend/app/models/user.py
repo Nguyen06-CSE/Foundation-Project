@@ -38,6 +38,7 @@ class User(Base, TimestampMixin):
     student_code: Mapped[Optional[str]] = mapped_column(String(20), unique=True)
     class_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("classes.id"))
     faculty_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("faculties.id"))
+    avatar_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     # ── Tổ chức học thuật ──────────────────────────────────────────
     student_class: Mapped[Optional["Class"]] = relationship(

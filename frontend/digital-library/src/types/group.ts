@@ -14,6 +14,8 @@ export interface Workspace {
   dissolve_at?: string | null;
   created_at: string;
   updated_at?: string | null;
+  avatar_url?: string | null;
+  cover_url?: string | null;
 }
 
 export interface WorkspaceMember {

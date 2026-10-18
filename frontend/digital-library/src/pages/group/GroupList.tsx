@@ -218,8 +218,16 @@ function GroupListCard({ id, group, onEnter }: GroupListCardProps) {
       : "Thành viên";
   return (
     <Card id={id} className="flex items-center gap-4 p-4">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
-        <Users className="h-6 w-6" />
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600 overflow-hidden border border-gray-100">
+        {group.avatar_url ? (
+          <img
+            src={group.avatar_url}
+            alt={group.name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <Users className="h-6 w-6" />
+        )}
       </div>
       <div className="min-w-0 flex-1">
         <h2 className="truncate text-base font-semibold text-gray-900">

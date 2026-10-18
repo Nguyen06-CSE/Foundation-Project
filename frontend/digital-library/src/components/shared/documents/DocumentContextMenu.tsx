@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { 
   Download, 
   Share2, 
-  Heart, 
+  Bookmark, 
   Edit2, 
   FolderInput, 
   Trash2,
@@ -110,7 +110,7 @@ export function DocumentContextMenu({
       ? [{ action: "download-markdown", icon: <FileText className="h-4 w-4 text-primary-600" />, label: "Tải xuống Markdown (.md)" }] 
       : []),
     { action: "share", icon: <Share2 className="h-4 w-4" />, label: "Chia sẻ" },
-    { action: "favorite", icon: <Heart className="h-4 w-4" />, label: "Thêm vào Yêu thích" },
+    { action: "favorite", icon: <Bookmark className="h-4 w-4 text-amber-500" />, label: "Thêm vào Yêu thích" },
     { action: "rename", icon: <Edit2 className="h-4 w-4" />, label: "Đổi tên" },
     { action: "move", icon: <FolderInput className="h-4 w-4" />, label: "Di chuyển" },
     { action: "delete", icon: <Trash2 className="h-4 w-4" />, label: "Xóa", danger: true },

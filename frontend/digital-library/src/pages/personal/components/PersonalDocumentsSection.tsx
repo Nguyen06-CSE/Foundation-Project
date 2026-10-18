@@ -1,3 +1,4 @@
+import { useFavoriteStore } from "@/stores/favoriteStore";
 // src/pages/personal/components/PersonalDocumentsSection.tsx
 
 import { useState, useEffect, useCallback } from "react";
@@ -101,6 +102,7 @@ function toListItem(doc: DocCardType): DocumentListItem {
     bundle_children_count: doc.bundle_children_count,
     content: doc.content ?? null,
     pages: doc.pages ?? null,
+    isFavorite: useFavoriteStore.getState().isFavorite(doc.id),
   };
 }
 

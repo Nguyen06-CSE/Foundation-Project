@@ -30,7 +30,7 @@ export const groupService = {
 
   getById: (id: number) => api.get<Workspace>(`/groups/${id}`).then((r) => r.data),
 
-  update: (id: number, payload: { name?: string; description?: string }) =>
+  update: (id: number, payload: { name?: string; description?: string; avatar_url?: string; cover_url?: string }) =>
     api.patch<Workspace>(`/groups/${id}`, payload).then((r) => r.data),
 
   dissolve: (id: number) => api.delete(`/groups/${id}`),

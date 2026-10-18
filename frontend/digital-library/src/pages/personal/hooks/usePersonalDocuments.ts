@@ -1,3 +1,4 @@
+import { useFavoriteStore } from "@/stores/favoriteStore";
 // src/pages/personal/hooks/usePersonalDocuments.ts
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -136,6 +137,20 @@ export function usePersonalDocuments(
       if (docToRename) {
         setRenamingDoc({ id: docToRename.id.toString(), title: docToRename.title });
         setIsRenameModalOpen(true);
+      }
+    } else if (action === "favorite") {
+      const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
+      if (targetDoc) {
+        useFavoriteStore.getState().toggleFavorite({
+          id: targetDoc.id,
+          title: targetDoc.title,
+          name: targetDoc.title,
+          type: targetDoc.file_type || "unknown",
+          size: targetDoc.file_size || 0,
+          thumbnail_path: targetDoc.thumbnail_path,
+          markdown_path: targetDoc.markdown_path,
+          tags: targetDoc.tags,
+        });
       }
     } else if (action === "contribute") {
       const docToContribute = docData?.items.find((d) => d.id.toString() === documentId);

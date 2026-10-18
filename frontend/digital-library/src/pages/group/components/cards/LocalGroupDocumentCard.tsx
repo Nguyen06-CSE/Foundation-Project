@@ -1,3 +1,4 @@
+import { TikTokFavoriteButton } from "@/components/shared/documents/TikTokFavoriteButton";
 // frontend/digital-library/src/pages/group/components/LocalGroupDocumentCard.tsx
 
 import { useState } from "react";
@@ -153,6 +154,29 @@ export default function LocalGroupDocumentCard({
           <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide backdrop-blur-xs ${theme.badgeBg} ${theme.badgeText}`}>
             {ext || "FILE"}
           </span>
+        </div>
+
+        {/* Nút Yêu thích TikTok */}
+        <div
+          className="absolute right-2 top-2 z-20"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="rounded-full bg-white/90 p-0.5 shadow-xs backdrop-blur-xs hover:bg-white transition-colors">
+            <TikTokFavoriteButton
+              document={{
+                id: document.id,
+                title: document.title,
+                name: document.title,
+                type: String(document.file_type || "unknown"),
+                size: document.file_size || 0,
+                thumbnail_path: document.thumbnail_path,
+                markdown_path: document.markdown_path,
+                tags: document.tags,
+              }}
+              variant="vertical"
+              showCount={true}
+            />
+          </div>
         </div>
 
         {thumbnailUrl ? (

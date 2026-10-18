@@ -147,14 +147,22 @@ export default function GroupSwitcher({
       >
         <div
           className={cn(
-            "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl",
+            "flex h-14 w-14 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-gray-100",
             isOpen
               ? "bg-primary-100 text-primary-700"
               : "bg-primary-50 text-primary-600",
             "transition-colors",
           )}
         >
-          <Users className="h-7 w-7" />
+          {(currentGroup as any)?.avatar_url || (currentGroupFromList as any)?.avatar_url ? (
+            <img
+              src={(currentGroup as any)?.avatar_url || (currentGroupFromList as any)?.avatar_url}
+              alt={displayName}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <Users className="h-7 w-7" />
+          )}
         </div>
 
         <div className="min-w-0">
@@ -265,13 +273,21 @@ export default function GroupSwitcher({
                     >
                       <div
                         className={cn(
-                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-gray-100",
                           isCurrent
                             ? "bg-primary-100 text-primary-700"
                             : "bg-gray-100 text-gray-500",
                         )}
                       >
-                        <Users className="h-5 w-5" />
+                        {group.avatar_url ? (
+                          <img
+                            src={group.avatar_url}
+                            alt={group.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <Users className="h-5 w-5" />
+                        )}
                       </div>
 
                       <div className="min-w-0 flex-1">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Lock,
@@ -6,13 +6,14 @@ import {
   SlidersHorizontal,
   User,
   AlertCircle,
-  CheckCircle,
+  CheckCircle, Camera, Upload, Trash2,
 } from "lucide-react";
 import { userService } from "@/services/userService";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { useAuthStore } from "@/stores/authStore";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -114,6 +115,11 @@ function ReadOnlyField({
 function ProfileTab() {
   const queryClient = useQueryClient();
   const [toast, setToast] = useState<ToastProps | null>(null);
+  const authUser = useAuthStore((s) => s.user);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    authUser?.avatar_url || localStorage.getItem("user_custom_avatar") || ""
+  );
 
   const showToast = (message: string, type: "success" | "error") => {
     setToast({ message, type });
@@ -177,35 +183,158 @@ function ProfileTab() {
     );
   }
 
+  useEffect(() => {
+    if (user?.avatar_url) {
+      setAvatarUrl(user.avatar_url);
+    } else if (authUser?.avatar_url) {
+      setAvatarUrl(authUser.avatar_url);
+    }
+  }, [user, authUser]);
+
+  const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      showToast("Vui lòng chọn một file hình ảnh (JPG, PNG, WEBP...)", "error");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("Dung lượng ảnh tối đa là 5MB", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result as string;
+      setAvatarUrl(dataUrl);
+      useAuthStore.getState().updateUser({ avatar_url: dataUrl });
+      localStorage.setItem("user_custom_avatar", dataUrl);
+
+      try {
+        await userService.updateProfile({ avatar_url: dataUrl });
+        queryClient.invalidateQueries({ queryKey: ["me"] });
+      } catch {
+        // Giữ local state
+      }
+
+      showToast("Đã đổi ảnh đại diện thành công!", "success");
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const handleRemoveAvatar = async () => {
+    setAvatarUrl("");
+    useAuthStore.getState().updateUser({ avatar_url: null });
+    localStorage.removeItem("user_custom_avatar");
+    try {
+      await userService.updateProfile({ avatar_url: "" });
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+    } catch {
+      // Giữ local state
+    }
+    showToast("Đã gỡ ảnh đại diện", "success");
+  };
+
   return (
     <div className="space-y-6">
       {/* Avatar + tên + thành viên từ */}
-      <div className="flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary-600 text-xl font-bold text-white">
-          {getInitials(user?.full_name, user?.username)}
-        </div>
-        <div>
-          <p className="text-base font-semibold text-gray-900">
-            {user?.full_name || user?.username}
-          </p>
-          <div className="mt-1 flex flex-wrap items-center gap-2">
-            <span
-              className={cn(
-                "rounded-full px-2.5 py-0.5 text-xs font-medium",
-                roleInfo.color,
-              )}
-            >
-              {roleInfo.label}
-            </span>
-            {user?.student_code && (
-              <span className="text-xs text-gray-400">
-                MSSV: {user.student_code}
-              </span>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-5 rounded-2xl border border-gray-200/80 bg-gray-50/70 p-5 shadow-2xs">
+        {/* Hidden input để chọn ảnh đại diện từ file trên máy */}
+        <input
+          type="file"
+          ref={avatarInputRef}
+          accept="image/*"
+          className="hidden"
+          onChange={handleAvatarFileChange}
+        />
+
+        <div className="relative group">
+          <div
+            onClick={() => avatarInputRef.current?.click()}
+            title="Nhấn vào ảnh đại diện để đổi ảnh từ file trên máy"
+            className="relative flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-primary-200 bg-primary-600 text-2xl font-bold text-white shadow-md transition-all group-hover:scale-105 group-hover:border-primary-500 group-hover:shadow-lg"
+          >
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt={user?.full_name || "Avatar"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span>{getInitials(user?.full_name, user?.username)}</span>
             )}
-            <span className="text-xs text-gray-400">
-              Thành viên từ {formatDate(user?.created_at)}
-            </span>
+
+            {/* Hover overlay đổi ảnh */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100 backdrop-blur-xs">
+              <Camera className="h-6 w-6" />
+              <span className="text-[10px] font-semibold mt-0.5">Đổi ảnh</span>
+            </div>
           </div>
+
+          {/* Badge camera góc avatar */}
+          <button
+            type="button"
+            onClick={() => avatarInputRef.current?.click()}
+            title="Đổi ảnh từ file trên máy"
+            className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary-600 text-white shadow-md hover:bg-primary-700 transition-colors"
+          >
+            <Camera className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        <div className="flex-1">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-lg font-bold text-gray-900">
+                {user?.full_name || user?.username}
+              </p>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <span
+                  className={cn(
+                    "rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                    roleInfo.color,
+                  )}
+                >
+                  {roleInfo.label}
+                </span>
+                {user?.student_code && (
+                  <span className="text-xs text-gray-500 font-medium">
+                    MSSV: {user.student_code}
+                  </span>
+                )}
+                <span className="text-xs text-gray-400">
+                  Thành viên từ {formatDate(user?.created_at)}
+                </span>
+              </div>
+            </div>
+
+            {/* Nút hành động */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => avatarInputRef.current?.click()}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-primary-300 bg-white px-3 py-1.5 text-xs font-semibold text-primary-700 shadow-2xs hover:bg-primary-50 transition-colors cursor-pointer"
+              >
+                <Camera className="h-4 w-4" />
+                Đổi ảnh đại diện từ máy
+              </button>
+              {avatarUrl && (
+                <button
+                  type="button"
+                  onClick={handleRemoveAvatar}
+                  className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                >
+                  Gỡ ảnh
+                </button>
+              )}
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-gray-400">
+            * Nhấn trực tiếp vào ảnh đại diện hoặc nút &quot;Đổi ảnh đại diện từ máy&quot; để chọn tệp hình ảnh từ thiết bị của bạn.
+          </p>
         </div>
       </div>
 

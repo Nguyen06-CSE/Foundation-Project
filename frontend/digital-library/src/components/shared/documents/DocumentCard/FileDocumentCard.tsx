@@ -1,3 +1,4 @@
+import { TikTokFavoriteButton } from "@/components/shared/documents/TikTokFavoriteButton";
 // src/components/shared/FileDocumentCard.tsx
 
 import { useState, useRef, useEffect } from "react";
@@ -286,6 +287,32 @@ export function FileDocumentCard({
             {ext || "FILE"}
           </span>
         </div>
+
+        {/* Nút Yêu thích TikTok (Bookmark + Số lượt thích) */}
+        {!isExpanded && (
+          <div
+            className="absolute right-2 top-2 z-20"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="rounded-full bg-white/90 p-0.5 shadow-xs backdrop-blur-xs hover:bg-white transition-colors">
+              <TikTokFavoriteButton
+                document={{
+                  id: document.id,
+                  title: document.name,
+                  name: document.name,
+                  type: String(document.type),
+                  size: document.size,
+                  updatedAt: document.updatedAt,
+                  thumbnail_path: document.thumbnail_path,
+                  markdown_path: document.markdown_path || document.markdownPath,
+                  tags: document.tags,
+                }}
+                variant="vertical"
+                showCount={true}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Lớp cuộn nội dung (macOS Quick Look style khi isExpanded = true) */}
         <div

@@ -1,4 +1,5 @@
-import {
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users,
   FileBox,
   FilePlus,
   FolderUp,
@@ -6,19 +7,28 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Dropdown } from "@/components/ui/Dropdown";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, Button } from "@/components/ui/Button";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, Card } from "@/components/ui/Card";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, Dropdown } from "@/components/ui/Dropdown";
 
-import { groupService } from "@/services/groupService";
-import { groupTagService } from "@/services/tagService";
-import { groupFolderService } from "@/services/folderService";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, groupService } from "@/services/groupService";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, groupTagService } from "@/services/tagService";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, groupFolderService } from "@/services/folderService";
 
-import { cn } from "@/utils/cn";
-import { formatRelativeDate } from "@/utils/formatDate";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, cn } from "@/utils/cn";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, formatRelativeDate } from "@/utils/formatDate";
 
 import type { GroupTab } from "./types/groupSpace.types";
-import { TAB_LABELS } from "./types/groupSpace.types";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, TAB_LABELS } from "./types/groupSpace.types";
 
 import MembersTab from "./components/tabs/MembersTab";
 import RequestsTab from "./components/tabs/RequestsTab";
@@ -28,12 +38,18 @@ import DocumentsTab from "./components/tabs/DocumentsTab";
 import SimpleShareModal from "./components/modals/SimpleShareModal";
 import InviteModal from "./components/modals/InviteModal";
 
-import { useGroupSpace } from "./hooks/useGroupSpace";
-import { GroupFolderModalContainer } from "./components/modals/GroupFolderModalContainer";
-import { RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
-import { GroupUploadModal } from "./components/modals/GroupUploadModal";
-import { CreateFolderModal } from "@/components/shared/modals/CreateFolderModal";
-import { useHighlightElement } from "@/hooks/useHighlightElement";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, useGroupSpace } from "./hooks/useGroupSpace";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, GroupFolderModalContainer } from "./components/modals/GroupFolderModalContainer";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, GroupUploadModal } from "./components/modals/GroupUploadModal";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, CreateFolderModal } from "@/components/shared/modals/CreateFolderModal";
+import { useRef, useState, useEffect } from "react";
+import { Camera, Image as ImageIcon, Users, useHighlightElement } from "@/hooks/useHighlightElement";
 
 import GroupSwitcher from "./components/shared/GroupSwitcher";
 
@@ -106,6 +122,88 @@ export default function GroupSpace() {
     groups,
   } = useGroupSpace();
 
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
+
+  const [groupAvatar, setGroupAvatar] = useState<string>(
+    workspace?.avatar_url || localStorage.getItem(`group_avatar_${groupId}`) || ""
+  );
+  const [groupCover, setGroupCover] = useState<string>(
+    workspace?.cover_url || localStorage.getItem(`group_cover_${groupId}`) || ""
+  );
+  const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setFeedbackToast(msg);
+    setTimeout(() => setFeedbackToast(null), 3000);
+  };
+
+  useEffect(() => {
+    if (workspace?.avatar_url) {
+      setGroupAvatar(workspace.avatar_url);
+    } else {
+      const cached = localStorage.getItem(`group_avatar_${groupId}`);
+      if (cached) setGroupAvatar(cached);
+    }
+
+    if (workspace?.cover_url) {
+      setGroupCover(workspace.cover_url);
+    } else {
+      const cachedCover = localStorage.getItem(`group_cover_${groupId}`);
+      if (cachedCover) setGroupCover(cachedCover);
+    }
+  }, [workspace, groupId]);
+
+  const handleAvatarFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      showToast("Vui lòng chọn một file hình ảnh");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result as string;
+      setGroupAvatar(dataUrl);
+      localStorage.setItem(`group_avatar_${groupId}`, dataUrl);
+      try {
+        await groupService.update(Number(groupId), { avatar_url: dataUrl });
+        queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+        queryClient.invalidateQueries({ queryKey: ["groups"] });
+      } catch {
+        // Local cache vẫn giữ được ảnh
+      }
+      showToast("Đã đổi ảnh đại diện nhóm thành công!");
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const handleCoverFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      showToast("Vui lòng chọn một file hình ảnh");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result as string;
+      setGroupCover(dataUrl);
+      localStorage.setItem(`group_cover_${groupId}`, dataUrl);
+      try {
+        await groupService.update(Number(groupId), { cover_url: dataUrl });
+        queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+        queryClient.invalidateQueries({ queryKey: ["groups"] });
+      } catch {
+        // Local cache vẫn giữ được ảnh
+      }
+      showToast("Đã đổi ảnh nền nhóm thành công!");
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
   useHighlightElement("highlight_doc");
 
   if (workspaceLoading) {
@@ -149,46 +247,184 @@ export default function GroupSpace() {
           Quay lại danh sách nhóm
         </button>
       </div>
-      <Card className="relative flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5">
-        <GroupSwitcher
-          currentGroup={workspace}
-          currentGroupId={groupId}
-          groups={groups}
-          onSelectGroup={(nextGroupId) => {
-            navigate(`/groups/${nextGroupId}`);
-          }}
-          onViewAllGroups={() => {
-            navigate("/groups");
-          }}
+      {/* Khối Ảnh nền (Cover) & Ảnh đại diện (Avatar) của Nhóm */}
+      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xs">
+        {/* Hidden File Inputs để đổi ảnh từ file trên máy */}
+        <input
+          type="file"
+          ref={avatarInputRef}
+          accept="image/*"
+          className="hidden"
+          onChange={handleAvatarFileSelect}
+        />
+        <input
+          type="file"
+          ref={coverInputRef}
+          accept="image/*"
+          className="hidden"
+          onChange={handleCoverFileSelect}
         />
 
-        {canManageDocuments && (
-          <Dropdown
-            trigger={
-              <Button icon={<FilePlus className="h-4 w-4" />}>
-                + Thêm tài liệu
-              </Button>
-            }
-            items={[
-              {
-                icon: <Upload className="h-4 w-4" />,
-                label: "Upload tài liệu mới",
-                onClick: () => setIsUploadModalOpen(true),
-              },
-              {
-                icon: <FileBox className="h-4 w-4" />,
-                label: "Chia sẻ từ kho cá nhân",
-                onClick: () => setShareModal("documents"),
-              },
-              {
-                icon: <FolderUp className="h-4 w-4" />,
-                label: "Chia sẻ cả thư mục",
-                onClick: () => setShareModal("folder"),
-              },
-            ]}
-          />
-        )}
-      </Card>
+        {/* 1. ẢNH NỀN NHÓM (Group Cover / Background Banner) */}
+        <div className="relative h-44 sm:h-52 w-full overflow-hidden bg-gradient-to-r from-primary-600 via-emerald-600 to-teal-700">
+          {groupCover ? (
+            <img
+              src={groupCover}
+              alt="Ảnh nền nhóm"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(#ffffff25_1px,transparent_1px)] [background-size:16px_16px] opacity-80" />
+          )}
+
+          {/* Nút Đổi ảnh nền nhóm ở góc trên bên phải */}
+          {canManageDocuments && (
+            <div className="absolute right-4 top-4 z-20 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => coverInputRef.current?.click()}
+                title="Đổi ảnh nền nhóm từ file trên máy"
+                className="inline-flex items-center gap-2 rounded-xl bg-black/55 px-3.5 py-2 text-xs font-semibold text-white shadow-md backdrop-blur-md transition-all hover:bg-black/75 hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <Camera className="h-4 w-4" />
+                <span>Đổi ảnh nền</span>
+              </button>
+              {groupCover && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setGroupCover("");
+                    localStorage.removeItem(`group_cover_${groupId}`);
+                    try {
+                      await groupService.update(Number(groupId), { cover_url: "" });
+                    } catch {}
+                    showToast("Đã khôi phục ảnh nền mặc định");
+                  }}
+                  className="rounded-xl bg-black/45 px-2.5 py-2 text-xs font-medium text-white/90 backdrop-blur-md hover:bg-red-600 hover:text-white transition-colors cursor-pointer"
+                  title="Gỡ ảnh nền về mặc định"
+                >
+                  Gỡ nền
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* 2. KHỐI THÔNG TIN CHÍNH: Avatar nhóm + Tên nhóm + Thao tác */}
+        <div className="relative px-6 pb-6 pt-3">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 sm:-mt-14 mb-3">
+            {/* Ảnh đại diện nhóm (Group Avatar) */}
+            <div className="relative group/avatar flex items-end gap-3.5">
+              <div
+                onClick={() => canManageDocuments && avatarInputRef.current?.click()}
+                title={canManageDocuments ? "Nhấn để đổi ảnh đại diện nhóm từ file trên máy" : undefined}
+                className={cn(
+                  "relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-primary-100 text-primary-700 shadow-md transition-all",
+                  canManageDocuments && "cursor-pointer group-hover/avatar:ring-4 group-hover/avatar:ring-primary-400/40"
+                )}
+              >
+                {groupAvatar ? (
+                  <img
+                    src={groupAvatar}
+                    alt={workspace.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Users className="h-12 w-12 text-primary-600" />
+                )}
+
+                {/* Overlay khi hover vào Avatar để đổi ảnh */}
+                {canManageDocuments && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/55 text-white opacity-0 transition-opacity group-hover/avatar:opacity-100 backdrop-blur-2xs">
+                    <Camera className="h-6 w-6" />
+                    <span className="text-[10px] font-semibold mt-1">Đổi avatar</span>
+                  </div>
+                )}
+              </div>
+
+              {canManageDocuments && (
+                <div className="flex flex-col gap-1 mb-1">
+                  <button
+                    type="button"
+                    onClick={() => avatarInputRef.current?.click()}
+                    title="Đổi ảnh đại diện nhóm từ file trên máy"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2.5 py-1 text-xs font-semibold text-gray-700 shadow-2xs hover:bg-gray-50 transition-colors cursor-pointer"
+                  >
+                    <Camera className="h-3.5 w-3.5 text-primary-600" />
+                    Đổi ảnh đại diện
+                  </button>
+                  {groupAvatar && (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setGroupAvatar("");
+                        localStorage.removeItem(`group_avatar_${groupId}`);
+                        try {
+                          await groupService.update(Number(groupId), { avatar_url: "" });
+                        } catch {}
+                        showToast("Đã khôi phục ảnh đại diện mặc định");
+                      }}
+                      className="text-left text-[11px] font-medium text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                      Gỡ ảnh
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Nút thêm tài liệu */}
+            {canManageDocuments && (
+              <Dropdown
+                trigger={
+                  <Button icon={<FilePlus className="h-4 w-4" />}>
+                    + Thêm tài liệu
+                  </Button>
+                }
+                items={[
+                  {
+                    icon: <Upload className="h-4 w-4" />,
+                    label: "Upload tài liệu mới",
+                    onClick: () => setIsUploadModalOpen(true),
+                  },
+                  {
+                    icon: <FileBox className="h-4 w-4" />,
+                    label: "Chia sẻ từ kho cá nhân",
+                    onClick: () => setShareModal("documents"),
+                  },
+                  {
+                    icon: <FolderUp className="h-4 w-4" />,
+                    label: "Chia sẻ cả thư mục",
+                    onClick: () => setShareModal("folder"),
+                  },
+                ]}
+              />
+            )}
+          </div>
+
+          {/* GroupSwitcher dropdown */}
+          <div className="mt-1">
+            <GroupSwitcher
+              currentGroup={{
+                ...workspace,
+                avatar_url: groupAvatar || workspace.avatar_url,
+              }}
+              currentGroupId={groupId}
+              groups={groups.map((g) =>
+                Number(g.id) === Number(groupId)
+                  ? { ...g, avatar_url: groupAvatar || g.avatar_url }
+                  : g
+              )}
+              onSelectGroup={(nextGroupId) => {
+                navigate(`/groups/${nextGroupId}`);
+              }}
+              onViewAllGroups={() => {
+                navigate("/groups");
+              }}
+            />
+          </div>
+        </div>
+      </div>
 
       {workspace.is_dissolving && workspace.dissolve_at && (
         <div className="rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-700">
@@ -269,6 +505,24 @@ export default function GroupSpace() {
         <SettingsTab
           groupName={workspace.name}
           members={members}
+          avatarUrl={groupAvatar}
+          coverUrl={groupCover}
+          onUpdateAvatar={async (url) => {
+            setGroupAvatar(url);
+            localStorage.setItem(`group_avatar_${groupId}`, url);
+            try {
+              await groupService.update(Number(groupId), { avatar_url: url });
+            } catch {}
+            showToast("Đã cập nhật ảnh đại diện nhóm");
+          }}
+          onUpdateCover={async (url) => {
+            setGroupCover(url);
+            localStorage.setItem(`group_cover_${groupId}`, url);
+            try {
+              await groupService.update(Number(groupId), { cover_url: url });
+            } catch {}
+            showToast("Đã cập nhật ảnh nền nhóm");
+          }}
           onDissolve={() =>
             groupService
               .dissolve(groupId)
@@ -464,6 +718,12 @@ export default function GroupSpace() {
               </Button>
             </div>
           </div>
+        </div>
+      )}
+      {/* Toast thông báo */}
+      {feedbackToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-gray-900 text-white px-4 py-3 shadow-lg text-sm font-medium animate-in fade-in slide-in-from-bottom-2">
+          <span>{feedbackToast}</span>
         </div>
       )}
     </div>

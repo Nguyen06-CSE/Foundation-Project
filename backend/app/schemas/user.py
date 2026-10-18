@@ -12,6 +12,7 @@ class UserBase(BaseModel):
     student_code: Optional[str] = Field(default=None, max_length=20)
     class_id: Optional[int] = None
     faculty_id: Optional[int] = None
+    avatar_url: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
@@ -25,6 +26,7 @@ class UserUpdate(BaseModel):
     student_code: Optional[str] = Field(default=None, max_length=20)
     class_id: Optional[int] = None
     faculty_id: Optional[int] = None
+    avatar_url: Optional[str] = None
 
 class PasswordUpdate(BaseModel):
     current_password: str

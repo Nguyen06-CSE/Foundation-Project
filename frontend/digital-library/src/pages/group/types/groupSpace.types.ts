@@ -129,6 +129,10 @@ export interface SettingsTabProps {
   groupName: string;
   members: WorkspaceMember[];
   onDissolve: () => Promise<unknown>;
+  avatarUrl?: string | null;
+  coverUrl?: string | null;
+  onUpdateAvatar?: (url: string) => void;
+  onUpdateCover?: (url: string) => void;
 }
 
 export interface TrashTabProps {

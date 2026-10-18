@@ -5,6 +5,7 @@ import type { User } from "@/types/user"
 interface UpdateProfilePayload {
   full_name?: string
   username?: string
+  avatar_url?: string
 }
 
 export const userService = {
@@ -16,7 +17,7 @@ export const userService = {
   updatePassword: async (data: { current_password: string; new_password: string }) => {
     const response = await api.patch("/users/me/password", data);
     return response.data;
-    },
-    searchUsers: (query: string) => 
+  },
+  searchUsers: (query: string) => 
     api.get<User[]>(`/users/search?q=${encodeURIComponent(query)}`).then((r) => r.data),
 }

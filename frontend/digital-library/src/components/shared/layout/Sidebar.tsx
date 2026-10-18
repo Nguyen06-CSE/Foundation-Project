@@ -10,7 +10,7 @@ import {
   LayoutDashboard,
   FileText,
   Share2,
-  Heart,
+  Bookmark,
   Trash2,
   BarChart2,
   Settings,
@@ -39,7 +39,7 @@ const PERSONAL_ITEMS: SidebarItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/personal/dashboard" },
   { icon: FileText, label: "Tài liệu", to: "/personal/documents" },
   { icon: Share2, label: "Đã chia sẻ với tôi", to: "/personal/shared" },
-  { icon: Heart, label: "Yêu thích", to: "/personal/favorites" },
+  { icon: Bookmark, label: "Yêu thích", to: "/personal/favorites" },
   { icon: Trash2, label: "Thùng rác", to: "/personal/trash" },
 ];
 

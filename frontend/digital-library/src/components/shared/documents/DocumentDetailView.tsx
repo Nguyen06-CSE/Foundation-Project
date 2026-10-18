@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Heart, Download, Sparkles } from 'lucide-react'
+import { User, Bookmark, Download, Sparkles } from 'lucide-react'
 import { FileIcon } from './FileIcon'
 import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
 import { GroupDocumentContextMenu } from '@/pages/group/components/shared/GroupDocumentContextMenu'
@@ -218,13 +218,13 @@ export function DocumentDetailView({
                   {onAction && workspaceType === 'personal' && (
                     <button
                       onClick={() => onAction('favorite', doc.id)}
-                      className="p-1.5 text-gray-400 hover:text-rose-500 rounded-md hover:bg-gray-100 transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-amber-500 rounded-md hover:bg-gray-100 transition-colors"
                       title="Yêu thích"
                     >
-                      <Heart
+                      <Bookmark
                         className={cn(
                           'h-4 w-4',
-                          doc.isFavorite && 'fill-rose-500 text-rose-500'
+                          doc.isFavorite && 'fill-amber-400 text-amber-500'
                         )}
                       />
                     </button>

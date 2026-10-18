@@ -41,6 +41,8 @@ class Workspace(Base, TimestampMixin):
         Integer, ForeignKey("faculties.id"), nullable=True
     )
     
+    avatar_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    cover_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
     default_member_permission: Mapped[str] = mapped_column(
         String(10), default='view', nullable=False
     )

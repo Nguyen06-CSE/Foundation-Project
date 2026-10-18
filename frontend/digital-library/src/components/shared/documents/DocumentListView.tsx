@@ -6,7 +6,7 @@ import {
   ChevronDown,
   ChevronRight,
   User,
-  Heart,
+  Bookmark,
   Download,
   Package,
 } from "lucide-react";
@@ -462,13 +462,13 @@ export function DocumentListView({
                     {onAction && workspaceType === "personal" && (
                       <button
                         onClick={() => onAction("favorite", doc.id)}
-                        className="p-1 text-gray-400 hover:text-rose-500 rounded-md hover:bg-gray-100 transition-colors"
+                        className="p-1 text-gray-400 hover:text-amber-500 rounded-md hover:bg-gray-100 transition-colors"
                         title="Yêu thích"
                       >
-                        <Heart
+                        <Bookmark
                           className={cn(
                             "h-3.5 w-3.5",
-                            doc.isFavorite && "fill-rose-500 text-rose-500",
+                            doc.isFavorite && "fill-amber-400 text-amber-500",
                           )}
                         />
                       </button>

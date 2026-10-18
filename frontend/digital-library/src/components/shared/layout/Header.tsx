@@ -1,6 +1,6 @@
-// frontend/digital-library/src/components/shared/Header.tsx
+// frontend/digital-library/src/components/shared/layout/Header.tsx
 
-import { Bell, Menu, LogOut } from "lucide-react";
+import { Bell, Menu, LogOut, Settings } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
@@ -71,12 +71,32 @@ export function Header({ scopeLabel, notificationCount = 0, onMenuClick }: Heade
           )}
         </button>
 
+        {/* Khối tài khoản: Khi ấn vào ảnh đại diện hoặc tên tài khoản thì vào phần Cài đặt hệ thống */}
         <div className="flex items-center gap-3 border-l border-gray-200 pl-4">
-          <Avatar name={displayName} />
-          <div className="hidden flex-col md:flex">
-            <span className="text-sm font-semibold text-gray-900">{displayName}</span>
-            <span className="text-xs text-gray-500">{displayRole}</span>
-          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/settings')}
+            title="Nhấn để vào Cài đặt hệ thống"
+            className="group flex items-center gap-3 rounded-xl p-1 text-left transition-all hover:bg-gray-100/80 focus:outline-none"
+          >
+            <div className="relative">
+              <Avatar 
+                name={displayName} 
+                src={user?.avatar_url || undefined} 
+                className="ring-2 ring-transparent group-hover:ring-primary-500 transition-all duration-200"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary-600 text-white shadow-xs group-hover:scale-110 transition-transform">
+                <Settings className="h-2 w-2" />
+              </span>
+            </div>
+            <div className="hidden flex-col md:flex">
+              <span className="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
+                {displayName}
+              </span>
+              <span className="text-xs text-gray-500">{displayRole}</span>
+            </div>
+          </button>
+
           <button 
             onClick={handleLogout} 
             title="Đăng xuất" 

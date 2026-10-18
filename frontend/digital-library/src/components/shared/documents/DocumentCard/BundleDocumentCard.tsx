@@ -1,3 +1,4 @@
+import { TikTokFavoriteButton } from "@/components/shared/documents/TikTokFavoriteButton";
 // src/components/shared/BundleDocumentCard.tsx
 
 import { useNavigate } from "react-router-dom";
@@ -40,6 +41,29 @@ export function BundleDocumentCard({
           <span className="inline-flex items-center rounded-md bg-purple-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-purple-700 backdrop-blur-xs">
             BUNDLE
           </span>
+        </div>
+
+        {/* Nút Yêu thích TikTok */}
+        <div
+          className="absolute right-2 top-2 z-20"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="rounded-full bg-white/90 p-0.5 shadow-xs backdrop-blur-xs hover:bg-white transition-colors">
+            <TikTokFavoriteButton
+              document={{
+                id: document.id,
+                title: document.name,
+                name: document.name,
+                type: String(document.type),
+                size: document.size,
+                updatedAt: document.updatedAt,
+                tags: document.tags,
+                is_bundle: true,
+              }}
+              variant="vertical"
+              showCount={true}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col items-center justify-center gap-2">

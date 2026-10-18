@@ -10,6 +10,7 @@ export interface User {
   class_id?: number | null
   faculty_id?: number | null
   created_at?: string | null
+  avatar_url?: string | null
 }
 
 export type UserRole = User['role']
