@@ -21,7 +21,7 @@ from app.models.workspace import Workspace
 from app.models.workspace_invitation import WorkspaceInvitation
 from app.models.workspace_member import WorkspaceMember
 from app.routers.documents import _process_document_background
-from app.schemas.document import DocumentOut, DocumentUpdate, PaginatedDocuments
+from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
 from app.schemas.folder import AddTagsToFolder, FolderCreate, FolderOut, FolderUpdate
 from app.schemas.group import (
     BulkInviteCreate,
@@ -840,7 +840,7 @@ async def invite_member(
     )
     return _invitation_out(result.scalar_one())
 
-@router.post("/groups/{group_id}/invitations/", response_model=BulkInviteOut, status_code=status.HTTP_201_CREATED)
+@router.post("/groups/{group_id}/invitations/bulk", response_model=BulkInviteOut, status_code=status.HTTP_201_CREATED)
 async def invite_members_bulk(
     group_id: int,
     payload: BulkInviteCreate,
@@ -1125,35 +1125,6 @@ async def create_group_folder(
     return created_folder or new_folder
 
 
-@router.post("/groups/", response_model=WorkspaceOut, status_code=status.HTTP_201_CREATED)
-async def create_group(
-    payload: GroupCreate,
-    db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    workspace = Workspace(
-        type="group",
-        name=payload.name,
-        description=payload.description,
-        owner_id=current_user.id,
-        default_member_permission=payload.default_member_permission,
-    )
-    db.add(workspace)
-    await db.flush() # Flush để lấy workspace.id trước khi gán cho member
-    
-    # BỔ SUNG: Thêm chủ nhóm vào bảng thành viên với quyền cao nhất (full)
-    db.add(
-        WorkspaceMember(
-            workspace_id=workspace.id,
-            user_id=current_user.id,
-            permission_level="full",
-        )
-    )
-    
-    await db.commit()
-    await db.refresh(workspace)
-    return workspace
-
 @router.get("/groups/{group_id}/trash/", response_model=list[DocumentOut])
 async def list_group_trash(
     group_id: int,
@@ -1274,6 +1245,58 @@ async def add_tags_to_group_document(
             await db.execute(insert_stmt)
             
     await db.commit()
+
+@router.patch("/groups/{group_id}/documents/{document_id}/tags", response_model=DocumentOut)
+async def update_group_document_tags(
+    group_id: int,
+    document_id: int,
+    payload: DocumentTagsUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Thay thế toàn bộ tag của tài liệu nhóm bằng danh sách tag_ids mới (giống tài liệu cá nhân)."""
+    await require_full_permission(db, group_id, current_user.id)
+
+    result = await db.execute(
+        select(Document)
+        .options(selectinload(Document.tags))
+        .where(
+            Document.id == document_id,
+            Document.workspace_id == group_id,
+            Document.is_deleted == False,
+        )
+    )
+    document = result.scalar_one_or_none()
+    if not document:
+        raise HTTPException(404, "Không tìm thấy tài liệu trong nhóm này")
+
+    tag_ids = list(set(payload.tag_ids))
+    tags: list[Tag] = []
+    if tag_ids:
+        tag_result = await db.execute(select(Tag).where(Tag.id.in_(tag_ids)))
+        tags = list(tag_result.scalars().all())
+        missing_tag_ids = sorted(set(tag_ids) - {tag.id for tag in tags})
+        if missing_tag_ids:
+            raise HTTPException(404, f"Không tìm thấy tag: {missing_tag_ids}")
+
+    document.tags = tags
+
+    if document.is_bundle:
+        children_result = await db.execute(
+            select(Document)
+            .options(selectinload(Document.tags))
+            .where(
+                Document.bundle_parent_id == document_id,
+                Document.is_deleted == False,
+            )
+        )
+        for child in children_result.scalars().all():
+            child.tags = tags
+
+    await db.commit()
+
+    return await get_group_document(group_id, document_id, db, current_user)
+
 
 @router.delete("/groups/{group_id}/documents/{document_id}/tags/{tag_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def remove_tag_from_group_document(

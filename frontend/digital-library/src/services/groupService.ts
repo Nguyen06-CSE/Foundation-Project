@@ -88,39 +88,27 @@ export const groupService = {
       message: payload.message || "",
     }).then((r) => r.data),
 
-  // Mời danh sách (Xử lý tách mảng identifiers thành từng request song song phù hợp với Backend)
+  // Mời hàng loạt: theo danh sách định danh, lớp, khoa hoặc mẫu mã sinh viên
   inviteBulk: async (groupId: number, payload: BulkInvitePayload) => {
-    const targetIdentifiers: string[] = [];
+    const identifiers = Array.from(
+      new Set([
+        ...(payload.identifiers ?? []),
+        ...(payload.identifier ? [payload.identifier] : []),
+      ]),
+    );
 
-    if (payload.identifiers && payload.identifiers.length > 0) {
-      targetIdentifiers.push(...payload.identifiers);
-    }
-    if (payload.identifier && !targetIdentifiers.includes(payload.identifier)) {
-      targetIdentifiers.push(payload.identifier);
-    }
-
-    // Nếu có danh sách người nhận, tự động tách thành các request gửi song song
-    if (targetIdentifiers.length > 0) {
-      const requests = targetIdentifiers.map((id) =>
-        api.post(`/groups/${groupId}/invitations/`, {
-          identifier: id,
-          class_ids: payload.class_ids || [],
-          faculty_ids: payload.faculty_ids || [],
-          student_code_patterns: payload.student_code_patterns || [],
-          message: payload.message || "",
-        }).then((r) => r.data)
-      );
-      return Promise.all(requests);
-    }
-
-    // Trường hợp gửi theo lớp/khoa mà không truyền identifier cá nhân
-    return api.post(`/groups/${groupId}/invitations/`, {
-      identifier: "",
-      class_ids: payload.class_ids || [],
-      faculty_ids: payload.faculty_ids || [],
-      student_code_patterns: payload.student_code_patterns || [],
-      message: payload.message || "",
-    }).then((r) => r.data);
+    return api
+      .post<{ message: string; invited_count: number }>(
+        `/groups/${groupId}/invitations/bulk`,
+        {
+          identifiers,
+          class_ids: payload.class_ids ?? [],
+          faculty_ids: payload.faculty_ids ?? [],
+          student_code_patterns: payload.student_code_patterns ?? [],
+          message: payload.message ?? "",
+        },
+      )
+      .then((r) => r.data);
   },
 
   getInvitationsSent: (groupId: number) =>

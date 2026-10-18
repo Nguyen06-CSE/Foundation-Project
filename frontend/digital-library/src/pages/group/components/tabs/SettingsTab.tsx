@@ -1,7 +1,7 @@
 // frontend/digital-library/src/pages/group/components/tabs/SettingsTab.tsx
 
 import { useRef, useState } from "react";
-import { Camera, Image as ImageIcon, Users, Trash2 } from "lucide-react";
+import { Camera, Image as ImageIcon, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";

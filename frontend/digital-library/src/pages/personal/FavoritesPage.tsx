@@ -11,7 +11,6 @@ import {
   ExternalLink,
   Trash2,
   FolderOpen,
-  ArrowRight,
 } from "lucide-react";
 import { useFavoriteStore } from "@/stores/favoriteStore";
 import { TikTokFavoriteButton } from "@/components/shared/documents/TikTokFavoriteButton";
@@ -326,7 +325,7 @@ export default function FavoritesPage() {
                       {/* TikTok Favorite Button */}
                       <TikTokFavoriteButton
                         document={doc}
-                        variant="horizontal"
+                        variant="compact"
                         showCount={true}
                       />
 

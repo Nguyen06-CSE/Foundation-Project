@@ -6,7 +6,8 @@ import {
   SlidersHorizontal,
   User,
   AlertCircle,
-  CheckCircle, Camera, Upload, Trash2,
+  CheckCircle,
+  Camera,
 } from "lucide-react";
 import { userService } from "@/services/userService";
 import { Card } from "@/components/ui/Card";

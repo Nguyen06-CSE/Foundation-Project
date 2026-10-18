@@ -67,3 +67,20 @@ async def hard_delete_document(
 
     await db.delete(document)
     await db.commit()
+
+
+@router.delete("/empty", status_code=status.HTTP_204_NO_CONTENT)
+async def empty_trash(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Xóa vĩnh viễn toàn bộ tài liệu đang nằm trong thùng rác của người dùng hiện tại."""
+    result = await db.execute(
+        select(Document).where(
+            Document.owner_id == current_user.id,
+            Document.is_deleted == True
+        )
+    )
+    for document in result.scalars().all():
+        await db.delete(document)
+    await db.commit()

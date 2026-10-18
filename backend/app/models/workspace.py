@@ -2,7 +2,6 @@
 from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional, List
-from pydantic import Tag
 from sqlalchemy import (
     Integer, String, Text, Boolean, DateTime,
     ForeignKey, func, Index
@@ -18,7 +17,8 @@ if TYPE_CHECKING:
     from .workspace_invitation import WorkspaceInvitation
     from .document import Document
     from .folder import Folder
-    from .classes import Class
+    from .academic_class import Class
+    from .tag import Tag
     from .faculty import Faculty
     from .trash_batch import TrashBatch  
 
