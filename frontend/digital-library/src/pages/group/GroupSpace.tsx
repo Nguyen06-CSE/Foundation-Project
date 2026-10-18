@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users,
+import {
+  Camera,
+  Users,
   FileBox,
   FilePlus,
   FolderUp,
@@ -7,28 +9,18 @@ import { Camera, Image as ImageIcon, Users,
   ArrowLeft,
 } from "lucide-react";
 
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, Button } from "@/components/ui/Button";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, Card } from "@/components/ui/Card";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, Dropdown } from "@/components/ui/Dropdown";
+import { Button } from "@/components/ui/Button";
+import { Dropdown } from "@/components/ui/Dropdown";
 
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, groupService } from "@/services/groupService";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, groupTagService } from "@/services/tagService";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, groupFolderService } from "@/services/folderService";
+import { groupService } from "@/services/groupService";
+import { groupTagService } from "@/services/tagService";
+import { groupFolderService } from "@/services/folderService";
 
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, cn } from "@/utils/cn";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, formatRelativeDate } from "@/utils/formatDate";
+import { cn } from "@/utils/cn";
+import { formatRelativeDate } from "@/utils/formatDate";
 
 import type { GroupTab } from "./types/groupSpace.types";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, TAB_LABELS } from "./types/groupSpace.types";
+import { TAB_LABELS } from "./types/groupSpace.types";
 
 import MembersTab from "./components/tabs/MembersTab";
 import RequestsTab from "./components/tabs/RequestsTab";
@@ -38,18 +30,12 @@ import DocumentsTab from "./components/tabs/DocumentsTab";
 import SimpleShareModal from "./components/modals/SimpleShareModal";
 import InviteModal from "./components/modals/InviteModal";
 
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, useGroupSpace } from "./hooks/useGroupSpace";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, GroupFolderModalContainer } from "./components/modals/GroupFolderModalContainer";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, GroupUploadModal } from "./components/modals/GroupUploadModal";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, CreateFolderModal } from "@/components/shared/modals/CreateFolderModal";
-import { useRef, useState, useEffect } from "react";
-import { Camera, Image as ImageIcon, Users, useHighlightElement } from "@/hooks/useHighlightElement";
+import { useGroupSpace } from "./hooks/useGroupSpace";
+import { GroupFolderModalContainer } from "./components/modals/GroupFolderModalContainer";
+import { RenameDocumentModal } from "@/components/shared/modals/RenameDocumentModal";
+import { GroupUploadModal } from "./components/modals/GroupUploadModal";
+import { CreateFolderModal } from "@/components/shared/modals/CreateFolderModal";
+import { useHighlightElement } from "@/hooks/useHighlightElement";
 
 import GroupSwitcher from "./components/shared/GroupSwitcher";
 
@@ -247,6 +233,7 @@ export default function GroupSpace() {
           Quay lại danh sách nhóm
         </button>
       </div>
+
       {/* Khối Ảnh nền (Cover) & Ảnh đại diện (Avatar) của Nhóm */}
       <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xs">
         {/* Hidden File Inputs để đổi ảnh từ file trên máy */}
@@ -537,7 +524,8 @@ export default function GroupSpace() {
       )}
 
       {/* Modals */}
-      {/* Group Folder Modal Container */}
+      {/* LƯU Ý: GroupFolderModalContainer và CreateFolderModal bên dưới đang cùng mở khi isFolderModalOpen = true. 
+          Hãy xóa 1 trong 2 modal tùy theo luồng xử lý chính của dự án. */}
       <GroupFolderModalContainer
         isOpen={isFolderModalOpen}
         groupId={groupId}
@@ -632,10 +620,11 @@ export default function GroupSpace() {
           }
         }}
       />
+
       {isUploadModalOpen && (
         <GroupUploadModal
           onClose={() => setIsUploadModalOpen(false)}
-          tags={groupTags} // Hoặc workspaceTags tùy vào logic của bạn
+          tags={groupTags}
           createTagMutation={createTagMutation}
           uploadMutation={uploadMutation}
         />
@@ -720,6 +709,7 @@ export default function GroupSpace() {
           </div>
         </div>
       )}
+
       {/* Toast thông báo */}
       {feedbackToast && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-gray-900 text-white px-4 py-3 shadow-lg text-sm font-medium animate-in fade-in slide-in-from-bottom-2">
