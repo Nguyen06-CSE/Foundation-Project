@@ -1,10 +1,8 @@
-// src/components/shared/documents/DocumentDetail/viewers/PdfViewer.tsx
-
 import type { PdfViewerProps } from "../DocumentDetail.types";
 import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
- * PdfViewer - Hiển thị bản xem trước tài liệu PDF
+- PdfViewer - Hiển thị bản xem trước tài liệu PDF
  */
 export function PdfViewer({
   doc,
@@ -16,6 +14,18 @@ export function PdfViewer({
 }: PdfViewerProps) {
   const handleCover = onUpdateCover || onUpdateThumbnailPage;
   const isUpdating = isUpdatingCover || isUpdatingThumbnailPage;
+
+  // --- BẮT ĐẦU XỬ LÝ LỖI URL ---
+  // 1. Giải mã URL để sửa lỗi https%3A// thành https://
+  let cleanUrl = decodeURIComponent(fileUrl || "");
+  
+  // 2. Lọc bỏ Base URL của Backend nếu Component cha lỡ nối nhầm vào
+  // (Tìm chữ 'http' xuất hiện cuối cùng trong chuỗi và cắt lấy từ đó trở về sau)
+  const realHttpIndex = cleanUrl.lastIndexOf("http");
+  if (realHttpIndex > 0) {
+    cleanUrl = cleanUrl.substring(realHttpIndex);
+  }
+  // --- KẾT THÚC XỬ LÝ LỖI URL ---
 
   return (
     <div className="w-full flex flex-col items-center gap-3">
@@ -30,9 +40,9 @@ export function PdfViewer({
         </div>
       )}
 
-      {/* Vùng hiển thị PDF qua iframe */}
+      {/* Vùng hiển thị PDF qua iframe sử dụng cleanUrl */}
       <iframe
-        src={`${fileUrl}#toolbar=1&navpanes=0`}
+        src={`${cleanUrl}#toolbar=1&navpanes=0`}
         className="w-full h-[750px] rounded-lg shadow-sm bg-white border border-gray-200"
         title={doc?.title || "Tài liệu PDF"}
       />
