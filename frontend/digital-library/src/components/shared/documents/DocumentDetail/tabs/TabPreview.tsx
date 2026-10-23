@@ -9,7 +9,7 @@ import { DocxViewer } from "../viewers/DocxViewer";
 import { PdfViewer } from "../viewers/PdfViewer";
 import { CodeViewer } from "../viewers/CodeViewer";
 import { MarkdownViewer } from "../viewers/MarkdownViewer";
-import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
+//import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
  * TabPreview - Tab "Bản xem trước" tổng hợp của tài liệu
@@ -151,11 +151,11 @@ export function TabPreview({
               `}</style>
               {onUpdateThumbnail && (
                 <div className="w-full shrink-0 flex items-center justify-end px-4 py-2 border-b border-gray-200 bg-gray-50/60">
-                  <DocumentCoverSelector
+                  {/* <DocumentCoverSelector
                     variant="upload"
                     onUploadCover={onUpdateThumbnail}
                     isUpdating={isUpdatingThumbnail}
-                  />
+                  /> */}
                 </div>
               )}
               <div className="w-full flex-1 min-h-0">
@@ -190,11 +190,11 @@ export function TabPreview({
               </p>
               {onUpdateThumbnail && (
                 <div className="mt-4">
-                  <DocumentCoverSelector
+                  {/* <DocumentCoverSelector
                     variant="upload"
                     onUploadCover={onUpdateThumbnail}
                     isUpdating={isUpdatingThumbnail}
-                  />
+                  /> */}
                 </div>
               )}
             </div>

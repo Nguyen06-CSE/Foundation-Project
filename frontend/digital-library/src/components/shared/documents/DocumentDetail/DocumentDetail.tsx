@@ -173,55 +173,53 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               ))}
             </div>
 
-            <div className="flex items-center gap-2 pb-2">
-              {activeTab === "detail" && markdownDownloadUrl && (
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("original")}
-                    className={cn(
-                      "px-3 py-1 text-xs rounded-md border transition-colors",
-                      viewMode === "original"
-                        ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
-                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
-                    )}
-                  >
-                    Bản gốc
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("markdown")}
-                    className={cn(
-                      "px-3 py-1 text-xs rounded-md border transition-colors",
-                      viewMode === "markdown"
-                        ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
-                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
-                    )}
-                  >
-                    Markdown
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSidebarOpen((v) => !v)}
-                    className={cn(
-                      // FIX 3: Đổi flex-shrink-0 thành shrink-0
-                      "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
-                      sidebarOpen
-                        ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
-                        : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
-                    )}
-                    title={
-                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
-                    }
-                    aria-label={
-                      sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
-                    }
-                  >
-                    <Info className="h-4 w-4" />
-                  </button>
-                </div>
-              )}
-            </div>
+            {/* Bên phải: Nút Bản gốc / Markdown (nếu có) và Nút Info Toggle */}
+  <div className="flex items-center gap-2 pb-2">
+    {activeTab === "detail" && markdownDownloadUrl && (
+      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+        <button
+          type="button"
+          onClick={() => setViewMode("original")}
+          className={cn(
+            "px-3 py-1 text-xs rounded-md border transition-colors",
+            viewMode === "original"
+              ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
+              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+          )}
+        >
+          Bản gốc
+        </button>
+        <button
+          type="button"
+          onClick={() => setViewMode("markdown")}
+          className={cn(
+            "px-3 py-1 text-xs rounded-md border transition-colors",
+            viewMode === "markdown"
+              ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
+              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+          )}
+        >
+          Markdown
+        </button>
+      </div>
+    )}
+
+    {/* Nút Toggle Sidebar (Icon Info) */}
+    <button
+      type="button"
+      onClick={() => setSidebarOpen((v) => !v)}
+      className={cn(
+        "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
+        sidebarOpen
+          ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
+          : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
+      )}
+      title={sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"}
+      aria-label={sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"}
+    >
+      <Info className="h-4 w-4" />
+    </button>
+  </div>
           </div>
 
           {/* Nội dung tương ứng theo từng tab */}
