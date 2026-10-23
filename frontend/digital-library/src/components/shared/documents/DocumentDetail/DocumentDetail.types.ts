@@ -123,6 +123,13 @@ export interface DocxViewerProps {
   isUpdatingThumbnailPage?: boolean;
 }
 
+export interface OfficeViewerProps {
+  doc: any;
+  fileUrl: string;
+  onUpdateThumbnail?: (base64Thumbnail: string) => void;
+  isUpdatingThumbnail?: boolean;
+}
+
 export interface PdfViewerProps {
   doc: any;
   fileUrl: string;

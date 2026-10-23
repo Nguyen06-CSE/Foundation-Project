@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import os
 import uuid
 from pathlib import Path
 from fastapi import UploadFile
@@ -122,3 +123,25 @@ def get_file_url(file_key: str | None) -> str | None:
         clean_key = file_key.lstrip('/')
         return f"{settings.MINIO_PUBLIC_URL.rstrip('/')}/{clean_key}"
     return file_key
+
+
+def safe_remove(path: str | None) -> None:
+    """
+    Xóa file an toàn: xóa trên Cloudflare R2 (nếu có key hợp lệ) và xóa file local (nếu tồn tại).
+    Bỏ qua nếu path là None hoặc '__bundle__'.
+    """
+    if not path or path == "__bundle__":
+        return
+    # 1. Xóa trên Cloudflare R2 nếu có key
+    key = get_r2_key_from_path(path)
+    if key and settings.BUCKET_NAME:
+        try:
+            s3_client.delete_object(Bucket=settings.BUCKET_NAME, Key=key)
+        except Exception:
+            pass
+    # 2. Xóa trên local disk nếu có tồn tại (hỗ trợ cả môi trường hybrid hoặc temp/cache)
+    try:
+        if os.path.exists(path):
+            os.remove(path)
+    except OSError:
+        pass

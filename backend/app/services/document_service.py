@@ -16,8 +16,8 @@ async def create_document_from_upload(
     upload, 
     owner_id: int, 
     title: str, 
-    description: str | None, 
-    category_id: int | None, 
+    description: str | None = None, 
+    category_id: int | None = None, 
     workspace_id: int | None = None,
     tag_ids: list[int] | None = None,
     content: str | None = None,
@@ -30,23 +30,51 @@ async def create_document_from_upload(
     file_size = len(file_bytes)
     checksum = checksum_for_file(file_bytes)
     
-    # 2. Kiểm tra file trùng lặp (Bỏ qua các file đã xóa mềm)
-    query = select(Document).where(
-        Document.checksum == checksum, 
-        Document.is_deleted == False
+    # 2. Kiểm tra file trùng lặp (kể cả file trong thùng rác)
+    query_active = select(Document).where(
+        Document.checksum == checksum,
+        Document.is_deleted == False,
+    )
+    query_trash = select(Document).where(
+        Document.checksum == checksum,
+        Document.is_deleted == True,
     )
     if workspace_id:
-        query = query.where(Document.workspace_id == workspace_id)
+        query_active = query_active.where(
+            Document.workspace_id == workspace_id
+        )
+        query_trash = query_trash.where(
+            Document.workspace_id == workspace_id
+        )
     else:
-        query = query.where(Document.owner_id == owner_id, Document.workspace_id.is_(None))
-        
-    result = await db.execute(query)
-    existing = result.scalar_one_or_none()
-    
-    if existing:
-        raise ValueError(f"duplicate_document:{existing.id}")
-        
-    # 3. Upload trực tiếp lên Cloudflare R2
+        query_active = query_active.where(
+            Document.owner_id == owner_id,
+            Document.workspace_id.is_(None)
+        )
+        query_trash = query_trash.where(
+            Document.owner_id == owner_id,
+            Document.workspace_id.is_(None)
+        )
+
+    # Tìm bản active trùng
+    existing_active = (
+        await db.execute(query_active)
+    ).scalar_one_or_none()
+    if existing_active:
+        raise ValueError(
+            f"duplicate_document:{existing_active.id}"
+        )
+
+    # Tìm bản trong thùng rác trùng — trả lỗi đặc biệt để FE xử lý
+    existing_trash = (
+        await db.execute(query_trash)
+    ).scalar_one_or_none()
+    if existing_trash:
+        raise ValueError(
+            f"in_trash:{existing_trash.id}:{existing_trash.title}"
+        )
+
+    # 3. Upload trực tiếp lên Cloudflare R2 sau khi xác nhận không trùng
     file_path = await save_upload_file(upload, owner_id)
         
     document = Document(

@@ -7,6 +7,7 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.models.document import Document
 from app.models.user import User
+from app.services.file_service import safe_remove as _safe_remove
 
 router = APIRouter(prefix="/trash", tags=["trash"])
 
@@ -64,6 +65,21 @@ async def hard_delete_document(
     document = result.scalar_one_or_none()
     if not document:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu trong thùng rác")
+
+    _safe_remove(document.file_path)
+    _safe_remove(document.thumbnail_path)
+    _safe_remove(document.markdown_path)
+
+    # Nếu document là bundle (is_bundle=True), xóa file của children trước:
+    if document.is_bundle:
+        children_result = await db.execute(
+            select(Document).where(Document.bundle_parent_id == document.id)
+        )
+        for child in children_result.scalars().all():
+            _safe_remove(child.file_path)
+            _safe_remove(child.thumbnail_path)
+            _safe_remove(child.markdown_path)
+            await db.delete(child)
 
     await db.delete(document)
     await db.commit()

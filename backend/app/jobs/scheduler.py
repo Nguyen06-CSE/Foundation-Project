@@ -11,6 +11,7 @@ from app.models.document import Document
 from app.models.workspace import Workspace
 from app.models.workspace_invitation import WorkspaceInvitation
 from app.models.workspace_member import WorkspaceMember
+from app.services.file_service import safe_remove as _safe_remove
 from app.services.group_service import copy_file
 
 scheduler = AsyncIOScheduler()
@@ -95,34 +96,47 @@ async def cleanup_orphaned_documents() -> None:
             )
         )
         for doc in result.scalars().all():
-            try:
-                os.remove(doc.file_path)
-            except OSError:
-                pass
+            _safe_remove(doc.file_path)
+            _safe_remove(doc.thumbnail_path)
+            _safe_remove(doc.markdown_path)
             await db.delete(doc)
         await db.commit()
 
 
-async def cleanup_personal_trash() -> None:
+async def cleanup_deleted_documents() -> None:
     async with AsyncSessionLocal() as db:
         cutoff = datetime.utcnow() - timedelta(days=30)
         result = await db.execute(
             select(Document).where(
                 Document.is_deleted == True,
-                Document.workspace_id.is_(None),
                 Document.deleted_at < cutoff,
             )
         )
-        for doc in result.scalars().all():
-            try:
-                os.remove(doc.file_path)
-            except OSError:
-                pass
+        docs = result.scalars().all()
+        for doc in docs:
+            if doc.is_bundle:
+                children = (await db.execute(
+                    select(Document).where(
+                        Document.bundle_parent_id == doc.id
+                    )
+                )).scalars().all()
+                for child in children:
+                    _safe_remove(child.file_path)
+                    _safe_remove(child.thumbnail_path)
+                    _safe_remove(child.markdown_path)
+                    await db.delete(child)
+            _safe_remove(doc.file_path)
+            _safe_remove(doc.thumbnail_path)
+            _safe_remove(doc.markdown_path)
             await db.delete(doc)
         await db.commit()
+
+
+# Alias để tương thích ngược
+cleanup_personal_trash = cleanup_deleted_documents
 
 
 def register_jobs() -> None:
     scheduler.add_job(execute_group_dissolution, CronTrigger(minute="*/5"))
     scheduler.add_job(cleanup_orphaned_documents, CronTrigger(hour=0, minute=0))
-    scheduler.add_job(cleanup_personal_trash, CronTrigger(hour=0, minute=10))
+    scheduler.add_job(cleanup_deleted_documents, CronTrigger(hour=0, minute=10))
