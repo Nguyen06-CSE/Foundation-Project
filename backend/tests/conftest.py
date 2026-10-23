@@ -25,6 +25,9 @@ class FakeResult:
     def scalar_one_or_none(self):
         return self.value
 
+    def scalar_one(self):
+        return self.value
+
     def scalars(self):
         return SimpleNamespace(all=lambda: self.value or [])
 

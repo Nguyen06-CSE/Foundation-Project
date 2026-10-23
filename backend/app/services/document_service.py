@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
+import io
+import os
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-import os
 
 from app.models.document import Document
 from app.models.document_version import DocumentVersion
@@ -21,31 +23,66 @@ async def create_document_from_upload(
     upload, 
     owner_id: int, 
     title: str, 
-    description: str | None, 
-    category_id: int | None, 
+    description: str | None = None, 
+    category_id: int | None = None, 
     workspace_id: int | None = None,
     tag_ids: list[int] | None = None,  # <-- Thêm tham số tag_ids
     content: str | None = None,
     thumbnail_path: str | None = None,
 ):
-    file_path = save_upload_file(upload, owner_id)
-    checksum = checksum_for_file(file_path)
-    
-    # Kiểm tra file trùng lặp (Bỏ qua các file đã xóa mềm)
-    query = select(Document).where(
-        Document.checksum == checksum, 
-        Document.is_deleted == False
+    # BƯỚC 1: Đọc nội dung file vào RAM để tính checksum trước
+    #         (không ghi ra disk ở bước này)
+    content_bytes = await upload.read()
+    checksum = hashlib.sha256(content_bytes).hexdigest()
+
+    # BƯỚC 2: Kiểm tra trùng lặp (kể cả file trong thùng rác)
+    query_active = select(Document).where(
+        Document.checksum == checksum,
+        Document.is_deleted == False,
+    )
+    query_trash = select(Document).where(
+        Document.checksum == checksum,
+        Document.is_deleted == True,
     )
     if workspace_id:
-        query = query.where(Document.workspace_id == workspace_id)
+        query_active = query_active.where(
+            Document.workspace_id == workspace_id
+        )
+        query_trash = query_trash.where(
+            Document.workspace_id == workspace_id
+        )
     else:
-        query = query.where(Document.owner_id == owner_id, Document.workspace_id.is_(None))
-        
-    result = await db.execute(query)
-    existing = result.scalar_one_or_none()
-    
-    if existing:
-        raise ValueError(f"duplicate_document:{existing.id}")
+        query_active = query_active.where(
+            Document.owner_id == owner_id,
+            Document.workspace_id.is_(None)
+        )
+        query_trash = query_trash.where(
+            Document.owner_id == owner_id,
+            Document.workspace_id.is_(None)
+        )
+
+    # Tìm bản active trùng
+    existing_active = (
+        await db.execute(query_active)
+    ).scalar_one_or_none()
+    if existing_active:
+        raise ValueError(
+            f"duplicate_document:{existing_active.id}"
+        )
+
+    # Tìm bản trong thùng rác trùng — trả lỗi đặc biệt để FE xử lý
+    existing_trash = (
+        await db.execute(query_trash)
+    ).scalar_one_or_none()
+    if existing_trash:
+        raise ValueError(
+            f"in_trash:{existing_trash.id}:{existing_trash.title}"
+        )
+
+    # BƯỚC 3: Chỉ lưu file ra disk SAU KHI đã xác nhận không trùng
+    # Reset stream position vì đã read() ở bước 1
+    upload.file = io.BytesIO(content_bytes)
+    file_path = save_upload_file(upload, owner_id)
         
     document = Document(
         owner_id=owner_id,

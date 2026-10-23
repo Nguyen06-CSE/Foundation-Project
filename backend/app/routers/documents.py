@@ -33,7 +33,13 @@ from app.models.document import Document
 from app.models.folder import Folder
 from app.models.tag import Tag
 from app.models.user import User
-from app.schemas.document import DocumentOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments
+from app.schemas.document import (
+    BatchUploadOut,
+    DocumentOut,
+    DocumentTagsUpdate,
+    DocumentUpdate,
+    PaginatedDocuments,
+)
 from app.schemas.tag import TagOut
 from app.services.document_service import create_document_from_upload
 from app.services.file_processor import (
@@ -123,8 +129,17 @@ async def upload_document(
             content=content,
         )
     except ValueError as exc:
-        if str(exc).startswith("duplicate_document:"):
-            raise HTTPException(status_code=409, detail="Tài liệu đã tồn tại")
+        msg = str(exc)
+        if msg.startswith("duplicate_document:"):
+            doc_id = msg.split(":")[1]
+            raise HTTPException(409, {"code": "DUPLICATE", "document_id": int(doc_id)})
+        elif msg.startswith("in_trash:"):
+            parts = msg.split(":")
+            raise HTTPException(409, {
+                "code": "IN_TRASH",
+                "document_id": int(parts[1]),
+                "title": parts[2] if len(parts) > 2 else "tài liệu này"
+            })
         raise
 
     await db.commit()
@@ -146,7 +161,7 @@ async def upload_document(
     return document
 
 
-@router.post("/upload-batch", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
+@router.post("/upload-batch", response_model=BatchUploadOut, status_code=status.HTTP_201_CREATED)
 async def upload_batch_documents(
     background_tasks: BackgroundTasks,
     bundle_title: str = Form(...),
@@ -200,9 +215,49 @@ async def upload_batch_documents(
         total_size = 0
         storage_dir = f"storage/personal/{current_user.id}"
         os.makedirs(storage_dir, exist_ok=True)
+        skipped = []
 
         for file in files:
             content = await file.read()
+            checksum = hashlib.sha256(content).hexdigest()
+
+            # Kiểm tra trùng trong kho cá nhân (active + trash)
+            dup_active = (await db.execute(
+                select(Document).where(
+                    Document.checksum == checksum,
+                    Document.owner_id == current_user.id,
+                    Document.workspace_id.is_(None),
+                    Document.is_deleted == False,
+                )
+            )).scalar_one_or_none()
+
+            dup_trash = (await db.execute(
+                select(Document).where(
+                    Document.checksum == checksum,
+                    Document.owner_id == current_user.id,
+                    Document.workspace_id.is_(None),
+                    Document.is_deleted == True,
+                )
+            )).scalar_one_or_none()
+
+            if dup_active:
+                # Skip file này, ghi nhận vào danh sách skipped
+                skipped.append({
+                    "filename": file.filename,
+                    "reason": "duplicate",
+                    "existing_id": dup_active.id
+                })
+                continue
+
+            if dup_trash:
+                skipped.append({
+                    "filename": file.filename,
+                    "reason": "in_trash",
+                    "existing_id": dup_trash.id
+                })
+                continue
+
+            # Chỉ ghi file ra disk nếu không trùng
             total_size += len(content)
             unique_name = f"{uuid.uuid4().hex}_{file.filename}"
             file_path = f"{storage_dir}/{unique_name}"
@@ -210,8 +265,6 @@ async def upload_batch_documents(
             with open(file_path, "wb") as f:
                 f.write(content)
             saved_file_paths.append(file_path)
-
-            checksum = hashlib.sha256(content).hexdigest()
             
             from app.services.file_processor import get_file_group
             text_content = None
@@ -265,7 +318,10 @@ async def upload_batch_documents(
         )
         bundle_out = DocumentOut.model_validate(fresh_bundle)
         bundle_out.bundle_children_count = count_result.scalar() or 0
-        return bundle_out
+        return {
+            "bundle": bundle_out,
+            "skipped": skipped,
+        }
     except Exception as e:
         await db.rollback()
         for p in saved_file_paths:

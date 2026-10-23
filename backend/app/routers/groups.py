@@ -21,7 +21,7 @@ from app.models.workspace import Workspace
 from app.models.workspace_invitation import WorkspaceInvitation
 from app.models.workspace_member import WorkspaceMember
 from app.routers.documents import _process_document_background
-from app.schemas.document import DocumentOut, DocumentUpdate, PaginatedDocuments
+from app.schemas.document import BatchUploadOut, DocumentOut, DocumentUpdate, PaginatedDocuments
 from app.schemas.folder import AddTagsToFolder, FolderCreate, FolderOut, FolderUpdate
 from app.schemas.group import (
     BulkInviteCreate,
@@ -337,7 +337,7 @@ async def get_group_bundle_children(
     )
     return result.scalars().all()
 
-@router.post("/groups/{group_id}/documents/upload-batch", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
+@router.post("/groups/{group_id}/documents/upload-batch", response_model=BatchUploadOut, status_code=status.HTTP_201_CREATED)
 async def upload_group_batch_documents(
     group_id: int,
     background_tasks: BackgroundTasks,
@@ -392,9 +392,45 @@ async def upload_group_batch_documents(
         total_size = 0
         storage_dir = f"storage/groups/{group_id}"
         os.makedirs(storage_dir, exist_ok=True)
+        skipped = []
 
         for file in files:
             content = await file.read()
+            checksum = hashlib.sha256(content).hexdigest()
+
+            # Kiểm tra trùng trong nhóm (active + trash)
+            dup_active = (await db.execute(
+                select(Document).where(
+                    Document.checksum == checksum,
+                    Document.workspace_id == group_id,
+                    Document.is_deleted == False,
+                )
+            )).scalar_one_or_none()
+
+            dup_trash = (await db.execute(
+                select(Document).where(
+                    Document.checksum == checksum,
+                    Document.workspace_id == group_id,
+                    Document.is_deleted == True,
+                )
+            )).scalar_one_or_none()
+
+            if dup_active:
+                skipped.append({
+                    "filename": file.filename,
+                    "reason": "duplicate",
+                    "existing_id": dup_active.id
+                })
+                continue
+
+            if dup_trash:
+                skipped.append({
+                    "filename": file.filename,
+                    "reason": "in_trash",
+                    "existing_id": dup_trash.id
+                })
+                continue
+
             total_size += len(content)
             unique_name = f"{uuid.uuid4().hex}_{file.filename}"
             file_path = f"{storage_dir}/{unique_name}"
@@ -402,8 +438,6 @@ async def upload_group_batch_documents(
                 f.write(content)
             saved_file_paths.append(file_path)
 
-            checksum = hashlib.sha256(content).hexdigest()
-            
             from app.services.file_processor import get_file_group
             text_content = None
             if get_file_group(file.content_type or "", file.filename or "") == "text":
@@ -455,7 +489,10 @@ async def upload_group_batch_documents(
         )
         bundle_out = DocumentOut.model_validate(fresh_bundle)
         bundle_out.bundle_children_count = count_result.scalar() or 0
-        return bundle_out
+        return {
+            "bundle": bundle_out,
+            "skipped": skipped,
+        }
     except Exception as e:
         await db.rollback()
         for p in saved_file_paths:
@@ -490,18 +527,32 @@ async def upload_group_document(
         content = file_bytes.decode('utf-8', errors='replace')
         await file.seek(0)
         
-    document = await create_document_from_upload(
-        db,
-        upload=file,
-        owner_id=current_user.id,
-        title=title,
-        description=description,
-        category_id=category_id,
-        workspace_id=group_id,
-        tag_ids=tag_ids,
-        thumbnail_path=thumbnail_path,
-        content=content,
-    )
+    try:
+        document = await create_document_from_upload(
+            db,
+            upload=file,
+            owner_id=current_user.id,
+            title=title,
+            description=description,
+            category_id=category_id,
+            workspace_id=group_id,
+            tag_ids=tag_ids,
+            thumbnail_path=thumbnail_path,
+            content=content,
+        )
+    except ValueError as exc:
+        msg = str(exc)
+        if msg.startswith("duplicate_document:"):
+            doc_id = msg.split(":")[1]
+            raise HTTPException(409, {"code": "DUPLICATE", "document_id": int(doc_id)})
+        elif msg.startswith("in_trash:"):
+            parts = msg.split(":")
+            raise HTTPException(409, {
+                "code": "IN_TRASH",
+                "document_id": int(parts[1]),
+                "title": parts[2] if len(parts) > 2 else "tài liệu này"
+            })
+        raise
     await db.commit()
     await db.refresh(document)
     background_tasks.add_task(_process_document_background, document.id, document.file_path, document.file_type or "")

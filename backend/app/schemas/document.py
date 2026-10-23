@@ -77,3 +77,14 @@ class PaginatedDocuments(BaseModel):
     page: int
     page_size: int
     total_pages: int
+
+
+class SkippedFileOut(BaseModel):
+    filename: Optional[str] = None
+    reason: str
+    existing_id: int
+
+
+class BatchUploadOut(BaseModel):
+    bundle: DocumentOut
+    skipped: list[SkippedFileOut] = []

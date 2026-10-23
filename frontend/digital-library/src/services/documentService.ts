@@ -90,6 +90,9 @@ export const createDocumentService = (getBaseUrl: (groupId?: number | string) =>
 
   delete: (id: number, groupId?: number | string) =>
     api.delete(`${getBaseUrl(groupId)}/${id}`),
+
+  restoreOne: (docId: number) =>
+    api.post(`/trash/${docId}/restore`).then(r => r.data),
 })
 
 export const documentService = createDocumentService(() => '/documents')

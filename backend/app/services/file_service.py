@@ -25,3 +25,14 @@ def save_upload_file(upload: UploadFile, owner_id: int) -> str:
 
 def checksum_for_file(file_path: str) -> str:
     return compute_file_checksum(file_path)
+
+
+def safe_remove(path: str | None) -> None:
+    """Xóa file vật lý, bỏ qua nếu không tồn tại hoặc path là None."""
+    if not path or path == "__bundle__":
+        return
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+
