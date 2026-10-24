@@ -24,6 +24,7 @@ from app.routers.trash import router as trash_router
 from app.routers.users import router as users_router
 from app.routers.workspaces import router as workspaces_router
 from app.routers.library import router as library_router
+from app.routers.stats import router as stats_router
 
 app = FastAPI(
     title="Thư Viện Số - Quản Lí Tài Liệu",
@@ -75,6 +76,7 @@ app.include_router(folders_router)
 app.include_router(groups_router)
 app.include_router(workspace_tags.router)
 app.include_router(library_router)
+app.include_router(stats_router)
 
 
 @app.on_event("startup")
