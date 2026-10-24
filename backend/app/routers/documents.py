@@ -432,7 +432,7 @@ async def list_documents(
         if not folder or folder.owner_id != current_user.id:
             raise HTTPException(status_code=404, detail="Không tìm thấy thư mục")
         folder_docs = await get_documents_by_folder(
-            db, current_user.id, folder_id, page, page_size
+            db, current_user.id, folder_id, page, page_size, workspace_id=folder.workspace_id
         )
         items = folder_docs["items"]
         bundle_ids = [d.id for d in items if getattr(d, "is_bundle", False)]
@@ -471,8 +471,10 @@ async def list_documents(
             Document.bundle_parent_id.is_(None),
         )
     )
-    if workspace_id:
+    if workspace_id is not None:
         query = query.where(Document.workspace_id == workspace_id)
+    else:
+        query = query.where(Document.workspace_id.is_(None))
 
     count_result = await db.execute(select(func.count()).select_from(query.subquery()))
     total = count_result.scalar() or 0
@@ -516,6 +518,7 @@ async def get_document_file_types(
         select(Document.file_type)
         .where(
             Document.owner_id == current_user.id,
+            Document.workspace_id.is_(None),
             Document.is_deleted == False,
             Document.is_public == False,
             Document.file_type.is_not(None),

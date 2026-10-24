@@ -23,6 +23,7 @@ async def list_trash(
     result = await db.execute(
         select(Document).where(
             Document.owner_id == current_user.id,
+            Document.workspace_id.is_(None),
             Document.is_deleted == True
         )
     )

@@ -33,3 +33,12 @@ async def test_remove_file_if_unreferenced(monkeypatch):
     await remove_file_if_unreferenced(mock_db, "storage/6/test.pdf", exclude_doc_ids={1})
     assert mock_safe_remove.call_count == 1
     mock_safe_remove.assert_called_once_with("storage/6/test.pdf")
+
+
+def test_personal_documents_filter_isolation(client, fake_session):
+    """Xác nhận khi không truyền workspace_id thì câu truy vấn lọc workspace_id IS NULL"""
+    res = client.get("/documents/")
+    assert res.status_code == 200
+    sql_queries = [str(q[0]) for q in fake_session.queries]
+    assert any("documents.workspace_id IS NULL" in q for q in sql_queries)
+
