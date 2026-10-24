@@ -74,6 +74,10 @@ async def _process_document_background(doc_id: int, file_path: str, mime_type: s
             if not doc:
                 return
 
+            # Nếu tài liệu đã có đầy đủ thumbnail, markdown và content (tái sử dụng từ CAS), bỏ qua xử lý nặng
+            if doc.thumbnail_path and doc.markdown_path and doc.content:
+                return
+
             effective_path = file_path
             # Nếu file không tồn tại trên ổ đĩa local, tải tạm thời từ Cloudflare R2 về để xử lý
             if not os.path.exists(effective_path):
@@ -302,16 +306,30 @@ async def upload_batch_documents(
                 })
                 continue
 
-            # Chỉ tải lên R2 nếu không trùng
-            total_size += len(content)
-            await file.seek(0)
-            file_path = await save_upload_file(file, current_user.id)
-            saved_file_paths.append(file_path)
+            # Single-Instance Storage: Tái sử dụng file nếu checksum đã có trên hệ thống
+            query_storage = select(Document).where(
+                Document.checksum == checksum,
+                Document.file_path != "__bundle__",
+                Document.file_path.is_not(None)
+            )
+            existing_storage = (await db.execute(query_storage)).scalars().first()
 
-            from app.services.file_processor import get_file_group
-            text_content = None
-            if get_file_group(file.content_type or "", file.filename or "") == "text":
-                text_content = content.decode("utf-8", errors="replace")
+            if existing_storage:
+                file_path = existing_storage.file_path
+                thumbnail_path = existing_storage.thumbnail_path
+                markdown_path = existing_storage.markdown_path
+                text_content = existing_storage.content
+            else:
+                total_size += len(content)
+                await file.seek(0)
+                file_path = await save_upload_file(file, current_user.id)
+                saved_file_paths.append(file_path)
+                thumbnail_path = None
+                markdown_path = None
+                from app.services.file_processor import get_file_group
+                text_content = None
+                if get_file_group(file.content_type or "", file.filename or "") == "text":
+                    text_content = content.decode("utf-8", errors="replace")
             
             child = Document(
                 owner_id=current_user.id,
@@ -319,6 +337,8 @@ async def upload_batch_documents(
                 category_id=category_id,
                 title=file.filename or "Untitled",
                 file_path=file_path,
+                thumbnail_path=thumbnail_path,
+                markdown_path=markdown_path,
                 file_type=file.content_type or "application/octet-stream",
                 file_size=len(content),
                 checksum=checksum,

@@ -956,3 +956,58 @@ Tiến trình lập lịch nền `AsyncIOScheduler` được cấu hình khởi 
 3. **Starlette / FastAPI Documentation**: *Request Data and `UploadFile` Implementation* - Cơ chế quản lý bộ nhớ đệm SpooledTemporaryFile trong ASGI Framework.
 4. **PostgreSQL Global Development Group**: *PostgreSQL 15 Documentation - Chapter on Storage and Write-Ahead Logging (WAL)* - Tài liệu tối ưu lưu trữ nhị phân và nhật ký giao dịch.
 5. **Silberschatz, Galvin, Gagne**: *Operating System Concepts (10th Edition)* - Kiến trúc hệ thống tệp, Inodes và quản lý khối lưu trữ.
+
+---
+---
+### 1. NGUYÊN TẮC CỐT LÕI CỦA KIẾN TRÚC BẠN YÊU CẦU
+   Tầng                       | Cơ chế hoạt động
+  ----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   Database (Logic)           | Độc lập hoàn toàn giữa các không gian:• User A (cá nhân), User B (cá nhân), Nhóm 1, Nhóm 2, Kho cộng đồng đều sở hữu bản ghi Document riêng.• Mỗi bản ghi có title, description, owner_id,
+                              | workspace_id, tags, quyền sửa/xóa hoàn toàn độc lập, không ai đụng chạm ai.
+   Storage (Cloudflare R2)    | Duy nhất một file vật lý (Single-Instance):• Dù có 10 hay 100 bản ghi Document ở các không gian khác nhau, nếu nội dung tệp giống nhau (cùng checksum SHA-256), tất cả đều trỏ chung vào đúng 1
+                              | file_path trên Cloudflare R2.• Không bao giờ upload lại file binary nếu checksum đã có trên hệ thống.
+   Vòng đời & Xóa (Lifecycle) | Reference Counting (Kiểm tra tham chiếu):• Khi một bản ghi bị xóa vĩnh viễn, hệ thống đếm xem còn bản ghi Document nào khác (ở cá nhân khác, nhóm khác hay kho cộng đồng) đang dùng chung file_path đó
+                              | không.• Nếu còn ≥ 1 bên dùng: Chỉ xóa record DB của bên yêu cầu xóa, giữ nguyên 100% file vật lý trên R2.• Nếu không còn ai dùng (count = 0): Mới thực sự xóa file trên R2.
+  ──────
+  ### 2. PHÂN TÍCH 5 KỊCH BẢN CỤ THỂ THEO ĐÚNG YÊU CẦU CỦA BẠN
+
+  #### Kịch bản 1: Cùng 1 người upload file vào Cá nhân rồi upload vào Nhóm
+
+  • Tại Cá nhân: User upload file X. File X chưa có trên R2 → Upload lên R2, tạo Document #1 (cá nhân).
+  • Tại Nhóm: User upload file X vào nhóm.
+      • Kiểm tra trùng nghiệp vụ: Nhóm này chưa có file X → Cho phép.
+      • Kiểm tra Storage: Thấy file X đã tồn tại trên R2 (nhờ kiểm tra checksum toàn hệ thống) → Không upload R2 nữa, tạo Document #2 (của nhóm) nhưng gán thẳng file_path, thumbnail_path, markdown_path của Document #1.
+  • Kết quả: User thấy tài liệu xuất hiện ở cả 2 nơi bình thường, nhưng trên R2 chỉ tốn dung lượng đúng 1 lần.
+
+  #### Kịch bản 2: Hai người lạ không quen biết, khác nhóm cùng upload 1 file
+
+  • User A upload file tài liệu môn học vào kho riêng của A → Lưu R2, tạo Document A.
+  • User B (ở trường khác, nhóm khác) cũng upload đúng file đó → Hệ thống nhận diện checksum đã tồn tại trên R2 → Không upload lên R2, tạo Document B riêng của User B trỏ vào file đã có.
+  • User A và User B không hề nhìn thấy tài liệu của nhau, nhưng Cloudflare R2 tiết kiệm được 50% dung lượng.
+
+  #### Kịch bản 3: Chia sẻ từ Kho cá nhân vào Nhóm (share_document_to_group)
+
+  • Khi chọn "Chia sẻ vào nhóm": Tạo riêng một Document mới thuộc về nhóm (workspace_id = group_id), gán source_document_id = doc_gốc.id và trỏ chung vào file_path của kho cá nhân.
+  • Không copy tệp vật lý: Sau này nhóm có sửa tên, xóa vĩnh viễn khỏi nhóm thì kho cá nhân của người chia sẻ hoàn toàn không bị ảnh hưởng.
+
+  #### Kịch bản 4: Xóa vĩnh viễn (Hard delete / Purge / Tự động dọn dẹp sau 30 ngày)
+
+  • Khi gọi DELETE /trash/{doc_id}/purge hoặc Scheduler dọn rác 30 ngày:
+      • Trước khi gọi hàm xóa R2, chạy truy vấn:
+        SELECT COUNT(*) FROM documents WHERE file_path = :file_path AND id != :doc_id;
+
+      • Nếu Count > 0: (Vẫn còn bản ghi khác trỏ vào):
+          • → Chỉ xóa bản ghi Document trong Database.
+          • → Bỏ qua việc xóa file vật lý trên R2. Các bên khác vẫn xem/tải file bình thường.
+      • Nếu Count == 0: (Không còn ai trỏ vào file này nữa):
+          • → Xóa bản ghi Database.
+          • → Gọi s3_client.delete_object xóa sạch file trên Cloudflare R2 (giải phóng dung lượng triệt để).
+      • Làm tương tự cho cả thumbnail_path và markdown_path.
+
+
+  #### Kịch bản 5: Bảo vệ "Kho tài liệu cộng đồng" (Community Library)
+
+  • Tài liệu thuộc kho cộng đồng là những tài liệu có is_public == True (đã được Admin duyệt qua CommunitySubmission).
+  • Quy tắc phân quyền: Người dùng thông thường không có quyền xóa tài liệu cộng đồng (chỉ Admin mới có quyền xóa).
+  • Đảm bảo tính toàn vẹn: Nếu người dùng tải tài liệu từ cộng đồng về cá nhân, hoặc người đóng góp ban đầu xóa file trong kho cá nhân của họ → Nhờ cơ chế Reference Check ở Kịch bản 4, file vật lý trong kho cộng đồng không bao giờ
+  bị mất.

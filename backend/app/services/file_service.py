@@ -4,7 +4,11 @@ import io
 import os
 import uuid
 from pathlib import Path
+from typing import TYPE_CHECKING
 from fastapi import UploadFile
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings, s3_client
 from app.utils.checksum import compute_file_checksum
@@ -145,3 +149,29 @@ def safe_remove(path: str | None) -> None:
             os.remove(path)
     except OSError:
         pass
+
+
+async def remove_file_if_unreferenced(
+    db: AsyncSession, 
+    path: str | None, 
+    exclude_doc_ids: list[int] | set[int] | None = None
+) -> None:
+    """Xóa file trên storage chỉ khi không còn bất kỳ Document nào khác tham chiếu tới nó."""
+    if not path or path == "__bundle__":
+        return
+    from sqlalchemy import func, or_, select
+    from app.models.document import Document
+
+    query = select(func.count(Document.id)).where(
+        or_(
+            Document.file_path == path,
+            Document.thumbnail_path == path,
+            Document.markdown_path == path,
+        )
+    )
+    if exclude_doc_ids:
+        query = query.where(Document.id.not_in(exclude_doc_ids))
+    count = (await db.execute(query)).scalar() or 0
+    if count == 0:
+        safe_remove(path)
+

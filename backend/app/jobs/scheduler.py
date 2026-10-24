@@ -11,7 +11,7 @@ from app.models.document import Document
 from app.models.workspace import Workspace
 from app.models.workspace_invitation import WorkspaceInvitation
 from app.models.workspace_member import WorkspaceMember
-from app.services.file_service import safe_remove as _safe_remove
+from app.services.file_service import remove_file_if_unreferenced, safe_remove as _safe_remove
 from app.services.group_service import copy_file
 
 scheduler = AsyncIOScheduler()
@@ -96,9 +96,9 @@ async def cleanup_orphaned_documents() -> None:
             )
         )
         for doc in result.scalars().all():
-            _safe_remove(doc.file_path)
-            _safe_remove(doc.thumbnail_path)
-            _safe_remove(doc.markdown_path)
+            await remove_file_if_unreferenced(db, doc.file_path, exclude_doc_ids={doc.id})
+            await remove_file_if_unreferenced(db, doc.thumbnail_path, exclude_doc_ids={doc.id})
+            await remove_file_if_unreferenced(db, doc.markdown_path, exclude_doc_ids={doc.id})
             await db.delete(doc)
         await db.commit()
 
@@ -114,20 +114,22 @@ async def cleanup_deleted_documents() -> None:
         )
         docs = result.scalars().all()
         for doc in docs:
+            exclude_ids = {doc.id}
             if doc.is_bundle:
                 children = (await db.execute(
                     select(Document).where(
                         Document.bundle_parent_id == doc.id
                     )
                 )).scalars().all()
+                exclude_ids.update(c.id for c in children)
                 for child in children:
-                    _safe_remove(child.file_path)
-                    _safe_remove(child.thumbnail_path)
-                    _safe_remove(child.markdown_path)
+                    await remove_file_if_unreferenced(db, child.file_path, exclude_doc_ids=exclude_ids)
+                    await remove_file_if_unreferenced(db, child.thumbnail_path, exclude_doc_ids=exclude_ids)
+                    await remove_file_if_unreferenced(db, child.markdown_path, exclude_doc_ids=exclude_ids)
                     await db.delete(child)
-            _safe_remove(doc.file_path)
-            _safe_remove(doc.thumbnail_path)
-            _safe_remove(doc.markdown_path)
+            await remove_file_if_unreferenced(db, doc.file_path, exclude_doc_ids=exclude_ids)
+            await remove_file_if_unreferenced(db, doc.thumbnail_path, exclude_doc_ids=exclude_ids)
+            await remove_file_if_unreferenced(db, doc.markdown_path, exclude_doc_ids=exclude_ids)
             await db.delete(doc)
         await db.commit()
 

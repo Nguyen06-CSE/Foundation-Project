@@ -437,16 +437,30 @@ async def upload_group_batch_documents(
                 })
                 continue
 
-            # Chỉ tải lên R2 nếu không trùng
-            total_size += len(content)
-            await file.seek(0)
-            file_path = await save_upload_file(file, current_user.id)
-            saved_file_paths.append(file_path)
+            # Single-Instance Storage: Tái sử dụng file nếu checksum đã có trên hệ thống
+            query_storage = select(Document).where(
+                Document.checksum == checksum,
+                Document.file_path != "__bundle__",
+                Document.file_path.is_not(None)
+            )
+            existing_storage = (await db.execute(query_storage)).scalars().first()
 
-            from app.services.file_processor import get_file_group
-            text_content = None
-            if get_file_group(file.content_type or "", file.filename or "") == "text":
-                text_content = content.decode("utf-8", errors="replace")
+            if existing_storage:
+                file_path = existing_storage.file_path
+                thumbnail_path = existing_storage.thumbnail_path
+                markdown_path = existing_storage.markdown_path
+                text_content = existing_storage.content
+            else:
+                total_size += len(content)
+                await file.seek(0)
+                file_path = await save_upload_file(file, current_user.id)
+                saved_file_paths.append(file_path)
+                thumbnail_path = None
+                markdown_path = None
+                from app.services.file_processor import get_file_group
+                text_content = None
+                if get_file_group(file.content_type or "", file.filename or "") == "text":
+                    text_content = content.decode("utf-8", errors="replace")
                 
             child = Document(
                 owner_id=current_user.id,
@@ -454,6 +468,8 @@ async def upload_group_batch_documents(
                 category_id=category_id,
                 title=file.filename or "Untitled",
                 file_path=file_path,
+                thumbnail_path=thumbnail_path,
+                markdown_path=markdown_path,
                 file_type=file.content_type or "application/octet-stream",
                 file_size=len(content),
                 checksum=checksum,

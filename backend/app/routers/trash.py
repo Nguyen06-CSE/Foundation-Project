@@ -10,7 +10,7 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.models.document import Document
 from app.models.user import User
-from app.services.file_service import safe_remove as _safe_remove
+from app.services.file_service import remove_file_if_unreferenced, safe_remove as _safe_remove
 
 router = APIRouter(prefix="/trash", tags=["trash"])
 
@@ -69,20 +69,29 @@ async def hard_delete_document(
     if not document:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu trong thùng rác")
 
-    _safe_remove(document.file_path)
-    _safe_remove(document.thumbnail_path)
-    _safe_remove(document.markdown_path)
+    # Bảo vệ kho tài liệu cộng đồng: chỉ admin/superadmin mới có thể xóa vĩnh viễn
+    if document.is_public and current_user.role not in ["admin", "superadmin", "faculty_admin"]:
+        raise HTTPException(status_code=403, detail="Chỉ quản trị viên mới có thể xóa tài liệu trong kho cộng đồng")
 
-    # Nếu document là bundle (is_bundle=True), xóa file của children trước:
+    exclude_ids = {document.id}
+    children = []
     if document.is_bundle:
         children_result = await db.execute(
             select(Document).where(Document.bundle_parent_id == document.id)
         )
-        for child in children_result.scalars().all():
-            _safe_remove(child.file_path)
-            _safe_remove(child.thumbnail_path)
-            _safe_remove(child.markdown_path)
-            await db.delete(child)
+        children = list(children_result.scalars().all())
+        exclude_ids.update(c.id for c in children)
+
+    # Nếu document là bundle (is_bundle=True), xóa file của children trước (nếu không còn ai tham chiếu):
+    for child in children:
+        await remove_file_if_unreferenced(db, child.file_path, exclude_doc_ids=exclude_ids)
+        await remove_file_if_unreferenced(db, child.thumbnail_path, exclude_doc_ids=exclude_ids)
+        await remove_file_if_unreferenced(db, child.markdown_path, exclude_doc_ids=exclude_ids)
+        await db.delete(child)
+
+    await remove_file_if_unreferenced(db, document.file_path, exclude_doc_ids=exclude_ids)
+    await remove_file_if_unreferenced(db, document.thumbnail_path, exclude_doc_ids=exclude_ids)
+    await remove_file_if_unreferenced(db, document.markdown_path, exclude_doc_ids=exclude_ids)
 
     await db.delete(document)
     await db.commit()

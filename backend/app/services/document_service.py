@@ -74,8 +74,24 @@ async def create_document_from_upload(
             f"in_trash:{existing_trash.id}:{existing_trash.title}"
         )
 
-    # 3. Upload trực tiếp lên Cloudflare R2 sau khi xác nhận không trùng
-    file_path = await save_upload_file(upload, owner_id)
+    # 3. Single-Instance Storage: Tái sử dụng file vật lý nếu checksum đã tồn tại trên hệ thống
+    query_existing_storage = select(Document).where(
+        Document.checksum == checksum,
+        Document.file_path != "__bundle__",
+        Document.file_path.is_not(None)
+    )
+    existing_storage_doc = (await db.execute(query_existing_storage)).scalars().first()
+
+    if existing_storage_doc:
+        file_path = existing_storage_doc.file_path
+        if not thumbnail_path:
+            thumbnail_path = existing_storage_doc.thumbnail_path
+        markdown_path = existing_storage_doc.markdown_path
+        if not content:
+            content = existing_storage_doc.content
+    else:
+        file_path = await save_upload_file(upload, owner_id)
+        markdown_path = None
         
     document = Document(
         owner_id=owner_id,
@@ -85,6 +101,7 @@ async def create_document_from_upload(
         description=description,
         file_path=file_path,
         thumbnail_path=thumbnail_path,
+        markdown_path=markdown_path,
         file_type=upload.content_type,
         file_size=file_size,
         checksum=checksum,

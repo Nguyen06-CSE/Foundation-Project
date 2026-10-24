@@ -628,9 +628,6 @@ async def save_community_document_to_personal(
     if not src_doc or not src_doc.is_public or src_doc.is_deleted:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu")
 
-    dst_dir = f"storage/personal/{current_user.id}/from_community"
-    new_path = await copy_file_local(src_doc.file_path, dst_dir, os.path.basename(src_doc.file_path))
-
     new_doc = Document(
         owner_id=current_user.id,
         workspace_id=None,
@@ -639,11 +636,12 @@ async def save_community_document_to_personal(
         title=src_doc.title,
         description=src_doc.description,
         category_id=src_doc.category_id,
-        file_path=new_path,
+        file_path=src_doc.file_path,
         thumbnail_path=src_doc.thumbnail_path,
+        markdown_path=src_doc.markdown_path,
         file_type=src_doc.file_type,
         file_size=src_doc.file_size,
-        checksum=compute_file_checksum(new_path),
+        checksum=src_doc.checksum,
         content=src_doc.content,
         metadata_=src_doc.metadata_,
     )
@@ -1079,15 +1077,7 @@ async def approve_submission(
     if current_user.role == "faculty_admin" and current_user.faculty_id != subject.faculty_id:
         raise HTTPException(status_code=403, detail="Bạn chỉ có thể duyệt tài liệu thuộc khoa của mình")
 
-    # 1. Copy file vật lý vào storage/community/{faculty_code}/{subject_code}/
-    fac_code = faculty.code if faculty else "GENERAL"
-    subj_code = subject.code
-    dst_dir = f"storage/community/{fac_code}/{subj_code}"
-    new_file_path = await copy_file_local(
-        source_doc.file_path, dst_dir, os.path.basename(source_doc.file_path)
-    )
-
-    # 2. Tạo document công khai mới
+    # 2. Tạo document công khai mới trỏ vào cùng file vật lý
     metadata = dict(source_doc.metadata_ or {})
     if submission.doc_type:
         metadata["doc_type"] = submission.doc_type
@@ -1102,11 +1092,12 @@ async def approve_submission(
         source_document_id=source_doc.id,
         title=source_doc.title,
         description=source_doc.description,
-        file_path=new_file_path,
+        file_path=source_doc.file_path,
         thumbnail_path=source_doc.thumbnail_path,
+        markdown_path=source_doc.markdown_path,
         file_type=source_doc.file_type,
         file_size=source_doc.file_size,
-        checksum=compute_file_checksum(new_file_path),
+        checksum=source_doc.checksum,
         content=source_doc.content,
         metadata_=metadata,
     )
