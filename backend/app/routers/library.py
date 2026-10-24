@@ -401,8 +401,17 @@ async def download_community_document(
     filename = f"{doc.title}.{doc.file_type}" if doc.file_type and not doc.title.endswith(f".{doc.file_type}") else doc.title
     encoded_filename = quote(filename)
 
-    # 1. Thử lấy từ Cloudflare R2 / S3
-    if not os.path.exists(file_path):
+    # 1. Thử đọc từ local disk
+    if os.path.exists(file_path):
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type="application/octet-stream",
+            content_disposition_type="attachment",
+        )
+
+    # 2. Thử lấy từ Cloudflare R2 / S3 nếu có cấu hình
+    if s3_client and settings.BUCKET_NAME:
         key = file_path
         if key.startswith("http://") or key.startswith("https://"):
             if "/storage/" in key:
@@ -432,15 +441,6 @@ async def download_community_document(
             )
         except Exception:
             pass
-
-    # 2. Thử đọc từ local disk
-    if os.path.exists(file_path):
-        return FileResponse(
-            path=file_path,
-            filename=filename,
-            media_type="application/octet-stream",
-            content_disposition_type="attachment",
-        )
 
     raise HTTPException(status_code=404, detail="File vật lý không tồn tại trên hệ thống lưu trữ")
 

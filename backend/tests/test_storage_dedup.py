@@ -42,3 +42,34 @@ def test_personal_documents_filter_isolation(client, fake_session):
     sql_queries = [str(q[0]) for q in fake_session.queries]
     assert any("documents.workspace_id IS NULL" in q for q in sql_queries)
 
+
+@pytest.mark.asyncio
+async def test_local_storage_save_and_url(tmp_path, monkeypatch):
+    """Xác nhận khi chạy ở chế độ local thì file được ghi vào đĩa local và URL trả về dạng relative"""
+    import io
+    from fastapi import UploadFile
+    from app.services.file_service import save_upload_file, get_file_url, safe_remove
+    from app.core.config import settings
+
+    monkeypatch.setattr(settings, "STORAGE_BACKEND", "local")
+
+    file_content = b"hello local storage test content"
+    upload = UploadFile(
+        file=io.BytesIO(file_content),
+        filename="test_doc.txt"
+    )
+
+    file_key = await save_upload_file(upload, owner_id=999)
+    try:
+        assert file_key.startswith("storage/999/")
+        from pathlib import Path
+        assert Path(file_key).exists()
+        assert Path(file_key).read_bytes() == file_content
+
+        url = get_file_url(file_key)
+        assert url == f"/{file_key}"
+    finally:
+        safe_remove(file_key)
+        assert not Path(file_key).exists()
+
+
