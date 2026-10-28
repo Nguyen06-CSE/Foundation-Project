@@ -1,6 +1,13 @@
 # Tài liệu Kỹ thuật Chức năng: Activity Tracking (Theo dõi Hoạt động)
 
 > Tài liệu hướng dẫn và đặc tả kỹ thuật hệ thống Activity Tracking & Thống kê cho nền tảng Thư Viện Số.
+> 
+> 📚 **Bộ tài liệu kỹ thuật chi tiết theo từng chuyên đề được lưu trữ tại [docs/feat/activity-tracking](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/feat/activity-tracking/README.md):**
+> - [Tổng quan, Bối cảnh & Luồng Sequence Diagrams (README.md)](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/feat/activity-tracking/README.md)
+> - [Thiết kế Cơ sở Dữ liệu, ERD & Indexes (DATABASE.md)](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/feat/activity-tracking/DATABASE.md)
+> - [Quy tắc Nghiệp vụ, Deduplication & Trending Score (BUSINESS_RULES.md)](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/feat/activity-tracking/BUSINESS_RULES.md)
+> - [Đặc tả RESTful API & Error Responses (API.md)](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/feat/activity-tracking/API.md)
+> - [Hướng dẫn Triển khai, Vận hành Job & Test Cases (IMPLEMENTATION.md)](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/feat/activity-tracking/IMPLEMENTATION.md)
 
 ---
 
