@@ -1,6 +1,7 @@
 // src/components/shared/documents/DocumentDetail/components/DocumentTagSection.tsx
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Plus, X, Search, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
@@ -19,17 +20,6 @@ interface DocumentTagSectionProps {
   isRemovingTag: boolean;
 }
 
-/**
- * DocumentTagSection - Quản lý và hiển thị nhãn dán (Tags) của tài liệu
- *
- * Tính năng chính:
- * 1. Hiển thị danh sách tag hiện tại kèm nút gỡ nhanh từng tag
- * 2. Popover quản lý tag:
- *    - Tìm kiếm tag có sẵn trong hệ thống
- *    - Tạo nhanh tag mới với mã màu tùy chọn
- *    - Chọn / bỏ chọn nhiều tag cùng lúc
- *    - Nút Lưu thay đổi và Hủy bỏ
- */
 export function DocumentTagSection({
   tags,
   canManageTags,
@@ -47,14 +37,35 @@ export function DocumentTagSection({
   const [tagSearchQuery, setTagSearchQuery] = useState("");
   const [selectedColor, setSelectedColor] = useState(COLORS[0].hex);
 
-  // Cập nhật selectedTags mỗi khi props tags thay đổi từ server
+  // Tọa độ để định vị Popover khi dùng Portal
+  const [popoverCoords, setPopoverCoords] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     setSelectedTags(tags);
   }, [tags]);
 
-  /**
-   * Đảo trạng thái chọn / bỏ chọn một tag
-   */
+  // Cập nhật vị trí Popover mỗi khi mở hoặc resize màn hình
+  const updatePosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setPopoverCoords({
+        top: rect.bottom + window.scrollY + 8, // Hiện ngay phía dưới nút + offset 8px
+        left: rect.left + window.scrollX,
+      });
+    }
+  };
+
+  const handleTogglePopover = () => {
+    if (!isTagEditorOpen) {
+      setSelectedTags([...tags]);
+      setTagSearchQuery("");
+      setSelectedColor(COLORS[0].hex);
+      updatePosition();
+    }
+    setIsTagEditorOpen((prev) => !prev);
+  };
+
   const toggleTag = (tag: TagType) => {
     setSelectedTags((prev) => {
       const exists = prev.some((item) => item.id === tag.id);
@@ -63,9 +74,6 @@ export function DocumentTagSection({
     });
   };
 
-  /**
-   * Tạo tag mới từ ô tìm kiếm
-   */
   const handleCreateNewTag = () => {
     const trimmed = tagSearchQuery.trim();
     if (!trimmed) return;
@@ -73,7 +81,6 @@ export function DocumentTagSection({
     onCreateTag(
       { name: trimmed, color: selectedColor },
       (createdTag) => {
-        // Tự động thêm tag vừa tạo vào danh sách đã chọn
         setSelectedTags((prev) => {
           if (prev.some((t) => t.id === createdTag.id)) return prev;
           return [...prev, createdTag];
@@ -84,9 +91,6 @@ export function DocumentTagSection({
     );
   };
 
-  /**
-   * Lưu các tag đã chọn lên server
-   */
   const handleSave = () => {
     const tagIds = selectedTags
       .map((tag) => Number(tag.id))
@@ -96,9 +100,6 @@ export function DocumentTagSection({
     setTagSearchQuery("");
   };
 
-  /**
-   * Hủy bỏ chỉnh sửa và khôi phục trạng thái cũ
-   */
   const handleCancel = () => {
     setSelectedTags(tags);
     setTagSearchQuery("");
@@ -151,15 +152,9 @@ export function DocumentTagSection({
         {/* Nút mở Popover gán tag */}
         {canManageTags && (
           <button
+            ref={buttonRef}
             type="button"
-            onClick={() => {
-              if (!isTagEditorOpen) {
-                setSelectedTags([...tags]);
-                setTagSearchQuery("");
-                setSelectedColor(COLORS[0].hex);
-              }
-              setIsTagEditorOpen((prev) => !prev);
-            }}
+            onClick={handleTogglePopover}
             className={cn(
               "inline-flex h-7 w-7 items-center justify-center rounded-full border border-dashed text-gray-400 transition-colors",
               isTagEditorOpen
@@ -173,131 +168,146 @@ export function DocumentTagSection({
         )}
       </div>
 
-      {/* POPUP TAG EDITOR */}
-      {isTagEditorOpen && canManageTags && (
-        <div className="absolute top-full left-0 mt-3 w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 z-50 animate-in fade-in zoom-in-95">
-          <div className="mb-4">
-            <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-gray-700">
-              <span>Gắn nhãn dán (Tags)</span>
-              <span className="text-xs font-normal text-gray-400">
-                Đã chọn {selectedTagIds.length}
-              </span>
-            </label>
-
-            <div className="rounded-lg border border-gray-200 bg-gray-50/50 p-3">
-              {/* Ô tìm kiếm */}
-              <div className="relative mb-3">
-                <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  value={tagSearchQuery}
-                  onChange={(e) => setTagSearchQuery(e.target.value)}
-                  placeholder="Tìm hoặc tạo tag mới..."
-                  className="w-full rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-                />
+      {/* POPUP TAG EDITOR (Dùng Portal để đẩy ra ngoài DOM cha) */}
+      {isTagEditorOpen &&
+        canManageTags &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9999] bg-transparent"
+            onClick={() => setIsTagEditorOpen(false)} // Click ra ngoài tự đóng
+          >
+            <div
+              className="absolute w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 animate-in fade-in zoom-in-95"
+              style={{
+                top: `${popoverCoords.top}px`,
+                left: `${popoverCoords.left - 50}px`,
+              }}
+              onClick={(e) => e.stopPropagation()} // Tránh click trong menu bị đóng
+            >
+              {/* Tiêu đề & Đã chọn (nằm riêng) */}
+              <div className="mb-4">
+                <label className="flex items-center justify-between text-sm font-medium text-gray-700">
+                  <span>Gắn nhãn dán (Tags)</span>
+                  <span className="text-xs font-normal text-gray-400">
+                    Đã chọn {selectedTagIds.length}
+                  </span>
+                </label>
               </div>
 
-              {/* Danh sách tag gợi ý */}
-              <div className="max-h-36 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
-                {isLoadingTags ? (
-                  <div className="w-full text-center text-xs text-gray-500 py-2">
-                    Đang tải nhãn dán...
-                  </div>
-                ) : tagSearchQuery.trim() !== "" && !isExactMatch ? (
-                  <button
-                    type="button"
-                    onClick={handleCreateNewTag}
-                    disabled={isCreatingTag}
-                    className="flex items-center gap-1 rounded-full border border-dashed border-primary-500 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    {isCreatingTag
-                      ? "Đang tạo..."
-                      : `Tạo mới "${tagSearchQuery.trim()}"`}
-                  </button>
-                ) : null}
+              {/* Ô tìm kiếm & Danh sách tag */}
+              <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50/50 p-3">
+                <div className="relative mb-3">
+                  <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    value={tagSearchQuery}
+                    onChange={(e) => setTagSearchQuery(e.target.value)}
+                    placeholder="Tìm hoặc tạo tag mới..."
+                    className="w-full rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  />
+                </div>
 
-                {filteredTags.length > 0
-                  ? filteredTags.map((tag) => {
-                      const isSelected = selectedTagIds.includes(tag.id);
+                <div className="max-h-36 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
+                  {isLoadingTags ? (
+                    <div className="w-full text-center text-xs text-gray-500 py-2">
+                      Đang tải nhãn dán...
+                    </div>
+                  ) : tagSearchQuery.trim() !== "" && !isExactMatch ? (
+                    <button
+                      type="button"
+                      onClick={handleCreateNewTag}
+                      disabled={isCreatingTag}
+                      className="flex items-center gap-1 rounded-full border border-dashed border-primary-500 bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      {isCreatingTag
+                        ? "Đang tạo..."
+                        : `Tạo mới "${tagSearchQuery.trim()}"`}
+                    </button>
+                  ) : null}
+
+                  {filteredTags.length > 0
+                    ? filteredTags.map((tag) => {
+                        const isSelected = selectedTagIds.includes(tag.id);
+                        return (
+                          <button
+                            key={tag.id}
+                            type="button"
+                            onClick={() => toggleTag(tag)}
+                            className={cn(
+                              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200",
+                              isSelected
+                                ? "bg-primary-600 text-white shadow-sm ring-1 ring-primary-600"
+                                : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600",
+                            )}
+                          >
+                            {tag.name}
+                            {isSelected && <Check className="h-3 w-3" />}
+                          </button>
+                        );
+                      })
+                    : (isExactMatch || tagSearchQuery.trim() === "") &&
+                      !isLoadingTags && (
+                        <div className="w-full text-center text-xs text-gray-500 py-2">
+                          Không tìm thấy tag phù hợp.
+                        </div>
+                      )}
+                </div>
+              </div>
+
+              {/* Chọn màu sắc cho tag mới */}
+              {tagSearchQuery.trim() !== "" && !isExactMatch && (
+                <div className="mb-4 pt-2 border-t border-gray-100">
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Màu sắc tag mới
+                  </label>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {COLORS.map((color) => {
+                      const isSelected = selectedColor === color.hex;
                       return (
                         <button
-                          key={tag.id}
+                          key={color.hex}
                           type="button"
-                          onClick={() => toggleTag(tag)}
+                          onClick={() => setSelectedColor(color.hex)}
                           className={cn(
-                            "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200",
+                            `flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 ${color.tw}`,
                             isSelected
-                              ? "bg-primary-600 text-white shadow-sm ring-1 ring-primary-600"
-                              : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-600",
+                              ? "ring-2 ring-gray-900 ring-offset-2"
+                              : "ring-1 ring-black/10",
                           )}
                         >
-                          {tag.name}
-                          {isSelected && <Check className="h-3 w-3" />}
+                          {isSelected && (
+                            <Check className="h-3.5 w-3.5 text-white" />
+                          )}
                         </button>
                       );
-                    })
-                  : (isExactMatch || tagSearchQuery.trim() === "") &&
-                    !isLoadingTags && (
-                      <div className="w-full text-center text-xs text-gray-500 py-2">
-                        Không tìm thấy tag phù hợp.
-                      </div>
-                    )}
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Footer nút Lưu / Hủy */}
+              <div className="flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  Huỷ bỏ
+                </button>
+                <Button
+                  variant="primary"
+                  className="h-8 text-xs px-4"
+                  onClick={handleSave}
+                  disabled={isSavingTags || isCreatingTag}
+                >
+                  {isSavingTags ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
               </div>
             </div>
-          </div>
-
-          {/* Chọn màu sắc cho tag mới */}
-          {tagSearchQuery.trim() !== "" && !isExactMatch && (
-            <div className="mb-4 pt-2 border-t border-gray-100">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Màu sắc tag mới
-              </label>
-              <div className="flex flex-wrap items-center gap-3">
-                {COLORS.map((color) => {
-                  const isSelected = selectedColor === color.hex;
-                  return (
-                    <button
-                      key={color.hex}
-                      type="button"
-                      onClick={() => setSelectedColor(color.hex)}
-                      className={cn(
-                        `flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 ${color.tw}`,
-                        isSelected
-                          ? "ring-2 ring-gray-900 ring-offset-2"
-                          : "ring-1 ring-black/10",
-                      )}
-                    >
-                      {isSelected && (
-                        <Check className="h-3.5 w-3.5 text-white" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Footer nút Lưu / Hủy */}
-          <div className="flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-            >
-              Huỷ bỏ
-            </button>
-            <Button
-              variant="primary"
-              className="h-8 text-xs px-4"
-              onClick={handleSave}
-              disabled={isSavingTags || isCreatingTag}
-            >
-              {isSavingTags ? "Đang lưu..." : "Lưu thay đổi"}
-            </Button>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

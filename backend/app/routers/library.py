@@ -21,6 +21,7 @@ from app.models.user import User
 from app.models.faculty import Faculty
 from app.models.subject import Subject
 from app.models.document import Document
+from app.models.document_stats import DocumentStats
 from app.models.document_rating import DocumentRating
 from app.models.community_submission import CommunitySubmission
 from app.models.download_log import DownloadLog
@@ -245,11 +246,17 @@ async def get_documents_by_subject(
         .join(User, User.id == Document.owner_id)
         .outerjoin(rating_sq, rating_sq.c.document_id == Document.id)
         .outerjoin(download_sq, download_sq.c.document_id == Document.id)
+        .outerjoin(DocumentStats, DocumentStats.document_id == Document.id)
         .where(and_(*base_filter))
     )
 
-    if sort == "popular":
-        query = query.order_by(desc("download_count"), desc(Document.created_at))
+    if sort in ("popular", "trending"):
+        query = query.order_by(
+            desc(func.coalesce(DocumentStats.trending_score, 0.0)),
+            desc(func.coalesce(DocumentStats.view_count, 0)),
+            desc("download_count"),
+            desc(Document.created_at),
+        )
     elif sort == "rating":
         query = query.order_by(desc("rating_avg"), desc("rating_count"), desc(Document.created_at))
     else:
@@ -534,11 +541,17 @@ async def search_community_documents(
         .join(User, User.id == Document.owner_id)
         .outerjoin(rating_sq, rating_sq.c.document_id == Document.id)
         .outerjoin(download_sq, download_sq.c.document_id == Document.id)
+        .outerjoin(DocumentStats, DocumentStats.document_id == Document.id)
         .where(and_(*filters))
     )
 
-    if sort == "popular":
-        query = query.order_by(desc("download_count"), desc(Document.created_at))
+    if sort in ("popular", "trending"):
+        query = query.order_by(
+            desc(func.coalesce(DocumentStats.trending_score, 0.0)),
+            desc(func.coalesce(DocumentStats.view_count, 0)),
+            desc("download_count"),
+            desc(Document.created_at),
+        )
     elif sort == "rating":
         query = query.order_by(desc("rating_avg"), desc("rating_count"), desc(Document.created_at))
     else:

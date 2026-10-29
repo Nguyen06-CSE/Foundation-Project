@@ -173,3 +173,42 @@ Tài liệu chi tiết các endpoint RESTful API được xây dựng mới và 
 - **Response Errors:**
   - `403 Forbidden`: Người dùng không có quyền truy cập tệp tin này.
   - `404 Not Found`: Không tìm thấy tệp tin trên hệ thống lưu trữ.
+
+---
+
+### 2.5. Nâng Cấp API Danh Sách Tài Liệu (Trending Sort & Activity Enrichment)
+Hệ thống bổ sung tham số sắp xếp `sort` và làm giàu dữ liệu đầu ra với các trường chỉ số hoạt động:
+
+#### A. Danh sách Tài liệu Cá nhân: `GET /documents/`
+- **Query Parameters:**
+  - `page` (`int`, default: `1`)
+  - `page_size` (`int`, default: `20`)
+  - `folder_id` (`int`, optional)
+  - `sort` (`string`, optional, default: `"trending"`):
+    - `"trending"`: Sắp xếp theo độ "nóng" nhu cầu: `ORDER BY COALESCE(document_stats.trending_score, 0.0) DESC, documents.created_at DESC`.
+    - `"views"`: Sắp xếp theo tổng lượt xem: `ORDER BY COALESCE(document_stats.view_count, 0) DESC, documents.created_at DESC`.
+    - `"newest"`: Sắp xếp theo thời gian tải lên: `ORDER BY documents.created_at DESC`.
+    - `"title"`: Sắp xếp theo bảng chữ cái: `ORDER BY documents.title ASC`.
+- **Response Item Schema (`DocumentOut`):**
+  ```json
+  {
+    "id": 12,
+    "title": "Bai 3 - Tinh ke thua v2",
+    "file_path": "storage/6/doc12.pdf",
+    "file_type": "application/pdf",
+    "file_size": 154200,
+    "created_at": "2026-10-13T08:17:57.746613Z",
+    "trending_score": 35.5,
+    "view_count": 25,
+    "personal_view_count": 25,
+    "tags": []
+  }
+  ```
+
+#### B. Danh sách Tài liệu Nhóm: `GET /groups/{group_id}/documents/`
+- **Query Parameters:** Hỗ trợ tương tự `sort=trending|views|newest|title` (mặc định `"trending"`).
+- **Enrichment:** Trả về `trending_score`, `view_count` và `personal_view_count` của người dùng hiện tại trong nhóm.
+
+#### C. Danh sách Tài liệu Thư viện: `GET /library/documents/`
+- **Query Parameters:** Hỗ trợ `sort=popular|newest|rating` (trong đó `sort=popular` hoặc `sort=trending` thực hiện `LEFT OUTER JOIN document_stats` sắp xếp theo `trending_score DESC`).
+

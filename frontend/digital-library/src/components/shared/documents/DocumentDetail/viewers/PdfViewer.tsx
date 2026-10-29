@@ -1,19 +1,12 @@
 import type { PdfViewerProps } from "../DocumentDetail.types";
-import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
-- PdfViewer - Hiển thị bản xem trước tài liệu PDF
+ * PdfViewer - Hiển thị bản xem trước tài liệu PDF
  */
 export function PdfViewer({
   doc,
   fileUrl,
-  onUpdateCover,
-  isUpdatingCover = false,
-  onUpdateThumbnailPage,
-  isUpdatingThumbnailPage = false,
 }: PdfViewerProps) {
-  const handleCover = onUpdateCover || onUpdateThumbnailPage;
-  const isUpdating = isUpdatingCover || isUpdatingThumbnailPage;
 
   // --- BẮT ĐẦU XỬ LÝ LỖI URL ---
   // 1. Giải mã URL để sửa lỗi https%3A// thành https://

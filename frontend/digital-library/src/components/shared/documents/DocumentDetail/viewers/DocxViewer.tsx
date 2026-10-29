@@ -3,10 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { renderAsync } from "docx-preview";
 import html2canvas from "html2canvas";
-import { Loader2, Image as ImageIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/utils/cn";
-import type { DocxViewerProps } from "../DocumentDetail.types";
-import { DocumentCoverSelector } from "../components/DocumentCoverSelector";
 
 /**
  * DocxViewer - Hiển thị bản xem trước tài liệu Word (.docx / .doc)
@@ -20,18 +18,15 @@ export function DocxViewer({
   fileUrl,
   hasThumbnail,
   onUpdateThumbnail,
-  isUpdatingThumbnail = false,
-  onUpdateThumbnailPage,
-  isUpdatingThumbnailPage = false,
-  onUpdateCover,
-  isUpdatingCover = false,
-}: DocxViewerProps) {
+}: {
+  fileUrl?: string;
+  hasThumbnail?: boolean;
+  onUpdateThumbnail?: (base64: string) => void;
+  [key: string]: any;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState(1);
-  const [selectedPage, setSelectedPage] = useState(1);
-  const [isCapturing, setIsCapturing] = useState(false);
 
   // Dùng ref để giữ giá trị mới nhất trong callback timeout/async
   const hasThumbnailRef = useRef(hasThumbnail);
@@ -75,6 +70,10 @@ export function DocxViewer({
    * Effect tải và render tài liệu DOCX từ fileUrl
    */
   useEffect(() => {
+    if (!fileUrl) {
+      setLoading(false);
+      return;
+    }
     let isMounted = true;
     let captureTimeout: ReturnType<typeof setTimeout> | undefined;
     setLoading(true);
@@ -101,14 +100,9 @@ export function DocxViewer({
         if (!isMounted) return;
         setLoading(false);
 
-        // Chờ DOM ổn định để đếm trang và tự động chụp trang đầu nếu thiếu ảnh bìa
+        // Chờ DOM ổn định để tự động chụp trang đầu nếu thiếu ảnh bìa
         captureTimeout = setTimeout(async () => {
           if (!isMounted || !containerRef.current) return;
-
-          const pages = containerRef.current.querySelectorAll("section");
-          const pageCount = pages.length || 1;
-          setTotalPages(pageCount);
-          setSelectedPage((page) => Math.min(page, pageCount));
 
           if (!hasThumbnailRef.current && onUpdateThumbnailRef.current) {
             const firstPageThumbnail = await capturePage(1);
@@ -133,44 +127,6 @@ export function DocxViewer({
       if (captureTimeout) clearTimeout(captureTimeout);
     };
   }, [fileUrl]);
-
-  /**
-   * Xử lý khi người dùng nhấn đặt trang đang chọn làm ảnh bìa
-   */
-  const handleSetCover = async (page: number) => {
-    setSelectedPage(page);
-
-    // Ưu tiên 1: Chụp ảnh trang hiện tại từ DOM canvas và gửi base64
-    if (onUpdateThumbnail) {
-      setIsCapturing(true);
-      try {
-        const base64 = await capturePage(page);
-        if (base64) {
-          onUpdateThumbnail(base64);
-          return;
-        }
-      } catch (err) {
-        console.error("Lỗi chụp thumbnail DOCX:", err);
-      } finally {
-        setIsCapturing(false);
-      }
-    }
-
-    // Ưu tiên 2: Gọi callback page number trực tiếp nếu có
-    const onPageCoverFn = onUpdateCover || onUpdateThumbnailPage;
-    if (onPageCoverFn) {
-      onPageCoverFn(page);
-    }
-  };
-
-  const hasCoverHandler = Boolean(
-    onUpdateThumbnail || onUpdateCover || onUpdateThumbnailPage,
-  );
-  const isCoverUpdating =
-    isCapturing ||
-    isUpdatingThumbnail ||
-    isUpdatingThumbnailPage ||
-    isUpdatingCover;
 
   return (
     <div className="w-full flex flex-col items-center gap-3">

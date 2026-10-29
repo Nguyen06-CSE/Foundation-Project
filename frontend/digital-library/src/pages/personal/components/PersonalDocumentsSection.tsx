@@ -38,6 +38,9 @@ export interface DocCardType {
   // Bổ sung cho Detail view
   content?: string | null;
   pages?: number | null;
+  view_count?: number;
+  personal_view_count?: number;
+  trending_score?: number;
 }
 
 interface PersonalDocumentsSectionProps {
@@ -101,6 +104,9 @@ function toListItem(doc: DocCardType): DocumentListItem {
     bundle_children_count: doc.bundle_children_count,
     content: doc.content ?? null,
     pages: doc.pages ?? null,
+    view_count: doc.view_count,
+    personal_view_count: doc.personal_view_count,
+    trending_score: doc.trending_score,
   };
 }
 
@@ -121,7 +127,7 @@ export function PersonalDocumentsSection({
   const [viewMode, setViewMode] = useState<ViewMode>("detail");
 
   // Local state cho Bundle Expanded Grid
-  const [isExpandedMode, setIsExpandedMode] = useState(false);
+  const [isExpandedMode, setIsExpandedMode] = useState(true);
   const [bundleChildrenMap, setBundleChildrenMap] = useState<Map<string, DocCardType[]>>(new Map());
   const [loadingBundleIds, setLoadingBundleIds] = useState<Set<string>>(new Set());
 

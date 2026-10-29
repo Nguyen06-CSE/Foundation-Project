@@ -18,6 +18,7 @@ import {
 import { GroupDocumentContextMenu } from "@/pages/group/components/shared/GroupDocumentContextMenu";
 import { cn } from "@/utils/cn";
 import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
+import { getActivityHeat } from "@/utils/activityHeat";
 import {
   type BaseDocumentViewProps,
   type DocumentListItem,
@@ -297,6 +298,9 @@ export function DocumentListView({
           const isBundleLoading = loadingBundles.has(doc.id);
           const childrenList = bundleChildren[doc.id] || [];
 
+          const viewCount = (doc as any).personal_view_count ?? (doc as any).view_count ?? 0;
+          const heat = getActivityHeat(viewCount);
+
           return (
             <div key={doc.id} className="flex flex-col">
               <div
@@ -308,11 +312,12 @@ export function DocumentListView({
                   }
                 }}
                 className={cn(
-                  "group grid grid-cols-12 gap-3 px-4 py-3 items-center",
-                  isBundle
+                  "group grid grid-cols-12 gap-3 px-4 py-3 items-center transition-all cursor-pointer",
+                  heat.level > 0
+                    ? `${heat.cardBg} ${heat.hoverBg}`
+                    : isBundle
                     ? "hover:bg-purple-50/40 bg-purple-50/10"
-                    : "hover:bg-slate-50/80",
-                  "transition-all cursor-pointer",
+                    : "hover:bg-slate-50/80 bg-white",
                 )}
               >
                 {/* Tên tài liệu & Preview */}
@@ -376,12 +381,24 @@ export function DocumentListView({
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <p
-                      className="text-sm font-semibold text-gray-800 truncate group-hover:text-primary-600 transition-colors leading-snug"
-                      title={doc.title}
-                    >
-                      {doc.title}
-                    </p>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p
+                        className="text-sm font-semibold text-gray-800 truncate group-hover:text-primary-600 transition-colors leading-snug"
+                        title={doc.title}
+                      >
+                        {doc.title}
+                      </p>
+                      {heat.badgeText && (
+                        <span
+                          className={cn(
+                            "shrink-0 inline-flex items-center rounded px-1.5 py-0.5 text-[10px]",
+                            heat.badgeClass,
+                          )}
+                        >
+                          {heat.badgeText}
+                        </span>
+                      )}
+                    </div>
 
                     {isBundle && (
                       <span className="text-[11px] text-purple-600 font-medium block">

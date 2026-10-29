@@ -8,9 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import AsyncSessionLocal
 from app.models.document import Document
+from app.models.document_stats import DocumentStats
 from app.models.document_version import DocumentVersion
 from app.models.download_log import DownloadLog
 from app.models.tag import Tag
+from app.constants.activity_actions import ActivityAction
 from app.services.file_service import checksum_for_file, save_upload_file
 
 UTC = timezone.utc
@@ -185,6 +187,42 @@ async def _do_log_activity(
         workspace_id=workspace_id,
         extra_data=extra_data or {},
     ))
+
+    # Cập nhật tức thời (near real-time bump) vào bảng document_stats
+    now_utc = datetime.now(UTC)
+    is_view = action in (ActivityAction.VIEWED, "view")
+    is_download = action in (ActivityAction.DOWNLOADED, "download")
+    is_save = action == ActivityAction.SAVED
+    is_share = action in (ActivityAction.SHARED, ActivityAction.CONTRIBUTED)
+
+    stats = await session.get(DocumentStats, document_id)
+    if not stats:
+        stats = DocumentStats(
+            document_id=document_id,
+            view_count=1 if is_view else 0,
+            download_count=1 if is_download else 0,
+            save_count=1 if is_save else 0,
+            share_count=1 if is_share else 0,
+            unique_viewers=1 if is_view else 0,
+            trending_score=1.0 if is_view else (3.0 if is_download else (5.0 if is_save else 2.0)),
+            last_activity_at=now_utc,
+            updated_at=now_utc,
+        )
+        session.add(stats)
+    else:
+        if is_view:
+            stats.view_count += 1
+        elif is_download:
+            stats.download_count += 1
+        elif is_save:
+            stats.save_count += 1
+        elif is_share:
+            stats.share_count += 1
+        stats.last_activity_at = now_utc
+        bump = 1.0 if is_view else (3.0 if is_download else (5.0 if is_save else 2.0))
+        stats.trending_score = (stats.trending_score or 0.0) + bump
+        stats.updated_at = now_utc
+
     await session.commit()
 
 

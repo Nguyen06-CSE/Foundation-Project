@@ -37,6 +37,9 @@ class FakeResult:
     def mappings(self):
         return SimpleNamespace(all=lambda: self.value or [])
 
+    def all(self):
+        return self.value or []
+
 
 class FakeSession:
     def __init__(self):

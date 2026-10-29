@@ -54,6 +54,9 @@ export interface Document {
   is_bundle?: boolean;
   bundle_parent_id?: number | null;
   bundle_children_count?: number | null;
+  trending_score?: number;
+  view_count?: number;
+  personal_view_count?: number;
 }
 
 export interface PaginatedDocuments {

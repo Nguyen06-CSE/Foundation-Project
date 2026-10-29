@@ -10,7 +10,6 @@ import {
   Activity,
   BarChart2,
   Calendar,
-  FileText,
 } from "lucide-react";
 import {
   BarChart,

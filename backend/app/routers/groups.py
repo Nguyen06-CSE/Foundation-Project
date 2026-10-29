@@ -12,6 +12,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.models.document import Document
+from app.models.document_stats import DocumentStats
 from app.models.document_tag import document_tags
 from app.models.folder import Folder
 from app.models.folder_tag import FolderTag
@@ -222,6 +223,7 @@ import uuid
 async def list_group_documents(
     group_id: int,
     folder_id: Optional[int] = Query(None),
+    sort: str = Query("trending", pattern="^(trending|newest|views|title)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
@@ -230,7 +232,8 @@ async def list_group_documents(
     await require_member(db, group_id, current_user.id)
     offset = (page - 1) * page_size
     query = (
-        select(Document)
+        select(Document, DocumentStats)
+        .outerjoin(DocumentStats, DocumentStats.document_id == Document.id)
         .options(selectinload(Document.tags), selectinload(Document.owner))
         .where(
             Document.workspace_id == group_id,
@@ -251,9 +254,26 @@ async def list_group_documents(
         )
     count_result = await db.execute(select(func.count()).select_from(query.subquery()))
     total = count_result.scalar() or 0
-    result = await db.execute(query.order_by(Document.created_at.desc()).offset(offset).limit(page_size))
-    items = result.scalars().all()
 
+    if sort == "newest":
+        query = query.order_by(Document.created_at.desc())
+    elif sort == "views":
+        query = query.order_by(
+            func.coalesce(DocumentStats.view_count, 0).desc(),
+            Document.created_at.desc(),
+        )
+    elif sort == "title":
+        query = query.order_by(Document.title.asc(), Document.created_at.desc())
+    else:  # "trending"
+        query = query.order_by(
+            func.coalesce(DocumentStats.trending_score, 0.0).desc(),
+            Document.created_at.desc(),
+        )
+
+    result = await db.execute(query.offset(offset).limit(page_size))
+    rows = result.all()
+
+    items = [doc for doc, _ in rows]
     bundle_ids = [d.id for d in items if d.is_bundle]
     counts_map = {}
     if bundle_ids:
@@ -264,11 +284,29 @@ async def list_group_documents(
         )
         counts_map = dict(counts_res.all())
 
+    doc_ids = [d.id for d in items]
+    personal_views_map = {}
+    if doc_ids:
+        from app.models.download_log import DownloadLog
+        p_res = await db.execute(
+            select(DownloadLog.document_id, func.count(DownloadLog.id))
+            .where(
+                DownloadLog.document_id.in_(doc_ids),
+                DownloadLog.user_id == current_user.id,
+                DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
+            )
+            .group_by(DownloadLog.document_id)
+        )
+        personal_views_map = dict(p_res.all())
+
     items_out = []
-    for doc in items:
+    for doc, stats in rows:
         doc_out = DocumentOut.model_validate(doc)
         if doc.is_bundle:
             doc_out.bundle_children_count = counts_map.get(doc.id, 0)
+        doc_out.trending_score = float(stats.trending_score) if stats else 0.0
+        doc_out.view_count = int(stats.view_count) if stats else 0
+        doc_out.personal_view_count = int(personal_views_map.get(doc.id, 0))
         items_out.append(doc_out)
 
     return {
@@ -320,6 +358,19 @@ async def get_group_document(
             )
         )
         doc_out.bundle_children_count = cnt or 0
+
+    stats = (await db.execute(select(DocumentStats).where(DocumentStats.document_id == document_id))).scalar_one_or_none()
+    doc_out.trending_score = float(stats.trending_score) if stats else 0.0
+    doc_out.view_count = int(stats.view_count) if stats else 0
+    from app.models.download_log import DownloadLog
+    p_cnt = (await db.execute(
+        select(func.count(DownloadLog.id)).where(
+            DownloadLog.document_id == document_id,
+            DownloadLog.user_id == current_user.id,
+            DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
+        )
+    )).scalar() or 0
+    doc_out.personal_view_count = int(p_cnt)
 
     background_tasks.add_task(
         _log_activity, db, document_id, current_user.id,

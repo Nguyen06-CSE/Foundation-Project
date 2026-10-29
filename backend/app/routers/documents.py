@@ -450,6 +450,7 @@ async def get_bundle_children(
 async def list_documents(
     workspace_id: Optional[int] = Query(None),
     folder_id: Optional[int] = Query(None),
+    sort: str = Query("trending", pattern="^(trending|newest|views|title)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
@@ -472,11 +473,33 @@ async def list_documents(
                 .group_by(Document.bundle_parent_id)
             )
             counts_map = dict(counts_res.all())
+
+        doc_ids = [d.id for d in items]
+        stats_map = {}
+        personal_views_map = {}
+        if doc_ids:
+            s_res = await db.execute(select(DocumentStats).where(DocumentStats.document_id.in_(doc_ids)))
+            stats_map = {s.document_id: s for s in s_res.scalars().all()}
+            p_res = await db.execute(
+                select(DownloadLog.document_id, func.count(DownloadLog.id))
+                .where(
+                    DownloadLog.document_id.in_(doc_ids),
+                    DownloadLog.user_id == current_user.id,
+                    DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
+                )
+                .group_by(DownloadLog.document_id)
+            )
+            personal_views_map = dict(p_res.all())
+
         items_out = []
         for doc in items:
             doc_out = DocumentOut.model_validate(doc)
             if doc.is_bundle:
                 doc_out.bundle_children_count = counts_map.get(doc.id, 0)
+            st = stats_map.get(doc.id)
+            doc_out.trending_score = float(st.trending_score) if st else 0.0
+            doc_out.view_count = int(st.view_count) if st else 0
+            doc_out.personal_view_count = int(personal_views_map.get(doc.id, 0))
             items_out.append(doc_out)
         return {
             "items": items_out,
@@ -490,7 +513,8 @@ async def list_documents(
 
     # Đã thêm Document.is_public == False để ngăn lấy tài liệu công khai đã được approve
     query = (
-        select(Document)
+        select(Document, DocumentStats)
+        .outerjoin(DocumentStats, DocumentStats.document_id == Document.id)
         .options(selectinload(Document.tags))
         .where(
             Document.owner_id == current_user.id,
@@ -507,10 +531,26 @@ async def list_documents(
     count_result = await db.execute(select(func.count()).select_from(query.subquery()))
     total = count_result.scalar() or 0
 
-    query = query.order_by(Document.created_at.desc()).offset(offset).limit(page_size)
-    result = await db.execute(query)
-    items = result.scalars().all()
+    if sort == "newest":
+        query = query.order_by(Document.created_at.desc())
+    elif sort == "views":
+        query = query.order_by(
+            func.coalesce(DocumentStats.view_count, 0).desc(),
+            Document.created_at.desc(),
+        )
+    elif sort == "title":
+        query = query.order_by(Document.title.asc(), Document.created_at.desc())
+    else:  # "trending"
+        query = query.order_by(
+            func.coalesce(DocumentStats.trending_score, 0.0).desc(),
+            Document.created_at.desc(),
+        )
 
+    query = query.offset(offset).limit(page_size)
+    result = await db.execute(query)
+    rows = result.all()
+
+    items = [doc for doc, _ in rows]
     bundle_ids = [d.id for d in items if d.is_bundle]
     counts_map = {}
     if bundle_ids:
@@ -521,11 +561,28 @@ async def list_documents(
         )
         counts_map = dict(counts_res.all())
 
+    doc_ids = [d.id for d in items]
+    personal_views_map = {}
+    if doc_ids:
+        p_res = await db.execute(
+            select(DownloadLog.document_id, func.count(DownloadLog.id))
+            .where(
+                DownloadLog.document_id.in_(doc_ids),
+                DownloadLog.user_id == current_user.id,
+                DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
+            )
+            .group_by(DownloadLog.document_id)
+        )
+        personal_views_map = dict(p_res.all())
+
     items_out = []
-    for doc in items:
+    for doc, stats in rows:
         doc_out = DocumentOut.model_validate(doc)
         if doc.is_bundle:
             doc_out.bundle_children_count = counts_map.get(doc.id, 0)
+        doc_out.trending_score = float(stats.trending_score) if stats else 0.0
+        doc_out.view_count = int(stats.view_count) if stats else 0
+        doc_out.personal_view_count = int(personal_views_map.get(doc.id, 0))
         items_out.append(doc_out)
 
     return {
@@ -599,6 +656,18 @@ async def get_document(
             )
         )
         doc_out.bundle_children_count = cnt or 0
+
+    stats = (await db.execute(select(DocumentStats).where(DocumentStats.document_id == document_id))).scalar_one_or_none()
+    doc_out.trending_score = float(stats.trending_score) if stats else 0.0
+    doc_out.view_count = int(stats.view_count) if stats else 0
+    p_cnt = (await db.execute(
+        select(func.count(DownloadLog.id)).where(
+            DownloadLog.document_id == document_id,
+            DownloadLog.user_id == current_user.id,
+            DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
+        )
+    )).scalar() or 0
+    doc_out.personal_view_count = int(p_cnt)
 
     background_tasks.add_task(
         _log_activity, db, document_id, current_user.id,

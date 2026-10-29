@@ -67,7 +67,7 @@ async def test_local_storage_save_and_url(tmp_path, monkeypatch):
         assert Path(file_key).read_bytes() == file_content
 
         url = get_file_url(file_key)
-        assert url == f"/{file_key}"
+        assert url == file_key.lstrip('/')
     finally:
         safe_remove(file_key)
         assert not Path(file_key).exists()

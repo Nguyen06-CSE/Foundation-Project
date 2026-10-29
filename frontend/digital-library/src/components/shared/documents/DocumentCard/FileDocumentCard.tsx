@@ -9,6 +9,7 @@ import type { DocumentCardProps } from "./DocumentCard";
 import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
 import { useHoverExpand } from "@/hooks/useHoverExpand";
 import { cn } from "@/utils/cn";
+import { getActivityHeat } from "@/utils/activityHeat";
 
 // ======================================================
 // Helpers & Themes (giữ nguyên)
@@ -213,6 +214,9 @@ export function FileDocumentCard({
   const ext = getFileExtension(document.extension || document.type);
   const theme = FILE_TYPE_THEMES[ext] || DEFAULT_THEME;
 
+  const viewCount = document.personal_view_count ?? document.view_count ?? 0;
+  const heat = getActivityHeat(viewCount);
+
   const thumbnailUrl = !imageError
     ? getThumbnailUrl(document.thumbnail_path)
     : null;
@@ -259,10 +263,11 @@ export function FileDocumentCard({
   const cardContent = (
     <div
       className={cn(
-        "group flex h-full w-full flex-col overflow-hidden rounded-xl border bg-white transition-shadow duration-300",
+        "group flex h-full w-full flex-col overflow-hidden rounded-xl border transition-all duration-300",
+        heat.cardBg,
         isExpanded
           ? "border-gray-200 shadow-2xl"
-          : `border-gray-200/80 shadow-xs hover:shadow-md ${theme.border}`,
+          : `${heat.level > 0 ? heat.border : "border-gray-200/80"} shadow-xs hover:shadow-md ${heat.level === 0 ? theme.border : ""}`,
       )}
     >
       {/* Khung Preview ngoài (Cố định vị trí Badge & Hint) */}
@@ -286,6 +291,20 @@ export function FileDocumentCard({
             {ext || "FILE"}
           </span>
         </div>
+
+        {/* Badge nhiệt độ hoạt động (view count) ở góc trên phải */}
+        {heat.badgeText && (
+          <div className="pointer-events-none absolute right-2.5 top-2.5 z-20">
+            <span
+              className={cn(
+                "inline-flex items-center rounded-md px-2 py-0.5 text-[10px] shadow-2xs backdrop-blur-xs",
+                heat.badgeClass,
+              )}
+            >
+              {heat.badgeText}
+            </span>
+          </div>
+        )}
 
         {/* Lớp cuộn nội dung (macOS Quick Look style khi isExpanded = true) */}
         <div
@@ -365,7 +384,7 @@ export function FileDocumentCard({
       </div>
 
       {/* Thông tin Chi tiết */}
-      <div className="relative flex flex-1 flex-col justify-between rounded-b-xl bg-white p-4">
+      <div className={cn("relative flex flex-1 flex-col justify-between rounded-b-xl p-4 transition-colors", heat.cardBg)}>
         <div>
           <div className="flex items-start justify-between gap-1.5">
             <div className="relative min-w-0 flex-1">
