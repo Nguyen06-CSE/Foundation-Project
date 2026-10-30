@@ -306,6 +306,8 @@ async def list_group_documents(
             doc_out.bundle_children_count = counts_map.get(doc.id, 0)
         doc_out.trending_score = float(stats.trending_score) if stats else 0.0
         doc_out.view_count = int(stats.view_count) if stats else 0
+        doc_out.download_count = int(stats.download_count) if stats else 0
+        doc_out.share_count = int(stats.share_count) if stats else 0
         doc_out.personal_view_count = int(personal_views_map.get(doc.id, 0))
         items_out.append(doc_out)
 
@@ -362,6 +364,8 @@ async def get_group_document(
     stats = (await db.execute(select(DocumentStats).where(DocumentStats.document_id == document_id))).scalar_one_or_none()
     doc_out.trending_score = float(stats.trending_score) if stats else 0.0
     doc_out.view_count = int(stats.view_count) if stats else 0
+    doc_out.download_count = int(stats.download_count) if stats else 0
+    doc_out.share_count = int(stats.share_count) if stats else 0
     from app.models.download_log import DownloadLog
     p_cnt = (await db.execute(
         select(func.count(DownloadLog.id)).where(

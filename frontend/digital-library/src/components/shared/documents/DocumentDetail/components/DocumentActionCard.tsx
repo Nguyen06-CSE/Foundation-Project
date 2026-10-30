@@ -29,6 +29,7 @@ interface DocumentActionCardProps {
   onStartRename: () => void;
   onDelete: () => void;
   onSetCover: () => void; // <-- Thêm prop để xử lý khi bấm nút "Cài ảnh bìa"
+  onDownloadSuccess?: () => void;
 }
 
 export function DocumentActionCard({
@@ -44,6 +45,7 @@ export function DocumentActionCard({
   onStartRename,
   onDelete,
   onSetCover, // <-- Nhận prop
+  onDownloadSuccess,
 }: DocumentActionCardProps) {
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const downloadMenuRef = useRef<HTMLDivElement>(null);
@@ -66,6 +68,7 @@ export function DocumentActionCard({
     if (documentId) {
       try {
         await activityService.downloadDocumentFile(documentId, fileTitle);
+        onDownloadSuccess?.();
         return;
       } catch (err) {
         console.error("Lỗi khi tải file qua API, dùng fallback link:", err);
@@ -76,6 +79,7 @@ export function DocumentActionCard({
     link.download = fileTitle;
     link.target = "_blank";
     link.click();
+    onDownloadSuccess?.();
   };
 
   const handleDeleteClick = () => {

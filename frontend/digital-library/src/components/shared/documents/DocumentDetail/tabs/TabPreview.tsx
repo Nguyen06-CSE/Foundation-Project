@@ -67,14 +67,14 @@ export function TabPreview({
   const thumbnailUrl = getThumbnailUrl(doc.thumbnail_path);
 
   return (
-    <div className="flex flex-col gap-3 min-w-0 w-full">
+    <div className="flex flex-col gap-3 min-w-0 w-full h-full flex-1">
       {/* Vùng xem trước chính */}
-      <div className="w-full min-w-0 flex flex-col">
+      <div className="w-full min-w-0 flex flex-col h-full flex-1">
         {/* Chế độ Markdown: Giữ trong DOM, ẩn/hiện bằng CSS để tránh re-fetch */}
         {hasMarkdown && (
           <div
             className={cn(
-              "w-full min-w-0",
+              "w-full min-w-0 h-full flex-1 flex-col",
               viewMode === "markdown" ? "block" : "hidden",
             )}
           >
@@ -85,7 +85,7 @@ export function TabPreview({
         {/* Chế độ Bản gốc */}
         <div
           className={cn(
-            "w-full min-w-0",
+            "w-full min-w-0 h-full flex-1 flex-col",
             !hasMarkdown || viewMode === "original" ? "block" : "hidden",
           )}
         >

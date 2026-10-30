@@ -27,11 +27,12 @@ export function InfoRow({ label, value, title }: InfoRowProps) {
 interface StatItemProps {
   label: string;
   value: number;
+  title?: string;
 }
 
-export function StatItem({ label, value }: StatItemProps) {
+export function StatItem({ label, value, title }: StatItemProps) {
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-1" title={title}>
       <span className="text-xs text-gray-500">{label}</span>
       <span className="text-lg font-bold text-gray-900">{value}</span>
     </div>
@@ -53,6 +54,11 @@ interface DocumentInfoCardProps {
   isCreatingTag: boolean;
   onRemoveTag: (tagId: number) => void;
   isRemovingTag: boolean;
+  viewCount?: number;
+  downloadCount?: number;
+  shareCount?: number;
+  personalViewCount?: number;
+  isPersonal?: boolean;
 }
 
 /**
@@ -73,6 +79,11 @@ export function DocumentInfoCard({
   isCreatingTag,
   onRemoveTag,
   isRemovingTag,
+  viewCount = 0,
+  downloadCount = 0,
+  shareCount = 0,
+  personalViewCount = 0,
+  isPersonal = true,
 }: DocumentInfoCardProps) {
   const displayTitle = title.length > 25 ? title.slice(0, 25) + "…" : title;
 
@@ -105,11 +116,31 @@ export function DocumentInfoCard({
 
       {/* Thống kê tương tác */}
       <div className="mt-6 flex justify-around border-t border-gray-100 pt-4">
-        <StatItem label="Lượt xem" value={0} />
+        <StatItem
+          label="Lượt xem"
+          value={viewCount}
+          title={
+            isPersonal
+              ? `Bạn đã mở xem ${personalViewCount || viewCount} lần`
+              : `Tổng ${viewCount} lượt xem${personalViewCount ? ` (của bạn: ${personalViewCount})` : ""}`
+          }
+        />
         <div className="w-px bg-gray-100" />
-        <StatItem label="Tải xuống" value={0} />
+        <StatItem
+          label="Tải xuống"
+          value={downloadCount}
+          title="Số lần tải xuống tài liệu"
+        />
         <div className="w-px bg-gray-100" />
-        <StatItem label="Đã chia sẻ" value={0} />
+        <StatItem
+          label="Đã chia sẻ"
+          value={shareCount}
+          title={
+            isPersonal
+              ? "Số lần tài liệu được chia sẻ vào nhóm hoặc cộng đồng"
+              : "Số lần tài liệu được chia sẻ"
+          }
+        />
       </div>
     </Card>
   );

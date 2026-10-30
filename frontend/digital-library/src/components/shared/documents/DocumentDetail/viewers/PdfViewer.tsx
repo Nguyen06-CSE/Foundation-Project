@@ -1,3 +1,4 @@
+// frontend/digital-library/src/components/shared/documents/DocumentDetail/viewers/PdfViewer.tsx
 import type { PdfViewerProps } from "../DocumentDetail.types";
 
 /**
@@ -21,7 +22,7 @@ export function PdfViewer({
   // --- KẾT THÚC XỬ LÝ LỖI URL ---
 
   return (
-    <div className="w-full flex flex-col items-center gap-3">
+    <div className="h-full w-full flex flex-col items-center gap-3">
       {/* Thanh công cụ: Chọn trang làm ảnh bìa PDF */}
       {/* {handleCover && (
         <div className="w-full max-w-4xl flex flex-wrap items-center justify-end gap-3 bg-white px-4 py-2.5 rounded-lg border border-gray-200 shadow-xs">
@@ -36,7 +37,7 @@ export function PdfViewer({
       {/* Vùng hiển thị PDF qua iframe sử dụng cleanUrl */}
       <iframe
         src={`${cleanUrl}#toolbar=1&navpanes=0`}
-        className="w-full h-[750px] rounded-lg shadow-sm bg-white border border-gray-200"
+        className="w-full flex-1 h-full rounded-lg shadow-sm bg-white border border-gray-200"
         title={doc?.title || "Tài liệu PDF"}
       />
     </div>

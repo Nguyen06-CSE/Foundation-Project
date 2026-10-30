@@ -154,7 +154,7 @@ export function DocxViewer({
       )} */}
 
       {/* Vùng hiển thị nội dung tài liệu Word */}
-      <div className="w-full min-h-[700px] max-h-[800px] overflow-auto bg-gray-200/70 p-4 rounded-xl flex flex-col items-center custom-scrollbar">
+      <div className="w-full flex-1 h-full overflow-auto bg-gray-200/70 p-4 rounded-xl flex flex-col items-center custom-scrollbar">
         {loading && (
           <div className="flex flex-col items-center justify-center my-auto py-20 text-gray-500 gap-3">
             <Loader2 className="h-8 w-8 animate-spin text-primary-600" />

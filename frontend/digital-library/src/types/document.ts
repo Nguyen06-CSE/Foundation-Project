@@ -56,6 +56,8 @@ export interface Document {
   bundle_children_count?: number | null;
   trending_score?: number;
   view_count?: number;
+  download_count?: number;
+  share_count?: number;
   personal_view_count?: number;
 }
 

@@ -37,7 +37,6 @@ export function DocumentTagSection({
   const [tagSearchQuery, setTagSearchQuery] = useState("");
   const [selectedColor, setSelectedColor] = useState(COLORS[0].hex);
 
-  // Tọa độ để định vị Popover khi dùng Portal
   const [popoverCoords, setPopoverCoords] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -45,23 +44,31 @@ export function DocumentTagSection({
     setSelectedTags(tags);
   }, [tags]);
 
-  // Cập nhật vị trí Popover mỗi khi mở hoặc resize màn hình
-  const updatePosition = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPopoverCoords({
-        top: rect.bottom + window.scrollY + 8, // Hiện ngay phía dưới nút + offset 8px
-        left: rect.left + window.scrollX,
-      });
+  // Tính toán tọa độ bằng fixed position tương tự Dropdown
+  useEffect(() => {
+    if (!isTagEditorOpen || !buttonRef.current) return;
+
+    const rect = buttonRef.current.getBoundingClientRect();
+    const popupWidth = 320; // w-80 tương đương 320px
+    
+    let calculatedLeft = rect.left;
+    
+    // Nếu popup bị tràn màn hình bên phải thì canh lề phải của popup bằng lề phải của nút
+    if (rect.left + popupWidth > window.innerWidth) {
+      calculatedLeft = rect.right - popupWidth;
     }
-  };
+
+    setPopoverCoords({
+      top: rect.bottom + 8, // Cách nút cộng 8px
+      left: calculatedLeft,
+    });
+  }, [isTagEditorOpen]);
 
   const handleTogglePopover = () => {
     if (!isTagEditorOpen) {
       setSelectedTags([...tags]);
       setTagSearchQuery("");
       setSelectedColor(COLORS[0].hex);
-      updatePosition();
     }
     setIsTagEditorOpen((prev) => !prev);
   };
@@ -119,7 +126,6 @@ export function DocumentTagSection({
     <div className="mt-5 relative">
       <h3 className="text-sm font-medium text-gray-700 mb-2">Nhãn dán</h3>
 
-      {/* Danh sách các tag đang có */}
       <div className="flex flex-wrap items-center gap-1.5">
         {tags.map((tag) => {
           const baseColor = tag.color || "#2E7D32";
@@ -149,7 +155,6 @@ export function DocumentTagSection({
           );
         })}
 
-        {/* Nút mở Popover gán tag */}
         {canManageTags && (
           <button
             ref={buttonRef}
@@ -168,23 +173,22 @@ export function DocumentTagSection({
         )}
       </div>
 
-      {/* POPUP TAG EDITOR (Dùng Portal để đẩy ra ngoài DOM cha) */}
       {isTagEditorOpen &&
         canManageTags &&
+        typeof document !== "undefined" &&
         createPortal(
           <div
             className="fixed inset-0 z-[9999] bg-transparent"
-            onClick={() => setIsTagEditorOpen(false)} // Click ra ngoài tự đóng
+            onClick={() => setIsTagEditorOpen(false)}
           >
             <div
-              className="absolute w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 animate-in fade-in zoom-in-95"
+              className="fixed w-80 bg-white rounded-xl shadow-xl border border-gray-100 p-4 animate-in fade-in zoom-in-95"
               style={{
-                top: `${popoverCoords.top}px`,
-                left: `${popoverCoords.left - 50}px`,
+                top: popoverCoords.top,
+                left: popoverCoords.left,
               }}
-              onClick={(e) => e.stopPropagation()} // Tránh click trong menu bị đóng
+              onClick={(e) => e.stopPropagation()}
             >
-              {/* Tiêu đề & Đã chọn (nằm riêng) */}
               <div className="mb-4">
                 <label className="flex items-center justify-between text-sm font-medium text-gray-700">
                   <span>Gắn nhãn dán (Tags)</span>
@@ -194,7 +198,6 @@ export function DocumentTagSection({
                 </label>
               </div>
 
-              {/* Ô tìm kiếm & Danh sách tag */}
               <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50/50 p-3">
                 <div className="relative mb-3">
                   <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -255,7 +258,6 @@ export function DocumentTagSection({
                 </div>
               </div>
 
-              {/* Chọn màu sắc cho tag mới */}
               {tagSearchQuery.trim() !== "" && !isExactMatch && (
                 <div className="mb-4 pt-2 border-t border-gray-100">
                   <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -286,7 +288,6 @@ export function DocumentTagSection({
                 </div>
               )}
 
-              {/* Footer nút Lưu / Hủy */}
               <div className="flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
                 <button
                   type="button"
