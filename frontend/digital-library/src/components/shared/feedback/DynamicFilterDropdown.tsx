@@ -1,10 +1,11 @@
+// frontend/digital-library/src/components/shared/feedback/DynamicFilterDropdown.tsx
 import { useState, useRef, useEffect, useMemo } from "react"
 import { ChevronDown, Check, Search, Plus } from "lucide-react"
 import { cn } from "@/utils/cn"
 
 export interface FilterOption {
   value: string | number
-  label: string
+  label: string | React.ReactNode;
 }
 
 export interface DynamicFilterDropdownProps {
@@ -47,10 +48,14 @@ export function DynamicFilterDropdown({
   }, [isOpen])
 
   const filteredOptions = useMemo(() => {
-    if (!searchable || !searchQuery.trim()) return options
-    return options.filter((opt) =>
-      opt.label.toLowerCase().includes(searchQuery.toLowerCase().trim())
-    )
+    if (!searchable || !searchQuery.trim()) return options;
+    const query = searchQuery.toLowerCase().trim();
+    
+    return options.filter((opt) => {
+      // Đảm bảo chỉ gọi toLowerCase khi label là chuỗi, nếu không thì dùng fallback (như value)
+      const textToSearch = typeof opt.label === 'string' ? opt.label : String(opt.value);
+      return textToSearch.toLowerCase().includes(query);
+    })
   }, [options, searchQuery, searchable])
 
   const selectedOption = options.find((o) => o.value === selectedValue)
@@ -66,7 +71,13 @@ export function DynamicFilterDropdown({
             : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
         )}
       >
-        {selectedOption ? `${label}: ${selectedOption.label}` : label}
+        {selectedOption ? (
+          <span className="flex items-center gap-1">
+            {label}: {selectedOption.label}
+          </span>
+        ) : (
+          label
+        )}
         <ChevronDown
           className={cn(
             "h-3.5 w-3.5 transition-transform",
@@ -77,7 +88,7 @@ export function DynamicFilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full z-50 mt-1 flex max-h-60 min-w-[14rem] flex-col rounded-lg border border-gray-100 bg-white shadow-lg animate-in fade-in zoom-in-95">
+        <div className="absolute left-0 top-full z-50 mt-1 flex max-h-60 min-w-56 flex-col rounded-lg border border-gray-100 bg-white shadow-lg animate-in fade-in zoom-in-95">
           
           <div className="overflow-y-auto py-1 custom-scrollbar">
             {/* Ô input tìm kiếm (chỉ hiển thị nếu searchable = true) */}
