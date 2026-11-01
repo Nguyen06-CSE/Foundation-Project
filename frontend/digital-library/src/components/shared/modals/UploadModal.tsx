@@ -13,6 +13,7 @@ import { groupService } from "@/services/groupService";
 import { formatSize } from "@/utils/formatSize";
 import { TagSelector, type TagItem } from "../feedback/TagSelector";
 import { generateDocxThumbnail, isDocxFile } from "@/utils/docxThumbnail";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 export interface UploadModalProps {
   onClose: () => void;
   availableTags?: TagItem[];
@@ -21,6 +22,7 @@ export interface UploadModalProps {
   onBatchUpload?: (formData: FormData) => Promise<void>;
   isUploading: boolean;
   groupId?: number | string;
+  initialMode?: "single" | "batch";
 }
 
 const ACCEPTED_MIME = [
@@ -63,6 +65,7 @@ export function UploadModal({
   onBatchUpload,
   isUploading,
   groupId,
+  initialMode = "single",
 }: UploadModalProps) {
   const queryClient = useQueryClient();
   const { addToast } = useToastStore();
@@ -81,6 +84,7 @@ export function UploadModal({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
       queryClient.invalidateQueries({ queryKey: ["trash"] });
+      invalidateDashboard(queryClient);
       setTrashConflict(null);
       addToast({
         message: "Đã khôi phục tài liệu từ thùng rác.",
@@ -91,7 +95,7 @@ export function UploadModal({
   });
 
   // Tab mode
-  const [uploadMode, setUploadMode] = useState<"single" | "batch">("single");
+  const [uploadMode, setUploadMode] = useState<"single" | "batch">(initialMode);
 
   const safeTags = availableTags ?? [];
 
@@ -281,6 +285,7 @@ export function UploadModal({
       }
 
       await queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
       if (groupId) {
         await queryClient.invalidateQueries({
           queryKey: ["group-documents", groupId],

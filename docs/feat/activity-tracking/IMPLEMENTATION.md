@@ -180,3 +180,30 @@ downloadDocumentFile: async (documentId: number, fileName: string) => {
   npm run build
   ```
   *Kết quả:* Tạo thành công bundle production trong thư mục `dist/`.
+
+### Kịch Bản 6: Kiểm Thử Sắp Xếp Nhu Cầu Hoạt Động (Trending Sort)
+- **Mục tiêu:** Xác minh tài liệu có điểm hoạt động cao được đưa lên đầu danh sách và hỗ trợ chuyển đổi linh hoạt.
+- **Thực thi Unit Test:**
+  ```bash
+  ./.venv/bin/pytest backend/tests/test_activity_sorting.py -v
+  ```
+  *Kết quả:* Test `test_list_documents_trending_sort_order` vượt qua (`PASSED 100%`).
+- **Thực thi trên API thật:**
+  - `GET /documents/?sort=trending`: Doc 33 (`score=35.5`) xếp vị trí #1, Doc 24 (`score=18.2`) xếp #2, Doc 23 (`score=8.0`) xếp #3.
+  - `GET /documents/?sort=newest`: Thứ tự quay về đảo ngược theo thời gian tạo (`created_at DESC`), Doc 33, 24, 23, 16...
+
+### Kịch Bản 7: Kiểm Thử Hiệu Ứng Màu Nền Hoạt Động (Activity Heat & Badges)
+- **Mục tiêu:** Kiểm tra 4 bậc đổi màu nền ấm dần và gắn nhãn theo số lần xem tài liệu.
+- **Thực hiện:**
+  1. Chạy seed script thực nghiệm:
+     ```bash
+     PYTHONPATH=backend ./.venv/bin/python backend/db/seed_activity_heat.py
+     ```
+  2. Truy cập giao diện Kho cá nhân (`/ca-nhan`), kiểm tra hiển thị:
+     - **Doc 33 (25 views - Tier 3):** Thẻ có nền cam ấm (`bg-orange-50/80`), viền nổi bật (`border-orange-300`), góc trên phải xuất hiện huy hiệu `⚡ Thường dùng (20+)`.
+     - **Doc 24 (14 views - Tier 2):** Thẻ có nền hổ phách đậm (`bg-amber-50/70`), viền `border-amber-200`, huy hiệu `🔥 10+ xem`.
+     - **Doc 23 (7 views - Tier 1):** Thẻ có nền hổ phách nhạt (`bg-amber-50/30`), viền `border-amber-200/60`, huy hiệu `5+ xem`.
+     - **Doc 16 (2 views - Tier 0):** Thẻ có nền trắng tiêu chuẩn (`bg-white`), viền xám mặc định, không hiển thị huy hiệu.
+  3. Bấm chuyển chế độ hiển thị từ **Lưới (Grid)** sang **Danh sách (List)** và **Chi tiết (Detail)**:
+     - Các hàng tài liệu vẫn giữ màu nền ấm tương ứng và hiển thị huy hiệu hoạt động ngay bên cạnh tiêu đề tài liệu.
+

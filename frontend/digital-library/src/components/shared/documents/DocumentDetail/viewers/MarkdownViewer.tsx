@@ -62,7 +62,7 @@ export function MarkdownViewer({ markdownPath }: MarkdownViewerProps) {
   }
 
   return (
-    <div className="prose prose-sm max-w-none overflow-auto max-h-[750px] p-5 bg-white rounded-xl border border-gray-200 custom-scrollbar">
+    <div className="prose prose-sm max-w-none overflow-auto flex-1 h-full p-5 bg-white rounded-xl border border-gray-200 custom-scrollbar">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{content ?? ""}</ReactMarkdown>
     </div>
   );

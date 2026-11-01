@@ -271,3 +271,68 @@ def downgrade() -> None:
                type_=sa.VARCHAR(length=20),
                existing_nullable=False)
 ```
+
+---
+
+## 6. Truy Vấn Tối Ưu Cho Sắp Xếp Hoạt Động (Trending Sort & Personal Views)
+
+### 6.1. Câu Lệnh Truy Vấn Danh Sách Sắp Xếp Theo Trending Score
+Để xếp tài liệu có nhu cầu hoạt động cao lên đầu trang, backend sử dụng liên kết ngoài `LEFT OUTER JOIN` với bảng `document_stats`:
+
+```sql
+SELECT
+  documents.id,
+  documents.title,
+  documents.file_path,
+  documents.file_type,
+  documents.file_size,
+  documents.created_at,
+  document_stats.trending_score,
+  document_stats.view_count,
+  document_stats.download_count
+FROM documents
+LEFT OUTER JOIN document_stats
+  ON document_stats.document_id = documents.id
+WHERE documents.owner_id = :current_user_id
+  AND documents.is_deleted = false
+  AND documents.is_public = false
+  AND documents.bundle_parent_id IS NULL
+  AND documents.workspace_id IS NULL
+ORDER BY
+  COALESCE(document_stats.trending_score, 0.0) DESC,
+  documents.created_at DESC
+LIMIT :page_size OFFSET :offset;
+```
+
+> **Giải thích kỹ thuật**:
+> 1. `LEFT OUTER JOIN` đảm bảo tài liệu mới tải lên chưa có bản ghi trong `document_stats` vẫn được hiển thị đầy đủ, không bị rớt bản ghi như `INNER JOIN`.
+> 2. `COALESCE(document_stats.trending_score, 0.0)` chuyển đổi giá trị `NULL` thành `0.0`, tránh lỗi sắp xếp không xác định trên PostgreSQL.
+> 3. `documents.created_at DESC` là tiêu chí phụ giải quyết trường hợp hòa điểm (tie-breaker), đưa tài liệu mới tải lên xếp trước tài liệu cũ khi cả hai cùng có điểm 0.
+
+### 6.2. Truy Vấn Lấy Số Lượt Xem Cá Nhân (Personal View Count Subquery)
+Để tính toán chính xác mức nhiệt màu nền (Heat Background) cho riêng tài khoản đang xem, sau khi lấy danh sách document IDs trên trang hiện tại, backend thực thi một truy vấn gom nhóm:
+
+```sql
+SELECT
+  download_logs.document_id,
+  COUNT(download_logs.id) AS personal_views
+FROM download_logs
+WHERE download_logs.document_id IN (:doc_ids)
+  AND download_logs.user_id = :current_user_id
+  AND download_logs.action IN ('DOCUMENT_VIEWED', 'view')
+GROUP BY download_logs.document_id;
+```
+Nhờ chỉ mục `ix_download_logs_document_id_created_at`, câu lệnh này chỉ quét các index leaf nodes của tập `:doc_ids` (tối đa 20 - 100 IDs), thời gian thực thi `< 2ms`.
+
+### 6.3. Script Seed Data Kiểm Thử Trực Tiếp DB (`backend/db/seed_activity_heat.py`)
+Hệ thống cung cấp script seed dữ liệu thực nghiệm vào Database để kiểm chứng ngay trên giao diện:
+- **Tier 3 (Doc 33, Doc 12):** 25 lượt xem, điểm trending 35.5 (Nền Orange, Badge `⚡ Thường dùng (20+)`).
+- **Tier 2 (Doc 24, Doc 7):** 14 lượt xem, điểm trending 18.2 (Nền Amber đậm, Badge `🔥 10+ xem`).
+- **Tier 1 (Doc 23, Doc 2):** 7 lượt xem, điểm trending 8.0 (Nền Amber nhạt, Badge `5+ xem`).
+- **Tier 0 (Doc 16, Doc 9):** 2 lượt xem, điểm trending 1.5 (Nền Trắng mặc định, không badge).
+
+Chạy script bằng lệnh:
+```bash
+PYTHONPATH=backend ./.venv/bin/python backend/db/seed_activity_heat.py
+```
+

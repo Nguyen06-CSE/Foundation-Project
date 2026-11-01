@@ -65,6 +65,11 @@ class DocumentOut(DocumentBase):
     is_bundle: bool = False
     bundle_parent_id: Optional[int] = None
     bundle_children_count: Optional[int] = None
+    trending_score: float = 0.0
+    view_count: int = 0
+    download_count: int = 0
+    share_count: int = 0
+    personal_view_count: int = 0
     created_at: datetime
     updated_at: Optional[datetime] = None
     tags: list[TagOut] = Field(default_factory=list)

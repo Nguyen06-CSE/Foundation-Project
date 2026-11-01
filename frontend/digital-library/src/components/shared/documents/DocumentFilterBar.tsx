@@ -1,5 +1,5 @@
 // src/components/shared/DocumentFilterBar.tsx
-import { Search, Upload } from "lucide-react";
+import { Search, Upload, Flame, Eye, Clock, ArrowDownAZ } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { DynamicFilterDropdown } from "@/components/shared/feedback/DynamicFilterDropdown";
 import { Button } from "@/components/ui/Button";
@@ -36,16 +36,20 @@ interface DocumentFilterBarProps {
   selectedFileType: string | null;
   setSelectedFileType: (type: string | null) => void;
 
-  // Time Filters (Mới thêm)
+  // Time Filters
   selectedUploadTime?: string | null;
   setSelectedUploadTime?: (time: string | null) => void;
   selectedAccessTime?: string | null;
   setSelectedAccessTime?: (time: string | null) => void;
 
-  // Uploader Filter (Dành cho Group)
+  // Uploader Filter
   members?: WorkspaceMember[];
   selectedUploaderId?: number | null;
   setSelectedUploaderId?: (id: number | null) => void;
+
+  // Sort Filter
+  selectedSort?: string;
+  setSelectedSort?: (sort: string) => void;
 
   // Actions
   onUploadClick?: () => void;
@@ -68,6 +72,8 @@ export function DocumentFilterBar({
   setSelectedUploadTime,
   selectedAccessTime,
   setSelectedAccessTime,
+  selectedSort,
+  setSelectedSort,
   members,
   selectedUploaderId,
   setSelectedUploaderId,
@@ -78,12 +84,12 @@ export function DocumentFilterBar({
   return (
     <div className="flex flex-wrap items-center gap-3">
       {/* Ô Tìm kiếm */}
-      <div className="min-w-[240px] flex-1">
+      <div className="flex-1 min-w-[240px]">
         <Input
           placeholder={searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          icon={<Search className="h-4 w-4" />}
+          icon={<Search className="w-4 h-4" />}
         />
       </div>
 
@@ -103,8 +109,8 @@ export function DocumentFilterBar({
         {/* Lọc theo Nhãn dán */}
         <DynamicFilterDropdown
           label="Nhãn dán"
-          searchable={true} // Bật tính năng tìm kiếm cho Nhãn dán
-          searchPlaceholder="Tìm nhãn dán..." // Placeholder tuỳ chỉnh
+          searchable={true}
+          searchPlaceholder="Tìm nhãn dán..."
           options={tags.map((t) => ({
             value: (t.tag_id ?? t.id) as number,
             label: t.name,
@@ -134,6 +140,53 @@ export function DocumentFilterBar({
           />
         )}
 
+        {/* Sắp xếp tài liệu */}
+        {setSelectedSort && (
+          <DynamicFilterDropdown
+            label="Sắp xếp"
+            options={[
+              {
+                value: "trending",
+                label: (
+                  <div className="flex items-center gap-2">
+                    <Flame className="w-4 h-4 text-orange-500" />
+                    <span>Nổi bật</span>
+                  </div>
+                ),
+              },
+              {
+                value: "views",
+                label: (
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-blue-500" />
+                    <span>Lượt xem</span>
+                  </div>
+                ),
+              },
+              {
+                value: "newest",
+                label: (
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-green-500" />
+                    <span>Mới nhất</span>
+                  </div>
+                ),
+              },
+              {
+                value: "title",
+                label: (
+                  <div className="flex items-center gap-2">
+                    <ArrowDownAZ className="w-4 h-4 text-purple-500" />
+                    <span>Tên A-Z</span>
+                  </div>
+                ),
+              },
+            ]}
+            selectedValue={selectedSort ?? "trending"}
+            onChange={(val) => setSelectedSort((val as string) || "trending")}
+          />
+        )}
+
         {/* Lọc theo Người tải lên */}
         {members && members.length > 0 && setSelectedUploaderId && (
           <DynamicFilterDropdown
@@ -153,7 +206,7 @@ export function DocumentFilterBar({
         <div className="ml-auto">
           <Button
             variant="primary"
-            icon={<Upload className="h-4 w-4" />}
+            icon={<Upload className="w-4 h-4" />}
             onClick={onUploadClick}
           >
             Tải lên

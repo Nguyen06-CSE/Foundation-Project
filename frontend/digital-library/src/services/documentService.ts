@@ -8,6 +8,7 @@ export const createDocumentService = (getBaseUrl: (groupId?: number | string) =>
     folder_id?: number
     page?: number
     page_size?: number
+    sort?: string
   }, groupId?: number | string) =>
     api.get<PaginatedDocuments>(`${getBaseUrl(groupId)}/`, { params })
       .then(r => r.data),

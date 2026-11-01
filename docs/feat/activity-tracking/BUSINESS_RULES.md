@@ -129,3 +129,51 @@ Trong danh sách 20 sự kiện gần nhất trên trang Thống kê, các bản
 ### 5.3. Quy Tắc Làm Mượt Biểu Đồ 30 Ngày (Zero-fill Daily Chart)
 - Trục X của biểu đồ cột `BarChart` luôn hiển thị **đủ 30 cột mốc ngày liên tục** kể từ ngày hiện tại lùi về 29 ngày trước.
 - Những ngày không phát sinh bất kỳ sự kiện nào bắt buộc phải có giá trị `{ "date": "YYYY-MM-DD", "count": 0 }`. Tuyệt đối không bỏ trống ngày để tránh làm đứt gãy hoặc co rúm tỷ lệ hiển thị của biểu đồ Recharts.
+
+---
+
+## 6. Quy Tắc Sắp Xếp Hiển Thị Theo Nhu Cầu Hoạt Động (Trending Document Ordering)
+
+### 6.1. Mục Tiêu Nghiệp Vụ
+Người dùng khi truy cập Kho tài liệu cá nhân (`/ca-nhan`), Nhóm học tập (`/groups/{id}`), hay Thư viện chung (`/library`) thường có nhu cầu mở lại những tài liệu đang trong quá trình học tập/nghiên cứu cao độ. Do đó, hệ thống ưu tiên xếp các tài liệu có **chỉ số hoạt động cao lên vị trí đầu tiên** để người dùng truy cập nhanh nhất.
+
+### 6.2. Tiêu Chuẩn Sắp Xếp Mặc Định (Default Sort Strategy)
+- Tham số truy vấn `sort` mặc định là `"trending"` trên toàn bộ các endpoint liệt kê tài liệu.
+- Câu lệnh SQL sắp xếp chuẩn hóa:
+  ```sql
+  ORDER BY COALESCE(document_stats.trending_score, 0.0) DESC, documents.created_at DESC
+  ```
+- **Ý nghĩa kỹ thuật của `COALESCE`**:
+  - Đối với các tài liệu mới tải lên chưa có bản ghi trong bảng `document_stats`, giá trị `trending_score` nhận kết quả `NULL`. Hàm `COALESCE(..., 0.0)` chuyển đổi an toàn thành `0.0`.
+  - Tiêu chí phụ `documents.created_at DESC` đảm bảo giữa các tài liệu có cùng điểm số (hoặc cùng bằng 0), tài liệu vừa được tạo mới nhất sẽ xếp trước.
+- **Hỗ trợ các tùy chọn sắp xếp linh hoạt**:
+  - `trending`: `COALESCE(document_stats.trending_score, 0.0) DESC, documents.created_at DESC`
+  - `views`: `COALESCE(document_stats.view_count, 0) DESC, documents.created_at DESC`
+  - `newest`: `documents.created_at DESC`
+  - `title`: `documents.title ASC`
+
+### 6.3. Cơ Chế Real-time Counter Bump Trong Background Task
+Nhằm giải quyết độ trễ 60 phút của Cron Job tính điểm, hàm `_do_log_activity` trong `document_service.py` thực hiện cập nhật nóng (near real-time bump) trực tiếp vào bảng `document_stats` ngay khi sự kiện phát sinh:
+- Tăng `view_count += 1`, cập nhật `last_activity_at = now()`.
+- Tính lại điểm `trending_score` tạm thời dựa trên công thức trọng số kết hợp thời gian.
+- Nhờ vậy, ngay khi người dùng mở đọc tài liệu, điểm số được ghi nhận tức thì và tài liệu tự động thăng hạng lên đầu danh sách ở lần tải/F5 tiếp theo.
+
+---
+
+## 7. Quy Tắc Phân Bậc Màu Nền & Huy Hiệu Hoạt Động (Activity Heat Background & Badging)
+
+### 7.1. Phân Tích Nhận Thức Thị Giác (Visual Affordance)
+Tài liệu được mở nhiều lần đồng nghĩa với việc đang có giá trị sử dụng cao. Hệ thống áp dụng hiệu ứng **Heatmap Background (Màu nền ấm đậm dần)** theo các mốc số lần mở đọc của người dùng:
+
+| Bậc (Tier) | Mốc Xem (`viewCount`) | Màu Nền Card / Row | Màu Viền (Border) | Huy Hiệu (Badge) & Style | Ý Nghĩa Nhận Diện |
+| :---: | :---: | :--- | :--- | :--- | :--- |
+| **0** | `< 5` | `bg-white` | `border-gray-200/80` | Không hiển thị | Trạng thái mặc định, tài liệu ít tương tác |
+| **1** | `5 - 9` | `bg-amber-50/30` | `border-amber-200/60` | `5+ xem`<br>`bg-amber-50/90 text-amber-700` | Bắt đầu có tần suất tương tác |
+| **2** | `10 - 19` | `bg-amber-50/70` | `border-amber-200`<br>`group-hover:border-amber-300` | `🔥 10+ xem`<br>`bg-amber-100 text-amber-800` | Tài liệu học tập thường xuyên |
+| **3** | `>= 20` | `bg-orange-50/80` | `border-orange-300`<br>`group-hover:border-orange-400` | `⚡ Thường dùng (20+)`<br>`bg-gradient-to-r from-orange-500 to-amber-500 text-white` | Tài liệu trọng tâm, tài liệu gối đầu giường |
+
+### 7.2. Nguyên Tắc Lấy Dữ Liệu Lượt Xem
+- **Kho cá nhân & Nhóm học tập:** Ưu tiên sử dụng `personal_view_count` (số lần chính tài khoản đang đăng nhập đã mở tài liệu này). Nếu không có, dự phòng bằng tổng `view_count`.
+- **Kho học liệu công cộng (`/library`):** Sử dụng tổng `view_count` toàn trường để phản ánh độ "hot" của tài liệu đối với toàn bộ cộng đồng sinh viên.
+- **Tính đồng bộ trên mọi chế độ xem:** Hiệu ứng màu nền và huy hiệu hiển thị nhất quán trên 3 dạng giao diện: Dạng lưới Card (`FileDocumentCard`, `BundleDocumentCard`, `LocalGroupDocumentCard`), Dạng danh sách bảng (`DocumentListView`), và Dạng thẻ chi tiết (`DocumentDetailView`).
+

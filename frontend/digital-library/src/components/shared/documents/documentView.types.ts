@@ -28,6 +28,9 @@ export interface DocumentListItem {
   is_bundle?: boolean
   bundle_parent_id?: number | null
   bundle_children_count?: number | null
+  view_count?: number
+  personal_view_count?: number
+  trending_score?: number
 }
 
 export interface BaseDocumentViewProps {

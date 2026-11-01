@@ -1,9 +1,9 @@
 // frontend/digital-library/src/pages/group/GroupList.tsx
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Search, Users, X, Check, Bell, List, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -17,6 +17,7 @@ import { cn } from "@/utils/cn";
 import { mockGroups } from "@/mocks/groups";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { useHighlightElement } from "@/hooks/useHighlightElement";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 
 export interface Tag {
   id: number;
@@ -47,10 +48,28 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
 
 export default function GroupList() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<TabKey>("groups");
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("create") === "1") {
+      setIsCreateOpen(true);
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.delete("create");
+          return next;
+        },
+        { replace: true }
+      );
+    }
+    if (searchParams.get("tab") === "notifications") {
+      setActiveTab("notifications");
+    }
+  }, [searchParams, setSearchParams]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["groups"],
@@ -98,6 +117,7 @@ export default function GroupList() {
     },
     onSuccess: (workspace) => {
       queryClient.invalidateQueries({ queryKey: ["groups"] });
+      invalidateDashboard(queryClient);
       setIsCreateOpen(false);
 
       navigate(`/groups?highlight_group=${workspace.id}`, { replace: true });

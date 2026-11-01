@@ -8,6 +8,8 @@ import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import { Avatar } from "@/components/ui/Avatar"; // <-- 1. Import Component Avatar
 import { getThumbnailUrl } from "@/utils/getThumbnailUrl";
+import { getActivityHeat } from "@/utils/activityHeat";
+import { cn } from "@/utils/cn";
 import type { LocalGroupDocumentCardProps } from "../../types/groupSpace.types";
 
 // ======================================================
@@ -136,13 +138,18 @@ export default function LocalGroupDocumentCard({
 
   const uploaderName = document.owner?.full_name || document.owner?.username || "Thành viên";
   const uploaderAvatar = document.owner?.avatar_url || document.owner?.avatar || undefined;
-  console.log("Dữ liệu Document từ API:", document);
+
+  const viewCount = document.personal_view_count ?? document.view_count ?? 0;
+  const heat = getActivityHeat(viewCount);
 
   return (
     <div
       id={`doc-${document.id}`}
-      // Thay đổi chiều cao từ h-[280px] lên h-[290px] để đủ chỗ cho Avatar
-      className={`group relative flex h-[290px] w-full flex-col overflow-hidden rounded-xl border border-gray-200/80 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${theme.border}`}
+      className={cn(
+        "group relative flex h-[290px] w-full flex-col overflow-hidden rounded-xl border shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md",
+        heat.cardBg,
+        heat.level > 0 ? heat.border : `border-gray-200/80 ${theme.border}`,
+      )}
     >
       {/* 1. KHUNG PREVIEW TÀI LIỆU */}
       <div
@@ -154,6 +161,20 @@ export default function LocalGroupDocumentCard({
             {ext || "FILE"}
           </span>
         </div>
+
+        {/* Heat Badge ở góc trên phải */}
+        {heat.badgeText && (
+          <div className="pointer-events-none absolute right-2.5 top-2.5 z-10">
+            <span
+              className={cn(
+                "inline-flex items-center rounded-md px-2 py-0.5 text-[10px] shadow-2xs backdrop-blur-xs",
+                heat.badgeClass,
+              )}
+            >
+              {heat.badgeText}
+            </span>
+          </div>
+        )}
 
         {thumbnailUrl ? (
           <img
@@ -170,7 +191,7 @@ export default function LocalGroupDocumentCard({
       </div>
 
       {/* 2. KHUNG THÔNG TIN TÀI LIỆU */}
-      <div className="relative flex flex-1 flex-col justify-between p-3.5">
+      <div className={cn("relative flex flex-1 flex-col justify-between p-3.5 transition-colors", heat.cardBg)}>
         <div>
           {/* Tiêu đề & Menu thao tác */}
           <div className="flex items-start justify-between gap-1.5">

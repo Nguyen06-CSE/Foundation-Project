@@ -9,7 +9,6 @@ import { useRestoreSession } from "@/hooks/useRestoreSession";
 import { LoginPage } from "@/pages/auth/LoginPage";
 
 // Pages - Personal
-import { PersonalHome } from "@/pages/personal/PersonalHome";
 import { PersonalDashboard } from "@/pages/personal/PersonalDashboard";
 import { PersonalDocuments } from "@/pages/personal/PersonalDocuments";
 import SharedWithMe from "@/pages/personal/SharedWithMe";
@@ -86,8 +85,11 @@ function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
           {/* Section: Personal */}
-          <Route path="/personal" element={<PersonalHome />} />
-          <Route path="/personal/dashboard" element={<PersonalDashboard />} />
+          <Route path="/personal" element={<PersonalDashboard />} />
+          <Route
+            path="/personal/dashboard"
+            element={<Navigate to="/personal" replace />}
+          />
           <Route path="/personal/documents" element={<PersonalDocuments />} />
           <Route path="/personal/documents/:id" element={<DocumentDetail />} />
           <Route path="/personal/bundle/:id" element={<BundleDetailPage />} />

@@ -17,6 +17,7 @@ import {
 import { trashService } from "@/services/trashService";
 import { formatSize } from "@/utils/formatSize";
 import { groupDocsIntoBatches } from "@/utils/trashUtils";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { TrashDocument } from "@/types/trash";
 import {
   TrashStatCard,
@@ -87,6 +88,7 @@ export default function TrashPage() {
     onSuccess: (_, restoredIds) => {
       queryClient.invalidateQueries({ queryKey: ["trash"] });
       queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
       setSelectedDocIds((prev) =>
         prev.filter((id) => !restoredIds.includes(id))
       );
@@ -109,6 +111,7 @@ export default function TrashPage() {
     },
     onSuccess: (_, deletedIds) => {
       queryClient.invalidateQueries({ queryKey: ["trash"] });
+      invalidateDashboard(queryClient);
       setSelectedDocIds((prev) =>
         prev.filter((id) => !deletedIds.includes(id))
       );
@@ -121,6 +124,7 @@ export default function TrashPage() {
     mutationFn: trashService.emptyTrash,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["trash"] });
+      invalidateDashboard(queryClient);
       setSelectedDocIds([]);
       setConfirmState({ isOpen: false, mode: "empty", targetDocIds: [] });
     },

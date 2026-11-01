@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/utils/cn";
 import { formatSize } from "@/utils/formatSize";
@@ -21,6 +22,7 @@ import { TabContent } from "./tabs/TabContent";
 import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
 
 export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
+  const queryClient = useQueryClient();
   const {
     doc,
     isLoading,
@@ -127,7 +129,6 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   return (
     <div className="flex flex-col gap-6 pb-10">
-
       <div
         className={cn(
           "grid grid-cols-1 items-start gap-4",
@@ -135,7 +136,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
         )}
       >
         {/* ── Cột trái: Header, Tabs & Xem trước nội dung ── */}
-        <Card className="flex flex-col min-w-0">
+        <Card className="flex flex-col min-w-0 h-[1100px]">
           <DocumentTitleHeader
             onBack={handleBack}
             title={doc.title}
@@ -174,56 +175,61 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
             </div>
 
             {/* Bên phải: Nút Bản gốc / Markdown (nếu có) và Nút Info Toggle */}
-  <div className="flex items-center gap-2 pb-2">
-    {activeTab === "detail" && markdownDownloadUrl && (
-      <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
-        <button
-          type="button"
-          onClick={() => setViewMode("original")}
-          className={cn(
-            "px-3 py-1 text-xs rounded-md border transition-colors",
-            viewMode === "original"
-              ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
-              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
-          )}
-        >
-          Bản gốc
-        </button>
-        <button
-          type="button"
-          onClick={() => setViewMode("markdown")}
-          className={cn(
-            "px-3 py-1 text-xs rounded-md border transition-colors",
-            viewMode === "markdown"
-              ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
-              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
-          )}
-        >
-          Markdown
-        </button>
-      </div>
-    )}
+            <div className="flex items-center gap-2 pb-2">
+              {activeTab === "detail" && markdownDownloadUrl && (
+                <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("original")}
+                    className={cn(
+                      "px-3 py-1 text-xs rounded-md border transition-colors",
+                      viewMode === "original"
+                        ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+                    )}
+                  >
+                    Bản gốc
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("markdown")}
+                    className={cn(
+                      "px-3 py-1 text-xs rounded-md border transition-colors",
+                      viewMode === "markdown"
+                        ? "bg-primary-50 border-primary-300 text-primary-700 font-medium"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+                    )}
+                  >
+                    Markdown
+                  </button>
+                </div>
+              )}
 
-    {/* Nút Toggle Sidebar (Icon Info) */}
-    <button
-      type="button"
-      onClick={() => setSidebarOpen((v) => !v)}
-      className={cn(
-        "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
-        sidebarOpen
-          ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
-          : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
-      )}
-      title={sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"}
-      aria-label={sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"}
-    >
-      <Info className="h-4 w-4" />
-    </button>
-  </div>
+              {/* Nút Toggle Sidebar (Icon Info) */}
+              <button
+                type="button"
+                onClick={() => setSidebarOpen((v) => !v)}
+                className={cn(
+                  "shrink-0 inline-flex items-center justify-center p-1.5 rounded-md border transition-all shadow-2xs",
+                  sidebarOpen
+                    ? "border-primary-200 bg-primary-50 text-primary-600 hover:bg-primary-100"
+                    : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-900",
+                )}
+                title={
+                  sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                }
+                aria-label={
+                  sidebarOpen ? "Ẩn bảng thông tin" : "Hiện bảng thông tin"
+                }
+              >
+                <Info className="h-4 w-4" />
+              </button>
+            </div>
           </div>
 
           {/* Nội dung tương ứng theo từng tab */}
-          <div className="pt-1">
+          <div className="pt-1 flex-1 min-h-0 overflow-y-auto relative flex flex-col">
+            {" "}
             {activeTab === "detail" && (
               <TabPreview
                 doc={doc}
@@ -274,6 +280,11 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               isCreatingTag={isCreatingTag}
               onRemoveTag={handleRemoveTag}
               isRemovingTag={isRemovingTag}
+              viewCount={doc.view_count ?? 0}
+              downloadCount={doc.download_count ?? 0}
+              shareCount={doc.share_count ?? 0}
+              personalViewCount={doc.personal_view_count}
+              isPersonal={!doc.workspace_id}
             />
 
             <DocumentActionCard
@@ -289,6 +300,11 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               onStartRename={handleStartRename}
               onDelete={handleDelete}
               onSetCover={handleSetCover}
+              onDownloadSuccess={() => {
+                queryClient.invalidateQueries({
+                  queryKey: [...(props.queryKeyPrefix || ["document"]), doc.id],
+                });
+              }}
             />
           </div>
         )}

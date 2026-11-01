@@ -173,7 +173,7 @@ export function CodeViewer({ documentId, filePath, title }: CodeViewerProps) {
   }
 
   return (
-    <div className="w-full max-w-full min-w-0 h-full min-h-[550px] max-h-[800px] overflow-hidden bg-[#f6f8fa] rounded-xl border border-gray-200 text-sm flex flex-col font-mono">
+    <div className="w-full max-w-full min-w-0 h-full flex-1  overflow-hidden bg-[#f6f8fa] rounded-xl border border-gray-200 text-sm flex flex-col font-mono">
       {/* Header toolbar: Chuyển đổi Code / Raw & Nút sao chép */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50 text-xs">
         <div className="flex items-center gap-1 bg-gray-200/60 p-0.5 rounded-lg">

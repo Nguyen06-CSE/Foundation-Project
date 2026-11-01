@@ -19,7 +19,7 @@ import {
 import { groupService } from "@/services/groupService";
 import { formatSize } from "@/utils/formatSize";
 import { groupDocsIntoBatches } from "@/utils/trashUtils";
-import type { TrashBatch, TrashDocument } from "@/types/trash";
+import type { TrashDocument } from "@/types/trash";
 import {
   TrashStatCard,
   TrashEmptyState,

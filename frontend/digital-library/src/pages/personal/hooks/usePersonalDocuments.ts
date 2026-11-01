@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documentService } from "@/services/documentService";
 import { activityService } from "@/services/activityService";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import { getFileExtension } from "@/utils/file";
 import { formatSize } from "@/utils/formatSize";
@@ -56,6 +57,7 @@ export function usePersonalDocuments(
 
   const [selectedUploadTime, setSelectedUploadTime] = useState<string | null>(null);
   const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
+  const [selectedSort, setSelectedSort] = useState<string>("trending");
 
   // --- 2. STATES GIAO DIỆN & MODAL ---
   const [page, setPage] = useState(1);
@@ -72,14 +74,17 @@ export function usePersonalDocuments(
   });
 
   const { data: docData, isLoading: docsLoading, isFetching } = useQuery({
-    queryKey: ["documents"],
-    queryFn: () => documentService.getAll({ page: 1, page_size: 100 }),
+    queryKey: ["documents", selectedSort],
+    queryFn: () => documentService.getAll({ page: 1, page_size: 100, sort: selectedSort }),
   });
 
   // --- 4. MUTATIONS ---
   const deleteMutation = useMutation({
     mutationFn: (id: string) => documentService.delete(Number(id)),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
+    },
   });
 
   const renameDocumentMutation = useMutation({
@@ -87,6 +92,7 @@ export function usePersonalDocuments(
       documentService.update(Number(id), { title }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
       setIsRenameModalOpen(false);
       setRenamingDoc(null);
     },
@@ -94,7 +100,10 @@ export function usePersonalDocuments(
 
   const uploadMutation = useMutation({
     mutationFn: (fd: FormData) => documentService.upload(fd),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
+    },
   });
 
   // --- 5. HANDLERS ---
@@ -177,6 +186,11 @@ export function usePersonalDocuments(
       is_bundle: doc.is_bundle,
       bundle_parent_id: doc.bundle_parent_id,
       bundle_children_count: doc.bundle_children_count,
+
+      // STATS
+      view_count: doc.view_count ?? 0,
+      personal_view_count: doc.personal_view_count ?? 0,
+      trending_score: doc.trending_score ?? 0,
 
       // LƯU CÁC MỐC THỜI GIAN ĐỂ PHỤC VỤ BỘ LỌC
       created_at: doc.created_at,
@@ -311,6 +325,8 @@ export function usePersonalDocuments(
     setSelectedUploadTime,
     selectedAccessTime,
     setSelectedAccessTime,
+    selectedSort,
+    setSelectedSort,
 
     // Data (Đã lọc)
     fileTypes, docData, docsLoading, isFetching,

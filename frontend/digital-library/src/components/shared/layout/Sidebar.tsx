@@ -7,7 +7,6 @@ import {
   User,
   Users,
   BookOpen,
-  LayoutDashboard,
   FileText,
   Share2,
   Heart,
@@ -36,7 +35,7 @@ const SCOPE_ITEMS: SidebarItem[] = [
 ];
 
 const PERSONAL_ITEMS: SidebarItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", to: "/personal/dashboard" },
+  //{ icon: LayoutDashboard, label: "Dashboard", to: "/personal/dashboard" },
   { icon: FileText, label: "Tài liệu", to: "/personal/documents" },
   { icon: Share2, label: "Đã chia sẻ với tôi", to: "/personal/shared" },
   { icon: Heart, label: "Yêu thích", to: "/personal/favorites" },
@@ -201,6 +200,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       <NavLink
         key={item.to}
         to={item.to}
+        end={item.to === "/personal"}
         onClick={onNavigate}
         title={isCollapsed ? item.label : undefined}
         className={({ isActive }) =>

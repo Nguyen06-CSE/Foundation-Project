@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { folderService } from "@/services/folderService";
 import { tagService } from "@/services/tagService";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { FolderAction } from "@/components/shared/folders/FolderContextMenu";
 import type { FolderInitialData } from "../../../components/shared/modals/CreateFolderModal";
 
@@ -39,6 +40,7 @@ const createFolderMutation = useMutation({
     onSuccess: () => {
       // Tự động làm mới danh sách folder trên UI mà không cần F5
       queryClient.invalidateQueries({ queryKey: ["folders"] });
+      invalidateDashboard(queryClient);
     },
   });
 
@@ -72,6 +74,7 @@ const updateFolderMutation = useMutation({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["folders"] });
+      invalidateDashboard(queryClient);
     },
   });
 
@@ -84,6 +87,7 @@ const updateFolderMutation = useMutation({
     mutationFn: (id: number) => folderService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["folders"] });
+      invalidateDashboard(queryClient);
       if (selectedFolderId === deletingFolderId) {
         setSelectedFolderId(null);
       }

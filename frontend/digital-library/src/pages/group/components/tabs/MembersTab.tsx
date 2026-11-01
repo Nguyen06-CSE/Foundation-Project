@@ -42,7 +42,7 @@ export default function MembersTab({
       <div className="flex justify-end">
         {isOwner && (
           <Button icon={<UserPlus className="h-4 w-4" />} onClick={onInvite}>
-            + Mời thành viên
+            Mời thành viên
           </Button>
         )}
       </div>
