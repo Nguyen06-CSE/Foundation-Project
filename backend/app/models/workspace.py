@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from .workspace_invitation import WorkspaceInvitation
     from .document import Document
     from .folder import Folder
-    from .classes import Class
+    from .academic_class import Class
     from .faculty import Faculty
     from .trash_batch import TrashBatch  
 
