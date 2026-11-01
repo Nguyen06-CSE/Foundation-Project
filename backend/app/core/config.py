@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     # Chế độ lưu trữ: "local" (mặc định cho main/local) hoặc "r2" (cho cloud/produc)
     STORAGE_BACKEND: str = "local"
+    STORAGE_QUOTA_BYTES: int = 15 * 1024 * 1024 * 1024
 
     # --- Các biến cấu hình Storage Cloudflare R2 / MinIO (tùy chọn) ---
     MINIO_ENDPOINT: Optional[str] = None

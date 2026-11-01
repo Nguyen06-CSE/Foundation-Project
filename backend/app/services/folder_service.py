@@ -81,18 +81,22 @@ async def get_folders_with_stats(
     result = await db.execute(sql, {"owner_id": owner_id, "workspace_id": workspace_id})
     rows = result.mappings().all()
 
+    folder_ids = [r["id"] for r in rows]
+    folder_tags_map: dict[int, list[Tag]] = {fid: [] for fid in folder_ids}
+
+    if folder_ids:
+        tags_result = await db.execute(
+            select(FolderTag.folder_id, Tag)
+            .join(Tag, FolderTag.tag_id == Tag.id)
+            .where(FolderTag.folder_id.in_(folder_ids))
+        )
+        for fid, tag in tags_result.all():
+            folder_tags_map[fid].append(tag)
+
     folders_out = []
     for row in rows:
-        # 3. Query lấy danh sách Tag objects
-        tags_result = await db.execute(
-            select(Tag)
-            .join(FolderTag, FolderTag.tag_id == Tag.id)
-            .where(FolderTag.folder_id == row["id"])
-        )
-        tags = tags_result.scalars().all()
-
         folder_dict = dict(row)
-        folder_dict["tags"] = tags
+        folder_dict["tags"] = folder_tags_map.get(row["id"], [])
         folders_out.append(folder_dict)
 
     return folders_out

@@ -1,187 +1,285 @@
-// src/pages/personal/PersonalDashboard.tsx
+// frontend/digital-library/src/pages/personal/PersonalDashboard.tsx
 
-import { useEffect, useState } from "react";
-import { Upload, FileText, Share2, Star, HardDrive, FileX } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { StatCard } from "@/components/shared/feedback/StatCard";
-import { DocumentRow } from "@/components/shared/documents/DocumentRow";
-import EmptyState from "@/components/shared/feedback/EmptyState";
-import { ProcessingDonut } from "@/components/shared/feedback/ProcessingDonut";
-import { TagDistribution } from "@/components/shared/feedback/TagDistribution";
-import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
-import { documents } from "@/mocks/documents";
-import { personalStats, processingStats, tagDistribution } from "@/mocks/stats";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/stores/authStore";
+import { useToastStore } from "@/stores/toastStore";
+
+// Sub-components
+import { QuickActions } from "./dashboard/components/QuickActions";
+import { StatCards } from "./dashboard/components/StatCards";
+import { RecentOpened } from "./dashboard/components/RecentOpened";
+import { FolderShortcuts } from "./dashboard/components/FolderShortcuts";
+import { GroupsCard } from "./dashboard/components/GroupsCard";
+import { ContributionCard } from "./dashboard/components/ContributionCard";
+import { ActivityFeed } from "./dashboard/components/ActivityFeed";
+import { DashboardUpdates } from "./dashboard/components/DashboardUpdates";
+import { DashboardError, DashboardLoading } from "./dashboard/components/DashboardStates";
+import { DashboardModals } from "./dashboard/components/DashboardModals";
+import { usePersonalDashboardData } from "./dashboard/hooks/usePersonalDashboardData";
+
+function getTimeBasedGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Chào buổi sáng";
+  if (hour < 18) return "Chào buổi chiều";
+  return "Chào buổi tối";
+}
 
 export function PersonalDashboard() {
-  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const { addToast } = useToastStore();
+  const dashboard = usePersonalDashboardData();
+  const { data: summary, isLoading: isSummaryLoading, isError, refetch } = dashboard.summaryQuery;
+  const {
+    invitations,
+    trendingData,
+    isTrendingLoading,
+    folders,
+    isFoldersLoading,
+    tags,
+    uploadMutation,
+    createFolderMutation,
+  } = dashboard;
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 1500);
-    return () => window.clearTimeout(timer);
-  }, []);
+  // Modals state
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
 
-  const handleDocumentAction = (action: DocumentAction | string, documentId: string) => {
-    console.log("Action:", action, "on document:", documentId);
+  // Actions
+  const handleOpenUpload = () => {
+    setIsUploadOpen(true);
   };
 
-  // Hàm lấy đuôi file linh hoạt (Xử lý được cả file_path, title, lẫn MIME type)
-  const getFileExtension = (input: string | undefined | null) => {
-    if (!input) return "";
-    
-    // Nếu là tên file hoặc đường dẫn có chứa dấu chấm (vd: /docs/report.pdf hoặc report.docx)
-    if (input.includes(".")) {
-      const parts = input.split(".");
-      return `.${parts.pop()}`.toLowerCase();
-    }
-    
-    // Nếu là dạng MIME type (vd: application/pdf)
-    if (input.includes("/")) {
-      const mimeExt = input.split("/")[1];
-      return mimeExt ? `.${mimeExt.toLowerCase()}` : "";
-    }
-    
-    return input.startsWith(".") ? input.toLowerCase() : `.${input.toLowerCase()}`;
+  const handleContributeAction = () => {
+    addToast({
+      message: "Chọn tài liệu cá nhân của bạn rồi bấm 'Đóng góp' trong menu thao tác.",
+      variant: "info",
+    });
+    navigate("/personal/documents");
   };
 
-  const recentDocuments = documents.slice(0, 5).map((doc: any) => ({
-    id: doc.id?.toString(),
-    name: doc.title || doc.name,
-    type: doc.fileType || doc.file_type || 'unknown',
-    updatedAt: doc.updatedAtLabel || doc.created_at,
-    size: doc.sizeLabel || doc.file_size,
-    // Lấy đuôi file ưu tiên theo file_path -> file_type -> title
-    extension: getFileExtension(doc.filePath || doc.file_path || doc.fileType || doc.file_type || doc.title),
-    owner: doc.owner || { name: 'You', avatar: '' },
-  }));
+  const handleRejectedNotice = () => {
+    addToast({
+      message: "Các đóng góp bị từ chối cần xem lại tài liệu và thông tin trước khi gửi lại.",
+      variant: "warning",
+    });
+    navigate("/personal/documents");
+  };
+
+  // Date & Greeting
+  const greeting = useMemo(() => getTimeBasedGreeting(), []);
+  const todayStr = useMemo(
+    () =>
+      new Date().toLocaleDateString("vi-VN", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+    []
+  );
+
+  const displayName = user?.full_name || user?.username || "bạn";
+  const pendingInvitationCount = invitations.filter((item) => item.status === "pending").length;
+  const rejectedCount = summary?.rejected_recent_count ?? 0;
+  const expiringTrashCount = summary?.expiring_trash_count ?? 0;
+  const attentionCount =
+    pendingInvitationCount + rejectedCount + (expiringTrashCount > 0 ? 1 : 0);
+
+  if (isError) {
+    return <DashboardError onRetry={() => refetch()} />;
+  }
+
+  if (isSummaryLoading || !summary) {
+    return <DashboardLoading />;
+  }
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Greeting */}
-      <Card className="p-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Xin chào, Cao Khôi Nguyên
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Hôm nay bạn muốn học tập và nghiên cứu tài liệu gì?
-        </p>
-      </Card>
-
-      {/* Stat Cards — 4 cột */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {isLoading ? (
-          Array.from({ length: 4 }).map((_, index) => (
-            <Card key={index} className="flex items-center gap-4 p-5">
-              <div className="h-12 w-12 rounded-xl bg-gray-200 animate-pulse" />
-              <div className="flex-1 space-y-2">
-                <div className="h-4 w-24 rounded bg-gray-200 animate-pulse" />
-                <div className="h-8 w-20 rounded bg-gray-200 animate-pulse" />
-                <div className="h-3 w-32 rounded bg-gray-200 animate-pulse" />
-              </div>
-            </Card>
-          ))
-        ) : (
-          <>
-            <StatCard
-              icon={<FileText className="h-6 w-6 text-primary-600" />}
-              iconBg="bg-primary-50"
-              label="Tổng tài liệu"
-              value={personalStats.totalDocuments}
-              subLabel={personalStats.totalDocumentsLabel}
-            />
-            <StatCard
-              icon={<Share2 className="h-6 w-6 text-blue-500" />}
-              iconBg="bg-blue-50"
-              label="Đã chia sẻ"
-              value={personalStats.sharedCount}
-              subLabel={personalStats.sharedCountLabel}
-            />
-            <StatCard
-              icon={<HardDrive className="h-6 w-6 text-orange-500" />}
-              iconBg="bg-orange-50"
-              label="Dung lượng đã dùng"
-              value={personalStats.storageUsed}
-              subLabel={personalStats.storageLabel}
-            />
-            <StatCard
-              icon={<Star className="h-6 w-6 text-yellow-500" />}
-              iconBg="bg-yellow-50"
-              label="Yêu thích"
-              value={personalStats.favoriteCount}
-              subLabel={personalStats.favoriteLabel}
-            />
-          </>
-        )}
-      </div>
-
-      {/* Main 2-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 items-start">
-        {/* Left: Recent Documents */}
-        <Card className="overflow-hidden">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Tài liệu gần đây</h2>
-            <Link
-              to="/personal/documents"
-              className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline"
-            >
-              Xem tất cả
-            </Link>
-          </div>
-          <div>
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, index) => (
-                <div key={index} className="flex items-center gap-3 border-b border-gray-100 px-2 py-3 last:border-0">
-                  <div className="h-10 w-10 rounded-lg bg-gray-200 animate-pulse" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 w-2/3 rounded bg-gray-200 animate-pulse" />
-                    <div className="h-3 w-24 rounded bg-gray-200 animate-pulse" />
-                  </div>
-                  <div className="hidden h-4 w-12 rounded bg-gray-200 animate-pulse sm:block" />
-                  <div className="hidden h-4 w-16 rounded bg-gray-200 animate-pulse sm:block" />
-                </div>
-              ))
-            ) : recentDocuments.length > 0 ? (
-              recentDocuments.map((doc) => (
-                <DocumentRow
-                  key={doc.id}
-                  document={doc}
-                  onAction={handleDocumentAction}
-                />
-              ))
+    <div className="mx-auto flex max-w-[1600px] flex-col gap-6 pb-8">
+      {/* 1. HERO HEADER: Lời chào thông minh + Thao tác nhanh */}
+      <header className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xs sm:p-6 xl:flex-row xl:items-center xl:justify-between">
+        <div className="space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="text-xs font-medium tracking-wide text-gray-500 uppercase">
+              {todayStr}
+            </span>
+            <span className="text-gray-300">•</span>
+            {attentionCount > 0 ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 ring-inset">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                {attentionCount} việc cần chú ý
+              </span>
             ) : (
-              <EmptyState
-                icon={<FileX className="h-6 w-6" />}
-                title="Chưa có tài liệu nào"
-                description="Tải lên tài liệu đầu tiên để bắt đầu xây dựng thư viện cá nhân."
-                actionLabel="Tải tài liệu đầu tiên"
-                onAction={() => console.log("Upload first document")}
-              />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/20 ring-inset">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                Mọi thứ đã được cập nhật
+              </span>
             )}
           </div>
-        </Card>
 
-        {/* Right column: Upload + ProcessingDonut + TagDistribution */}
-        <div className="flex flex-col gap-4">
-          {/* Upload Button */}
-          <Button
-            variant="primary"
-            className="w-full text-base py-8 h-auto"
-            icon={<Upload className="h-5 w-5" />}
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+            {greeting}, {displayName}!
+          </h1>
+          <p className="text-sm text-gray-500">
+            Quản lý tài liệu cá nhân, thư mục học phần và không gian học tập nhóm của bạn tại một nơi.
+          </p>
+        </div>
+
+        <div className="shrink-0">
+          <QuickActions
+            onUploadSingle={handleOpenUpload}
+            onCreateFolder={() => setIsCreateFolderOpen(true)}
+            onCreateGroup={() => navigate("/groups?create=1")}
+            onContribute={handleContributeAction}
+          />
+        </div>
+      </header>
+
+      {/* 2. METRIC STRIP: Chỉ số tổng quan */}
+      <section aria-label="Thống kê nhanh">
+        <StatCards
+          totalPersonalDocs={summary.total_docs}
+          newDocs7d={summary.new_docs_7d}
+          usedBytes={summary.storage_used_bytes}
+          quotaBytes={summary.storage_quota_bytes}
+          sharedDocsCount={summary.shared_docs_count}
+          favoriteCount={summary.favorite_count}
+          approvedContributions={summary.contributions.approved}
+          contributedDownloads={summary.contributions.approved_downloads}
+        />
+      </section>
+
+      {/* 3. BỐ CỤC CHÍNH 2 CỘT: Main Workspace (Trái) & Contextual Rail (Phải) */}
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-12">
+        {/* CỘT TRÁI (8/12): Không gian tài liệu, thư mục & cộng tác */}
+        <div className="flex flex-col gap-6 xl:col-span-8 2xl:col-span-9">
+          {/* 3.1. Tiếp tục công việc (Mở gần đây / Thịnh hành) */}
+          <section aria-label="Tài liệu truy cập nhanh">
+            <RecentOpened
+              documents={summary.recent_viewed}
+              trendingDocuments={trendingData?.items ?? []}
+              sharedCount={summary.shared_docs_count}
+              favoriteCount={summary.favorite_count}
+              isTrendingLoading={isTrendingLoading}
+            />
+          </section>
+
+          {/* 3.2. Thư mục cá nhân */}
+          <section aria-label="Thư mục cá nhân">
+            <FolderShortcuts
+              folders={folders}
+              isLoading={isFoldersLoading}
+              onCreateFolder={() => setIsCreateFolderOpen(true)}
+            />
+          </section>
+
+          {/* 3.3. Nhóm học tập & Đóng góp học liệu (Đặt song song cân đối) */}
+          <section
+            aria-label="Cộng tác và đóng góp"
+            className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2"
           >
-            + Tải tài liệu lên
-          </Button>
+            <GroupsCard
+              groupsCount={summary.groups.total}
+              totalGroupDocs={summary.groups.total_docs}
+              recentGroups={summary.groups.recent}
+            />
+            <ContributionCard
+              contributions={summary.contributions}
+              onContribute={handleContributeAction}
+            />
+          </section>
+        </div>
 
-          {/* Processing Donut */}
-          <ProcessingDonut
-            percent={processingStats.percent}
-            legendItems={processingStats.legendItems}
+        {/* CỘT PHẢI (4/12): Trung tâm thông báo, việc cần làm & lịch sử hoạt động */}
+        <aside
+          aria-label="Thông báo và hoạt động"
+          className="flex flex-col gap-6 xl:sticky xl:top-6 xl:col-span-4 2xl:col-span-3"
+        >
+          {/* Banner nhắc việc thông minh (Chỉ hiển thị khi thực sự có việc cần xử lý) */}
+          {attentionCount > 0 && (
+            <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4">
+              <h2 className="text-sm font-semibold text-amber-900">
+                Cần bạn phản hồi ({attentionCount})
+              </h2>
+              <ul className="mt-2 space-y-1.5 text-xs text-amber-800">
+                {pendingInvitationCount > 0 && (
+                  <li className="flex items-center justify-between">
+                    <span>• {pendingInvitationCount} lời mời tham gia nhóm học tập</span>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/groups")}
+                      className="font-semibold underline hover:text-amber-950"
+                    >
+                      Xem
+                    </button>
+                  </li>
+                )}
+                {rejectedCount > 0 && (
+                  <li className="flex items-center justify-between">
+                    <span>• {rejectedCount} học liệu đóng góp cần chỉnh sửa</span>
+                    <button
+                      type="button"
+                      onClick={handleRejectedNotice}
+                      className="font-semibold underline hover:text-amber-950"
+                    >
+                      Kiểm tra
+                    </button>
+                  </li>
+                )}
+                {expiringTrashCount > 0 && (
+                  <li className="flex items-center justify-between">
+                    <span>• {expiringTrashCount} tệp trong thùng rác sắp xóa vĩnh viễn</span>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/personal/trash")}
+                      className="font-semibold underline hover:text-amber-950"
+                    >
+                      Mở thùng rác
+                    </button>
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
+          {/* Trung tâm cập nhật (Thông báo / Việc cần làm) */}
+          <DashboardUpdates
+            summary={summary}
+            invitations={invitations}
+            activities={summary.recent_activities}
+            onRejectedClick={handleRejectedNotice}
           />
 
-          {/* Tag Distribution */}
-          <TagDistribution tags={tagDistribution} />
-        </div>
+          {/* Nhật ký hoạt động gần đây */}
+          <ActivityFeed activities={summary.recent_activities} />
+        </aside>
       </div>
+
+      {/* 4. MODALS */}
+      <DashboardModals
+        uploadOpen={isUploadOpen}
+        folderOpen={isCreateFolderOpen}
+        tags={tags}
+        isUploading={uploadMutation.isPending}
+        isCreatingFolder={createFolderMutation.isPending}
+        onCloseUpload={() => setIsUploadOpen(false)}
+        onCloseFolder={() => setIsCreateFolderOpen(false)}
+        onUpload={async (fd) => {
+          await uploadMutation.mutateAsync(fd);
+          setIsUploadOpen(false);
+        }}
+        onCreateFolder={async (data) => {
+          await createFolderMutation.mutateAsync({
+            name: data.name,
+            color: data.color,
+            tagIds: data.tagIds,
+          });
+          setIsCreateFolderOpen(false);
+        }}
+      />
     </div>
   );
 }
+
+export default PersonalDashboard;

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documentService } from "@/services/documentService";
 import { activityService } from "@/services/activityService";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import { getFileExtension } from "@/utils/file";
 import { formatSize } from "@/utils/formatSize";
@@ -80,7 +81,10 @@ export function usePersonalDocuments(
   // --- 4. MUTATIONS ---
   const deleteMutation = useMutation({
     mutationFn: (id: string) => documentService.delete(Number(id)),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
+    },
   });
 
   const renameDocumentMutation = useMutation({
@@ -88,6 +92,7 @@ export function usePersonalDocuments(
       documentService.update(Number(id), { title }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
       setIsRenameModalOpen(false);
       setRenamingDoc(null);
     },
@@ -95,7 +100,10 @@ export function usePersonalDocuments(
 
   const uploadMutation = useMutation({
     mutationFn: (fd: FormData) => documentService.upload(fd),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      invalidateDashboard(queryClient);
+    },
   });
 
   // --- 5. HANDLERS ---

@@ -26,7 +26,7 @@ interface SidebarItem {
 }
 
 const SCOPE_ITEMS: SidebarItem[] = [
-  { icon: User, label: "Cá nhân", to: "/personal/dashboard" },
+  { icon: User, label: "Cá nhân", to: "/personal" },
   { icon: Users, label: "Nhóm", to: "/groups" },
   // { icon: BookOpen, label: "Lớp", to: "/class" },
   // { icon: GraduationCap, label: "Khoa", to: "/faculty" },
@@ -200,6 +200,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       <NavLink
         key={item.to}
         to={item.to}
+        end={item.to === "/personal"}
         onClick={onNavigate}
         title={isCollapsed ? item.label : undefined}
         className={({ isActive }) =>

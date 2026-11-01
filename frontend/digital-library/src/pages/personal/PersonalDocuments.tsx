@@ -1,5 +1,6 @@
 // src/pages/personal/PersonalDocuments.tsx
 import { useEffect } from "react"; 
+import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
 // Hooks
@@ -25,6 +26,7 @@ import { DeleteFolderConfirmModal } from "./components/DeleteFolderConfirmModal"
 
 export function PersonalDocuments() {
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
 
   // 1. Gọi Hook Folders
   const {
@@ -106,6 +108,16 @@ export function PersonalDocuments() {
   } = usePersonalDocuments(selectedFolderId, folders);
 
   // 4. TỰ ĐỘNG BỎ LỌC NẾU THƯ MỤC ĐANG CHỌN BỊ XÓA KHỎI DANH SÁCH
+  useEffect(() => {
+    const folderParam = searchParams.get("folder");
+    if (folderParam) {
+      const folderId = Number(folderParam);
+      if (!Number.isNaN(folderId)) {
+        setSelectedFolderId(folderId);
+      }
+    }
+  }, [searchParams, setSelectedFolderId]);
+
   useEffect(() => {
     if (
       selectedFolderId !== null &&

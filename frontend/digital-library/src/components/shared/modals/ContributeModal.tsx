@@ -1,9 +1,11 @@
 // frontend/digital-library/src/components/shared/ContributeModal.tsx
 
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { X, Upload, CheckCircle2, AlertTriangle, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { libraryService } from "@/services/libraryService";
+import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { Faculty, Subject } from "@/types/library";
 
 export interface ContributeModalProps {
@@ -36,6 +38,7 @@ export function ContributeModal({
   onClose,
   onSuccess,
 }: ContributeModalProps) {
+  const queryClient = useQueryClient();
   const [step, setStep] = useState<1 | 2>(1);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -134,6 +137,7 @@ export function ContributeModal({
         note: note.trim() || undefined,
       });
       setSuccessSubmitted(true);
+      invalidateDashboard(queryClient);
       setTimeout(() => {
         onSuccess?.();
         onClose();
