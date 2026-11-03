@@ -116,7 +116,14 @@ export function PersonalDocuments() {
         setSelectedFolderId(folderId);
       }
     }
-  }, [searchParams, setSelectedFolderId]);
+    const tagParam = searchParams.get("tag");
+    if (tagParam) {
+      const tagId = Number(tagParam);
+      if (!Number.isNaN(tagId)) {
+        setSelectedTagId(tagId);
+      }
+    }
+  }, [searchParams, setSelectedFolderId, setSelectedTagId]);
 
   useEffect(() => {
     if (

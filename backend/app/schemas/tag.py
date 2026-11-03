@@ -1,6 +1,6 @@
 # backend/app/schemas/tag.py
 
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 class TagBase(BaseModel):
@@ -24,3 +24,13 @@ class TagOut(BaseModel):
     workspace_id: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class TagStatsOut(TagOut):
+    document_count: int = 0
+    folder_count: int = 0
+
+
+class TagMergeIn(BaseModel):
+    source_ids: List[int] = Field(min_length=1)
+    target_id: int

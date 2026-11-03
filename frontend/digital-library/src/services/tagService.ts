@@ -8,6 +8,11 @@ export interface Tag {
   color?: string
 }
 
+export interface TagStats extends Tag {
+  document_count: number
+  folder_count: number
+}
+
 export interface WorkspaceTagItem {
   id: number
   workspace_id: number
@@ -46,15 +51,23 @@ export const createTagService = (getBaseUrl: (groupId?: number | string) => stri
   }
 })
 
-export const tagService = createTagService(() => "/tags")
-//export const groupTagService = createTagService((groupId) => `/groups/${groupId}/tags`)
+export const tagService = {
+  ...createTagService(() => "/tags"),
+  async getStats(): Promise<TagStats[]> {
+    const response = await api.get("/tags/stats")
+    return response.data
+  },
+  async merge(sourceIds: number[], targetId: number): Promise<Tag> {
+    const response = await api.post("/tags/merge", {
+      source_ids: sourceIds,
+      target_id: targetId,
+    })
+    return response.data
+  },
+}
 
-
-
-// Cập nhật groupTagService trỏ đúng về endpoint /workspaces/{groupId}/tags/
 export const groupTagService = {
   ...createTagService((groupId) => `/workspaces/${groupId}/tags`),
-  // Nếu bạn cần lấy danh sách chi tiết có kèm thông tin owner từ WorkspaceTagOut:
   async getWorkspaceTags(groupId: number | string): Promise<WorkspaceTagItem[]> {
     const response = await api.get(`/workspaces/${groupId}/tags/`)
     return response.data

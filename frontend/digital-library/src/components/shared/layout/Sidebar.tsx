@@ -16,6 +16,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ShieldCheck,
+  Tags,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { groupService } from "@/services/groupService";
@@ -41,6 +42,7 @@ const SCOPE_ITEMS: SidebarItem[] = [
 const PERSONAL_ITEMS: SidebarItem[] = [
   //{ icon: LayoutDashboard, label: "Dashboard", to: "/personal/dashboard" },
   { icon: FileText, label: "Tài liệu", to: "/personal/documents" },
+  { icon: Tags, label: "Quản lý nhãn", to: "/personal/tags" },
   { icon: Share2, label: "Đã chia sẻ với tôi", to: "/personal/shared" },
   { icon: Heart, label: "Yêu thích", to: "/personal/favorites" },
   { icon: Trash2, label: "Thùng rác", to: "/personal/trash" },

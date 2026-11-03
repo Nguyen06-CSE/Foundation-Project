@@ -15,6 +15,7 @@ import SharedWithMe from "@/pages/personal/SharedWithMe";
 import FavoritesPage from "@/pages/personal/FavoritesPage";
 import TrashPage from "@/pages/personal/TrashPage";
 import BundleDetailPage from "@/pages/personal/BundleDetailPage";
+import { TagsManagementPage } from "@/pages/personal/TagsManagementPage";
 
 // Pages - Group
 import GroupList from "@/pages/group/GroupList";
@@ -95,6 +96,7 @@ function AppRoutes() {
           <Route path="/personal/bundle/:id" element={<BundleDetailPage />} />
           <Route path="/personal/shared" element={<SharedWithMe />} />
           <Route path="/personal/favorites" element={<FavoritesPage />} />
+          <Route path="/personal/tags" element={<TagsManagementPage />} />
           <Route path="/personal/trash" element={<TrashPage />} />
 
           {/* Section: Groups */}
