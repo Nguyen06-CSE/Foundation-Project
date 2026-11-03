@@ -1,6 +1,7 @@
 # app/routers/notifications.py
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import desc, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -16,18 +17,53 @@ router = APIRouter(prefix="/notifications", tags=["notifications"])
 async def list_notifications(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    unread_only: bool = Query(False),
+    types: Optional[str] = Query(None),
     page: int = Query(1, ge=1),
-    page_size: int = Query(10, ge=1, le=50),
+    page_size: int = Query(20, ge=1, le=50),
 ):
-    """Lấy danh sách thông báo của user"""
+    """Lấy danh sách thông báo của user (mới nhất trước)."""
     offset = (page - 1) * page_size
-    result = await db.execute(
-        select(Notification)
-        .where(Notification.user_id == current_user.id)
-        .offset(offset)
-        .limit(page_size)
-    )
+    stmt = select(Notification).where(Notification.user_id == current_user.id)
+    if unread_only:
+        stmt = stmt.where(Notification.is_read == False)
+    if types:
+        type_list = [t.strip() for t in types.split(",") if t.strip()]
+        if type_list:
+            stmt = stmt.where(Notification.type.in_(type_list))
+    stmt = stmt.order_by(desc(Notification.created_at), desc(Notification.id)).offset(offset).limit(page_size)
+    result = await db.execute(stmt)
     return result.scalars().all()
+
+
+@router.get("/unread-count")
+async def get_unread_count(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Đếm số thông báo chưa đọc của user."""
+    result = await db.execute(
+        select(func.count(Notification.id)).where(
+            Notification.user_id == current_user.id,
+            Notification.is_read == False,
+        )
+    )
+    return {"count": int(result.scalar() or 0)}
+
+
+@router.post("/mark-all-read")
+async def mark_all_as_read(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Đánh dấu tất cả thông báo của user là đã đọc."""
+    await db.execute(
+        update(Notification)
+        .where(Notification.user_id == current_user.id, Notification.is_read == False)
+        .values(is_read=True)
+    )
+    await db.commit()
+    return {"message": "Đã đánh dấu đọc tất cả thông báo"}
 
 
 @router.patch("/{notification_id}", response_model=NotificationOut)

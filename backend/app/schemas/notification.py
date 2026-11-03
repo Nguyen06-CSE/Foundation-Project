@@ -9,6 +9,7 @@ class NotificationOut(BaseModel):
     workspace_id: Optional[int] = None
     document_id: Optional[int] = None
     message: str
+    link: Optional[str] = None
     is_read: bool
     created_at: Optional[datetime] = None
 

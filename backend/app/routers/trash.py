@@ -77,8 +77,9 @@ async def hard_delete_document(
     if not document:
         raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu trong thùng rác")
 
+    from app.core.roles import is_admin
     # Bảo vệ kho tài liệu cộng đồng: chỉ admin/superadmin mới có thể xóa vĩnh viễn
-    if document.is_public and current_user.role not in ["admin", "superadmin", "faculty_admin"]:
+    if document.is_public and not (is_admin(current_user.role) or current_user.role in ["admin", "superadmin"]):
         raise HTTPException(status_code=403, detail="Chỉ quản trị viên mới có thể xóa tài liệu trong kho cộng đồng")
 
     exclude_ids = {document.id}

@@ -8,8 +8,9 @@ class Notification(Base, TimestampMixin):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
-    type: Mapped[str] = mapped_column(String(30), nullable=False)
+    type: Mapped[str] = mapped_column(String(50), nullable=False)
     workspace_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("workspaces.id"))
     document_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("documents.id"))
     message: Mapped[str] = mapped_column(String(255), nullable=False)
+    link: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     is_read: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)

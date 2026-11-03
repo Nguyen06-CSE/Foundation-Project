@@ -15,9 +15,13 @@ import {
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { groupService } from "@/services/groupService";
+import { libraryService } from "@/services/libraryService";
+import { useAuthStore } from "@/stores/authStore";
+import { isAdminRole } from "@/utils/roles";
 
 interface SidebarItem {
   icon: ElementType;
@@ -59,6 +63,9 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const [width, setWidth] = useState(MAX_WIDTH);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const user = useAuthStore((s) => s.user);
+  const isAdmin = isAdminRole(user?.role);
+
   const { data: invitations = [] } = useQuery({
     queryKey: ["my-invitations"],
     queryFn: groupService.getMyInvitations,
@@ -66,6 +73,15 @@ export function Sidebar({ onNavigate }: SidebarProps) {
     retry: false,
   });
   const pendingInvitationCount = invitations.filter((invitation) => invitation.status === "pending").length;
+
+  const { data: pendingSubData } = useQuery({
+    queryKey: ["library-admin-submissions", "pending-count"],
+    queryFn: () => libraryService.getAdminSubmissions({ status: "pending", page: 1, page_size: 1 }),
+    enabled: isAdmin,
+    refetchInterval: 30000,
+    retry: false,
+  });
+  const pendingSubmissionCount = pendingSubData?.total ?? 0;
 
   const resizeStartX = useRef(0);
   const resizeStartWidth = useRef(MAX_WIDTH);
@@ -195,17 +211,23 @@ export function Sidebar({ onNavigate }: SidebarProps) {
 
   const renderItem = (item: SidebarItem) => {
     const Icon = item.icon;
+    const badgeCount =
+      item.to === "/groups"
+        ? pendingInvitationCount
+        : item.to === "/library/admin"
+          ? pendingSubmissionCount
+          : 0;
 
     return (
       <NavLink
         key={item.to}
         to={item.to}
-        end={item.to === "/personal"}
+        end={item.to === "/personal" || item.to === "/library"}
         onClick={onNavigate}
         title={isCollapsed ? item.label : undefined}
         className={({ isActive }) =>
           cn(
-            "group flex h-10 items-center rounded-lg text-sm font-medium transition-colors",
+            "relative group flex h-10 items-center rounded-lg text-sm font-medium transition-colors",
             isCollapsed
               ? "justify-center px-0"
               : "gap-3 px-3",
@@ -227,12 +249,12 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             {item.label}
           </span>
         )}
-        {!isCollapsed && item.to === "/groups" && pendingInvitationCount > 0 && (
+        {!isCollapsed && badgeCount > 0 && (
           <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-xs font-semibold text-white">
-            {pendingInvitationCount}
+            {badgeCount}
           </span>
         )}
-        {isCollapsed && item.to === "/groups" && pendingInvitationCount > 0 && (
+        {isCollapsed && badgeCount > 0 && (
           <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500" />
         )}
       </NavLink>
@@ -319,6 +341,21 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             {SCOPE_ITEMS.map(renderItem)}
           </nav>
         </div>
+
+        {/* ================= ADMIN ================= */}
+        {isAdmin && (
+          <div className="mb-6">
+            {renderSectionTitle("Quản trị")}
+
+            <nav className="space-y-1">
+              {renderItem({
+                icon: ShieldCheck,
+                label: "Quản lý kho học liệu",
+                to: "/library/admin",
+              })}
+            </nav>
+          </div>
+        )}
 
         {/* ================= PERSONAL ================= */}
 

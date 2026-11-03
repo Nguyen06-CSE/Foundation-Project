@@ -1,16 +1,22 @@
-// src/hooks/useHighlightElement.ts
-
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export function useHighlightElement(paramName = "highlight_doc") {
+export function useHighlightElement(paramName = "highlight_doc", customPrefix?: string) {
   const [searchParams, setSearchParams] = useSearchParams();
   const highlightId = searchParams.get(paramName);
 
   useEffect(() => {
     if (highlightId) {
-      const prefix = paramName.includes("group") ? "group-" : "doc-";
-      
+      const prefix =
+        customPrefix ??
+        (paramName.includes("group")
+          ? "group-"
+          : paramName.includes("submission")
+            ? "submission-"
+            : paramName.includes("todo")
+              ? "todo-"
+              : "doc-");
+
       const timer = setTimeout(() => {
         const element = document.getElementById(`${prefix}${highlightId}`);
         if (element) {
@@ -34,5 +40,5 @@ export function useHighlightElement(paramName = "highlight_doc") {
 
       return () => clearTimeout(timer);
     }
-  }, [highlightId, searchParams, setSearchParams, paramName]);
+  }, [highlightId, searchParams, setSearchParams, paramName, customPrefix]);
 }

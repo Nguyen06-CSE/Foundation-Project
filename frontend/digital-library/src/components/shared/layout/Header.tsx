@@ -1,10 +1,16 @@
 // frontend/digital-library/src/components/shared/Header.tsx
 
-import { Bell, Menu, LogOut } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Bell, Menu, LogOut, CheckCheck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Avatar } from "@/components/ui/Avatar";
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore } from "@/stores/authStore";
+import { notificationService } from "@/services/notificationService";
+import { formatRelativeDate } from "@/utils/formatDate";
+import { cn } from "@/utils/cn";
 import { SearchBar } from "./SearchBar";
+import type { Notification } from "@/types/notification";
 
 export interface HeaderProps {
   scopeLabel: string;
@@ -12,25 +18,80 @@ export interface HeaderProps {
   onMenuClick?: () => void;
 }
 
-export function Header({ scopeLabel, notificationCount = 0, onMenuClick }: HeaderProps) {
+export function Header({ scopeLabel, onMenuClick }: HeaderProps) {
   const navigate = useNavigate();
-  
-  // Lấy thông tin user và hàm logout trực tiếp từ Zustand Store
+  const queryClient = useQueryClient();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ["notifications", "unread-count"],
+    queryFn: notificationService.getUnreadCount,
+    enabled: Boolean(user),
+    refetchInterval: 30000,
+    retry: false,
+  });
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["notifications", "list"],
+    queryFn: () => notificationService.getAll({ page: 1, page_size: 8 }),
+    enabled: Boolean(user) && dropdownOpen,
+    retry: false,
+  });
+
+  const markReadMutation = useMutation({
+    mutationFn: notificationService.markAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
+  });
+
+  const markAllReadMutation = useMutation({
+    mutationFn: notificationService.markAllAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
+  });
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
+
+  const handleNotificationClick = (n: Notification) => {
+    if (!n.is_read) {
+      markReadMutation.mutate(n.id);
+    }
+    setDropdownOpen(false);
+    if (n.link) {
+      navigate(n.link);
+    } else if (n.type === "community_submission_received") {
+      navigate("/library/admin/submissions?status=pending");
+    } else {
+      navigate("/personal");
+    }
   };
 
-  // Xác định Tên hiển thị (Ưu tiên full_name -> username -> Mặc định)
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   const displayName = user?.full_name || user?.username || "Người dùng";
-  
-  // Format Role để hiển thị đẹp hơn trên UI (ví dụ: student/Sinh viên)
-  const displayRole = user?.role === 'student' || user?.role === 'Sinh viên' 
-    ? 'Sinh viên' 
-    : (user?.role || 'Người dùng');
+  const displayRole =
+    user?.role === "student" || user?.role === "Sinh viên"
+      ? "Sinh viên"
+      : user?.role || "Người dùng";
 
   return (
     <header className="flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-6">
@@ -44,7 +105,7 @@ export function Header({ scopeLabel, notificationCount = 0, onMenuClick }: Heade
         >
           <Menu className="h-5 w-5" />
         </button>
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white font-bold text-lg">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-lg font-bold text-white">
           L
         </div>
         <span className="hidden text-lg font-bold text-gray-900 sm:inline">Digital Library</span>
@@ -62,14 +123,83 @@ export function Header({ scopeLabel, notificationCount = 0, onMenuClick }: Heade
           {scopeLabel}
         </div>
 
-        <button className="relative rounded-full p-2 text-gray-500 hover:bg-gray-100 transition-colors">
-          <Bell className="h-5 w-5" />
-          {notificationCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white border-2 border-white">
-              {notificationCount > 99 ? "99+" : notificationCount}
-            </span>
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setDropdownOpen((v) => !v)}
+            aria-label="Thông báo"
+            className="relative rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100"
+          >
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-white bg-red-500 px-1 text-[10px] font-bold text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg sm:w-96">
+              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+                <span className="text-sm font-semibold text-gray-900">
+                  Thông báo {unreadCount > 0 ? `(${unreadCount})` : ""}
+                </span>
+                {unreadCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => markAllReadMutation.mutate()}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-700"
+                  >
+                    <CheckCheck className="h-3.5 w-3.5" />
+                    Đọc tất cả
+                  </button>
+                )}
+              </div>
+
+              <div className="max-h-80 divide-y divide-gray-100 overflow-y-auto">
+                {notifications.length > 0 ? (
+                  notifications.map((n) => (
+                    <button
+                      key={n.id}
+                      type="button"
+                      onClick={() => handleNotificationClick(n)}
+                      className={cn(
+                        "flex w-full items-start gap-2.5 px-4 py-3 text-left transition-colors hover:bg-gray-50",
+                        !n.is_read && "bg-primary-50/40"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-1.5 h-2 w-2 shrink-0 rounded-full",
+                          !n.is_read ? "bg-primary-600" : "bg-gray-300"
+                        )}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className={cn(
+                            "text-xs text-gray-900",
+                            !n.is_read ? "font-semibold" : "font-normal text-gray-700"
+                          )}
+                        >
+                          {n.message}
+                        </p>
+                        {n.created_at && (
+                          <p className="mt-0.5 text-[11px] text-gray-400">
+                            {formatRelativeDate(n.created_at)}
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <p className="px-4 py-8 text-center text-xs text-gray-500">
+                    Chưa có thông báo nào.
+                  </p>
+                )}
+              </div>
+            </div>
           )}
-        </button>
+        </div>
 
         <div className="flex items-center gap-3 border-l border-gray-200 pl-4">
           <Avatar name={displayName} />
@@ -77,10 +207,10 @@ export function Header({ scopeLabel, notificationCount = 0, onMenuClick }: Heade
             <span className="text-sm font-semibold text-gray-900">{displayName}</span>
             <span className="text-xs text-gray-500">{displayRole}</span>
           </div>
-          <button 
-            onClick={handleLogout} 
-            title="Đăng xuất" 
-            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+          <button
+            onClick={handleLogout}
+            title="Đăng xuất"
+            className="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
           >
             <LogOut className="h-5 w-5" />
           </button>

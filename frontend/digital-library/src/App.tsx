@@ -120,22 +120,7 @@ function AppRoutes() {
           <Route path="/settings" element={<SettingsPage />} />
 
           {/* Admin only routes */}
-          <Route
-            element={
-              <ProtectedRoute
-                allowedRoles={[
-                  "sysadmin",
-                  "schooladmin",
-                  "system_admin",
-                  "school_admin",
-                  "faculty_admin",
-                  "admin_cntt",
-                  "admin_kt",
-                  "admin_nn",
-                ]}
-              />
-            }
-          >
+          <Route element={<ProtectedRoute requireAdmin />}>
             <Route path="/faculty" element={<FacultySpace />} />
             <Route path="/school" element={<SchoolSpace />} />
             <Route path="/library/admin" element={<LibraryAdmin />} />

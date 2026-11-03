@@ -73,11 +73,12 @@ def verify_faculty_access(current_user: User, faculty_code: str) -> bool:
     1. sysadmin / schooladmin / system_admin / school_admin: Toàn quyền trên mọi Khoa.
     2. faculty_admin: Lấy prefix của email (vd: cntt@school.edu.vn -> 'cntt') để so sánh với mã Khoa.
     """
-    user_role = str(current_user.role).lower().strip()
+    from app.core.roles import is_global_admin, norm_role
+    user_role = norm_role(current_user.role)
     target_faculty_code = faculty_code.lower().strip()
 
     # 1. Admin hệ thống -> Cho phép luôn
-    if user_role in ["sysadmin", "schooladmin", "system_admin", "school_admin"]:
+    if is_global_admin(user_role):
         return True
 
     # 2. Admin Khoa (role = "faculty_admin") -> Lấy prefix email

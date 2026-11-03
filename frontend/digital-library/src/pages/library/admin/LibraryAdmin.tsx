@@ -3,13 +3,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileCheck, FolderTree } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore'; // Dùng useAuthStore
+import { isGlobalAdmin } from '@/utils/roles';
 
 export const LibraryAdmin: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   
-  const userRole = (user?.role || '').toLowerCase().trim();
-  const isSystemAdmin = ['sysadmin', 'schooladmin', 'system_admin', 'school_admin'].includes(userRole);
+  const isSystemAdmin = isGlobalAdmin(user?.role);
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">

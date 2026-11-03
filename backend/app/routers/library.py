@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session, selectinload
 from app.core.config import s3_client, settings
 from app.core.database import get_db
 from app.core.dependencies import get_current_user, get_optional_user, verify_faculty_access
+from app.core.roles import GLOBAL_ADMIN, is_admin, is_global_admin
 from app.models.user import User
 from app.models.faculty import Faculty
 from app.models.subject import Subject
@@ -794,8 +795,8 @@ async def delete_rating(
     if not rating or rating.document_id != document_id:
         raise HTTPException(status_code=404, detail="Không tìm thấy đánh giá")
 
-    is_admin = current_user.role in ["faculty_admin", "school_admin", "system_admin"]
-    if rating.user_id != current_user.id and not is_admin:
+    is_adm = is_admin(current_user.role)
+    if rating.user_id != current_user.id and not is_adm:
         raise HTTPException(status_code=403, detail="Bạn không có quyền xóa đánh giá này")
 
     await db.delete(rating)
@@ -817,6 +818,17 @@ async def submit_document_to_library(
     if src_doc.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Bạn chỉ có thể đóng góp tài liệu do bạn sở hữu")
 
+    existing_pending = (
+        await db.execute(
+            select(CommunitySubmission).where(
+                CommunitySubmission.source_document_id == src_doc.id,
+                CommunitySubmission.status == "pending",
+            )
+        )
+    ).scalar_one_or_none()
+    if existing_pending:
+        raise HTTPException(status_code=409, detail="Tài liệu này đang chờ duyệt")
+
     subject = await db.get(Subject, payload.subject_id)
     if not subject:
         raise HTTPException(status_code=404, detail="Môn học không tồn tại")
@@ -835,22 +847,26 @@ async def submit_document_to_library(
     db.add(submission)
     await db.flush()
 
-    # Tạo thông báo cho faculty_admin của khoa hoặc system_admin
+    # Tạo thông báo cho faculty_admin của khoa hoặc system_admin / school_admin
     admins_res = await db.execute(
         select(User).where(
             or_(
                 and_(User.role == "faculty_admin", User.faculty_id == subject.faculty_id),
-                User.role == "system_admin",
+                User.role.in_(list(GLOBAL_ADMIN)),
             )
         )
     )
     admins = admins_res.scalars().all()
+    submitter_label = current_user.full_name or current_user.username
     for admin in admins:
+        if admin.id == current_user.id:
+            continue
         notif = Notification(
             user_id=admin.id,
             type="community_submission_received",
             document_id=src_doc.id,
-            message=f"Có tài liệu mới chờ duyệt: {src_doc.title}",
+            message=f"{submitter_label} đóng góp tài liệu chờ duyệt: {src_doc.title}"[:255],
+            link=f"/library/admin/submissions?status=pending&highlight_submission={submission.id}",
         )
         db.add(notif)
 
@@ -933,7 +949,7 @@ async def get_my_submissions(
 # ══════════════════════════════════════════════════════════
 
 def check_admin_permission(user: User):
-    if user.role not in ["faculty_admin", "school_admin", "system_admin"]:
+    if not is_admin(user.role):
         raise HTTPException(status_code=403, detail="Bạn không có quyền quản trị kho học liệu")
 
 
@@ -1149,14 +1165,24 @@ async def approve_submission(
     submission.reviewed_at = datetime.utcnow()
     submission.published_document_id = new_doc.id
 
-    # 4. Tạo thông báo cho người đóng góp
+    # 4. Tạo thông báo cho người đóng góp & đánh dấu đã đọc thông báo chờ duyệt của admin
     notif = Notification(
         user_id=submission.submitter_id,
         type="community_submission_approved",
         document_id=new_doc.id,
-        message=f'Tài liệu "{source_doc.title}" đã được duyệt vào kho học liệu!',
+        message=f'Tài liệu "{source_doc.title}" đã được duyệt vào kho học liệu!'[:255],
+        link=f"/library/document/{new_doc.id}",
     )
     db.add(notif)
+    await db.execute(
+        update(Notification)
+        .where(
+            Notification.type == "community_submission_received",
+            Notification.document_id == source_doc.id,
+            Notification.is_read == False,
+        )
+        .values(is_read=True)
+    )
 
     await db.commit()
     await db.refresh(submission)
@@ -1214,15 +1240,25 @@ async def reject_submission(
     submission.reviewed_at = datetime.utcnow()
     submission.reject_reason = payload.reason
 
-    # Tạo thông báo cho submitter
+    # Tạo thông báo cho submitter & đánh dấu đã đọc thông báo chờ duyệt của admin
     doc_title = source_doc.title if source_doc else "Tài liệu"
     notif = Notification(
         user_id=submission.submitter_id,
         type="community_submission_rejected",
         document_id=submission.source_document_id,
-        message=f'Tài liệu "{doc_title}" bị từ chối: {payload.reason}',
+        message=f'Tài liệu "{doc_title}" bị từ chối: {payload.reason}'[:255],
+        link=f"/personal/documents?highlight_doc={submission.source_document_id}",
     )
     db.add(notif)
+    await db.execute(
+        update(Notification)
+        .where(
+            Notification.type == "community_submission_received",
+            Notification.document_id == submission.source_document_id,
+            Notification.is_read == False,
+        )
+        .values(is_read=True)
+    )
 
     await db.commit()
     await db.refresh(submission)
@@ -1258,8 +1294,7 @@ async def create_faculty(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    user_role = str(current_user.role).lower().strip()
-    if user_role not in ["sysadmin", "schooladmin", "system_admin", "school_admin"]:
+    if not is_global_admin(current_user.role):
         raise HTTPException(status_code=403, detail="Chỉ Admin hệ thống mới có quyền thêm Khoa")
 
     result = await db.execute(select(Faculty).where(Faculty.code == payload.code))
@@ -1281,8 +1316,7 @@ async def update_faculty(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    user_role = str(current_user.role).lower().strip()
-    if user_role not in ["sysadmin", "schooladmin", "system_admin", "school_admin"]:
+    if not is_global_admin(current_user.role):
         raise HTTPException(status_code=403, detail="Chỉ Admin hệ thống mới có quyền sửa Khoa")
 
     result = await db.execute(select(Faculty).where(Faculty.id == faculty_id))

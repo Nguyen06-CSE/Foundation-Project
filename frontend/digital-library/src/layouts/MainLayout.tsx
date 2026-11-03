@@ -45,7 +45,6 @@ export function MainLayout() {
         {/* Header */}
         <Header
           scopeLabel="Cá nhân"
-          notificationCount={2}
           onMenuClick={() => setIsSidebarOpen(true)}
         />
 

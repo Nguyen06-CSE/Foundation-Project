@@ -2,8 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/authStore";
 import { useToastStore } from "@/stores/toastStore";
+import { libraryService } from "@/services/libraryService";
+import { isAdminRole } from "@/utils/roles";
 
 // Sub-components
 import { QuickActions } from "./dashboard/components/QuickActions";
@@ -81,11 +84,23 @@ export function PersonalDashboard() {
   );
 
   const displayName = user?.full_name || user?.username || "bạn";
+  const isAdmin = isAdminRole(user?.role);
+  const { data: adminPendingSubs } = useQuery({
+    queryKey: ["library-admin-submissions", "pending-count"],
+    queryFn: () => libraryService.getAdminSubmissions({ status: "pending", page: 1, page_size: 1 }),
+    enabled: isAdmin,
+    retry: false,
+  });
+  const pendingAdminSubmissionsCount = isAdmin ? (adminPendingSubs?.total ?? 0) : 0;
+
   const pendingInvitationCount = invitations.filter((item) => item.status === "pending").length;
   const rejectedCount = summary?.rejected_recent_count ?? 0;
   const expiringTrashCount = summary?.expiring_trash_count ?? 0;
   const attentionCount =
-    pendingInvitationCount + rejectedCount + (expiringTrashCount > 0 ? 1 : 0);
+    pendingInvitationCount +
+    rejectedCount +
+    (expiringTrashCount > 0 ? 1 : 0) +
+    pendingAdminSubmissionsCount;
 
   if (isError) {
     return <DashboardError onRetry={() => refetch()} />;
@@ -203,6 +218,18 @@ export function PersonalDashboard() {
                 Cần bạn phản hồi ({attentionCount})
               </h2>
               <ul className="mt-2 space-y-1.5 text-xs text-amber-800">
+                {pendingAdminSubmissionsCount > 0 && (
+                  <li className="flex items-center justify-between">
+                    <span>• {pendingAdminSubmissionsCount} học liệu đóng góp chờ bạn phê duyệt</span>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/library/admin/submissions?status=pending")}
+                      className="font-semibold underline hover:text-amber-950"
+                    >
+                      Duyệt ngay
+                    </button>
+                  </li>
+                )}
                 {pendingInvitationCount > 0 && (
                   <li className="flex items-center justify-between">
                     <span>• {pendingInvitationCount} lời mời tham gia nhóm học tập</span>

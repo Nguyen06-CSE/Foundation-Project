@@ -1,7 +1,7 @@
 // frontend/digital-library/src/pages/library/admin/LibraryAdminSubmissions.tsx
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Shield,
@@ -21,18 +21,33 @@ import { libraryService } from "@/services/libraryService";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { formatRelativeDate } from "@/utils/formatDate";
+import { isAdminRole } from "@/utils/roles";
+import { useHighlightElement } from "@/hooks/useHighlightElement";
 import type { Submission } from "@/types/library";
 
 export function LibraryAdminSubmissions() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
 
-  const isAdmin = user && ["faculty_admin", "school_admin", "system_admin"].includes(user.role);
+  const isAdmin = isAdminRole(user?.role);
+  const statusParam = searchParams.get("status");
 
   // States
-  const [activeTab, setActiveTab] = useState<"pending" | "approved" | "rejected">("pending");
+  const [activeTab, setActiveTab] = useState<"pending" | "approved" | "rejected">(
+    statusParam === "approved" || statusParam === "rejected" ? statusParam : "pending"
+  );
   const [page, setPage] = useState(1);
+
+  useHighlightElement("highlight_submission", "submission-");
+
+  useEffect(() => {
+    if (statusParam === "pending" || statusParam === "approved" || statusParam === "rejected") {
+      setActiveTab(statusParam);
+      setPage(1);
+    }
+  }, [statusParam]);
   const [rejectingSubmission, setRejectingSubmission] = useState<Submission | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [rejectError, setRejectError] = useState<string | null>(null);
@@ -56,6 +71,7 @@ export function LibraryAdminSubmissions() {
     onSuccess: (sub) => {
       queryClient.invalidateQueries({ queryKey: ["library-admin-submissions"] });
       queryClient.invalidateQueries({ queryKey: ["library-faculties"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
       setActionSuccessMsg(`Đã duyệt tài liệu "${sub.source_document_title}" vào kho học liệu!`);
       setTimeout(() => setActionSuccessMsg(null), 3500);
     },
@@ -226,6 +242,7 @@ export function LibraryAdminSubmissions() {
           submissions.map((sub) => (
             <Card
               key={sub.id}
+              id={`submission-${sub.id}`}
               className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-gray-200/90 shadow-sm hover:border-gray-300 transition-colors"
             >
               <div className="flex items-start gap-3.5 min-w-0 flex-1">
