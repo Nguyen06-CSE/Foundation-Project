@@ -1,11 +1,13 @@
 from typing import Optional
 
-LEGACY_ADMIN = {"sysadmin", "schooladmin"}
+LEGACY_MAP = {"sysadmin": "system_admin", "schooladmin": "school_admin"}
+LEGACY_ADMIN = set(LEGACY_MAP.keys())
 GLOBAL_ADMIN = {"system_admin", "school_admin"} | LEGACY_ADMIN
 
 
 def norm_role(role: Optional[str]) -> str:
-    return (role or "").lower().strip()
+    r = (role or "").lower().strip()
+    return LEGACY_MAP.get(r, r)
 
 
 def is_admin(role: Optional[str]) -> bool:
