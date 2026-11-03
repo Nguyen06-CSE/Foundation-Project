@@ -11,6 +11,8 @@ from app.core.database import AsyncSessionLocal
 from app.models.document import Document
 from app.models.document_stats import DocumentStats
 from app.models.download_log import DownloadLog
+from app.models.notification import Notification
+from app.models.todo import UserTodo
 from app.models.workspace import Workspace
 from app.models.workspace_invitation import WorkspaceInvitation
 from app.models.workspace_member import WorkspaceMember
@@ -227,8 +229,39 @@ async def refresh_document_stats() -> None:
         await db.commit()
 
 
+async def remind_due_todos() -> None:
+    now_utc = datetime.now(timezone.utc)
+    async with AsyncSessionLocal() as db:
+        res = await db.execute(
+            select(UserTodo).where(
+                UserTodo.completed_at.is_(None),
+                UserTodo.reminded_at.is_(None),
+                UserTodo.due_at.is_not(None),
+            )
+        )
+        todos = res.scalars().all()
+        for todo in todos:
+            due = todo.due_at
+            if due and due.tzinfo is None:
+                due = due.replace(tzinfo=timezone.utc)
+            remind_mins = todo.remind_before_minutes if todo.remind_before_minutes is not None else 30
+            if due and now_utc >= due - timedelta(minutes=remind_mins):
+                notif = Notification(
+                    user_id=todo.user_id,
+                    type="todo_due",
+                    document_id=todo.document_id,
+                    workspace_id=todo.workspace_id,
+                    message=f"Sắp đến hạn việc cần làm: {todo.title}"[:255],
+                    link=f"/personal?tab=todo&highlight_todo={todo.id}",
+                )
+                db.add(notif)
+                todo.reminded_at = now_utc
+        await db.commit()
+
+
 def register_jobs() -> None:
     scheduler.add_job(execute_group_dissolution, CronTrigger(minute="*/5"))
+    scheduler.add_job(remind_due_todos, CronTrigger(minute="*/5"))
     scheduler.add_job(cleanup_orphaned_documents, CronTrigger(hour=0, minute=0))
     scheduler.add_job(cleanup_deleted_documents, CronTrigger(hour=0, minute=10))
     scheduler.add_job(

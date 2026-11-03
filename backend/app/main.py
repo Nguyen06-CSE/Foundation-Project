@@ -26,6 +26,7 @@ from app.routers.workspaces import router as workspaces_router
 from app.routers.library import router as library_router
 from app.routers.stats import router as stats_router
 from app.routers.dashboard import router as dashboard_router
+from app.routers.todos import router as todos_router
 
 app = FastAPI(
     title="Thư Viện Số - Quản Lí Tài Liệu",
@@ -79,10 +80,43 @@ app.include_router(workspace_tags.router)
 app.include_router(library_router)
 app.include_router(stats_router)
 app.include_router(dashboard_router)
+app.include_router(todos_router)
 
 
 @app.on_event("startup")
 async def startup():
+    try:
+        from sqlalchemy import text
+        from app.core.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as db:
+            await db.execute(text("ALTER TABLE notifications ALTER COLUMN type TYPE VARCHAR(50)"))
+            await db.execute(text("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS link VARCHAR(255)"))
+            await db.execute(
+                text(
+                    """
+                    CREATE TABLE IF NOT EXISTS user_todos (
+                        id SERIAL PRIMARY KEY,
+                        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                        title VARCHAR(255) NOT NULL,
+                        note TEXT,
+                        task_type VARCHAR(30) NOT NULL DEFAULT 'custom',
+                        document_id INTEGER REFERENCES documents(id) ON DELETE SET NULL,
+                        workspace_id INTEGER REFERENCES workspaces(id) ON DELETE SET NULL,
+                        start_at TIMESTAMPTZ,
+                        due_at TIMESTAMPTZ,
+                        priority VARCHAR(10) NOT NULL DEFAULT 'normal',
+                        remind_before_minutes INTEGER DEFAULT 30,
+                        reminded_at TIMESTAMPTZ,
+                        completed_at TIMESTAMPTZ,
+                        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+                        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+                    )
+                    """
+                )
+            )
+            await db.commit()
+    except Exception:
+        pass
     if not scheduler.running:
         register_jobs()
         scheduler.start()

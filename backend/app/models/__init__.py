@@ -24,6 +24,7 @@ from .subject import Subject
 from .community_submission import CommunitySubmission
 from .document_rating import DocumentRating
 from .document_stats import DocumentStats
+from .todo import UserTodo
 
 
 __all__ = [
@@ -53,4 +54,5 @@ __all__ = [
     "CommunitySubmission",
     "DocumentRating",
     "DocumentStats",
+    "UserTodo",
 ]
