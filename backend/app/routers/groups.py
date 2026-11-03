@@ -802,6 +802,109 @@ async def save_group_document_to_personal(
     return saved_doc
 
 
+@router.post("/groups/{group_id}/documents/bulk-delete")
+async def bulk_delete_group_documents(
+    group_id: int,
+    payload: dict,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    await require_full_permission(db, group_id, current_user.id)
+    raw_ids = payload.get("document_ids") or payload.get("ids") or []
+    doc_ids = [int(x) for x in dict.fromkeys(raw_ids) if str(x).isdigit()][:50]
+    if not doc_ids:
+        raise HTTPException(400, "Danh sách tài liệu trống")
+
+    succeeded: list[int] = []
+    failed: list[dict] = []
+    for doc_id in doc_ids:
+        document = await db.get(Document, doc_id)
+        if not document or document.workspace_id != group_id or document.is_deleted:
+            failed.append({"id": doc_id, "reason": "Không tìm thấy tài liệu"})
+            continue
+        await mark_group_document_deleted(db, document)
+        succeeded.append(doc_id)
+        background_tasks.add_task(
+            _log_activity, db, doc_id, current_user.id,
+            ActivityAction.DELETED, "group", group_id, None, 0,
+        )
+    return {
+        "deleted_count": len(succeeded),
+        "skipped_ids": [f["id"] for f in failed],
+        "succeeded": succeeded,
+        "failed": failed,
+    }
+
+
+@router.post("/groups/{group_id}/documents/bulk-download")
+async def bulk_download_group_documents(
+    group_id: int,
+    payload: dict,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    import io
+    import zipfile
+    from fastapi.responses import StreamingResponse
+    from app.services.file_service import download_file_from_r2
+
+    await require_member(db, group_id, current_user.id)
+    raw_ids = payload.get("document_ids") or payload.get("ids") or []
+    doc_ids = [int(x) for x in dict.fromkeys(raw_ids) if str(x).isdigit()][:50]
+    if not doc_ids:
+        raise HTTPException(400, "Danh sách tài liệu trống")
+
+    res = await db.execute(
+        select(Document).where(
+            Document.id.in_(doc_ids),
+            Document.workspace_id == group_id,
+            Document.is_deleted == False,
+        )
+    )
+    docs = res.scalars().all()
+    if not docs:
+        raise HTTPException(404, "Không tìm thấy tài liệu để tải xuống")
+
+    zip_buffer = io.BytesIO()
+    used_names: dict[str, int] = {}
+
+    def _unique_name(raw_name: str) -> str:
+        base, ext = os.path.splitext(raw_name)
+        count = used_names.get(raw_name.lower(), 0)
+        used_names[raw_name.lower()] = count + 1
+        return raw_name if count == 0 else f"{base} ({count}){ext}"
+
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        for doc in docs:
+            if not doc.file_path:
+                continue
+            fname = doc.title
+            ext = os.path.splitext(doc.file_path)[1]
+            if ext and not fname.endswith(ext):
+                fname = fname + ext
+            arcname = _unique_name(fname)
+            if os.path.exists(doc.file_path):
+                zf.write(doc.file_path, arcname=arcname)
+            else:
+                data = download_file_from_r2(doc.file_path)
+                if data:
+                    zf.writestr(arcname, data)
+
+    zip_buffer.seek(0)
+    for doc in docs:
+        background_tasks.add_task(
+            _log_activity, db, doc.id, current_user.id,
+            ActivityAction.DOWNLOADED, "group", group_id, None, 0,
+        )
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers={"Content-Disposition": f"attachment; filename=tai_lieu_nhom_{group_id}.zip"},
+    )
+
+
 @router.delete("/groups/{group_id}/documents/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_group_document(
     group_id: int,

@@ -42,6 +42,8 @@ export interface BaseDocumentViewProps {
   workspaceType?: 'personal' | 'group'
   permission?: 'owner' | 'full' | 'view'
   extraItems?: any[]
+  selectedIds?: (string | number)[]
+  onToggleSelect?: (docId: string | number) => void
 }
 
 export const getFileExtension = (type?: string) => {

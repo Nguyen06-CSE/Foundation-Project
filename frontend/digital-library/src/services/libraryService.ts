@@ -88,6 +88,19 @@ export const libraryService = {
   submit: (payload: SubmitPayload): Promise<Submission> =>
     api.post('/library/submissions/', payload).then((r) => r.data),
 
+  submitBulk: (payload: {
+    source_document_ids: number[];
+    subject_id: number;
+    academic_year?: string;
+    doc_type?: string;
+    note?: string;
+  }): Promise<{
+    submitted_count: number;
+    skipped_ids: number[];
+    submissions: { id: number; source_document_id: number; title: string }[];
+  }> =>
+    api.post('/library/submissions/bulk', payload).then((r) => r.data),
+
   getMySubmissions: (): Promise<Submission[]> =>
     api.get('/library/submissions/my/').then((r) => r.data),
 

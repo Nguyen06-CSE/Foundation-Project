@@ -1,7 +1,8 @@
 // src/pages/group/components/sections/GroupDocumentsSection.tsx
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, FileBox } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, FileBox, CheckSquare } from "lucide-react";
 import EmptyState from "@/components/shared/feedback/EmptyState";
 import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import {
@@ -9,6 +10,8 @@ import {
   DocumentDetailView,
   type DocumentListItem,
 } from "@/components/shared/documents";
+import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
+import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 import LocalGroupDocumentCard from "../cards/LocalGroupDocumentCard";
 import { groupDocumentService } from "@/services/documentService";
 import type { Document, Folder } from "@/types/document";
@@ -86,6 +89,68 @@ export function GroupDocumentsSection({
     : permission === "full"
       ? "full"
       : "view";
+
+  const queryClient = useQueryClient();
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
+  const [bulkContributeDocs, setBulkContributeDocs] = useState<{ id: number; title: string }[] | null>(null);
+
+  const toggleSelectDoc = useCallback((docId: string | number) => {
+    const numId = Number(docId);
+    setSelectedIds((prev) =>
+      prev.includes(numId) ? prev.filter((id) => id !== numId) : [...prev, numId]
+    );
+  }, []);
+
+  const handleSelectAll = useCallback(() => {
+    setSelectedIds(documents.map((d) => Number(d.id)));
+  }, [documents]);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedIds([]);
+  }, []);
+
+  const handleBulkDownload = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkProcessing(true);
+    try {
+      await groupDocumentService.bulkDownloadZip(selectedIds, groupId);
+    } catch {
+      alert("Không thể tải xuống các tài liệu đã chọn.");
+    } finally {
+      setIsBulkProcessing(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`Chuyển ${selectedIds.length} tài liệu nhóm đã chọn vào thùng rác?`)) return;
+    setIsBulkProcessing(true);
+    try {
+      const res = await groupDocumentService.bulkDelete(selectedIds, groupId);
+      setSelectedIds([]);
+      queryClient.invalidateQueries({ queryKey: ["group-documents", groupId] });
+      queryClient.invalidateQueries({ queryKey: ["group-folders", groupId] });
+      if (res.skipped_ids?.length > 0) {
+        alert(`Đã xóa ${res.deleted_count} tài liệu (${res.skipped_ids.length} tài liệu bị bỏ qua do không đủ quyền).`);
+      }
+    } catch {
+      alert("Không thể xóa các tài liệu đã chọn.");
+    } finally {
+      setIsBulkProcessing(false);
+    }
+  };
+
+  const handleBulkContribute = () => {
+    const docsToContribute = documents
+      .filter((d: any) => selectedIds.includes(Number(d.id)) && !d.is_bundle)
+      .map((d: any) => ({ id: Number(d.id), title: d.title || d.name }));
+    if (docsToContribute.length === 0) {
+      alert("Vui lòng chọn ít nhất 1 tệp tài liệu đơn lẻ để đóng góp.");
+      return;
+    }
+    setBulkContributeDocs(docsToContribute);
+  };
 
   const currentFolder = folders.find((f) => f.id === selectedFolderId);
 
@@ -207,6 +272,22 @@ export function GroupDocumentsSection({
               ? `Tài liệu trong "${currentFolder.name}"`
               : "Tài liệu nhóm"}
           </h2>
+          {documents.length > 0 && (
+            <button
+              type="button"
+              onClick={
+                selectedIds.length === documents.length
+                  ? handleClearSelection
+                  : handleSelectAll
+              }
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-primary-600 border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              <CheckSquare className="h-3.5 w-3.5" />
+              {selectedIds.length > 0
+                ? `Đã chọn ${selectedIds.length}/${documents.length}`
+                : "Chọn nhiều"}
+            </button>
+          )}
           {selectedFolderId !== null && (
             <button
               onClick={() => onSelectFolder?.(null)}
@@ -244,6 +325,8 @@ export function GroupDocumentsSection({
                   onSave={onSave || (async () => {})}
                   onDelete={onDelete || (async () => {})}
                   onRename={onRename}
+                  isSelected={selectedIds.includes(Number(doc.id))}
+                  onToggleSelect={toggleSelectDoc}
                 />
               ))}
             </div>
@@ -260,6 +343,8 @@ export function GroupDocumentsSection({
               navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
               onAction={handleListAction}
               onToggleBundle={handleToggleBundle}
+              selectedIds={selectedIds}
+              onToggleSelect={toggleSelectDoc}
             />
           )}
 
@@ -273,6 +358,8 @@ export function GroupDocumentsSection({
               permission={effectivePermission}
               navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
               onAction={handleListAction}
+              selectedIds={selectedIds}
+              onToggleSelect={toggleSelectDoc}
             />
           )}
         </>
@@ -281,6 +368,28 @@ export function GroupDocumentsSection({
           icon={<FileBox className="h-6 w-6" />}
           title={selectedFolderId ? "Thư mục trống" : "Chưa có tài liệu nào"}
           description="Chia sẻ hoặc upload tài liệu để nhóm cùng sử dụng."
+        />
+      )}
+
+      <DocumentBulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={documents.length}
+        onSelectAll={handleSelectAll}
+        onClearSelection={handleClearSelection}
+        onBulkDownload={handleBulkDownload}
+        onBulkContribute={handleBulkContribute}
+        onBulkDelete={effectivePermission !== "view" ? handleBulkDelete : undefined}
+        isProcessing={isBulkProcessing}
+      />
+
+      {bulkContributeDocs && (
+        <ContributeModal
+          documents={bulkContributeDocs}
+          onClose={() => setBulkContributeDocs(null)}
+          onSuccess={() => {
+            setBulkContributeDocs(null);
+            setSelectedIds([]);
+          }}
         />
       )}
     </section>

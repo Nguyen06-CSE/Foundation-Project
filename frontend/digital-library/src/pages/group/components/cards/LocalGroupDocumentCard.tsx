@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Check } from "lucide-react";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
 import { GroupDocumentContextMenu } from "@/pages/group/components/shared/GroupDocumentContextMenu";
 import { formatSize } from "@/utils/formatSize";
@@ -65,7 +66,8 @@ export default function LocalGroupDocumentCard({
   onSave,
   onDelete,
   onRename,
-  
+  isSelected = false,
+  onToggleSelect,
 }: LocalGroupDocumentCardProps) {
   const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
@@ -148,9 +150,31 @@ export default function LocalGroupDocumentCard({
       className={cn(
         "group relative flex h-[290px] w-full flex-col overflow-hidden rounded-xl border shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md",
         heat.cardBg,
-        heat.level > 0 ? heat.border : `border-gray-200/80 ${theme.border}`,
+        isSelected
+          ? "ring-2 ring-primary-500 border-primary-400"
+          : heat.level > 0
+            ? heat.border
+            : `border-gray-200/80 ${theme.border}`,
       )}
     >
+      {onToggleSelect && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect(document.id);
+          }}
+          title={isSelected ? "Bỏ chọn tài liệu" : "Chọn tài liệu"}
+          className={cn(
+            "absolute top-2.5 right-2.5 z-20 flex h-6 w-6 items-center justify-center rounded-md border shadow-xs transition-all cursor-pointer",
+            isSelected
+              ? "bg-primary-600 border-primary-600 text-white opacity-100"
+              : "bg-white/95 border-gray-300 text-transparent opacity-0 group-hover:opacity-100 hover:border-primary-500"
+          )}
+        >
+          <Check className="h-3.5 w-3.5 stroke-[3]" />
+        </button>
+      )}
       {/* 1. KHUNG PREVIEW TÀI LIỆU */}
       <div
         className={`relative h-[135px] w-full shrink-0 cursor-pointer overflow-hidden transition-colors ${theme.bg} flex items-center justify-center`}

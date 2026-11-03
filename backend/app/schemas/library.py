@@ -48,6 +48,13 @@ class SubmissionCreate(BaseModel):
     doc_type: Optional[str] = None
     note: Optional[str] = None
 
+class BulkSubmissionCreate(BaseModel):
+    source_document_ids: List[int] = Field(min_length=1, max_length=50)
+    subject_id: int
+    academic_year: Optional[str] = None
+    doc_type: Optional[str] = None
+    note: Optional[str] = None
+
 class SubmissionRejectPayload(BaseModel):
     reason: str = Field(..., min_length=5, description="Lý do từ chối tài liệu")
 

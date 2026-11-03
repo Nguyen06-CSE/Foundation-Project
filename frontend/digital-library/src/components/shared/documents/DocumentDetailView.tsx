@@ -31,6 +31,8 @@ export function DocumentDetailView({
   workspaceType = 'personal',
   permission = 'view',
   extraItems,
+  selectedIds = [],
+  onToggleSelect,
 }: DocumentDetailViewProps) {
   const navigate = useNavigate()
   const [imageErrors, setImageErrors] = useState<Record<string | number, boolean>>({})
@@ -111,6 +113,7 @@ export function DocumentDetailView({
         
         // Lấy số trang từ doc.pages hoặc doc.page_count
         const pageCount = doc.pages ?? (doc as any).page_count ?? null;
+        const isSelected = selectedIds.some((id) => String(id) === String(doc.id));
 
         return (
           <div
@@ -118,11 +121,29 @@ export function DocumentDetailView({
             onClick={() => handleRowClick(doc)}
             className={cn(
               "group relative flex flex-col sm:flex-row items-start gap-5 p-4 sm:p-5 rounded-xl border transition-all cursor-pointer shadow-sm hover:shadow-md",
-              heat.level > 0 
+              isSelected
+                ? "ring-2 ring-primary-500 border-primary-300 bg-primary-50/20"
+                : heat.level > 0 
                 ? `${heat.cardBg} border-gray-200 hover:border-blue-200` 
                 : "bg-white border-gray-200 hover:border-gray-300"
             )}
           >
+            {onToggleSelect && (
+              <div
+                className="shrink-0 flex items-center pt-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleSelect(doc.id);
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => {}}
+                  className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                />
+              </div>
+            )}
             {/* Hình thu nhỏ lớn hơn */}
             <div
               className={cn(

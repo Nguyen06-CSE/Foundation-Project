@@ -31,4 +31,6 @@ export interface DocumentCardProps {
   basePath?: string;
   allowedActions?: DocumentAction[];
   extraItems?: DocumentMenuItem[];
+  isSelected?: boolean;
+  onToggleSelect?: (id: string) => void;
 }

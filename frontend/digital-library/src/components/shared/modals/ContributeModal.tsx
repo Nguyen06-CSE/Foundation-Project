@@ -9,8 +9,9 @@ import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { Faculty, Subject } from "@/types/library";
 
 export interface ContributeModalProps {
-  documentId: number;
-  documentTitle: string;
+  documentId?: number;
+  documentTitle?: string;
+  documents?: { id: number; title: string }[];
   onClose: () => void;
   onSuccess?: () => void;
 }
@@ -35,9 +36,19 @@ const ACADEMIC_YEARS = [
 export function ContributeModal({
   documentId,
   documentTitle,
+  documents,
   onClose,
   onSuccess,
 }: ContributeModalProps) {
+  const targetDocs = documents && documents.length > 0
+    ? documents
+    : documentId
+      ? [{ id: documentId, title: documentTitle || `Tài liệu #${documentId}` }]
+      : [];
+  const isBulk = targetDocs.length > 1;
+  const displayTitle = isBulk
+    ? `${targetDocs.length} tài liệu đã chọn (${targetDocs.map((d) => d.title).join(", ")})`
+    : targetDocs[0]?.title || documentTitle || "";
   const queryClient = useQueryClient();
   const [step, setStep] = useState<1 | 2>(1);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
@@ -129,21 +140,37 @@ export function ContributeModal({
     setSubmitting(true);
     setError(null);
     try {
-      await libraryService.submit({
-        source_document_id: documentId,
-        subject_id: Number(selectedSubjectId),
-        doc_type: selectedDocType,
-        academic_year: academicYear,
-        note: note.trim() || undefined,
-      });
+      if (isBulk) {
+        const res = await libraryService.submitBulk({
+          source_document_ids: targetDocs.map((d) => d.id),
+          subject_id: Number(selectedSubjectId),
+          doc_type: selectedDocType,
+          academic_year: academicYear,
+          note: note.trim() || undefined,
+        });
+        if (res.submitted_count === 0) {
+          setError("Các tài liệu đã chọn hiện đã có trong hàng chờ duyệt hoặc không thuộc quyền sở hữu của bạn.");
+          setSubmitting(false);
+          return;
+        }
+      } else if (targetDocs[0]) {
+        await libraryService.submit({
+          source_document_id: targetDocs[0].id,
+          subject_id: Number(selectedSubjectId),
+          doc_type: selectedDocType,
+          academic_year: academicYear,
+          note: note.trim() || undefined,
+        });
+      }
       setSuccessSubmitted(true);
       invalidateDashboard(queryClient);
       setTimeout(() => {
         onSuccess?.();
         onClose();
       }, 1500);
-    } catch (err: unknown) {
-      setError("Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại.");
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail;
+      setError(typeof detail === "string" ? detail : "Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại.");
     } finally {
       setSubmitting(false);
     }
@@ -197,10 +224,10 @@ export function ContributeModal({
               <form onSubmit={handleNext} className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
-                    Tài liệu đóng góp
+                    Tài liệu đóng góp {isBulk && `(${targetDocs.length})`}
                   </label>
                   <p className="text-sm font-medium text-gray-900 bg-gray-50 p-2.5 rounded-lg border border-gray-200 truncate">
-                    {documentTitle}
+                    {displayTitle}
                   </p>
                 </div>
 
@@ -321,7 +348,7 @@ export function ContributeModal({
                   <div className="flex justify-between py-1 border-b border-gray-200/60">
                     <span className="text-gray-500">Tài liệu:</span>
                     <span className="font-semibold text-gray-900 truncate max-w-[260px]">
-                      {documentTitle}
+                      {displayTitle}
                     </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-gray-200/60">

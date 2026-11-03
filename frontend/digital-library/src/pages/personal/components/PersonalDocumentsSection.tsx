@@ -1,10 +1,10 @@
 // src/pages/personal/components/PersonalDocumentsSection.tsx
 
 import { useState, useEffect, useCallback } from "react";
-import { FileX, LayoutGrid } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { FileX, LayoutGrid, CheckSquare } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DocumentCard } from "@/components/shared/documents/DocumentCard";
-import { BundleDocumentCard } from "@/components/shared/documents/DocumentCard/BundleDocumentCard";
 import { BundleExpandedFrame } from "./BundleExpandedFrame";
 import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import {
@@ -12,6 +12,8 @@ import {
   DocumentDetailView,
   type DocumentListItem,
 } from "@/components/shared/documents";
+import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
+import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import EmptyState from "@/components/shared/feedback/EmptyState";
 import { cn } from "@/utils/cn";
@@ -124,7 +126,68 @@ export function PersonalDocumentsSection({
   searchQuery = "",
   selectedTagId = null,
 }: PersonalDocumentsSectionProps) {
+  const queryClient = useQueryClient();
   const [viewMode, setViewMode] = useState<ViewMode>("detail");
+
+  // Multi-select state
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
+  const [bulkContributeDocs, setBulkContributeDocs] = useState<{ id: number; title: string }[] | null>(null);
+
+  const toggleSelectDoc = useCallback((docId: string | number) => {
+    const idStr = String(docId);
+    setSelectedIds((prev) =>
+      prev.includes(idStr) ? prev.filter((id) => id !== idStr) : [...prev, idStr]
+    );
+  }, []);
+
+  const handleSelectAll = useCallback(() => {
+    setSelectedIds(filteredDocCards.map((d) => String(d.id)));
+  }, [filteredDocCards]);
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedIds([]);
+  }, []);
+
+  const handleBulkDownload = async () => {
+    if (selectedIds.length === 0) return;
+    setIsBulkProcessing(true);
+    try {
+      await documentService.bulkDownloadZip(selectedIds.map(Number));
+    } catch {
+      alert("Không thể tải xuống các tài liệu đã chọn.");
+    } finally {
+      setIsBulkProcessing(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`Chuyển ${selectedIds.length} tài liệu đã chọn vào thùng rác?`)) return;
+    setIsBulkProcessing(true);
+    try {
+      await documentService.bulkDelete(selectedIds.map(Number));
+      setSelectedIds([]);
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
+      queryClient.invalidateQueries({ queryKey: ["trash"] });
+    } catch {
+      alert("Có lỗi khi xóa hàng loạt tài liệu.");
+    } finally {
+      setIsBulkProcessing(false);
+    }
+  };
+
+  const handleBulkContribute = () => {
+    const docsToContribute = filteredDocCards
+      .filter((d) => selectedIds.includes(String(d.id)) && !d.is_bundle)
+      .map((d) => ({ id: Number(d.id), title: d.name }));
+    if (docsToContribute.length === 0) {
+      alert("Vui lòng chọn ít nhất 1 tệp tài liệu đơn lẻ (không phải gói bundle) để đóng góp.");
+      return;
+    }
+    setBulkContributeDocs(docsToContribute);
+  };
 
   // Local state cho Bundle Expanded Grid
   const [isExpandedMode, setIsExpandedMode] = useState(true);
@@ -206,7 +269,25 @@ export function PersonalDocumentsSection({
     <section className="pb-70">
       {/* Header: title + toggle bundle button (nếu có bundle) + view toggle */}
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-gray-700">Tài liệu</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-sm font-semibold text-gray-700">Tài liệu</h2>
+          {filteredDocCards.length > 0 && (
+            <button
+              type="button"
+              onClick={
+                selectedIds.length === filteredDocCards.length
+                  ? handleClearSelection
+                  : handleSelectAll
+              }
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-primary-600 border border-gray-200 rounded-lg px-2.5 py-1 hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              <CheckSquare className="h-3.5 w-3.5" />
+              {selectedIds.length > 0
+                ? `Đã chọn ${selectedIds.length}/${filteredDocCards.length}`
+                : "Chọn nhiều"}
+            </button>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           {viewMode === "grid" && hasBundle && (
             <button
@@ -242,16 +323,20 @@ export function PersonalDocumentsSection({
                     key={doc.id}
                     document={doc}
                     onAction={onDocumentAction}
+                    isSelected={selectedIds.includes(String(doc.id))}
+                    onToggleSelect={toggleSelectDoc}
                   />
                 );
               }
 
               if (!isExpandedMode) {
                 return (
-                  <BundleDocumentCard
+                  <DocumentCard
                     key={doc.id}
                     document={doc}
                     onAction={onDocumentAction}
+                    isSelected={selectedIds.includes(String(doc.id))}
+                    onToggleSelect={toggleSelectDoc}
                   />
                 );
               }
@@ -295,6 +380,8 @@ export function PersonalDocumentsSection({
           <DocumentListView
             documents={listItems}
             isLoading={docsLoading}
+            selectedIds={selectedIds}
+            onToggleSelect={toggleSelectDoc}
             onAction={(action, docId) =>
               onDocumentAction(action, String(docId))
             }
@@ -325,11 +412,36 @@ export function PersonalDocumentsSection({
           <DocumentDetailView
             documents={listItems}
             isLoading={docsLoading}
+            selectedIds={selectedIds}
+            onToggleSelect={toggleSelectDoc}
             onAction={(action, docId) =>
               onDocumentAction(action, String(docId))
             }
           />
         </div>
+      )}
+
+      <DocumentBulkActionBar
+        selectedCount={selectedIds.length}
+        totalCount={filteredDocCards.length}
+        onSelectAll={handleSelectAll}
+        onClearSelection={handleClearSelection}
+        onBulkDownload={handleBulkDownload}
+        onBulkContribute={handleBulkContribute}
+        onBulkDelete={handleBulkDelete}
+        isProcessing={isBulkProcessing}
+      />
+
+      {bulkContributeDocs && (
+        <ContributeModal
+          documents={bulkContributeDocs}
+          onClose={() => setBulkContributeDocs(null)}
+          onSuccess={() => {
+            setBulkContributeDocs(null);
+            setSelectedIds([]);
+            queryClient.invalidateQueries({ queryKey: ["documents"] });
+          }}
+        />
       )}
 
       {/* Pagination */}

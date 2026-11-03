@@ -1252,6 +1252,143 @@ async def add_from_personal_to_bundle(
     return {"added_count": added_count}
 
 
+@router.post("/bulk-delete")
+async def bulk_soft_delete_documents(
+    payload: dict,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    raw_ids = payload.get("document_ids") or payload.get("ids") or []
+    doc_ids = [int(x) for x in dict.fromkeys(raw_ids) if str(x).isdigit()][:50]
+    if not doc_ids:
+        raise HTTPException(status_code=400, detail="Danh sách tài liệu trống")
+
+    now = datetime.utcnow()
+    succeeded: list[int] = []
+    failed: list[dict] = []
+
+    for doc_id in doc_ids:
+        result = await db.execute(
+            select(Document).where(
+                Document.id == doc_id,
+                Document.owner_id == current_user.id,
+                Document.is_deleted == False,
+                Document.is_public == False,
+            )
+        )
+        document = result.scalar_one_or_none()
+        if not document:
+            failed.append({"id": doc_id, "reason": "Không tìm thấy hoặc không có quyền"})
+            continue
+
+        document.is_deleted = True
+        document.deleted_at = now
+        if document.is_bundle:
+            children_result = await db.execute(
+                select(Document).where(
+                    Document.bundle_parent_id == document.id,
+                    Document.is_deleted == False,
+                )
+            )
+            for child in children_result.scalars().all():
+                child.is_deleted = True
+                child.deleted_at = now
+        succeeded.append(doc_id)
+
+    await db.commit()
+    for doc_id in succeeded:
+        background_tasks.add_task(
+            _log_activity, db, doc_id, current_user.id,
+            ActivityAction.DELETED, "personal", None, None, 0,
+        )
+    return {
+        "deleted_count": len(succeeded),
+        "skipped_ids": [f["id"] for f in failed],
+        "succeeded": succeeded,
+        "failed": failed,
+    }
+
+
+@router.post("/bulk-download")
+async def bulk_download_documents_zip(
+    payload: dict,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    raw_ids = payload.get("document_ids") or payload.get("ids") or []
+    doc_ids = [int(x) for x in dict.fromkeys(raw_ids) if str(x).isdigit()][:50]
+    if not doc_ids:
+        raise HTTPException(status_code=400, detail="Danh sách tài liệu trống")
+
+    result = await db.execute(
+        select(Document).where(
+            Document.id.in_(doc_ids),
+            Document.owner_id == current_user.id,
+            Document.is_deleted == False,
+        )
+    )
+    docs = result.scalars().all()
+    if not docs:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu để tải xuống")
+
+    files_to_zip: list[tuple[str, str]] = []
+    used_names: dict[str, int] = {}
+
+    def _unique_name(raw_name: str) -> str:
+        base, ext = os.path.splitext(raw_name)
+        count = used_names.get(raw_name.lower(), 0)
+        used_names[raw_name.lower()] = count + 1
+        return raw_name if count == 0 else f"{base} ({count}){ext}"
+
+    for doc in docs:
+        if doc.is_bundle:
+            c_res = await db.execute(
+                select(Document).where(
+                    Document.bundle_parent_id == doc.id,
+                    Document.is_deleted == False,
+                )
+            )
+            folder_prefix = doc.title.replace("/", "_")
+            for child in c_res.scalars().all():
+                if not child.file_path:
+                    continue
+                fname = child.title
+                ext = os.path.splitext(child.file_path)[1]
+                if ext and not fname.endswith(ext):
+                    fname = fname + ext
+                files_to_zip.append((child.file_path, _unique_name(f"{folder_prefix}/{fname}")))
+        elif doc.file_path:
+            fname = doc.title
+            ext = os.path.splitext(doc.file_path)[1]
+            if ext and not fname.endswith(ext):
+                fname = fname + ext
+            files_to_zip.append((doc.file_path, _unique_name(fname)))
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        for fpath, arcname in files_to_zip:
+            if os.path.exists(fpath):
+                zf.write(fpath, arcname=arcname)
+            else:
+                data = download_file_from_r2(fpath)
+                if data:
+                    zf.writestr(arcname, data)
+
+    zip_buffer.seek(0)
+    for doc in docs:
+        background_tasks.add_task(
+            _log_activity, db, doc.id, current_user.id,
+            ActivityAction.DOWNLOADED, "personal", None, None, 0,
+        )
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=tai_lieu_ca_nhan.zip"},
+    )
+
+
 @router.get("/{bundle_id}/download-zip")
 async def download_bundle_zip(
     bundle_id: int,

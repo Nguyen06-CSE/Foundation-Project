@@ -92,6 +92,29 @@ export const createDocumentService = (getBaseUrl: (groupId?: number | string) =>
   delete: (id: number, groupId?: number | string) =>
     api.delete(`${getBaseUrl(groupId)}/${id}`),
 
+  bulkDelete: (documentIds: number[], groupId?: number | string) =>
+    api.post<{ deleted_count: number; skipped_ids: number[] }>(
+      `${getBaseUrl(groupId)}/bulk-delete`,
+      { document_ids: documentIds }
+    ).then(r => r.data),
+
+  bulkDownloadZip: async (documentIds: number[], groupId?: number | string) => {
+    const response = await api.post(
+      `${getBaseUrl(groupId)}/bulk-download`,
+      { document_ids: documentIds },
+      { responseType: 'blob' }
+    )
+    const blob = new Blob([response.data], { type: 'application/zip' })
+    const url = window.URL.createObjectURL(blob)
+    const link = window.document.createElement('a')
+    link.href = url
+    link.download = `tai_lieu_${documentIds.length}_files.zip`
+    window.document.body.appendChild(link)
+    link.click()
+    window.document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  },
+
   restoreOne: (docId: number) =>
     api.post(`/trash/${docId}/restore`).then(r => r.data),
 })

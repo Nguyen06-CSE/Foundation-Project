@@ -61,6 +61,8 @@ export function DocumentListView({
   permission = "view",
   extraItems,
   onToggleBundle,
+  selectedIds = [],
+  onToggleSelect,
 }: DocumentListViewProps) {
   const navigate = useNavigate();
   const [imageErrors, setImageErrors] = useState<
@@ -322,6 +324,18 @@ export function DocumentListView({
               >
                 {/* Tên tài liệu & Preview */}
                 <div className="col-span-6 md:col-span-5 flex items-center gap-3 min-w-0">
+                  {onToggleSelect && (
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.some((id) => String(id) === String(doc.id))}
+                      onChange={() => {}}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleSelect(doc.id);
+                      }}
+                      className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer shrink-0"
+                    />
+                  )}
                   {isBundle && onToggleBundle ? (
                     <button
                       onClick={(e) => handleToggleBundle(e, doc.id)}

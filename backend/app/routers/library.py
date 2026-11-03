@@ -43,6 +43,7 @@ from app.schemas.library import (
     RatingOut,
     SubjectUpdate,
     SubmissionCreate,
+    BulkSubmissionCreate,
     SubmissionOut,
     SubmissionRejectPayload,
     CommunityDocumentOut,
@@ -896,6 +897,123 @@ async def submit_document_to_library(
         reviewed_at=submission.reviewed_at,
         created_at=submission.created_at,
     )
+
+
+@router.post("/submissions/bulk")
+async def submit_documents_bulk_to_library(
+    payload: BulkSubmissionCreate,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Đóng góp hàng loạt nhiều tài liệu vào kho cộng đồng."""
+    subject = await db.get(Subject, payload.subject_id)
+    if not subject:
+        raise HTTPException(status_code=404, detail="Môn học không tồn tại")
+
+    doc_ids = list(dict.fromkeys(payload.source_document_ids))
+    succeeded: list[int] = []
+    failed: list[dict] = []
+    created_subs: list[tuple[CommunitySubmission, Document]] = []
+
+    for doc_id in doc_ids:
+        src_doc = await db.get(Document, doc_id)
+        if not src_doc or src_doc.is_deleted:
+            failed.append({"id": doc_id, "reason": "Tài liệu không tồn tại"})
+            continue
+        if src_doc.owner_id != current_user.id:
+            # Cho phép thành viên nhóm hoặc chủ nhóm đóng góp tài liệu trong nhóm
+            can_contribute_group = False
+            if src_doc.workspace_id:
+                from app.models.workspace import Workspace, WorkspaceMember
+                ws = await db.get(Workspace, src_doc.workspace_id)
+                if ws and ws.owner_id == current_user.id:
+                    can_contribute_group = True
+                else:
+                    mem = (
+                        await db.execute(
+                            select(WorkspaceMember).where(
+                                WorkspaceMember.workspace_id == src_doc.workspace_id,
+                                WorkspaceMember.user_id == current_user.id,
+                            )
+                        )
+                    ).scalar_one_or_none()
+                    if mem:
+                        can_contribute_group = True
+            if not can_contribute_group:
+                failed.append({"id": doc_id, "reason": "Không phải chủ sở hữu tài liệu"})
+                continue
+        existing = (
+            await db.execute(
+                select(CommunitySubmission).where(
+                    CommunitySubmission.source_document_id == src_doc.id,
+                    CommunitySubmission.status == "pending",
+                )
+            )
+        ).scalar_one_or_none()
+        if existing:
+            failed.append({"id": doc_id, "reason": "Đang chờ duyệt"})
+            continue
+
+        sub = CommunitySubmission(
+            source_document_id=src_doc.id,
+            submitter_id=current_user.id,
+            subject_id=subject.id,
+            academic_year=payload.academic_year,
+            doc_type=payload.doc_type,
+            note=payload.note,
+            status="pending",
+        )
+        db.add(sub)
+        created_subs.append((sub, src_doc))
+        succeeded.append(doc_id)
+
+    await db.flush()
+
+    if created_subs:
+        admins_res = await db.execute(
+            select(User).where(
+                or_(
+                    and_(User.role == "faculty_admin", User.faculty_id == subject.faculty_id),
+                    User.role.in_(list(GLOBAL_ADMIN)),
+                )
+            )
+        )
+        admins = admins_res.scalars().all()
+        submitter_label = current_user.full_name or current_user.username
+        first_sub, first_doc = created_subs[0]
+        msg = (
+            f"{submitter_label} đóng góp {len(created_subs)} tài liệu mới chờ duyệt ({subject.name})"
+            if len(created_subs) > 1
+            else f"{submitter_label} đóng góp tài liệu chờ duyệt: {first_doc.title}"
+        )[:255]
+        link = f"/library/admin/submissions?status=pending&highlight_submission={first_sub.id}"
+        for admin in admins:
+            if admin.id == current_user.id:
+                continue
+            db.add(
+                Notification(
+                    user_id=admin.id,
+                    type="community_submission_received",
+                    document_id=first_doc.id,
+                    message=msg,
+                    link=link,
+                )
+            )
+
+    await db.commit()
+    for _, src_doc in created_subs:
+        background_tasks.add_task(
+            _log_activity, db, src_doc.id, current_user.id,
+            ActivityAction.CONTRIBUTED, "library", None, None, 0,
+        )
+
+    return {
+        "submitted_count": len(succeeded),
+        "skipped_ids": [f["id"] for f in failed],
+        "succeeded": succeeded,
+        "failed": failed,
+    }
 
 
 @router.get("/submissions/my/", response_model=List[SubmissionOut])
