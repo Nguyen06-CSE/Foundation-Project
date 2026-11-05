@@ -54,7 +54,7 @@ const BOTTOM_ITEMS: SidebarItem[] = [
 ];
 
 const MIN_WIDTH = 72;
-const MAX_WIDTH = 260;
+const MAX_WIDTH = 200;
 const COLLAPSE_THRESHOLD = 100;
 
 export interface SidebarProps {

@@ -51,6 +51,12 @@ docs/
   - [`spec.md`](./feat/community-library/spec.md) — Đặc tả yêu cầu
   - [`implementation.md`](./feat/community-library/implementation.md) — Hướng dẫn triển khai
   - [`management-extension.md`](./feat/community-library/management-extension.md) — Mở rộng quản lý
+- **System Enhancements (Quản trị, Thông báo, Việc cần làm, Thao tác hàng loạt & Quản lý Nhãn):**
+  - [`README.md`](./feat/system-enhancements-2026/README.md) — Tổng quan 5 hạng mục nâng cấp hệ thống
+  - [`DATABASE.md`](./feat/system-enhancements-2026/DATABASE.md) — Thiết kế Database, bảng `user_todos`, mở rộng `notifications`
+  - [`API.md`](./feat/system-enhancements-2026/API.md) — Đặc tả API Endpoints (To-do, Notifications, Bulk Actions, Tags)
+  - [`FRONTEND.md`](./feat/system-enhancements-2026/FRONTEND.md) — Cấu trúc Component, Hooks, State & Real-time status
+  - [`BUSINESS_RULES.md`](./feat/system-enhancements-2026/BUSINESS_RULES.md) — Quy tắc nghiệp vụ, ma trận phân quyền & logic nhắc hạn
 
 ---
 

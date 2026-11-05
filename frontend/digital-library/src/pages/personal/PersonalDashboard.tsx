@@ -111,7 +111,7 @@ export function PersonalDashboard() {
   }
 
   return (
-    <div className="mx-auto flex max-w-[1600px] flex-col gap-6 pb-8">
+    <div className="mx-auto flex max-w-[1600px] flex-col gap-3 pb-8">
       {/* 1. HERO HEADER: Lời chào thông minh + Thao tác nhanh */}
       <header className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xs sm:p-6 xl:flex-row xl:items-center xl:justify-between">
         <div className="space-y-1.5">
