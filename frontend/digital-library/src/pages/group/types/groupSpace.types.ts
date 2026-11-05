@@ -144,7 +144,3 @@ export interface SimpleShareModalProps {
   onClose: () => void;
 }
 
-export interface InviteModalProps {
-  groupId: number;
-  onClose: () => void;
-}
