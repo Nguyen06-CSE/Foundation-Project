@@ -623,9 +623,7 @@ export default function SettingsPage() {
         <h1 className="text-xl font-semibold text-gray-900">
           Cài đặt tài khoản
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Quản lý thông tin cá nhân và tuỳ chọn hệ thống
-        </p>
+        
       </div>
 
       <Card>
