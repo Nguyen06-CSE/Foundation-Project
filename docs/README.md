@@ -8,10 +8,13 @@ Tài liệu điều hướng nhanh đến các tài liệu kỹ thuật, quản 
 ```text
 docs/
 ├── feat/                           # Tài liệu kỹ thuật chi tiết của từng tính năng
+│   ├── activity-tracking/          # Theo dõi tương tác & chấm điểm độ hot tài liệu
 │   ├── bundle/                     # Đặc tả kỹ thuật mô-đun Bundle
 │   ├── community-library/          # Đặc tả kỹ thuật thư viện cộng đồng
 │   ├── document-preview-and-thumbnails/ # Xem trước đa định dạng & Quản lý ảnh bìa
-│   └── markdown-view/              # Chế độ xem & xuất văn bản Markdown
+│   ├── document-view-modes/        # Hiển thị tài liệu đa phong cách (Grid, List, Detail)
+│   ├── markdown-view/              # Chế độ xem & xuất văn bản Markdown
+│   └── system-enhancements-2026/   # Quản trị, Thông báo, Việc cần làm, Bulk actions & Tags
 ├── project-management/             # Quản lý tiến độ, kế hoạch & định hướng dự án
 │   ├── Task Assignment/            # Phân rã và phân công công việc
 │   ├── backlog.md                  # Ý tưởng mới & tính năng cần cải thiện
@@ -51,6 +54,11 @@ docs/
   - [`spec.md`](./feat/community-library/spec.md) — Đặc tả yêu cầu
   - [`implementation.md`](./feat/community-library/implementation.md) — Hướng dẫn triển khai
   - [`management-extension.md`](./feat/community-library/management-extension.md) — Mở rộng quản lý
+- **Document Multi-View Modes (Chế độ hiển thị đa phong cách: Grid, List, Detail):**
+  - [`README.md`](./feat/document-view-modes/README.md) — Tổng quan triết lý thiết kế 3 chế độ xem & ma trận so sánh
+  - [`FRONTEND.md`](./feat/document-view-modes/FRONTEND.md) — Kiến trúc Component, TypeScript interfaces & Bảng màu MIME
+  - [`REUSE_AND_INTEGRATION.md`](./feat/document-view-modes/REUSE_AND_INTEGRATION.md) — Hướng dẫn tái sử dụng tại Personal, Group, Bundle, Library
+  - [`BUSINESS_RULES.md`](./feat/document-view-modes/BUSINESS_RULES.md) — Quy tắc OCR snippet, Fallback ảnh bìa, Heat scoring & Multi-select
 - **System Enhancements (Quản trị, Thông báo, Việc cần làm, Thao tác hàng loạt & Quản lý Nhãn):**
   - [`README.md`](./feat/system-enhancements-2026/README.md) — Tổng quan 5 hạng mục nâng cấp hệ thống
   - [`DATABASE.md`](./feat/system-enhancements-2026/DATABASE.md) — Thiết kế Database, bảng `user_todos`, mở rộng `notifications`
