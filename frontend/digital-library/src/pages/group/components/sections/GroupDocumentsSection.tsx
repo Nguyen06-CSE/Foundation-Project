@@ -11,6 +11,7 @@ import {
   type DocumentListItem,
 } from "@/components/shared/documents";
 import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
+import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
 import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 import LocalGroupDocumentCard from "../cards/LocalGroupDocumentCard";
 import { groupDocumentService } from "@/services/documentService";
@@ -94,6 +95,7 @@ export function GroupDocumentsSection({
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [isBulkProcessing, setIsBulkProcessing] = useState(false);
   const [bulkContributeDocs, setBulkContributeDocs] = useState<{ id: number; title: string }[] | null>(null);
+  const [sharingDocs, setSharingDocs] = useState<{ ids: number[]; title?: string } | null>(null);
 
   const toggleSelectDoc = useCallback((docId: string | number) => {
     const numId = Number(docId);
@@ -188,6 +190,9 @@ export function GroupDocumentsSection({
       case "save_personal":
       case "save":
         onSave?.(numericId);
+        break;
+      case "share":
+        if (doc) setSharingDocs({ ids: [numericId], title: doc.title || (doc as any).name });
         break;
       case "delete":
         onDelete?.(numericId);
@@ -325,6 +330,7 @@ export function GroupDocumentsSection({
                   onSave={onSave || (async () => {})}
                   onDelete={onDelete || (async () => {})}
                   onRename={onRename}
+                  onShare={(docId, title) => setSharingDocs({ ids: [docId], title })}
                   isSelected={selectedIds.includes(Number(doc.id))}
                   onToggleSelect={toggleSelectDoc}
                 />
@@ -377,10 +383,28 @@ export function GroupDocumentsSection({
         onSelectAll={handleSelectAll}
         onClearSelection={handleClearSelection}
         onBulkDownload={handleBulkDownload}
+        onBulkShare={
+          effectivePermission !== "view"
+            ? () => setSharingDocs({ ids: selectedIds })
+            : undefined
+        }
         onBulkContribute={handleBulkContribute}
         onBulkDelete={effectivePermission !== "view" ? handleBulkDelete : undefined}
         isProcessing={isBulkProcessing}
       />
+
+      {sharingDocs && (
+        <ShareDocumentModal
+          documentIds={sharingDocs.ids}
+          documentTitle={sharingDocs.title}
+          sourceWorkspaceId={groupId}
+          onClose={() => setSharingDocs(null)}
+          onSuccess={() => {
+            setSharingDocs(null);
+            setSelectedIds([]);
+          }}
+        />
+      )}
 
       {bulkContributeDocs && (
         <ContributeModal

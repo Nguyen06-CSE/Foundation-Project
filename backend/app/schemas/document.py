@@ -76,6 +76,19 @@ class DocumentOut(DocumentBase):
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
+    @field_validator("metadata_", mode="before")
+    @classmethod
+    def normalize_metadata(cls, v):
+        if v is None or isinstance(v, dict):
+            return v
+        if isinstance(v, list):
+            merged: dict = {}
+            for item in v:
+                if isinstance(item, dict):
+                    merged.update(item)
+            return merged or None
+        return None
+
     @field_validator("file_path", "thumbnail_path", "markdown_path", mode="before")
     @classmethod
     def convert_to_public_url(cls, v: Optional[str]) -> Optional[str]:

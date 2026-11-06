@@ -16,6 +16,7 @@ import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
 import { DocumentFilterBar } from "@/components/shared/documents/DocumentFilterBar";
 import { ManageTagsModal } from "@/components/shared/modals/ManageTagsModal";
+import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
 
 // Sub-sections & Modals
 import { PersonalFoldersSection } from "./components/PersonalFoldersSection";
@@ -82,6 +83,8 @@ export function PersonalDocuments() {
     setIsContributeModalOpen,
     contributeDoc,
     setContributeDoc,
+    shareDoc,
+    setShareDoc,
     fileTypes,
     docData,
     docsLoading,
@@ -103,6 +106,8 @@ export function PersonalDocuments() {
     setSelectedAccessTime,
     selectedSort,
     setSelectedSort,
+    selectedShareFilter,
+    setSelectedShareFilter,
     filteredDocuments: filteredDocCards,
     filteredFolders,
   } = usePersonalDocuments(selectedFolderId, folders);
@@ -139,6 +144,7 @@ export function PersonalDocuments() {
     !!searchQuery.trim() ||
     selectedTagId !== null ||
     selectedFileType !== null ||
+    selectedShareFilter !== null ||
     activeTab !== "all";
 
   return (
@@ -159,6 +165,8 @@ export function PersonalDocuments() {
         setSelectedAccessTime={setSelectedAccessTime}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
+        selectedShareFilter={selectedShareFilter}
+        setSelectedShareFilter={setSelectedShareFilter}
         onUploadClick={() => setIsUploadOpen(true)}
         onManageTags={openManageModal}
       />
@@ -274,6 +282,14 @@ export function PersonalDocuments() {
           onSuccess={() => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
           }}
+        />
+      )}
+
+      {shareDoc && (
+        <ShareDocumentModal
+          documentIds={[shareDoc.id]}
+          documentTitle={shareDoc.title}
+          onClose={() => setShareDoc(null)}
         />
       )}
 

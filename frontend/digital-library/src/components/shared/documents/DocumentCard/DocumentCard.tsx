@@ -33,6 +33,7 @@ export interface DocumentItem {
   view_count?: number;
   personal_view_count?: number;
   trending_score?: number;
+  owner?: { name: string; avatar?: string };
 }
 
 export interface DocumentCardProps {

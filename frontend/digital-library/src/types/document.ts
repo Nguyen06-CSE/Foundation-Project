@@ -59,6 +59,7 @@ export interface Document {
   download_count?: number;
   share_count?: number;
   personal_view_count?: number;
+  metadata?: Record<string, any> | null;
 }
 
 export interface PaginatedDocuments {

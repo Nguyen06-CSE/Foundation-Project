@@ -66,6 +66,7 @@ export default function LocalGroupDocumentCard({
   onSave,
   onDelete,
   onRename,
+  onShare,
   isSelected = false,
   onToggleSelect,
 }: LocalGroupDocumentCardProps) {
@@ -114,6 +115,9 @@ export default function LocalGroupDocumentCard({
       case "save_personal":
       case "save":
         onSave?.(document.id);
+        break;
+      case "share":
+        onShare?.(document.id, document.title);
         break;
       case "rename":
         onRename?.(document.id, document.title);

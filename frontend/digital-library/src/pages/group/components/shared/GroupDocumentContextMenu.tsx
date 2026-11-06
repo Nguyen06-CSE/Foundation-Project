@@ -1,7 +1,7 @@
 // frontend/digital-library/src/pages/group/components/GroupDocumentContextMenu.tsx
 
 import { DocumentContextMenu, type DocumentAction, type DocumentMenuItem } from "@/components/shared/documents/DocumentContextMenu";
-import { Save } from "lucide-react";
+import { Save, Share2 } from "lucide-react";
 
 export type GroupPermission = "owner" | "full" | "view";
 
@@ -21,11 +21,22 @@ export function GroupDocumentContextMenu({ onAction, permission, markdownPath }:
   }
 
   const extraItems: DocumentMenuItem[] = [
+    ...(permission === "view"
+      ? [
+          {
+            action: "share",
+            icon: <Share2 className="h-4 w-4" />,
+            label: "Chia sẻ",
+            disabled: true,
+            tooltip: "Bạn chỉ có quyền xem trong nhóm này, không thể chia sẻ tài liệu.",
+          },
+        ]
+      : []),
     {
       action: "save-to-personal",
       icon: <Save className="h-4 w-4" />,
       label: "Lưu về cá nhân",
-    }
+    },
   ];
 
   return (

@@ -6,6 +6,7 @@ export interface DocumentBulkActionBarProps {
   onSelectAll: () => void;
   onClearSelection: () => void;
   onBulkDownload: () => void;
+  onBulkShare?: () => void;
   onBulkContribute?: () => void;
   onBulkDelete?: () => void;
   isProcessing?: boolean;
@@ -17,6 +18,7 @@ export function DocumentBulkActionBar({
   onSelectAll,
   onClearSelection,
   onBulkDownload,
+  onBulkShare,
   onBulkContribute,
   onBulkDelete,
   isProcessing = false,
@@ -57,6 +59,18 @@ export function DocumentBulkActionBar({
         <Download className="h-3.5 w-3.5 text-sky-400" />
         Tải xuống (.zip)
       </button>
+
+      {onBulkShare && (
+        <button
+          type="button"
+          onClick={onBulkShare}
+          disabled={isProcessing}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors cursor-pointer disabled:opacity-50"
+        >
+          <Share2 className="h-3.5 w-3.5" />
+          Chia sẻ ({selectedCount})
+        </button>
+      )}
 
       {onBulkContribute && (
         <button

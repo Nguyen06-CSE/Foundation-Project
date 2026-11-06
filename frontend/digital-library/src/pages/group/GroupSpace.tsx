@@ -26,7 +26,7 @@ import SettingsTab from "./components/tabs/SettingsTab";
 import TrashTab from "./components/tabs/TrashTab";
 import DocumentsTab from "./components/tabs/DocumentsTab";
 import SimpleShareModal from "./components/modals/SimpleShareModal";
-import InviteModal from "./components/modals/InviteModal";
+import GroupInviteModal from "./components/modals/GroupInviteModal";
 
 import { useGroupSpace } from "./hooks/useGroupSpace";
 import { GroupFolderModalContainer } from "./components/modals/GroupFolderModalContainer";
@@ -391,6 +391,8 @@ export default function GroupSpace() {
         <SimpleShareModal
           title="Chia sẻ từ kho cá nhân"
           documents={documents}
+          groupId={groupId}
+          mode="documents"
           onClose={() => setShareModal(null)}
         />
       )}
@@ -398,11 +400,13 @@ export default function GroupSpace() {
         <SimpleShareModal
           title="Chia sẻ cả thư mục"
           documents={documents}
+          groupId={groupId}
+          mode="folder"
           onClose={() => setShareModal(null)}
         />
       )}
       {shareModal === "invite" && (
-        <InviteModal groupId={groupId} onClose={() => setShareModal(null)} />
+        <GroupInviteModal groupId={groupId} onClose={() => setShareModal(null)} />
       )}
 
       {/* Modal Xác nhận xóa thư mục nhóm */}

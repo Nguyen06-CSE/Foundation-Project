@@ -27,6 +27,7 @@ from app.routers.library import router as library_router
 from app.routers.stats import router as stats_router
 from app.routers.dashboard import router as dashboard_router
 from app.routers.todos import router as todos_router
+from app.routers.shares import router as shares_router
 
 app = FastAPI(
     title="Thư Viện Số - Quản Lí Tài Liệu",
@@ -81,6 +82,7 @@ app.include_router(library_router)
 app.include_router(stats_router)
 app.include_router(dashboard_router)
 app.include_router(todos_router)
+app.include_router(shares_router)
 
 
 @app.on_event("startup")

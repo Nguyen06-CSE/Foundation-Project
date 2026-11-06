@@ -113,7 +113,7 @@ export function PersonalDashboard() {
   return (
     <div className="mx-auto flex max-w-[1600px] flex-col gap-3 pb-8">
       {/* 1. HERO HEADER: Lời chào thông minh + Thao tác nhanh */}
-      <header className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xs sm:p-6 xl:flex-row xl:items-center xl:justify-between">
+      <header className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xs sm:p-4 xl:flex-row xl:items-center xl:justify-between">
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="text-xs font-medium tracking-wide text-gray-500 uppercase">
@@ -136,9 +136,6 @@ export function PersonalDashboard() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
             {greeting}, {displayName}!
           </h1>
-          <p className="text-sm text-gray-500">
-            Quản lý tài liệu cá nhân, thư mục học phần và không gian học tập nhóm của bạn tại một nơi.
-          </p>
         </div>
 
         <div className="shrink-0">

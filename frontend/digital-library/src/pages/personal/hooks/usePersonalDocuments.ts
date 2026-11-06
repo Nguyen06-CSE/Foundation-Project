@@ -58,6 +58,7 @@ export function usePersonalDocuments(
   const [selectedUploadTime, setSelectedUploadTime] = useState<string | null>(null);
   const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
   const [selectedSort, setSelectedSort] = useState<string>("trending");
+  const [selectedShareFilter, setSelectedShareFilter] = useState<string | null>(null);
 
   // --- 2. STATES GIAO DIỆN & MODAL ---
   const [page, setPage] = useState(1);
@@ -66,6 +67,7 @@ export function usePersonalDocuments(
   const [renamingDoc, setRenamingDoc] = useState<{ id: string; title: string } | null>(null);
   const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
   const [contributeDoc, setContributeDoc] = useState<{ id: number; title: string } | null>(null);
+  const [shareDoc, setShareDoc] = useState<{ id: number; title: string } | null>(null);
 
   // --- 3. QUERIES ---
   const { data: fileTypes = [] } = useQuery({
@@ -146,6 +148,11 @@ export function usePersonalDocuments(
       } else {
         alert("Tài liệu không có tệp Markdown để tải xuống.");
       }
+    } else if (action === "share") {
+      const docToShare = docData?.items.find((d) => d.id.toString() === documentId);
+      if (docToShare) {
+        setShareDoc({ id: docToShare.id, title: docToShare.title });
+      }
     } else if (action === "rename") {
       const docToRename = docData?.items.find((d) => d.id.toString() === documentId);
       if (docToRename) {
@@ -167,35 +174,45 @@ export function usePersonalDocuments(
 
   // --- 6. CHUẨN HÓA DỮ LIỆU ---
   const allDocCards = useMemo(() => {
-    return (docData?.items ?? []).map((doc) => ({
-      id: doc.id.toString(),
-      name: doc.title,
-      type: doc.file_type || "unknown",
-      updatedAt: formatRelativeDate(doc.created_at),
-      size: formatSize(doc.file_size || 0),
-      extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
-      thumbnail_path: doc.thumbnail_path ?? null,
-      markdown_path: doc.markdown_path ?? null,
-      markdownPath: doc.markdown_path ?? null,
-      file_path: doc.file_path ?? null,
-      content: doc.content,
-      owner: { name: "You", avatar: "" },
-      rawType: doc.file_type,
-      tags: doc.tags || [],
-      folder_id: (doc as any).folder_id ?? null,
-      is_bundle: doc.is_bundle,
-      bundle_parent_id: doc.bundle_parent_id,
-      bundle_children_count: doc.bundle_children_count,
+    return (docData?.items ?? []).map((doc) => {
+      const meta = (doc as any).metadata ?? null;
+      const sharedBy = meta?.shared_by;
+      const sharerName = sharedBy
+        ? sharedBy.full_name || sharedBy.username
+        : undefined;
 
-      // STATS
-      view_count: doc.view_count ?? 0,
-      personal_view_count: doc.personal_view_count ?? 0,
-      trending_score: doc.trending_score ?? 0,
+      return {
+        id: doc.id.toString(),
+        name: doc.title,
+        type: doc.file_type || "unknown",
+        updatedAt: formatRelativeDate(doc.created_at),
+        size: formatSize(doc.file_size || 0),
+        extension: getFileExtension(doc.file_path, doc.file_type, doc.title),
+        thumbnail_path: doc.thumbnail_path ?? null,
+        markdown_path: doc.markdown_path ?? null,
+        markdownPath: doc.markdown_path ?? null,
+        file_path: doc.file_path ?? null,
+        content: doc.content,
+        owner: sharerName ? { name: sharerName, avatar: "" } : undefined,
+        rawType: doc.file_type,
+        tags: doc.tags || [],
+        folder_id: (doc as any).folder_id ?? null,
+        is_bundle: doc.is_bundle,
+        bundle_parent_id: doc.bundle_parent_id,
+        bundle_children_count: doc.bundle_children_count,
 
-      // LƯU CÁC MỐC THỜI GIAN ĐỂ PHỤC VỤ BỘ LỌC
-      created_at: doc.created_at,
-      last_accessed_at: (doc as any).last_accessed_at || (doc as any).updated_at || doc.created_at,
-    }));
+        // STATS & METADATA
+        view_count: doc.view_count ?? 0,
+        personal_view_count: doc.personal_view_count ?? 0,
+        trending_score: doc.trending_score ?? 0,
+        share_count: doc.share_count ?? 0,
+        metadata: meta,
+
+        // LƯU CÁC MỐC THỜI GIAN ĐỂ PHỤC VỤ BỘ LỌC
+        created_at: doc.created_at,
+        last_accessed_at: (doc as any).last_accessed_at || (doc as any).updated_at || doc.created_at,
+      };
+    });
   }, [docData]);
 
   // --- 7. LOGIC TÌM KIẾM ĐA TRƯỜNG & BỘ LỌC TỐC ĐỘ CAO ---
@@ -277,6 +294,15 @@ export function usePersonalDocuments(
         return false;
       }
 
+      // 6b. Lọc theo NGUỒN CHIA SẺ (Đã chia sẻ / Nhận từ chia sẻ)
+      if (selectedShareFilter === "shared_by_me") {
+        const isSharedByMe =
+          doc.metadata?.is_shared === true || (doc.share_count ?? 0) > 0;
+        if (!isSharedByMe) return false;
+      } else if (selectedShareFilter === "received_from_share") {
+        if (!doc.metadata?.shared_by) return false;
+      }
+
       // 7. Lọc theo TÌM KIẾM ĐA TRƯỜNG (Instant Search)
       if (query) {
         const matchName = doc.name.toLowerCase().includes(query);
@@ -306,6 +332,7 @@ export function usePersonalDocuments(
     selectedFolderId,
     selectedUploadTime,
     selectedAccessTime,
+    selectedShareFilter,
   ]);
 
   return {
@@ -316,6 +343,7 @@ export function usePersonalDocuments(
     renamingDoc, setRenamingDoc,
     isContributeModalOpen, setIsContributeModalOpen,
     contributeDoc, setContributeDoc,
+    shareDoc, setShareDoc,
     activeTab, setActiveTab,
     searchQuery, setSearchQuery,
     selectedTagId, setSelectedTagId,
@@ -327,6 +355,8 @@ export function usePersonalDocuments(
     setSelectedAccessTime,
     selectedSort,
     setSelectedSort,
+    selectedShareFilter,
+    setSelectedShareFilter,
 
     // Data (Đã lọc)
     fileTypes, docData, docsLoading, isFetching,

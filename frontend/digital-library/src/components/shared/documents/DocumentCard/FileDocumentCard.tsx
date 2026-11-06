@@ -422,6 +422,11 @@ export function FileDocumentCard({
             <span className="h-1 w-1 rounded-full bg-gray-300" />
             <span>{document.updatedAt}</span>
           </p>
+          {document.owner?.name && (
+            <p className="mt-1 truncate text-[11px] font-medium text-primary-600">
+              Từ: {document.owner.name}
+            </p>
+          )}
         </div>
 
         {/* Tags */}

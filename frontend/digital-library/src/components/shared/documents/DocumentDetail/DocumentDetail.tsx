@@ -17,6 +17,7 @@ import { DocumentTitleHeader } from "./components/DocumentTitleHeader";
 import { DocumentInfoCard } from "./components/DocumentInfoCard";
 import { DocumentActionCard } from "./components/DocumentActionCard";
 import { SetCoverModal } from "./components/SetCoverModal";
+import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
 import { TabPreview } from "./tabs/TabPreview";
 import { TabContent } from "./tabs/TabContent";
 import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
@@ -60,6 +61,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const [viewMode, setViewMode] = useState<"original" | "markdown">("original");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isCoverModalOpen, setIsCoverModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const isPdfOrDoc =
     doc?.file_type === "application/pdf" ||
@@ -285,6 +287,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               shareCount={doc.share_count ?? 0}
               personalViewCount={doc.personal_view_count}
               isPersonal={!doc.workspace_id}
+              sharedBy={(doc as any).metadata?.shared_by ?? null}
             />
 
             <DocumentActionCard
@@ -295,11 +298,13 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               fileTypeLabel={fileTypeLabel}
               canEdit={permissions.canEdit}
               canDelete={permissions.canDelete}
+              canShare={!doc.workspace_id || permissions.canEdit}
               isRenamePending={renameMutation.isPending}
               isDeletePending={isDeleting}
               onStartRename={handleStartRename}
               onDelete={handleDelete}
               onSetCover={handleSetCover}
+              onShare={() => setIsShareModalOpen(true)}
               onDownloadSuccess={() => {
                 queryClient.invalidateQueries({
                   queryKey: [...(props.queryKeyPrefix || ["document"]), doc.id],
@@ -319,6 +324,20 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
         onUploadCover={handleUpdateThumbnail}
         isUpdating={isUpdatingThumbnail || isUpdatingThumbnailPage}
       />
+
+      {isShareModalOpen && (
+        <ShareDocumentModal
+          documentIds={[doc.id]}
+          documentTitle={doc.title}
+          sourceWorkspaceId={doc.workspace_id}
+          onClose={() => setIsShareModalOpen(false)}
+          onSuccess={() => {
+            queryClient.invalidateQueries({
+              queryKey: [...(props.queryKeyPrefix || ["document"]), doc.id],
+            });
+          }}
+        />
+      )}
     </div>
   );
 }

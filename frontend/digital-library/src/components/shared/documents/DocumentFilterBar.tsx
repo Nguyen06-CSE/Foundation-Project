@@ -51,6 +51,10 @@ interface DocumentFilterBarProps {
   selectedSort?: string;
   setSelectedSort?: (sort: string) => void;
 
+  // Share Filter (Personal Library)
+  selectedShareFilter?: string | null;
+  setSelectedShareFilter?: (val: string | null) => void;
+
   // Actions
   onUploadClick?: () => void;
   showUploadButton?: boolean;
@@ -74,6 +78,8 @@ export function DocumentFilterBar({
   setSelectedAccessTime,
   selectedSort,
   setSelectedSort,
+  selectedShareFilter,
+  setSelectedShareFilter,
   members,
   selectedUploaderId,
   setSelectedUploaderId,
@@ -184,6 +190,19 @@ export function DocumentFilterBar({
             ]}
             selectedValue={selectedSort ?? "trending"}
             onChange={(val) => setSelectedSort((val as string) || "trending")}
+          />
+        )}
+
+        {/* Lọc theo Nguồn chia sẻ (Đã chia sẻ / Nhận từ chia sẻ) */}
+        {setSelectedShareFilter && (
+          <DynamicFilterDropdown
+            label="Nguồn chia sẻ"
+            options={[
+              { value: "shared_by_me", label: "Đã chia sẻ" },
+              { value: "received_from_share", label: "Nhận từ chia sẻ" },
+            ]}
+            selectedValue={selectedShareFilter ?? null}
+            onChange={(val) => setSelectedShareFilter(val as string | null)}
           />
         )}
 

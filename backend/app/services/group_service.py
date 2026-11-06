@@ -105,6 +105,10 @@ async def share_document_to_group(
     ):
         raise HTTPException(404, "Không tìm thấy tài liệu")
 
+    src_meta = dict(src_doc.metadata_) if isinstance(src_doc.metadata_, dict) else {}
+    src_meta["is_shared"] = True
+    src_doc.metadata_ = src_meta
+
     new_doc = Document(
         owner_id=sharer_id,
         workspace_id=workspace_id,
@@ -120,9 +124,38 @@ async def share_document_to_group(
         checksum=src_doc.checksum,
         content=src_doc.content,
         metadata_=src_doc.metadata_,
+        is_bundle=src_doc.is_bundle,
     )
     db.add(new_doc)
     await db.flush()
+    if src_doc.is_bundle:
+        children_res = await db.execute(
+            select(Document).where(
+                Document.bundle_parent_id == src_doc.id,
+                Document.is_deleted == False,
+            )
+        )
+        for child in children_res.scalars().all():
+            db.add(
+                Document(
+                    owner_id=sharer_id,
+                    workspace_id=workspace_id,
+                    bundle_parent_id=new_doc.id,
+                    source_document_id=child.id,
+                    title=child.title,
+                    description=child.description,
+                    category_id=child.category_id,
+                    file_path=child.file_path,
+                    thumbnail_path=child.thumbnail_path,
+                    markdown_path=child.markdown_path,
+                    file_type=child.file_type,
+                    file_size=child.file_size,
+                    checksum=child.checksum,
+                    content=child.content,
+                    metadata_=child.metadata_,
+                )
+            )
+        await db.flush()
     await _copy_document_tags(db, src_doc.id, new_doc.id)
     await db.commit()
     await db.refresh(new_doc)

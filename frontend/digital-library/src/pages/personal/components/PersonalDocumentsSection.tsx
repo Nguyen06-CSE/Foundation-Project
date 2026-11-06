@@ -13,6 +13,7 @@ import {
   type DocumentListItem,
 } from "@/components/shared/documents";
 import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
+import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
 import { ContributeModal } from "@/components/shared/modals/ContributeModal";
 import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import EmptyState from "@/components/shared/feedback/EmptyState";
@@ -43,6 +44,8 @@ export interface DocCardType {
   view_count?: number;
   personal_view_count?: number;
   trending_score?: number;
+  share_count?: number;
+  metadata?: Record<string, any> | null;
 }
 
 interface PersonalDocumentsSectionProps {
@@ -56,11 +59,13 @@ interface PersonalDocumentsSectionProps {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   onDocumentAction: (action: DocumentAction | string, documentId: string) => void;
-  onOpenUploadModal: () => void;
+  onOpenUploadModal?: () => void;
   CardSkeleton: React.ComponentType<{ variant: "folder" | "document" }>;
   isFilterActive: boolean;
   searchQuery?: string;
   selectedTagId?: number | null;
+  showOwner?: boolean;
+  sectionTitle?: string;
 }
 
 /**
@@ -125,6 +130,8 @@ export function PersonalDocumentsSection({
   isFilterActive,
   searchQuery = "",
   selectedTagId = null,
+  showOwner = false,
+  sectionTitle = "Tài liệu",
 }: PersonalDocumentsSectionProps) {
   const queryClient = useQueryClient();
   const [viewMode, setViewMode] = useState<ViewMode>("detail");
@@ -133,6 +140,7 @@ export function PersonalDocumentsSection({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkProcessing, setIsBulkProcessing] = useState(false);
   const [bulkContributeDocs, setBulkContributeDocs] = useState<{ id: number; title: string }[] | null>(null);
+  const [bulkShareIds, setBulkShareIds] = useState<number[] | null>(null);
 
   const toggleSelectDoc = useCallback((docId: string | number) => {
     const idStr = String(docId);
@@ -270,7 +278,7 @@ export function PersonalDocumentsSection({
       {/* Header: title + toggle bundle button (nếu có bundle) + view toggle */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <h2 className="text-sm font-semibold text-gray-700">Tài liệu</h2>
+          <h2 className="text-sm font-semibold text-gray-700">{sectionTitle}</h2>
           {filteredDocCards.length > 0 && (
             <button
               type="button"
@@ -366,7 +374,7 @@ export function PersonalDocumentsSection({
                 icon={<FileX className="h-6 w-6" />}
                 title="Không tìm thấy tài liệu"
                 description="Không có tài liệu nào phù hợp với bộ lọc hiện tại."
-                actionLabel="Tải lên ngay"
+                actionLabel={onOpenUploadModal ? "Tải lên ngay" : undefined}
                 onAction={onOpenUploadModal}
               />
             </div>
@@ -380,6 +388,7 @@ export function PersonalDocumentsSection({
           <DocumentListView
             documents={listItems}
             isLoading={docsLoading}
+            showOwner={showOwner || listItems.some((d) => Boolean(d.owner))}
             selectedIds={selectedIds}
             onToggleSelect={toggleSelectDoc}
             onAction={(action, docId) =>
@@ -412,6 +421,7 @@ export function PersonalDocumentsSection({
           <DocumentDetailView
             documents={listItems}
             isLoading={docsLoading}
+            showOwner={showOwner || listItems.some((d) => Boolean(d.owner))}
             selectedIds={selectedIds}
             onToggleSelect={toggleSelectDoc}
             onAction={(action, docId) =>
@@ -427,10 +437,23 @@ export function PersonalDocumentsSection({
         onSelectAll={handleSelectAll}
         onClearSelection={handleClearSelection}
         onBulkDownload={handleBulkDownload}
+        onBulkShare={() => setBulkShareIds(selectedIds.map(Number))}
         onBulkContribute={handleBulkContribute}
         onBulkDelete={handleBulkDelete}
         isProcessing={isBulkProcessing}
       />
+
+      {bulkShareIds && (
+        <ShareDocumentModal
+          documentIds={bulkShareIds}
+          onClose={() => setBulkShareIds(null)}
+          onSuccess={() => {
+            setBulkShareIds(null);
+            setSelectedIds([]);
+            queryClient.invalidateQueries({ queryKey: ["documents"] });
+          }}
+        />
+      )}
 
       {bulkContributeDocs && (
         <ContributeModal

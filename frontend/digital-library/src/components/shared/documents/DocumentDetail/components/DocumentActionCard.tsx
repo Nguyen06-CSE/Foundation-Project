@@ -29,6 +29,8 @@ interface DocumentActionCardProps {
   onStartRename: () => void;
   onDelete: () => void;
   onSetCover: () => void; // <-- Thêm prop để xử lý khi bấm nút "Cài ảnh bìa"
+  onShare?: () => void;
+  canShare?: boolean;
   onDownloadSuccess?: () => void;
 }
 
@@ -45,6 +47,8 @@ export function DocumentActionCard({
   onStartRename,
   onDelete,
   onSetCover, // <-- Nhận prop
+  onShare,
+  canShare = true,
   onDownloadSuccess,
 }: DocumentActionCardProps) {
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
@@ -185,7 +189,14 @@ export function DocumentActionCard({
           {
             icon: Share2,
             label: "Chia sẻ tài liệu",
-            onClick: () => console.log("Chia sẻ"),
+            onClick: () => {
+              if (!canShare) return;
+              onShare?.();
+            },
+            disabled: !canShare,
+            tooltip: !canShare
+              ? "Bạn chỉ có quyền xem trong nhóm này, không thể chia sẻ tài liệu."
+              : undefined,
             show: true,
           },
           {
@@ -220,12 +231,13 @@ export function DocumentActionCard({
             : []),
         ]
           .filter((item) => item.show)
-          .map(({ icon: Icon, label, onClick, disabled }) => (
+          .map(({ icon: Icon, label, onClick, disabled, tooltip }: any) => (
             <button
               key={label}
               type="button"
               disabled={disabled}
-              className="flex items-center gap-3 px-1 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50"
+              title={tooltip}
+              className="flex items-center gap-3 px-1 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={onClick}
             >
               <Icon className="h-4 w-4 text-gray-500 shrink-0" />

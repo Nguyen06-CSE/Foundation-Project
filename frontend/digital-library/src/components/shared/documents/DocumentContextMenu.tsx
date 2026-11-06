@@ -34,6 +34,8 @@ export interface DocumentMenuItem {
   icon: React.ReactNode;
   label: string;
   danger?: boolean;
+  disabled?: boolean;
+  tooltip?: string;
   onClick?: () => void;
 }
 
@@ -170,7 +172,10 @@ export function DocumentContextMenu({
                   )}
                   <button
                     type="button"
+                    disabled={item.disabled}
+                    title={item.tooltip}
                     onClick={(e) => {
+                      if (item.disabled) return;
                       e.stopPropagation();
                       setIsOpen(false);
                       if (item.onClick) {
@@ -180,7 +185,9 @@ export function DocumentContextMenu({
                       }
                     }}
                     className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
-                      isDanger
+                      item.disabled
+                        ? "text-gray-400 cursor-not-allowed opacity-60 bg-gray-50/50"
+                        : isDanger
                         ? "text-red-600 hover:bg-red-50"
                         : isContribute || isMarkdownDownload
                         ? "text-primary-700 hover:bg-primary-50"

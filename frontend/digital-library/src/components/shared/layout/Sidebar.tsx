@@ -21,6 +21,7 @@ import {
 import { cn } from "@/utils/cn";
 import { groupService } from "@/services/groupService";
 import { libraryService } from "@/services/libraryService";
+import { shareService } from "@/services/shareService";
 import { useAuthStore } from "@/stores/authStore";
 import { isAdminRole } from "@/utils/roles";
 
@@ -75,6 +76,14 @@ export function Sidebar({ onNavigate }: SidebarProps) {
     retry: false,
   });
   const pendingInvitationCount = invitations.filter((invitation) => invitation.status === "pending").length;
+
+  const { data: pendingShares = [] } = useQuery({
+    queryKey: ["shares-pending"],
+    queryFn: shareService.getPending,
+    refetchInterval: 30000,
+    retry: false,
+  });
+  const pendingShareCount = pendingShares.length;
 
   const { data: pendingSubData } = useQuery({
     queryKey: ["library-admin-submissions", "pending-count"],
@@ -218,7 +227,9 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         ? pendingInvitationCount
         : item.to === "/library/admin"
           ? pendingSubmissionCount
-          : 0;
+          : item.to === "/personal/shared"
+            ? pendingShareCount
+            : 0;
 
     return (
       <NavLink

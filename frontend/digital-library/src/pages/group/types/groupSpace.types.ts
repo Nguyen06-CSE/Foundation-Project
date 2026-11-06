@@ -112,6 +112,7 @@ export interface LocalGroupDocumentCardProps {
   onSave: (docId: number) => Promise<unknown>;
   onDelete: (docId: number) => Promise<unknown>;
   onRename?: (docId: string | number, currentTitle: string) => void;
+  onShare?: (docId: number, title: string) => void;
   isSelected?: boolean;
   onToggleSelect?: (docId: number) => void;
 }
@@ -141,6 +142,8 @@ export interface TrashTabProps {
 export interface SimpleShareModalProps {
   title: string;
   documents: Document[];
+  groupId?: number;
+  mode?: "documents" | "folder";
   onClose: () => void;
 }
 

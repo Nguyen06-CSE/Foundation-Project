@@ -59,6 +59,7 @@ interface DocumentInfoCardProps {
   shareCount?: number;
   personalViewCount?: number;
   isPersonal?: boolean;
+  sharedBy?: { id?: number; username?: string; full_name?: string; role?: string } | null;
 }
 
 /**
@@ -84,8 +85,10 @@ export function DocumentInfoCard({
   shareCount = 0,
   personalViewCount = 0,
   isPersonal = true,
+  sharedBy,
 }: DocumentInfoCardProps) {
   const displayTitle = title.length > 25 ? title.slice(0, 25) + "…" : title;
+  const sharerName = sharedBy?.full_name || sharedBy?.username;
 
   return (
     <Card className="min-w-0 overflow-hidden">
@@ -98,6 +101,9 @@ export function DocumentInfoCard({
         <InfoRow label="Loại tệp" value={fileTypeLabel} />
         <InfoRow label="Dung lượng" value={sizeLabel} />
         <InfoRow label="Ngày tải lên" value={uploadedAt} />
+        {sharerName && (
+          <InfoRow label="Người chia sẻ" value={sharerName} />
+        )}
       </div>
 
       {/* Quản lý danh sách nhãn dán */}
