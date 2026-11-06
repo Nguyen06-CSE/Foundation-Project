@@ -2,7 +2,7 @@
 ## Hệ thống Quản lý Tài liệu Cá nhân & Nhóm (Personal & Group Document Management)
 
 ---
-### Để hiểu về dự án bạn hãy đọc mô tả tại đây: [Mô tả dự án](MoTaDuAn.MD)
+### Để hiểu về dự án bạn hãy đọc mô tả tại đây: [Mô tả dự án](../MoTaDuAn)
 
 ## 1. Thông tin sinh viên
 

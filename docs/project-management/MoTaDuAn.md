@@ -1,3 +1,9 @@
+---
+id: MoTaDuAn
+title: Mô Tả Dự Án
+sidebar_position: 1
+---
+
 # 📚 Hệ thống Thư viện số - Quản lý Tài liệu Học tập
 
 ## 📋 Mô tả tổng quan
