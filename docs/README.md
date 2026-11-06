@@ -1,3 +1,10 @@
+---
+id: README
+title: Tổng Quan Dự Án
+sidebar_position: 1
+slug: /
+---
+
 # 📚 Tài Liệu Hướng Dẫn Cấu Trúc Dự Án (Project Documentation Guide)
 
 Tài liệu điều hướng nhanh đến các tài liệu kỹ thuật, quản lý và kiến trúc dự án.

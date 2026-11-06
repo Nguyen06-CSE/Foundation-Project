@@ -1,3 +1,9 @@
+---
+id: LOCAL_DEVELOPMENT_GUIDE
+title: Hướng Dẫn Phát Triển Local
+sidebar_position: 2
+---
+
 # HƯỚNG DẪN CHUYỂN ĐỔI VÀ VẬN HÀNH DỰ ÁN Ở CHẾ ĐỘ LOCAL (OFFLINE DEVELOPMENT GUIDE)
 
 > **Mục đích tài liệu:**

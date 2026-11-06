@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Đặc Tả Tính Năng: Xem Trước Đa Định Dạng & Tùy Chỉnh Ảnh Bìa (Document Preview & Cover Management)
 
 Tài liệu kỹ thuật chi tiết về tính năng **Xem trước đa định dạng tài liệu** (PDF, DOCX, PPTX, XLSX, Code/Plain Text) và **Hệ thống tạo & tùy chỉnh ảnh bìa (Thumbnail/Cover Management)** trong hệ thống Digital Library, được thực hiện trong hai commits:

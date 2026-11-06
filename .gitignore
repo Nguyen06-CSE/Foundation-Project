@@ -51,3 +51,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# --- Docusaurus (docs-site/) ---
+docs-site/.docusaurus/
+docs-site/build/

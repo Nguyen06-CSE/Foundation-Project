@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Tính năng: Markdown View & Export
 
 ## 1. Ý tưởng & Động lực (Idea & Motivation)

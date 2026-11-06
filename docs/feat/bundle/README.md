@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Document Bundle Feature
 
 ## Overview

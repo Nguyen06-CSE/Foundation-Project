@@ -1,3 +1,8 @@
+---
+id: STORAGE_SYSTEM
+title: Kiến Trúc Hệ Thống Lưu Trữ
+---
+
 # KIẾN TRÚC HỆ THỐNG LƯU TRỮ FILE, CƠ CHẾ KIỂM TRA TRÙNG LẶP VÀ VÒNG ĐỜI TÀI LIỆU (DIGITAL LIBRARY)
 
 > **Phân loại thông tin kỹ thuật trong tài liệu:**

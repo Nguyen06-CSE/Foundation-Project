@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Đặc Tả Tính Năng: Chế Độ Hiển Thị Tài Liệu Đa Phong Cách (Document Multi-View Modes)
 
 Tài liệu kỹ thuật toàn diện về tính năng **Hiển thị tài liệu dưới nhiều phong cách** (Grid View, List/Table View, Detail/Snippet View) trong hệ sinh thái Thư viện số (Digital Library).

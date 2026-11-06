@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Đặc Tả Tính Năng: Theo Dõi Hoạt Động & Thống Kê Tương Tác (Activity Tracking & Analytics)
 
 Tài liệu kỹ thuật chi tiết về hệ thống **Theo dõi hoạt động người dùng (Activity Tracking)**, **Hệ thống tổng hợp & tính điểm xu hướng (Trending Score & Document Stats)** và **Bảng điều khiển thống kê (Personal Analytics & Document Activity Timeline)** trong nền tảng Digital Library.

@@ -1,0 +1,49 @@
+name: Deploy Docusaurus to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'                              # Trigger khi sửa bất kỳ tài liệu nào
+      - 'docs-site/**'                         # Trigger khi sửa config Docusaurus
+      - '.github/workflows/deploy-docs.yml'   # Trigger khi sửa chính workflow này
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: Build & Deploy Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # Cần full history để showLastUpdateTime/Author hoạt động
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20          # Node 20 LTS — ổn định cho Docusaurus 3.x
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
+
+      - name: Install dependencies
+        working-directory: docs-site
+        run: npm ci
+
+      - name: Build Docusaurus
+        working-directory: docs-site
+        run: npm run build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096   # Tránh OOM khi build nhiều docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4          # v4 mới nhất (v3 đã deprecated)
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs-site/build
+          publish_branch: gh-pages
+          commit_message: "docs: deploy ${{ github.sha }}"

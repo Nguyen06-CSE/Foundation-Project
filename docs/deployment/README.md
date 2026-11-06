@@ -1,3 +1,9 @@
+---
+id: README
+title: Deployment Architecture
+sidebar_position: 1
+---
+
 # Hướng Dẫn Kiến Trúc & Triển Khai Hệ Thống Lưu Trữ (Storage Deployment Architecture)
 
 Tài liệu này cung cấp hướng dẫn tổng thể về kiến trúc, cấu hình triển khai và cách thức vận hành hệ thống lưu trữ tài liệu số tích hợp giữa **Cloudflare R2 Object Storage (S3-compatible)**, **FastAPI Backend** và **React (Vite) Frontend**.

@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # System Enhancements (Quản trị, Thông báo, Việc cần làm, Thao tác hàng loạt & Quản lý Nhãn)
 
 ## 📌 Tổng Quan (Overview)

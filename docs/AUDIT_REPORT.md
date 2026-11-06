@@ -1,3 +1,9 @@
+---
+id: AUDIT_REPORT
+title: Audit Report
+sidebar_position: 4
+---
+
 # Báo cáo kiểm toán ứng dụng Thư viện số
 
 **Ngày kiểm tra:** 03/11/2026  

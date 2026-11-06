@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Chia sẻ tài liệu (Copy-on-Accept)
 
 Cho phép người dùng chia sẻ **tài liệu** (hoặc **bundle** — kèm toàn bộ file con) tới người dùng khác, hoặc đưa tài liệu cá nhân vào nhóm. Bản chất chia sẻ là **tạo bản sao** vào kho của người nhận; file vật lý dùng chung (cùng `file_path`/`checksum`), không nhân đôi dung lượng lưu trữ.

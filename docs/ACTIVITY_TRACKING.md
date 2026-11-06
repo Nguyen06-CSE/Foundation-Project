@@ -1,3 +1,9 @@
+---
+id: ACTIVITY_TRACKING
+title: Activity Tracking Log
+sidebar_position: 3
+---
+
 # Tài liệu Kỹ thuật Chức năng: Activity Tracking (Theo dõi Hoạt động)
 
 > Tài liệu hướng dẫn và đặc tả kỹ thuật hệ thống Activity Tracking & Thống kê cho nền tảng Thư Viện Số.
