@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-feat/community-library/spec" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/feat/community-library/spec"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="1. Tổng quan"><meta data-rh="true" property="og:description" content="1. Tổng quan"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/feat/community-library/spec"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/feat/community-library/spec" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/feat/community-library/spec" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG","item":"https://Nguyen06-CSE.github.io/Foundation-Project/feat/community-library/spec"}]}</script><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.50880cfb.css">
+<script src="/Foundation-Project/assets/js/runtime~main.39677282.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.14430551.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Foundation-Project/">Tài Liệu</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Thanh điều hướng tài liệu" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Foundation-Project/"><span class="linkLabel_WmDU">🏠 Tổng Quan Dự Án</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Foundation-Project/LOCAL_DEVELOPMENT_GUIDE"><span class="linkLabel_WmDU">🛠️ Hướng Dẫn Phát Triển</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Foundation-Project/ACTIVITY_TRACKING"><span class="linkLabel_WmDU">📊 Activity Tracking Log</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Foundation-Project/AUDIT_REPORT"><span class="linkLabel_WmDU">🔍 Audit Report</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/Foundation-Project/system-architecture"><span class="categoryLinkLabel_W154">🏗️ Kiến Trúc Hệ Thống</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/system-architecture"><span class="linkLabel_WmDU">Kiến Trúc Hệ Thống</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/architecture/STORAGE_SYSTEM"><span class="linkLabel_WmDU">Kiến Trúc Hệ Thống Lưu Trữ</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/Foundation-Project/deployment"><span class="categoryLinkLabel_W154">🚀 Deployment &amp; Storage</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/deployment"><span class="linkLabel_WmDU">Deployment Architecture</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/deployment/ENV_VARIABLES"><span class="linkLabel_WmDU">Danh Mục Biến Môi Trường (Environment Variables Reference)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/deployment/STORAGE_R2"><span class="linkLabel_WmDU">Hướng Dẫn Triển Khai &amp; Cấu Hình Cloudflare R2 Storage (S3-Compatible)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/deployment/TROUBLESHOOTING"><span class="linkLabel_WmDU">Cẩm Nang Xử Lý Sự Cố Chuyên Sâu (Deep Dive Troubleshooting &amp; Postmortem Guide)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/deployment/BUG_FIX_REPORT"><span class="linkLabel_WmDU">BÁO CÁO KỸ THUẬT NỘI BỘ (ENGINEERING INCIDENT REPORT)</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/Foundation-Project/feat/activity-tracking"><span class="categoryLinkLabel_W154">✨ Feature Specs</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/activity-tracking"><span class="categoryLinkLabel_W154">Activity Tracking</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/bundle"><span class="categoryLinkLabel_W154">Bundle</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/Foundation-Project/feat/community-library/implementation"><span class="categoryLinkLabel_W154">Community Library</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/community-library/implementation"><span class="linkLabel_WmDU">HƯỚNG DẪN XÂY DỰNG — KHO HỌC LIỆU CỘNG ĐỒNG</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/community-library/management-extension"><span class="linkLabel_WmDU">TÀI LIỆU KỸ THUẬT: BỔ SUNG TÍNH NĂNG QUẢN LÝ KHOA &amp; MÔN HỌC (COMMUNITY LIBRARY ADMIN)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/Foundation-Project/feat/community-library/spec"><span class="linkLabel_WmDU">MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/document-preview-and-thumbnails"><span class="categoryLinkLabel_W154">Document Preview &amp; Thumbnails</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/document-sharing"><span class="categoryLinkLabel_W154">Document Sharing</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/document-view-modes"><span class="categoryLinkLabel_W154">Document View Modes</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/markdown-view"><span class="categoryLinkLabel_W154">Markdown View</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/personal-dashboard/PERSONAL_DASHBOARD"><span class="categoryLinkLabel_W154">Personal Dashboard</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/Foundation-Project/feat/system-enhancements-2026"><span class="categoryLinkLabel_W154">System Enhancements 2026</span></a></div></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/project-management/MoTaDuAn"><span class="categoryLinkLabel_W154">📋 Project Management</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Liên kết điều hướng"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Trang chủ" class="breadcrumbs__link" href="/Foundation-Project/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">✨ Feature Specs</span></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Community Library</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG</h1></header>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-tổng-quan">1. Tổng quan<a href="#1-tổng-quan" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Tổng quan" title="Đường dẫn trực tiếp đến 1. Tổng quan" translate="no">​</a></h2>
+<p><strong>Kho học liệu cộng đồng (Community Library)</strong> là một không gian lưu trữ tài liệu học tập công khai trong hệ thống thư viện số.</p>
+<p>Khác với kho tài liệu cá nhân và không gian nhóm, Kho học liệu cộng đồng cho phép <strong>người dùng chưa đăng nhập truy cập và sử dụng tài liệu mà không cần tài khoản</strong>.</p>
+<p>Tài liệu trong kho cộng đồng không được công khai ngay khi người dùng đóng góp. Tài liệu phải trải qua quá trình kiểm duyệt bởi <strong>Faculty Admin của khoa tương ứng</strong> hoặc <strong>System Admin</strong> trước khi xuất hiện công khai.</p>
+<p>Mục tiêu của chức năng là xây dựng một kho học liệu có tổ chức, trong đó tài liệu được phân cấp theo:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Khoa</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> └── Môn học</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      └── Tài liệu</span><br></div></code></pre></div></div>
+<p>Ví dụ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Khoa Công nghệ thông tin</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> ├── Cơ sở dữ liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> │    ├── Giáo trình CSDL 2024</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> │    ├── Đề thi CSDL cuối kỳ</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> │    └── Slide bài giảng CSDL</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> └── Lập trình hướng đối tượng</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ├── Giáo trình OOP</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ├── Bài tập OOP</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      └── Đề thi OOP</span><br></div></code></pre></div></div>
+<p>Việc tổ chức này giúp người dùng dễ dàng tìm kiếm tài liệu dựa trên <strong>khoa, môn học, loại tài liệu và năm học</strong>.</p>
+<hr>
+<h1>2. Mục tiêu của chức năng</h1>
+<p>Kho học liệu cộng đồng được xây dựng nhằm giải quyết các nhu cầu:</p>
+<ul>
+<li class="">Cung cấp nguồn tài liệu học tập công khai.</li>
+<li class="">Cho phép sinh viên và giảng viên đóng góp tài liệu.</li>
+<li class="">Kiểm duyệt tài liệu trước khi công khai.</li>
+<li class="">Phân loại tài liệu theo khoa và môn học.</li>
+<li class="">Cho phép người dùng tìm kiếm tài liệu.</li>
+<li class="">Cho phép xem trước và tải tài liệu.</li>
+<li class="">Cho phép người dùng lưu tài liệu cộng đồng về kho cá nhân.</li>
+<li class="">Cho phép đánh giá và bình luận tài liệu.</li>
+<li class="">Theo dõi lượt tải tài liệu.</li>
+<li class="">Thống kê mức độ sử dụng tài liệu.</li>
+<li class="">Phân quyền quản lý tài liệu theo khoa.</li>
+</ul>
+<hr>
+<h1>3. Đối tượng sử dụng</h1>
+<p>Chức năng phục vụ bốn nhóm người dùng chính:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Đối tượng</th><th>Quyền chính</th></tr></thead><tbody><tr><td>Khách chưa đăng nhập</td><td>Xem, tìm kiếm, xem trước, tải tài liệu</td></tr><tr><td>Sinh viên / Giảng viên</td><td>Các quyền công khai + lưu tài liệu, đánh giá, bình luận, đóng góp</td></tr><tr><td>Faculty Admin</td><td>Các quyền trên + duyệt tài liệu thuộc khoa mình</td></tr><tr><td>System Admin</td><td>Các quyền trên + duyệt tài liệu của tất cả các khoa</td></tr></tbody></table>
+<hr>
+<h1>4. Phân quyền</h1>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="41-người-chưa-đăng-nhập">4.1. Người chưa đăng nhập<a href="#41-người-chưa-đăng-nhập" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.1. Người chưa đăng nhập" title="Đường dẫn trực tiếp đến 4.1. Người chưa đăng nhập" translate="no">​</a></h2>
+<p>Người dùng không cần đăng nhập để truy cập kho học liệu.</p>
+<p>Có thể:</p>
+<ul>
+<li class="">Xem danh sách khoa.</li>
+<li class="">Xem môn học.</li>
+<li class="">Xem danh sách tài liệu.</li>
+<li class="">Tìm kiếm tài liệu.</li>
+<li class="">Xem chi tiết tài liệu.</li>
+<li class="">Xem trước tài liệu.</li>
+<li class="">Tải tài liệu.</li>
+</ul>
+<p>Không thể:</p>
+<ul>
+<li class="">Lưu tài liệu về kho cá nhân.</li>
+<li class="">Đánh giá tài liệu.</li>
+<li class="">Bình luận.</li>
+<li class="">Đóng góp tài liệu.</li>
+</ul>
+<p>Khi người dùng chọn:</p>
+<blockquote>
+<p>Lưu về cá nhân</p>
+</blockquote>
+<p>hệ thống chuyển tới trang đăng nhập.</p>
+<p>Sau khi đăng nhập thành công, hệ thống đưa người dùng trở lại trang tài liệu trước đó và tiếp tục thao tác lưu.</p>
+<hr>
+<h1>5. Phân quyền người dùng đã đăng nhập</h1>
+<p>Sinh viên và giảng viên có thể:</p>
+<ul>
+<li class="">Xem tài liệu.</li>
+<li class="">Tìm kiếm tài liệu.</li>
+<li class="">Xem trước.</li>
+<li class="">Tải xuống.</li>
+<li class="">Lưu tài liệu về kho cá nhân.</li>
+<li class="">Đánh giá tài liệu từ 1 đến 5 sao.</li>
+<li class="">Viết bình luận.</li>
+<li class="">Chỉnh sửa đánh giá của mình.</li>
+<li class="">Xóa đánh giá của mình.</li>
+<li class="">Đóng góp tài liệu từ kho cá nhân hoặc nhóm.</li>
+</ul>
+<hr>
+<h1>6. Quyền của Faculty Admin</h1>
+<p>Faculty Admin có toàn bộ quyền của người dùng thông thường và có thêm quyền kiểm duyệt.</p>
+<p>Faculty Admin chỉ được xử lý các tài liệu thuộc <strong>khoa mà mình quản lý</strong>.</p>
+<p>Có thể:</p>
+<ul>
+<li class="">Xem danh sách tài liệu đang chờ duyệt.</li>
+<li class="">Xem thông tin tài liệu.</li>
+<li class="">Xem người đóng góp.</li>
+<li class="">Xem môn học.</li>
+<li class="">Duyệt tài liệu.</li>
+<li class="">Từ chối tài liệu.</li>
+<li class="">Nhập lý do từ chối.</li>
+</ul>
+<p>Khi duyệt tài liệu:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">pending → approved</span><br></div></code></pre></div></div>
+<p>Khi từ chối:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">pending → rejected</span><br></div></code></pre></div></div>
+<hr>
+<h1>7. Quyền của System Admin</h1>
+<p>System Admin có quyền quản lý toàn bộ kho học liệu.</p>
+<p>Có thể:</p>
+<ul>
+<li class="">Xem tất cả yêu cầu đóng góp.</li>
+<li class="">Lọc yêu cầu theo khoa.</li>
+<li class="">Lọc theo môn học.</li>
+<li class="">Duyệt tài liệu.</li>
+<li class="">Từ chối tài liệu.</li>
+<li class="">Quản lý tài liệu thuộc tất cả các khoa.</li>
+</ul>
+<hr>
+<h1>8. Cấu trúc phân cấp</h1>
+<p>Kho học liệu sử dụng cấu trúc:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Faculty</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Subject</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Community Document</span><br></div></code></pre></div></div>
+<p>Trong đó:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="faculty">Faculty<a href="#faculty" class="hash-link" aria-label="Đường dẫn trực tiếp đến Faculty" title="Đường dẫn trực tiếp đến Faculty" translate="no">​</a></h3>
+<p>Đại diện cho khoa trong trường.</p>
+<p>Ví dụ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Khoa Công nghệ thông tin</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Khoa Kinh tế</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Khoa Ngoại ngữ</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="subject">Subject<a href="#subject" class="hash-link" aria-label="Đường dẫn trực tiếp đến Subject" title="Đường dẫn trực tiếp đến Subject" translate="no">​</a></h3>
+<p>Môn học thuộc một khoa.</p>
+<p>Ví dụ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">CSDL — Cơ sở dữ liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">OOP  — Lập trình hướng đối tượng</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">CTDL — Cấu trúc dữ liệu và giải thuật</span><br></div></code></pre></div></div>
+<p>Mỗi môn học thuộc duy nhất một khoa.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="document">Document<a href="#document" class="hash-link" aria-label="Đường dẫn trực tiếp đến Document" title="Đường dẫn trực tiếp đến Document" translate="no">​</a></h3>
+<p>Tài liệu được công khai trong kho cộng đồng.</p>
+<p>Một tài liệu có thể chứa:</p>
+<ul>
+<li class="">Tên tài liệu.</li>
+<li class="">Mô tả.</li>
+<li class="">Loại file.</li>
+<li class="">Kích thước.</li>
+<li class="">Môn học.</li>
+<li class="">Khoa.</li>
+<li class="">Loại tài liệu.</li>
+<li class="">Năm học.</li>
+<li class="">Người đóng góp.</li>
+<li class="">Điểm đánh giá.</li>
+<li class="">Số lượt đánh giá.</li>
+<li class="">Số lượt tải.</li>
+</ul>
+<hr>
+<h1>9. Đóng góp tài liệu</h1>
+<p>Người dùng có thể đóng góp tài liệu từ:</p>
+<ul>
+<li class="">Kho cá nhân.</li>
+<li class="">Không gian nhóm.</li>
+</ul>
+<p>Quy trình:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Chọn tài liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đóng góp vào kho học liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Chọn Khoa</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Chọn Môn học</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Chọn Loại tài liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Nhập Năm học</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Nhập Ghi chú</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Gửi yêu cầu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Pending</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Faculty Admin kiểm duyệt</span><br></div></code></pre></div></div>
+<p>Người dùng không thể trực tiếp biến tài liệu thành tài liệu công khai.</p>
+<hr>
+<h1>10. Thông tin khi đóng góp</h1>
+<p>Khi gửi tài liệu, người dùng có thể cung cấp:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="khoa">Khoa<a href="#khoa" class="hash-link" aria-label="Đường dẫn trực tiếp đến Khoa" title="Đường dẫn trực tiếp đến Khoa" translate="no">​</a></h3>
+<p>Khoa mà tài liệu thuộc về.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="môn-học">Môn học<a href="#môn-học" class="hash-link" aria-label="Đường dẫn trực tiếp đến Môn học" title="Đường dẫn trực tiếp đến Môn học" translate="no">​</a></h3>
+<p>Môn học cụ thể.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="loại-tài-liệu">Loại tài liệu<a href="#loại-tài-liệu" class="hash-link" aria-label="Đường dẫn trực tiếp đến Loại tài liệu" title="Đường dẫn trực tiếp đến Loại tài liệu" translate="no">​</a></h3>
+<p>Các loại:</p>
+<ul>
+<li class="">Giáo trình.</li>
+<li class="">Đề thi.</li>
+<li class="">Slide bài giảng.</li>
+<li class="">Bài tập.</li>
+<li class="">Khác.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="năm-học">Năm học<a href="#năm-học" class="hash-link" aria-label="Đường dẫn trực tiếp đến Năm học" title="Đường dẫn trực tiếp đến Năm học" translate="no">​</a></h3>
+<p>Ví dụ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">2023-2024</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">2024-2025</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">2025-2026</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ghi-chú">Ghi chú<a href="#ghi-chú" class="hash-link" aria-label="Đường dẫn trực tiếp đến Ghi chú" title="Đường dẫn trực tiếp đến Ghi chú" translate="no">​</a></h3>
+<p>Thông tin bổ sung gửi cho admin khi kiểm duyệt.</p>
+<hr>
+<h1>11. Trạng thái tài liệu đóng góp</h1>
+<p>Mỗi yêu cầu đóng góp có ba trạng thái:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">pending</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">approved</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">rejected</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="pending">Pending<a href="#pending" class="hash-link" aria-label="Đường dẫn trực tiếp đến Pending" title="Đường dẫn trực tiếp đến Pending" translate="no">​</a></h3>
+<p>Tài liệu đang chờ Faculty Admin hoặc System Admin xử lý.</p>
+<p>Tài liệu chưa xuất hiện công khai.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="approved">Approved<a href="#approved" class="hash-link" aria-label="Đường dẫn trực tiếp đến Approved" title="Đường dẫn trực tiếp đến Approved" translate="no">​</a></h3>
+<p>Tài liệu đã được duyệt.</p>
+<p>Hệ thống tạo bản tài liệu trong kho cộng đồng và tài liệu bắt đầu xuất hiện công khai.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="rejected">Rejected<a href="#rejected" class="hash-link" aria-label="Đường dẫn trực tiếp đến Rejected" title="Đường dẫn trực tiếp đến Rejected" translate="no">​</a></h3>
+<p>Tài liệu bị từ chối.</p>
+<p>Admin phải cung cấp lý do từ chối.</p>
+<p>Người đóng góp nhận được thông báo về kết quả.</p>
+<hr>
+<h1>12. Cơ chế công khai tài liệu</h1>
+<p>Tài liệu cộng đồng sử dụng hai thông tin quan trọng trong bảng <code>documents</code>:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">is_public = true</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">subject_id = ID môn học</span><br></div></code></pre></div></div>
+<p>Chỉ tài liệu:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">is_public = true</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">is_deleted = false</span><br></div></code></pre></div></div>
+<p>mới được hiển thị trong kho cộng đồng.</p>
+<p>Điều này giúp phân biệt tài liệu cộng đồng với tài liệu cá nhân hoặc tài liệu trong nhóm.</p>
+<hr>
+<h1>13. Cơ chế lưu tài liệu về cá nhân</h1>
+<p>Người dùng đăng nhập có thể chọn:</p>
+<blockquote>
+<p>Lưu về cá nhân</p>
+</blockquote>
+<p>Hệ thống tạo một bản sao của tài liệu trong kho cá nhân.</p>
+<p>File được lưu vào khu vực:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">storage/personal/{user_id}/from_community/</span><br></div></code></pre></div></div>
+<p>Thông tin tài liệu được sao chép để người dùng có thể tiếp tục quản lý trong kho cá nhân.</p>
+<p>Logic này được thiết kế để tái sử dụng cơ chế <code>save_to_personal</code> hiện có của hệ thống.</p>
+<hr>
+<h1>14. Đánh giá tài liệu</h1>
+<p>Người dùng đã đăng nhập có thể đánh giá tài liệu.</p>
+<p>Mỗi người dùng chỉ có một đánh giá cho một tài liệu.</p>
+<p>Điểm đánh giá:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">1 → 5 sao</span><br></div></code></pre></div></div>
+<p>Người dùng có thể:</p>
+<ul>
+<li class="">Tạo đánh giá.</li>
+<li class="">Thay đổi số sao.</li>
+<li class="">Sửa bình luận.</li>
+<li class="">Xóa đánh giá.</li>
+</ul>
+<p>Mỗi đánh giá có:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Số sao</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Bình luận</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Người đánh giá</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Thời gian tạo</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Thời gian cập nhật</span><br></div></code></pre></div></div>
+<p>Database sử dụng ràng buộc:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">UNIQUE(document_id, user_id)</span><br></div></code></pre></div></div>
+<p>để đảm bảo một người dùng không tạo nhiều đánh giá cho cùng một tài liệu.</p>
+<hr>
+<h1>15. Bình luận</h1>
+<p>Bình luận được lưu cùng với đánh giá.</p>
+<p>Giới hạn:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Tối đa 500 ký tự</span><br></div></code></pre></div></div>
+<p>Danh sách bình luận hiển thị:</p>
+<ul>
+<li class="">Avatar.</li>
+<li class="">Tên người dùng.</li>
+<li class="">Số sao.</li>
+<li class="">Nội dung bình luận.</li>
+<li class="">Thời gian.</li>
+</ul>
+<p>Người dùng chỉ có quyền xóa hoặc chỉnh sửa đánh giá của chính mình.</p>
+<hr>
+<h1>16. Thống kê đánh giá</h1>
+<p>Trang chi tiết tài liệu hiển thị:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">⭐ 4.5 / 5</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">120 đánh giá</span><br></div></code></pre></div></div>
+<p>Hệ thống tính:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">AVG(stars)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">COUNT(*)</span><br></div></code></pre></div></div>
+<p>Điểm trung bình được sử dụng ở:</p>
+<ul>
+<li class="">Trang chi tiết.</li>
+<li class="">Danh sách tài liệu.</li>
+<li class="">Danh sách môn học.</li>
+<li class="">Thống kê kho học liệu.</li>
+</ul>
+<hr>
+<h1>17. Theo dõi lượt tải</h1>
+<p>Mỗi lần tài liệu được tải xuống, hệ thống ghi nhận thông tin vào <code>download_logs</code>.</p>
+<p>Đối với người dùng đã đăng nhập, hệ thống có thể ghi nhận <code>user_id</code>.</p>
+<p>Đối với khách chưa đăng nhập, tài liệu vẫn có thể được tải nhưng không cần gắn với tài khoản.</p>
+<p>Số lượt tải được sử dụng để:</p>
+<ul>
+<li class="">Hiển thị mức độ phổ biến.</li>
+<li class="">Sắp xếp tài liệu.</li>
+<li class="">Thống kê theo môn học.</li>
+</ul>
+<hr>
+<h1>18. Tìm kiếm</h1>
+<p>Kho học liệu hỗ trợ tìm kiếm theo:</p>
+<ul>
+<li class="">Tên môn học.</li>
+<li class="">Tên tài liệu.</li>
+</ul>
+<p>Ví dụ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Tìm: Cơ sở dữ liệu</span><br></div></code></pre></div></div>
+<p>có thể trả về:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">CSDL</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Giáo trình Cơ sở dữ liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đề thi Cơ sở dữ liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Slide Cơ sở dữ liệu</span><br></div></code></pre></div></div>
+<p>Backend sử dụng khả năng Full-Text Search của PostgreSQL thông qua <code>plainto_tsquery</code>.</p>
+<hr>
+<h1>19. Bộ lọc tài liệu</h1>
+<p>Tại trang môn học, người dùng có thể lọc:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="theo-loại">Theo loại<a href="#theo-loại" class="hash-link" aria-label="Đường dẫn trực tiếp đến Theo loại" title="Đường dẫn trực tiếp đến Theo loại" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Tất cả</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Giáo trình</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đề thi</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Slide</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Bài tập</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Khác</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="theo-năm-học">Theo năm học<a href="#theo-năm-học" class="hash-link" aria-label="Đường dẫn trực tiếp đến Theo năm học" title="Đường dẫn trực tiếp đến Theo năm học" translate="no">​</a></h3>
+<p>Ví dụ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">2020-2021</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">2021-2022</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">2022-2023</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">2023-2024</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="theo-cách-sắp-xếp">Theo cách sắp xếp<a href="#theo-cách-sắp-xếp" class="hash-link" aria-label="Đường dẫn trực tiếp đến Theo cách sắp xếp" title="Đường dẫn trực tiếp đến Theo cách sắp xếp" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Mới nhất</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Phổ biến nhất</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đánh giá cao nhất</span><br></div></code></pre></div></div>
+<hr>
+<h1>20. Các trang giao diện</h1>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="201-trang-chủ">20.1. Trang chủ<a href="#201-trang-chủ" class="hash-link" aria-label="Đường dẫn trực tiếp đến 20.1. Trang chủ" title="Đường dẫn trực tiếp đến 20.1. Trang chủ" translate="no">​</a></h2>
+<p>Route:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">/library</span><br></div></code></pre></div></div>
+<p>Hiển thị:</p>
+<ul>
+<li class="">Tên Kho học liệu cộng đồng.</li>
+<li class="">Thanh tìm kiếm.</li>
+<li class="">Danh sách khoa.</li>
+<li class="">Số môn học.</li>
+<li class="">Số tài liệu.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="202-trang-khoa">20.2. Trang khoa<a href="#202-trang-khoa" class="hash-link" aria-label="Đường dẫn trực tiếp đến 20.2. Trang khoa" title="Đường dẫn trực tiếp đến 20.2. Trang khoa" translate="no">​</a></h2>
+<p>Route:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">/library/faculty/:facultyId</span><br></div></code></pre></div></div>
+<p>Hiển thị:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Kho học liệu</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Tên khoa</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Danh sách môn học</span><br></div></code></pre></div></div>
+<p>Mỗi môn học hiển thị:</p>
+<ul>
+<li class="">Tên môn.</li>
+<li class="">Mã môn.</li>
+<li class="">Số tài liệu.</li>
+<li class="">Điểm đánh giá trung bình.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="203-trang-môn-học">20.3. Trang môn học<a href="#203-trang-môn-học" class="hash-link" aria-label="Đường dẫn trực tiếp đến 20.3. Trang môn học" title="Đường dẫn trực tiếp đến 20.3. Trang môn học" translate="no">​</a></h2>
+<p>Route:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">/library/subject/:subjectId</span><br></div></code></pre></div></div>
+<p>Hiển thị:</p>
+<ul>
+<li class="">Tên môn.</li>
+<li class="">Mô tả.</li>
+<li class="">Số tài liệu.</li>
+<li class="">Tổng lượt tải.</li>
+<li class="">Điểm đánh giá trung bình.</li>
+<li class="">Bộ lọc.</li>
+<li class="">Danh sách tài liệu.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="204-trang-chi-tiết-tài-liệu">20.4. Trang chi tiết tài liệu<a href="#204-trang-chi-tiết-tài-liệu" class="hash-link" aria-label="Đường dẫn trực tiếp đến 20.4. Trang chi tiết tài liệu" title="Đường dẫn trực tiếp đến 20.4. Trang chi tiết tài liệu" translate="no">​</a></h2>
+<p>Route:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">/library/document/:documentId</span><br></div></code></pre></div></div>
+<p>Trang bao gồm:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="khu-vực-preview">Khu vực preview<a href="#khu-vực-preview" class="hash-link" aria-label="Đường dẫn trực tiếp đến Khu vực preview" title="Đường dẫn trực tiếp đến Khu vực preview" translate="no">​</a></h3>
+<p>Cho phép người dùng xem trước tài liệu.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="thông-tin-tài-liệu">Thông tin tài liệu<a href="#thông-tin-tài-liệu" class="hash-link" aria-label="Đường dẫn trực tiếp đến Thông tin tài liệu" title="Đường dẫn trực tiếp đến Thông tin tài liệu" translate="no">​</a></h3>
+<ul>
+<li class="">Tên.</li>
+<li class="">Mô tả.</li>
+<li class="">Loại file.</li>
+<li class="">Kích thước.</li>
+<li class="">Khoa.</li>
+<li class="">Môn học.</li>
+<li class="">Loại tài liệu.</li>
+<li class="">Năm học.</li>
+<li class="">Người đóng góp.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="thống-kê">Thống kê<a href="#thống-kê" class="hash-link" aria-label="Đường dẫn trực tiếp đến Thống kê" title="Đường dẫn trực tiếp đến Thống kê" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Rating</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Số đánh giá</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Số lượt tải</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="chức-năng">Chức năng<a href="#chức-năng" class="hash-link" aria-label="Đường dẫn trực tiếp đến Chức năng" title="Đường dẫn trực tiếp đến Chức năng" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Tải xuống</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Lưu về cá nhân</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đánh giá</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Bình luận</span><br></div></code></pre></div></div>
+<hr>
+<h1>21. Trang quản trị duyệt tài liệu</h1>
+<p>Route:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">/library/admin/submissions</span><br></div></code></pre></div></div>
+<p>Chỉ:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">faculty_admin</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">system_admin</span><br></div></code></pre></div></div>
+<p>được truy cập.</p>
+<p>Trang có các tab:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Chờ duyệt</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đã duyệt</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Đã từ chối</span><br></div></code></pre></div></div>
+<p>Mỗi yêu cầu hiển thị:</p>
+<ul>
+<li class="">Tên tài liệu.</li>
+<li class="">Người đóng góp.</li>
+<li class="">Thời gian.</li>
+<li class="">Khoa.</li>
+<li class="">Môn học.</li>
+<li class="">Năm học.</li>
+<li class="">Loại tài liệu.</li>
+<li class="">Ghi chú.</li>
+</ul>
+<p>Admin có hai lựa chọn:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">Duyệt</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Từ chối</span><br></div></code></pre></div></div>
+<p>Nếu từ chối phải nhập lý do.</p>
+<hr>
+<h1>22. Thông báo</h1>
+<p>Hệ thống sử dụng bảng <code>notifications</code> hiện có để gửi thông báo.</p>
+<p>Các loại thông báo:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="có-tài-liệu-chờ-duyệt">Có tài liệu chờ duyệt<a href="#có-tài-liệu-chờ-duyệt" class="hash-link" aria-label="Đường dẫn trực tiếp đến Có tài liệu chờ duyệt" title="Đường dẫn trực tiếp đến Có tài liệu chờ duyệt" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">community_submission_received</span><br></div></code></pre></div></div>
+<p>Gửi cho Faculty Admin.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tài-liệu-được-duyệt">Tài liệu được duyệt<a href="#tài-liệu-được-duyệt" class="hash-link" aria-label="Đường dẫn trực tiếp đến Tài liệu được duyệt" title="Đường dẫn trực tiếp đến Tài liệu được duyệt" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">community_submission_approved</span><br></div></code></pre></div></div>
+<p>Gửi cho người đóng góp.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tài-liệu-bị-từ-chối">Tài liệu bị từ chối<a href="#tài-liệu-bị-từ-chối" class="hash-link" aria-label="Đường dẫn trực tiếp đến Tài liệu bị từ chối" title="Đường dẫn trực tiếp đến Tài liệu bị từ chối" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">community_submission_rejected</span><br></div></code></pre></div></div>
+<p>Gửi cho người đóng góp và kèm lý do từ chối.</p>
+<hr>
+<h1>23. Cấu trúc dữ liệu chính</h1>
+<p>Các bảng mới:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">subjects</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">community_submissions</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">document_ratings</span><br></div></code></pre></div></div>
+<p>Bảng <code>documents</code> được bổ sung:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">is_public</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">subject_id</span><br></div></code></pre></div></div>
+<p>Các bảng có sẵn được tái sử dụng:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">faculties</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">documents</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">users</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">notifications</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">download_logs</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">favorites</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">tags</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">document_tags</span><br></div></code></pre></div></div>
+<hr>
+<h1>24. Materialized View</h1>
+<p>Hệ thống xây dựng:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">community_subject_stats</span><br></div></code></pre></div></div>
+<p>Materialized View lưu thống kê theo môn học:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">subject_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">faculty_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">document_count</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">total_downloads</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">avg_rating</span><br></div></code></pre></div></div>
+<p>Mục đích là hạn chế việc phải tính toán lại các thống kê lớn mỗi khi người dùng mở trang.</p>
+<p>View có thể được refresh định kỳ:</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">REFRESH MATERIALIZED </span><span class="token keyword" style="color:#00009f">VIEW</span><span class="token plain"> CONCURRENTLY community_subject_stats</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<hr>
+<h1>25. Tóm tắt chức năng</h1>
+<p>Kho học liệu cộng đồng tạo thành một hệ thống hoàn chỉnh:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">             KHO HỌC LIỆU CỘNG ĐỒNG</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">          ┌────────────┴────────────┐</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">          │                         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      Người dùng                 Admin</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">          │                         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">     ┌────┴────┐              ┌────┴────┐</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">     │          │              │         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    Xem       Đóng góp       Duyệt     Từ chối</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">     │          │              │         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> Tìm kiếm      │              │         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> Tải xuống      │              │         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> Đánh giá       │              │         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"> Lưu cá nhân    │              │         │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                ↓              ↓         ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">             Submission → Pending → Approved</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                              │</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                              ↓</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Public Document</span><br></div></code></pre></div></div>
+<p>Chức năng này kết hợp giữa <strong>quản lý tài liệu, phân quyền, kiểm duyệt, tìm kiếm, đánh giá, thống kê và chia sẻ tài liệu công khai</strong>, tạo thành một không gian học liệu dùng chung cho toàn hệ thống.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/feat/community-library/spec.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-09-23T03:02:13.000Z" itemprop="dateModified">23 thg 9, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"><a class="pagination-nav__link pagination-nav__link--prev" href="/Foundation-Project/feat/community-library/management-extension"><div class="pagination-nav__sublabel">Trước</div><div class="pagination-nav__label">TÀI LIỆU KỸ THUẬT: BỔ SUNG TÍNH NĂNG QUẢN LÝ KHOA &amp; MÔN HỌC (COMMUNITY LIBRARY ADMIN)</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Foundation-Project/feat/document-preview-and-thumbnails"><div class="pagination-nav__sublabel">Kế tiếp</div><div class="pagination-nav__label">Đặc Tả Tính Năng: Xem Trước Đa Định Dạng &amp; Tùy Chỉnh Ảnh Bìa (Document Preview &amp; Cover Management)</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-tổng-quan" class="table-of-contents__link toc-highlight">1. Tổng quan</a></li><li><a href="#41-người-chưa-đăng-nhập" class="table-of-contents__link toc-highlight">4.1. Người chưa đăng nhập</a><ul><li><a href="#faculty" class="table-of-contents__link toc-highlight">Faculty</a></li><li><a href="#subject" class="table-of-contents__link toc-highlight">Subject</a></li><li><a href="#document" class="table-of-contents__link toc-highlight">Document</a></li><li><a href="#khoa" class="table-of-contents__link toc-highlight">Khoa</a></li><li><a href="#môn-học" class="table-of-contents__link toc-highlight">Môn học</a></li><li><a href="#loại-tài-liệu" class="table-of-contents__link toc-highlight">Loại tài liệu</a></li><li><a href="#năm-học" class="table-of-contents__link toc-highlight">Năm học</a></li><li><a href="#ghi-chú" class="table-of-contents__link toc-highlight">Ghi chú</a></li><li><a href="#pending" class="table-of-contents__link toc-highlight">Pending</a></li><li><a href="#approved" class="table-of-contents__link toc-highlight">Approved</a></li><li><a href="#rejected" class="table-of-contents__link toc-highlight">Rejected</a></li><li><a href="#theo-loại" class="table-of-contents__link toc-highlight">Theo loại</a></li><li><a href="#theo-năm-học" class="table-of-contents__link toc-highlight">Theo năm học</a></li><li><a href="#theo-cách-sắp-xếp" class="table-of-contents__link toc-highlight">Theo cách sắp xếp</a></li></ul></li><li><a href="#201-trang-chủ" class="table-of-contents__link toc-highlight">20.1. Trang chủ</a></li><li><a href="#202-trang-khoa" class="table-of-contents__link toc-highlight">20.2. Trang khoa</a></li><li><a href="#203-trang-môn-học" class="table-of-contents__link toc-highlight">20.3. Trang môn học</a></li><li><a href="#204-trang-chi-tiết-tài-liệu" class="table-of-contents__link toc-highlight">20.4. Trang chi tiết tài liệu</a><ul><li><a href="#khu-vực-preview" class="table-of-contents__link toc-highlight">Khu vực preview</a></li><li><a href="#thông-tin-tài-liệu" class="table-of-contents__link toc-highlight">Thông tin tài liệu</a></li><li><a href="#thống-kê" class="table-of-contents__link toc-highlight">Thống kê</a></li><li><a href="#chức-năng" class="table-of-contents__link toc-highlight">Chức năng</a></li><li><a href="#có-tài-liệu-chờ-duyệt" class="table-of-contents__link toc-highlight">Có tài liệu chờ duyệt</a></li><li><a href="#tài-liệu-được-duyệt" class="table-of-contents__link toc-highlight">Tài liệu được duyệt</a></li><li><a href="#tài-liệu-bị-từ-chối" class="table-of-contents__link toc-highlight">Tài liệu bị từ chối</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/LOCAL_DEVELOPMENT_GUIDE">Hướng Dẫn Phát Triển</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/deployment/README">Deployment</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/project-management/roadmap">Roadmap</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/project-management/backlog">Backlog</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
