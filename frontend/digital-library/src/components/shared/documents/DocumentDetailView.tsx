@@ -30,7 +30,6 @@ export function DocumentDetailView({
   showOwner = false,
   workspaceType = 'personal',
   permission = 'view',
-  allowedActions,
   extraItems,
   selectedIds = [],
   onToggleSelect,
@@ -207,12 +206,6 @@ export function DocumentDetailView({
                       <DocumentContextMenu
                         markdownPath={doc.markdown_path}
                         onAction={(action: DocumentAction) => onAction?.(action, doc.id)}
-                        allowedActions={
-                          allowedActions ||
-                          (workspaceType === 'community'
-                            ? ['view', 'download', 'save-to-personal', 'share']
-                            : undefined)
-                        }
                         extraItems={extraItems}
                       />
                     )}
@@ -255,10 +248,10 @@ export function DocumentDetailView({
                   )}
                 </div>
 
-                {/* Trích xuất Nội dung / Mô tả */}
+                {/* Trích xuất Nội dung (Tăng lên 4-5 dòng) */}
                 <div className="mt-3 bg-gray-50/50 rounded-lg p-3 border border-gray-100/50">
                   <p className="text-sm text-gray-600 line-clamp-4 leading-relaxed font-normal">
-                    {doc.description || extractSummary(doc.content, 600) || <span className="italic text-gray-400">Tài liệu không có trích xuất văn bản (OCR/Text).</span>}
+                    {extractSummary(doc.content, 600) || <span className="italic text-gray-400">Tài liệu không có trích xuất văn bản (OCR/Text).</span>}
                   </p>
                 </div>
               </div>

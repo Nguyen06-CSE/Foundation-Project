@@ -23,12 +23,6 @@ export interface DocumentItem {
   view_count?: number;
   personal_view_count?: number;
   trending_score?: number;
-  owner?: { name: string; avatar?: string };
-  rating_avg?: number;
-  rating_count?: number;
-  download_count?: number;
-  doc_type?: string | null;
-  academic_year?: string | null;
 }
 
 export interface DocumentCardProps {
@@ -39,5 +33,4 @@ export interface DocumentCardProps {
   extraItems?: DocumentMenuItem[];
   isSelected?: boolean;
   onToggleSelect?: (id: string) => void;
-  variant?: "personal" | "group" | "community";
 }

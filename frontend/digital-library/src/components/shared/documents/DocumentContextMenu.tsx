@@ -11,8 +11,7 @@ import {
   MoreVertical,
   ExternalLink,
   Upload,
-  FileText,
-  BookmarkPlus,
+  FileText // Thêm icon cho markdown nếu muốn
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/stores/authStore";
@@ -108,7 +107,6 @@ export function DocumentContextMenu({
   const DEFAULT_ITEMS: DocumentMenuItem[] = [
     { action: "view", icon: <ExternalLink className="h-4 w-4" />, label: "Mở trong thẻ mới" },
     { action: "download", icon: <Download className="h-4 w-4" />, label: "Tải xuống bản gốc" },
-    { action: "save-to-personal", icon: <BookmarkPlus className="h-4 w-4 text-primary-600" />, label: "Lưu vào kho cá nhân" },
     // Nếu tài liệu có markdown_path, tự động hiển thị thêm tùy chọn này
     ...(markdownPath 
       ? [{ action: "download-markdown", icon: <FileText className="h-4 w-4 text-primary-600" />, label: "Tải xuống Markdown (.md)" }] 

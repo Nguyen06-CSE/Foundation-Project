@@ -39,7 +39,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
     <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
       {/* Header */}
       <header className="sticky top-0 z-30 h-16 border-b border-gray-200 bg-white/95 backdrop-blur-sm px-6">
-        <div className="w-full max-w-[1600px] mx-auto h-full flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto h-full flex items-center justify-between gap-4">
           {/* Logo & Title */}
           <Link to="/library" className="flex items-center gap-3 group">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-white font-bold text-lg shadow-sm group-hover:bg-primary-700 transition-colors">
@@ -134,7 +134,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 py-6 sm:px-6 md:px-8 xl:px-10">
+      <main className="flex-1 w-full max-w-7xl mx-auto p-6 md:p-8">
         {children}
       </main>
 

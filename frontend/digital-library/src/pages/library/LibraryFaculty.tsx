@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Search, GraduationCap, ArrowLeft, BookOpen, AlertCircle, X } from "lucide-react";
+import { ChevronRight, Search, GraduationCap, ArrowLeft, BookOpen } from "lucide-react";
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { SubjectCard } from "@/components/library/SubjectCard";
 import { libraryService } from "@/services/libraryService";
@@ -24,7 +24,7 @@ export function LibraryFaculty() {
 
   const currentFaculty = faculties.find((f) => f.id === fId);
 
-  const { data: subjects = [], isLoading, isError, refetch } = useQuery({
+  const { data: subjects = [], isLoading } = useQuery({
     queryKey: ["library-faculty-subjects", fId],
     queryFn: () => libraryService.getSubjects(fId),
     enabled: Boolean(fId),
@@ -116,13 +116,6 @@ export function LibraryFaculty() {
                 <CardSkeleton key={i} variant="folder" />
               ))}
             </div>
-          ) : isError ? (
-            <div className="rounded-xl border border-red-200 bg-white p-8 text-center">
-              <AlertCircle className="mx-auto h-8 w-8 text-red-500" />
-              <h3 className="mt-3 text-base font-semibold text-gray-900">Chưa tải được danh sách môn học</h3>
-              <p className="mt-1 text-sm text-gray-500">Vui lòng thử tải lại sau.</p>
-              <button type="button" onClick={() => refetch()} className="mt-4 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Thử lại</button>
-            </div>
           ) : filteredSubjects.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredSubjects.map((subject) => (
@@ -136,13 +129,12 @@ export function LibraryFaculty() {
           ) : (
             <div className="rounded-xl border border-dashed border-gray-300 p-12 text-center bg-white">
               <BookOpen className="mx-auto h-12 w-12 text-gray-400 mb-2" />
-              <h3 className="text-base font-semibold text-gray-900">{searchSubject ? "Không tìm thấy môn học phù hợp" : "Chưa có môn học trong khoa này"}</h3>
+              <h3 className="text-base font-semibold text-gray-900">Không tìm thấy môn học</h3>
               <p className="text-sm text-gray-500 mt-1">
                 {searchSubject
-                  ? `Không có môn nào phù hợp với “${searchSubject}”.`
-                  : "Danh sách môn học sẽ hiển thị tại đây khi có dữ liệu."}
+                  ? `Không có môn nào phù hợp với "${searchSubject}".`
+                  : "Khoa này hiện chưa có môn học nào trong hệ thống."}
               </p>
-              {searchSubject && <button type="button" onClick={() => setSearchSubject("")} className="mt-4 inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-primary-600 hover:bg-primary-50"><X className="h-4 w-4" /> Xóa tìm kiếm</button>}
             </div>
           )}
         </section>

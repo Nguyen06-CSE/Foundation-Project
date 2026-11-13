@@ -15,7 +15,6 @@ import {
   CheckCircle2,
   AlertCircle,
   ExternalLink,
-  Share2,
 } from "lucide-react";
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { StarRating } from "@/components/shared/feedback/StarRating";
@@ -106,15 +105,6 @@ export function LibraryDocumentDetail() {
     window.document.body.appendChild(link);
     link.click();
     window.document.body.removeChild(link);
-  };
-
-  const handleShare = () => {
-    const url = window.location.href;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
-      setActionSuccessMsg("Đã sao chép liên kết tài liệu vào bộ nhớ tạm!");
-      setTimeout(() => setActionSuccessMsg(null), 3000);
-    }
   };
 
   const handleSaveToPersonal = () => {
@@ -274,34 +264,11 @@ export function LibraryDocumentDetail() {
                     <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 </div>
-                {document.file_type?.toLowerCase().includes("pdf") ||
-                document.file_type?.toLowerCase().includes("image") ? (
-                  <iframe
-                    src={downloadUrl}
-                    title={document.title}
-                    className="w-full h-[550px] border-none bg-white"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center p-12 text-center bg-white h-[350px]">
-                    <FileIcon
-                      type={document.file_type || "default"}
-                      className="h-16 w-16 mb-3"
-                    />
-                    <p className="text-sm font-semibold text-gray-900">{document.title}</p>
-                    <p className="text-xs text-gray-500 mt-1 max-w-sm">
-                      Định dạng này không hỗ trợ xem trực tiếp trên trình duyệt. Vui lòng tải về máy để xem nội dung đầy đủ.
-                    </p>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="mt-4"
-                      onClick={handleDownload}
-                      icon={<Download className="h-4 w-4" />}
-                    >
-                      Tải xuống để xem ({formatSize(document.file_size || 0)})
-                    </Button>
-                  </div>
-                )}
+                <iframe
+                  src={downloadUrl}
+                  title={document.title}
+                  className="w-full h-[550px] border-none bg-white"
+                />
               </div>
             </Card>
 
@@ -504,15 +471,6 @@ export function LibraryDocumentDetail() {
                   {saveMutation.isPending ? "Đang lưu..." : "Lưu về kho cá nhân"}
                 </Button>
 
-                <Button
-                  variant="outline"
-                  className="w-full py-2.5 h-auto text-sm font-semibold text-gray-700 hover:text-primary-600 border-gray-300"
-                  onClick={handleShare}
-                  icon={<Share2 className="h-4 w-4 text-gray-500" />}
-                >
-                  Chia sẻ liên kết
-                </Button>
-
                 {isAuthenticated && (
                   <Button
                     variant="ghost"
@@ -546,13 +504,9 @@ export function LibraryDocumentDetail() {
         {/* Contribute Modal if clicked */}
         {isContributeModalOpen && (
           <ContributeModal
-            initialFacultyId={document.faculty_id || undefined}
-            initialSubjectId={document.subject_id || undefined}
+            documentId={docId}
+            documentTitle={document.title}
             onClose={() => setIsContributeModalOpen(false)}
-            onSuccess={() => {
-              setActionSuccessMsg("Đã gửi yêu cầu đóng góp của bạn!");
-              setTimeout(() => setActionSuccessMsg(null), 3000);
-            }}
           />
         )}
       </div>

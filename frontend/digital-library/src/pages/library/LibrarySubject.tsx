@@ -8,30 +8,24 @@ import {
   BookOpen,
   ArrowLeft,
   Download,
+  BookmarkPlus,
+  FileText,
   Calendar,
   Layers,
   ArrowUpDown,
-  Upload,
-  FileText,
 } from "lucide-react";
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { StarRating } from "@/components/shared/feedback/StarRating";
+import { FileIcon } from "@/components/shared/documents/FileIcon";
 import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
-import EmptyState from "@/components/shared/feedback/EmptyState";
 import { Button } from "@/components/ui/Button";
-import {
-  DocumentCard,
-  DocumentListView,
-  DocumentDetailView,
-} from "@/components/shared/documents";
-import { ContributeModal } from "@/components/shared/modals/ContributeModal";
+import { Card } from "@/components/ui/Card";
 import { useAuthStore } from "@/stores/authStore";
 import { libraryService } from "@/services/libraryService";
-import {
-  toCommunityDocItem,
-  toCommunityListItem,
-} from "@/utils/communityDocumentAdapters";
+import { formatSize } from "@/utils/formatSize";
+import { formatRelativeDate } from "@/utils/formatDate";
+import type { CommunityDocument } from "@/types/library";
 
 const DOC_TYPE_TABS = [
   "Tất cả",
@@ -66,7 +60,6 @@ export function LibrarySubject() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [page, setPage] = useState(1);
   const [actionSuccessMessage, setActionSuccessMessage] = useState<string | null>(null);
-  const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
 
   // Query documents
   const { data: docData, isLoading } = useQuery({
@@ -95,17 +88,19 @@ export function LibrarySubject() {
     },
   });
 
-  const handleSaveToPersonal = (docId: number | string) => {
+  const handleSaveToPersonal = (doc: CommunityDocument, e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (!isAuthenticated) {
       sessionStorage.setItem("redirect_after_login", window.location.pathname);
       navigate("/login");
       return;
     }
-    saveMutation.mutate(Number(docId));
+    saveMutation.mutate(doc.id);
   };
 
-  const handleDownload = (docId: number | string) => {
-    const downloadUrl = libraryService.getDownloadUrl(Number(docId));
+  const handleDownload = (doc: CommunityDocument, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const downloadUrl = libraryService.getDownloadUrl(doc.id);
     const link = document.createElement("a");
     link.href = downloadUrl;
     link.target = "_blank";
@@ -113,44 +108,6 @@ export function LibrarySubject() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-
-  const handleShare = (docId: number | string) => {
-    const url = `${window.location.origin}/library/document/${docId}`;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
-      setActionSuccessMessage("Đã sao chép liên kết tài liệu vào bộ nhớ tạm!");
-      setTimeout(() => setActionSuccessMessage(null), 3000);
-    }
-  };
-
-  const handleAction = (action: string, docId: string | number) => {
-    switch (action) {
-      case "view":
-        navigate(`/library/document/${docId}`);
-        break;
-      case "download":
-        handleDownload(docId);
-        break;
-      case "save-to-personal":
-      case "save":
-        handleSaveToPersonal(docId);
-        break;
-      case "share":
-        handleShare(docId);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleOpenContribute = () => {
-    if (!isAuthenticated) {
-      sessionStorage.setItem("redirect_after_login", window.location.pathname);
-      navigate("/login");
-      return;
-    }
-    setIsContributeModalOpen(true);
   };
 
   const firstDoc = docData?.items?.[0];
@@ -165,9 +122,6 @@ export function LibrarySubject() {
     avgRatings.length > 0
       ? avgRatings.reduce((acc, d) => acc + d.rating_avg, 0) / avgRatings.length
       : 0;
-
-  const items = docData?.items || [];
-  const listItems = items.map(toCommunityListItem);
 
   return (
     <PublicLayout>
@@ -237,24 +191,14 @@ export function LibrarySubject() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleOpenContribute}
-                icon={<Upload className="h-4 w-4" />}
-              >
-                Đóng góp tài liệu
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => (facultyId ? navigate(`/library/faculty/${facultyId}`) : navigate("/library"))}
-                icon={<ArrowLeft className="h-4 w-4" />}
-              >
-                Về danh sách môn
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => (facultyId ? navigate(`/library/faculty/${facultyId}`) : navigate("/library"))}
+              icon={<ArrowLeft className="h-4 w-4" />}
+            >
+              Về danh sách môn
+            </Button>
           </div>
         </div>
 
@@ -272,7 +216,7 @@ export function LibrarySubject() {
                     setActiveTab(tab);
                     setPage(1);
                   }}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
                     active
                       ? "bg-primary-600 text-white shadow-xs"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -297,7 +241,7 @@ export function LibrarySubject() {
                     setSelectedYear(e.target.value);
                     setPage(1);
                   }}
-                  className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-800 font-medium focus:border-primary-500 focus:outline-none cursor-pointer"
+                  className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-800 font-medium focus:border-primary-500 focus:outline-none"
                 >
                   {ACADEMIC_YEARS.map((year) => (
                     <option key={year} value={year}>
@@ -317,7 +261,7 @@ export function LibrarySubject() {
                     setSortBy(e.target.value as any);
                     setPage(1);
                   }}
-                  className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-800 font-medium focus:border-primary-500 focus:outline-none cursor-pointer"
+                  className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-800 font-medium focus:border-primary-500 focus:outline-none"
                 >
                   <option value="newest">Mới nhất</option>
                   <option value="popular">Tải nhiều nhất</option>
@@ -326,14 +270,14 @@ export function LibrarySubject() {
               </div>
             </div>
 
-            {/* ViewToggle (grid, list, detail) */}
+            {/* ViewToggle */}
             <div className="ml-auto">
               <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
             </div>
           </div>
         </div>
 
-        {/* Documents Views */}
+        {/* Documents Grid / List */}
         <section className="flex flex-col gap-4">
           {isLoading ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -341,53 +285,148 @@ export function LibrarySubject() {
                 <CardSkeleton key={i} variant="document" />
               ))}
             </div>
-          ) : items.length > 0 ? (
-            <>
-              {/* GRID VIEW */}
-              {viewMode === "grid" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {items.map((doc) => (
-                    <DocumentCard
+          ) : (docData?.items || []).length > 0 ? (
+            viewMode === "grid" ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {docData?.items.map((doc) => (
+                  <Card
+                    key={doc.id}
+                    onClick={() => navigate(`/library/document/${doc.id}`)}
+                    className="group relative flex flex-col justify-between rounded-xl border border-gray-200/90 bg-white p-4 shadow-sm hover:-translate-y-1 hover:border-primary-400 hover:shadow-md transition-all cursor-pointer"
+                  >
+                    <div>
+                      {/* Top bar with file icon & doc type */}
+                      <div className="flex items-start justify-between gap-2">
+                        <FileIcon type={doc.file_type || "pdf"} />
+                        <div className="flex flex-col items-end gap-1">
+                          {doc.doc_type && (
+                            <span className="rounded bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary-700">
+                              {doc.doc_type}
+                            </span>
+                          )}
+                          {doc.academic_year && (
+                            <span className="text-[10px] text-gray-400">
+                              {doc.academic_year}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Title & Description */}
+                      <h3
+                        className="mt-3 text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 leading-snug"
+                        title={doc.title}
+                      >
+                        {doc.title}
+                      </h3>
+
+                      <p className="mt-1 text-xs text-gray-400 line-clamp-1">
+                        Bởi: <span className="font-medium text-gray-600">{doc.contributed_by}</span>
+                      </p>
+                    </div>
+
+                    {/* Bottom Metadata & Actions */}
+                    <div className="mt-4 pt-3 border-t border-gray-100 flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <StarRating value={doc.rating_avg} size="sm" showValue={doc.rating_avg > 0} count={doc.rating_count} />
+                        <span>{formatSize(doc.file_size || 0)}</span>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-1.5 pt-1">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="flex-1 text-xs h-8"
+                          onClick={(e) => handleDownload(doc, e)}
+                          icon={<Download className="h-3.5 w-3.5" />}
+                        >
+                          Tải về
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-2.5"
+                          title="Lưu về kho cá nhân"
+                          onClick={(e) => handleSaveToPersonal(doc, e)}
+                        >
+                          <BookmarkPlus className="h-4 w-4 text-primary-600" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+                <div className="divide-y divide-gray-100">
+                  {docData?.items.map((doc) => (
+                    <div
                       key={doc.id}
-                      document={toCommunityDocItem(doc)}
-                      variant="community"
-                      basePath="/library/document"
-                      onAction={handleAction}
-                    />
+                      onClick={() => navigate(`/library/document/${doc.id}`)}
+                      className="group flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-gray-50 transition-colors cursor-pointer gap-3"
+                    >
+                      <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                        <FileIcon type={doc.file_type || "pdf"} />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors truncate">
+                              {doc.title}
+                            </h3>
+                            {doc.doc_type && (
+                              <span className="rounded bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary-700 shrink-0">
+                                {doc.doc_type}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-gray-400">
+                            <span>Đóng góp: {doc.contributed_by}</span>
+                            <span>•</span>
+                            <span>{formatRelativeDate(doc.created_at || "")}</span>
+                            <span>•</span>
+                            <span>{formatSize(doc.file_size || 0)}</span>
+                            <span>•</span>
+                            <span>{doc.download_count} lượt tải</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                        <StarRating value={doc.rating_avg} size="sm" showValue={doc.rating_avg > 0} count={doc.rating_count} />
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs font-medium"
+                            onClick={(e) => handleSaveToPersonal(doc, e)}
+                            icon={<BookmarkPlus className="h-3.5 w-3.5 text-primary-600" />}
+                          >
+                            Lưu
+                          </Button>
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            className="h-8 text-xs font-medium"
+                            onClick={(e) => handleDownload(doc, e)}
+                            icon={<Download className="h-3.5 w-3.5" />}
+                          >
+                            Tải
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              )}
-
-              {/* LIST VIEW */}
-              {viewMode === "list" && (
-                <DocumentListView
-                  documents={listItems}
-                  workspaceType="community"
-                  showOwner={true}
-                  navigationPath={(id) => `/library/document/${id}`}
-                  onAction={handleAction}
-                />
-              )}
-
-              {/* DETAIL VIEW */}
-              {viewMode === "detail" && (
-                <DocumentDetailView
-                  documents={listItems}
-                  workspaceType="community"
-                  showOwner={true}
-                  navigationPath={(id) => `/library/document/${id}`}
-                  onAction={handleAction}
-                />
-              )}
-            </>
+              </div>
+            )
           ) : (
-            <EmptyState
-              icon={<FileText className="h-8 w-8 text-gray-400" />}
-              title="Chưa có tài liệu nào"
-              description="Không tìm thấy tài liệu phù hợp với bộ lọc đã chọn trong môn học này."
-              actionLabel="Đóng góp tài liệu cho môn này"
-              onAction={handleOpenContribute}
-            />
+            <div className="rounded-xl border border-dashed border-gray-300 p-12 text-center bg-white">
+              <FileText className="mx-auto h-12 w-12 text-gray-400 mb-2" />
+              <h3 className="text-base font-semibold text-gray-900">Chưa có tài liệu nào</h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Không tìm thấy tài liệu phù hợp với bộ lọc đã chọn trong môn học này.
+              </p>
+            </div>
           )}
 
           {/* Pagination */}
@@ -411,28 +450,12 @@ export function LibrarySubject() {
                   disabled={page === docData.total_pages}
                   onClick={() => setPage((p) => p + 1)}
                 >
-                  Sau →
+                  Tiếp →
                 </Button>
               </div>
             </div>
           )}
         </section>
-
-        {/* Modal đóng góp tài liệu */}
-        {isContributeModalOpen && (
-          <ContributeModal
-            initialFacultyId={facultyId || undefined}
-            initialSubjectId={sId}
-            onClose={() => setIsContributeModalOpen(false)}
-            onSuccess={() => {
-              setActionSuccessMessage("Yêu cầu đóng góp của bạn đã được gửi tới người kiểm duyệt!");
-              setTimeout(() => setActionSuccessMessage(null), 3500);
-              queryClient.invalidateQueries({
-                queryKey: ["library-subject-documents", sId],
-              });
-            }}
-          />
-        )}
       </div>
     </PublicLayout>
   );

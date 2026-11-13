@@ -354,8 +354,8 @@
     "semantic_hash": "21b8abd4ac576568fa7ebfc4204ca8c1"
   },
   "backend/app/routers/library.py": {
-    "mtime": 1794546228.4152665,
-    "seen": 1794546825.537759,
+    "mtime": 1794561335.564794,
+    "seen": 1794577212.4403799,
     "ast_hash": "687a799194d9e0ba98d563b27fb3e79f",
     "semantic_hash": ""
   },
@@ -648,8 +648,8 @@
     "semantic_hash": "dffa4581fd902192c5b972e92939af55"
   },
   "backend/tests/conftest.py": {
-    "mtime": 1794546430.4478106,
-    "seen": 1794546825.539042,
+    "mtime": 1794561335.5665474,
+    "seen": 1794577212.441914,
     "ast_hash": "4b34ace9cc174119e4ad047a502ca0a1",
     "semantic_hash": ""
   },
@@ -758,15 +758,15 @@
     "semantic_hash": "374ea0d83e3abf64690db506f7f233de"
   },
   "frontend/digital-library/src/components/library/PublicLayout.tsx": {
-    "mtime": 1794544690.073632,
-    "seen": 1794546825.539596,
-    "ast_hash": "e6b850eefa54d0f90eec1751a456939d",
+    "mtime": 1794576820.7067854,
+    "seen": 1794577212.4425669,
+    "ast_hash": "50b0d572c50214d91e2de43fd37ece25",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/library/SubjectCard.tsx": {
-    "mtime": 1794543908.5046597,
-    "seen": 1794546825.539597,
-    "ast_hash": "c762b429224cf70a62283539abf796bc",
+    "mtime": 1794576820.7074976,
+    "seen": 1794577212.4425678,
+    "ast_hash": "8974cf9366204bb2bef5e1676bb2c14d",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/ProtectedRoute.tsx": {
@@ -788,33 +788,33 @@
     "semantic_hash": "e1ce16273ba9f5771ffd3721c7e06383"
   },
   "frontend/digital-library/src/components/shared/documents/DocumentCard/DocumentCard.tsx": {
-    "mtime": 1794543009.445103,
-    "seen": 1794543497.155353,
-    "ast_hash": "a27e8021d308e3347b8e6cb4ec641b0b",
+    "mtime": 1794576820.7079484,
+    "seen": 1794577212.442697,
+    "ast_hash": "71289cf75680c165bdbc441c60536342",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentCard/DocumentCard.types.ts": {
-    "mtime": 1794542966.2647145,
-    "seen": 1794543497.155354,
-    "ast_hash": "d60b13f722e21cc1cd524f2cd0997b07",
+    "mtime": 1794576820.7083964,
+    "seen": 1794577212.442698,
+    "ast_hash": "49d83de55cc9ae21ab8e101c40d77647",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentCard/FileDocumentCard.tsx": {
-    "mtime": 1794542908.2980256,
-    "seen": 1794543497.155355,
-    "ast_hash": "8880608a36ea994921f1f3ba84477da1",
+    "mtime": 1794576820.7091017,
+    "seen": 1794577212.442699,
+    "ast_hash": "f1902881d0cb2eab944a05e5bef4a62c",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentCard/index.ts": {
-    "mtime": 1794543040.4807289,
-    "seen": 1794543497.155356,
-    "ast_hash": "e594df3bba4c644baf348e332cb0d92b",
+    "mtime": 1794576820.709632,
+    "seen": 1794577212.442699,
+    "ast_hash": "fb5ecbdaa3c64175736767a49bf823ed",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentContextMenu.tsx": {
-    "mtime": 1794542949.2212694,
-    "seen": 1794543497.155357,
-    "ast_hash": "adb9e5fcc68cc7f0028c1bad8fd22c01",
+    "mtime": 1794576820.710291,
+    "seen": 1794577212.4427001,
+    "ast_hash": "a0a9af724f8581f15dc7c0d185398ffa",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentDetail.tsx": {
@@ -932,9 +932,9 @@
     "semantic_hash": "3b18270b966427e03af31d7647afd7a3"
   },
   "frontend/digital-library/src/components/shared/documents/DocumentDetailView.tsx": {
-    "mtime": 1794543105.7907774,
-    "seen": 1794543497.156093,
-    "ast_hash": "07eacd361366af47d25b86bd03ebd532",
+    "mtime": 1794576820.710935,
+    "seen": 1794577212.4435341,
+    "ast_hash": "b56e2689f26f354030637bf42eea1dee",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentFilterBar.tsx": {
@@ -944,9 +944,9 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentListView.tsx": {
-    "mtime": 1794543070.4261172,
-    "seen": 1794543497.156127,
-    "ast_hash": "fd23143a0709829509794329159e8027",
+    "mtime": 1794576820.711431,
+    "seen": 1794577212.44357,
+    "ast_hash": "effb7ab26680c8d14650dd9e0f3f4538",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentRow.tsx": {
@@ -968,9 +968,9 @@
     "semantic_hash": "808f953b7ef0249e2da4558329d6ce32"
   },
   "frontend/digital-library/src/components/shared/documents/documentView.types.ts": {
-    "mtime": 1794542883.1655154,
-    "seen": 1794543497.156257,
-    "ast_hash": "370159914eb1e798be1f84695816404c",
+    "mtime": 1794576820.7118936,
+    "seen": 1794577212.443711,
+    "ast_hash": "d8e632835b713c23446d974148efcd08",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/index.ts": {
@@ -1100,9 +1100,9 @@
     "semantic_hash": "db0a0b7f2b89c1035c2bb1cc3842650f"
   },
   "frontend/digital-library/src/components/shared/modals/ContributeModal.tsx": {
-    "mtime": 1794543221.4783337,
-    "seen": 1794543497.15696,
-    "ast_hash": "367c65cf39d6f46106d29bb5ea825c3c",
+    "mtime": 1794576820.712743,
+    "seen": 1794577212.444489,
+    "ast_hash": "6c834619d729eb1ab5483b36653aac5d",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/modals/CreateFolderModal.tsx": {
@@ -1346,9 +1346,9 @@
     "semantic_hash": "53f2e032e97d7f97acd03ee3bcdff405"
   },
   "frontend/digital-library/src/pages/group/components/cards/LocalGroupDocumentCard.tsx": {
-    "mtime": 1794542926.7382922,
-    "seen": 1794543497.158265,
-    "ast_hash": "5491857fd6a2ab7bdd9ec2b1537bf08f",
+    "mtime": 1794576820.713633,
+    "seen": 1794577212.4459891,
+    "ast_hash": "aa4dfee294ba7b13b5596907a6abca45",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/components/modals/GroupFolderModalContainer.tsx": {
@@ -1466,27 +1466,27 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/LibraryDocumentDetail.tsx": {
-    "mtime": 1794543356.1991086,
-    "seen": 1794543497.159043,
-    "ast_hash": "383dc036360a5bab562f1d86972e829c",
+    "mtime": 1794576820.7142215,
+    "seen": 1794577212.446788,
+    "ast_hash": "a7a9395fce7ee3ed77a9b7fd7d1c5808",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/LibraryFaculty.tsx": {
-    "mtime": 1794543903.2582612,
-    "seen": 1794546825.5436642,
-    "ast_hash": "c96e9c6205bee10d5af8b4b4c50f8e36",
+    "mtime": 1794576820.7146764,
+    "seen": 1794577212.446788,
+    "ast_hash": "d3a463c9372dea71713c804bc9e74cf0",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/LibraryHome.tsx": {
-    "mtime": 1794546261.2029858,
-    "seen": 1794546825.543665,
-    "ast_hash": "53c300ef641b8f7c889ec4ea3edde332",
+    "mtime": 1794576820.7151456,
+    "seen": 1794577212.446789,
+    "ast_hash": "ca39fb4ff142dc2d08c69be7e25ed9fe",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/LibrarySubject.tsx": {
-    "mtime": 1794543449.6424577,
-    "seen": 1794543497.159078,
-    "ast_hash": "cd9f0dc6f1b763195278dfc2eebfc4b8",
+    "mtime": 1794576820.7155764,
+    "seen": 1794577212.44679,
+    "ast_hash": "d62ce54c57e2df5bda7fe9185f46dad6",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/admin/LibraryAdmin.tsx": {
@@ -1532,8 +1532,8 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/personal/SharedWithMe.tsx": {
-    "mtime": 1794543421.6077092,
-    "seen": 1794543497.1593091,
+    "mtime": 1794576996.9631636,
+    "seen": 1794577212.447063,
     "ast_hash": "d064db187ad69782a83cb35a0cea1f03",
     "semantic_hash": ""
   },
@@ -2324,9 +2324,9 @@
     "semantic_hash": ""
   },
   "frontend/docs/COMPONENTS.md": {
-    "mtime": 1794543513.8320484,
-    "seen": 1794543552.73024,
-    "ast_hash": "53690729f29d7757b22b4de9227c6921",
+    "mtime": 1794576820.7166164,
+    "seen": 1794577212.451766,
+    "ast_hash": "444b5f51098149f39186e96a278c06ce",
     "semantic_hash": ""
   },
   "frontend/docs/GROUP_LOGIC.md": {
@@ -2336,9 +2336,9 @@
     "semantic_hash": ""
   },
   "frontend/docs/SCREENS.md": {
-    "mtime": 1794543536.6325002,
-    "seen": 1794543552.7302651,
-    "ast_hash": "60e56b486c77b64a73a84fd110fd8b62",
+    "mtime": 1794576820.717011,
+    "seen": 1794577212.4518,
+    "ast_hash": "db7f63d00764ae2f3d7dfb33a598b998",
     "semantic_hash": ""
   },
   "frontend/docs/design/DESIGN_SYSTEM.md": {
@@ -3223,24 +3223,6 @@
     "ast_hash": "8710928c3be6c24a5467c297fd7abe76",
     "semantic_hash": ""
   },
-  "frontend/digital-library/src/components/shared/documents/DocumentCard/CommunityDocumentCard.tsx": {
-    "mtime": 1794542990.904753,
-    "seen": 1794543497.155352,
-    "ast_hash": "a2edf65b1a35ac0a6e1ac0d9b3e440b1",
-    "semantic_hash": ""
-  },
-  "frontend/digital-library/src/utils/communityDocumentAdapters.ts": {
-    "mtime": 1794543119.1476905,
-    "seen": 1794543497.161094,
-    "ast_hash": "5492af9b9d1416c557a6e3b94d7d07ed",
-    "semantic_hash": ""
-  },
-  "frontend/digital-library/src/utils/fileTypeTheme.ts": {
-    "mtime": 1794542857.6707184,
-    "seen": 1794543497.16118,
-    "ast_hash": "41fae3448759e1c9f7e0061f42141f51",
-    "semantic_hash": ""
-  },
   "docs-site/README.md": {
     "mtime": 1793953873.8596308,
     "seen": 1794543497.161772,
@@ -3269,12 +3251,6 @@
     "mtime": 1793956086.0892446,
     "seen": 1794543497.163098,
     "ast_hash": "1daba88787c39a2fd506496d889a42bf",
-    "semantic_hash": ""
-  },
-  "frontend/docs/design/de-xuat-cai-tien-KhoHocLieuCongDong.md": {
-    "mtime": 1794541548.3863738,
-    "seen": 1794543497.1633651,
-    "ast_hash": "4d070c5522627d692a389f6b1f92f909",
     "semantic_hash": ""
   },
   "docs-site/static/img/docusaurus-social-card.jpg": {
@@ -3314,20 +3290,20 @@
     "semantic_hash": ""
   },
   "backend/db/seed_library_other_faculties.py": {
-    "mtime": 1794546750.1802635,
-    "seen": 1794546825.5389938,
+    "mtime": 1794561335.5659597,
+    "seen": 1794577212.441864,
     "ast_hash": "f4404902c311da71a14c1ab64711016f",
     "semantic_hash": ""
   },
   "backend/tests/test_library_counts.py": {
-    "mtime": 1794546489.1840851,
-    "seen": 1794546825.5391612,
+    "mtime": 1794561335.5669148,
+    "seen": 1794577212.4420621,
     "ast_hash": "2aa8e8754ecc6f2447fb724ba8bcadd8",
     "semantic_hash": ""
   },
   "docs/feat/community-library/bug-fix-document-counting.md": {
-    "mtime": 1794546168.6974416,
-    "seen": 1794546825.547213,
+    "mtime": 1794561335.5676377,
+    "seen": 1794577212.450387,
     "ast_hash": "da9c28b74f911a31ffdfbdb5aeb7eaa9",
     "semantic_hash": ""
   },
