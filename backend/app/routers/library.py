@@ -81,14 +81,7 @@ async def get_faculties(db: AsyncSession = Depends(get_db)):
             Faculty.code,
             Faculty.name,
             func.count(func.distinct(Subject.id)).label("subject_count"),
-            func.count(
-                func.distinct(
-                    func.nullif(
-                        and_(Document.is_public == True, Document.is_deleted == False),
-                        False,
-                    )
-                )
-            ).label("document_count"),
+            func.count(func.distinct(Document.id)).label("document_count"),
         )
         .outerjoin(Subject, Subject.faculty_id == Faculty.id)
         .outerjoin(
@@ -137,14 +130,7 @@ async def get_subjects_by_faculty(
     query = (
         select(
             Subject,
-            func.count(
-                func.distinct(
-                    func.nullif(
-                        and_(Document.is_public == True, Document.is_deleted == False),
-                        False,
-                    )
-                )
-            ).label("document_count"),
+            func.count(func.distinct(Document.id)).label("document_count"),
             func.coalesce(ratings_sq.c.avg_rating, 0.0).label("avg_rating"),
         )
         .outerjoin(

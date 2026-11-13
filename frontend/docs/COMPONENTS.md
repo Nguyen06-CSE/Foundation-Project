@@ -22,7 +22,10 @@ Trước khi tạo component mới, kiểm tra danh sách này — nếu đã c�
 | Header.tsx | thanh trên cùng: logo, search, badge phạm vi, chuông thông báo, avatar | scopeLabel, user |
 | FileIcon.tsx | icon màu theo loại file, dùng chung DocumentCard/DocumentRow | fileType (pdf/docx/pptx/zip/...) |
 | DocumentRow.tsx | 1 dòng tài liệu dạng list (dùng ở Dashboard "Tài liệu gần đây") | document, onAction |
-| DocumentCard.tsx | 1 card tài liệu dạng lưới (dùng ở trang Tài liệu) | document, onAction |
+| DocumentCard.tsx | Router card tài liệu dạng lưới (dùng cho cá nhân, bundle, hoặc kho học liệu qua variant) | document, onAction, basePath?, variant? |
+| CommunityDocumentCard.tsx | Thẻ tài liệu chuẩn Kho học liệu (hiển thị năm học, loại tài liệu, sao đánh giá, lượt tải, CTA tải và lưu) | document, onAction, basePath? |
+| DocumentListView.tsx | Hiển thị tài liệu dạng danh sách có phân cột sắp xếp, dùng chung Kho cá nhân, Nhóm và Kho học liệu | documents, workspaceType, onAction, navigationPath |
+| DocumentDetailView.tsx | Hiển thị tài liệu dạng thẻ chi tiết mở rộng kèm trích xuất nội dung OCR/tóm tắt | documents, workspaceType, onAction, navigationPath |
 | FolderCard.tsx | card thư mục cá nhân (Giáo trình, Bài tập...) | name, count, onClick |
 | DocumentContextMenu.tsx | menu hành động: Xem trước/Tải xuống/Chia sẻ/Yêu thích/Đổi tên/Di chuyển/Xóa | onAction |
 | StatCard.tsx | card thống kê góc trên dashboard | icon, iconBg, label, value, subLabel |

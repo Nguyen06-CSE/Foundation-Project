@@ -29,3 +29,12 @@
   query param ?tab=documents|members|requests|settings
 - Không tạo 4 file riêng cho 4 tab — dùng useState hoặc useSearchParams
   để switch tab, giữ URL đồng bộ
+
+## Màn hình Kho học liệu cộng đồng (Community Library)
+
+| # | Route | File | Ghi chú |
+|---|---|---|---|
+| L1 | /library | pages/library/LibraryHome.tsx | Trang chủ kho học liệu, duyệt theo khoa, xếp khoa có tài liệu lên đầu |
+| L2 | /library/faculty/:facultyId | pages/library/LibraryFaculty.tsx | Danh sách môn học trong khoa, tìm kiếm môn, ẩn sao rỗng |
+| L3 | /library/subject/:subjectId | pages/library/LibrarySubject.tsx | Danh sách tài liệu theo môn, hỗ trợ 3 view mode (grid, list, detail) qua DocumentCard/DocumentListView/DocumentDetailView |
+| L4 | /library/document/:documentId | pages/library/LibraryDocumentDetail.tsx | Xem chi tiết tài liệu, đánh giá sao, chia sẻ link, tải về, lưu vào cá nhân, preview thông minh |

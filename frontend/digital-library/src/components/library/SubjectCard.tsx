@@ -66,8 +66,14 @@ export function SubjectCard({ subject, onClick }: SubjectCardProps) {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5">
-        <StarRating value={subject.avg_rating} size="sm" showValue={subject.avg_rating > 0} />
+      <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5 min-h-[30px]">
+        {subject.avg_rating > 0 && subject.document_count > 0 ? (
+          <StarRating value={subject.avg_rating} size="sm" showValue />
+        ) : subject.document_count === 0 ? (
+          <span className="text-[11px] text-gray-500">Chưa có học liệu · đóng góp đầu tiên</span>
+        ) : (
+          <span className="text-[11px] text-gray-400">Chưa có đánh giá</span>
+        )}
         <div className="flex items-center text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity text-xs font-semibold">
           <span>Xem môn</span>
           <ArrowRight className="h-3 w-3 ml-1" />

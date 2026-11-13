@@ -59,6 +59,7 @@ export function DocumentListView({
   showOwner = false,
   workspaceType = "personal",
   permission = "view",
+  allowedActions,
   extraItems,
   onToggleBundle,
   selectedIds = [],
@@ -526,6 +527,14 @@ export function DocumentListView({
                       markdownPath={doc.markdown_path}
                       onAction={(action: DocumentAction) =>
                         onAction?.(action, doc.id)
+                      }
+                      allowedActions={
+                        allowedActions ||
+                        (workspaceType === "community"
+                          ? ["view", "download", "save-to-personal", "share"]
+                          : doc.is_bundle
+                            ? ["view", "delete"]
+                            : undefined)
                       }
                       extraItems={extraItems}
                     />

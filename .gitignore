@@ -42,6 +42,7 @@ pnpm-debug.log*
 # --- Cache công cụ phân tích (Graphify Cache) ---
 graphify-out/cache/
 graphify-out/.cloud-cta-shown
+docs-site/graphify-out/
 
 # --- IDE / OS (Khuyên dùng) ---
 .DS_Store

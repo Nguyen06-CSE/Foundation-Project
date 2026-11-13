@@ -5,13 +5,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { X, Upload, CheckCircle2, AlertTriangle, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { libraryService } from "@/services/libraryService";
+import { documentService } from "@/services/documentService";
 import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { Faculty, Subject } from "@/types/library";
+import type { Document } from "@/types/document";
 
 export interface ContributeModalProps {
   documentId?: number;
   documentTitle?: string;
   documents?: { id: number; title: string }[];
+  initialFacultyId?: number;
+  initialSubjectId?: number;
   onClose: () => void;
   onSuccess?: () => void;
 }
@@ -37,18 +41,24 @@ export function ContributeModal({
   documentId,
   documentTitle,
   documents,
+  initialFacultyId,
+  initialSubjectId,
   onClose,
   onSuccess,
 }: ContributeModalProps) {
-  const targetDocs = documents && documents.length > 0
+  const initialDocs = documents && documents.length > 0
     ? documents
     : documentId
       ? [{ id: documentId, title: documentTitle || `Tài liệu #${documentId}` }]
       : [];
-  const isBulk = targetDocs.length > 1;
-  const displayTitle = isBulk
-    ? `${targetDocs.length} tài liệu đã chọn (${targetDocs.map((d) => d.title).join(", ")})`
-    : targetDocs[0]?.title || documentTitle || "";
+  
+  const [personalDocs, setPersonalDocs] = useState<Document[]>([]);
+  const [loadingPersonalDocs, setLoadingPersonalDocs] = useState(false);
+  const [selectedDocId, setSelectedDocId] = useState<number | "">(
+    initialDocs.length > 0 ? initialDocs[0].id : ""
+  );
+
+  const isBulk = initialDocs.length > 1;
   const queryClient = useQueryClient();
   const [step, setStep] = useState<1 | 2>(1);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
@@ -57,8 +67,12 @@ export function ContributeModal({
   const [loadingSubjects, setLoadingSubjects] = useState(false);
 
   // Form State
-  const [selectedFacultyId, setSelectedFacultyId] = useState<number | "">("");
-  const [selectedSubjectId, setSelectedSubjectId] = useState<number | "">("");
+  const [selectedFacultyId, setSelectedFacultyId] = useState<number | "">(
+    initialFacultyId || ""
+  );
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number | "">(
+    initialSubjectId || ""
+  );
   const [selectedDocType, setSelectedDocType] = useState<string>("Giáo trình");
   const [academicYear, setAcademicYear] = useState<string>("2023-2024");
   const [note, setNote] = useState<string>("");
@@ -66,6 +80,28 @@ export function ContributeModal({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successSubmitted, setSuccessSubmitted] = useState(false);
+
+  // Fetch personal docs if target docs not provided
+  useEffect(() => {
+    if (initialDocs.length === 0) {
+      setLoadingPersonalDocs(true);
+      documentService
+        .getAll({ page_size: 50 })
+        .then((res) => {
+          const items = res.items || [];
+          setPersonalDocs(items);
+          if (items.length > 0) {
+            setSelectedDocId(items[0].id);
+          }
+        })
+        .catch(() => {
+          setError("Không thể tải danh sách tài liệu cá nhân của bạn.");
+        })
+        .finally(() => {
+          setLoadingPersonalDocs(false);
+        });
+    }
+  }, [initialDocs.length]);
 
   // Fetch faculties on mount
   useEffect(() => {
@@ -101,7 +137,9 @@ export function ContributeModal({
       .then((data) => {
         if (isMounted) {
           setSubjects(data);
-          if (data.length > 0) {
+          if (initialSubjectId && data.some((s) => s.id === initialSubjectId)) {
+            setSelectedSubjectId(initialSubjectId);
+          } else if (data.length > 0) {
             setSelectedSubjectId(data[0].id);
           } else {
             setSelectedSubjectId("");
@@ -117,13 +155,24 @@ export function ContributeModal({
     return () => {
       isMounted = false;
     };
-  }, [selectedFacultyId]);
+  }, [selectedFacultyId, initialSubjectId]);
 
   const selectedFaculty = faculties.find((f) => f.id === Number(selectedFacultyId));
   const selectedSubject = subjects.find((s) => s.id === Number(selectedSubjectId));
 
+  const chosenDocTitle = isBulk
+    ? `${initialDocs.length} tài liệu đã chọn (${initialDocs.map((d) => d.title).join(", ")})`
+    : initialDocs.length > 0
+    ? initialDocs[0].title
+    : personalDocs.find((d) => d.id === Number(selectedDocId))?.title ||
+      "Chưa chọn tài liệu";
+
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedDocId && initialDocs.length === 0) {
+      setError("Vui lòng chọn tài liệu từ kho cá nhân của bạn.");
+      return;
+    }
     if (!selectedFacultyId) {
       setError("Vui lòng chọn Khoa.");
       return;
@@ -142,7 +191,7 @@ export function ContributeModal({
     try {
       if (isBulk) {
         const res = await libraryService.submitBulk({
-          source_document_ids: targetDocs.map((d) => d.id),
+          source_document_ids: initialDocs.map((d) => d.id),
           subject_id: Number(selectedSubjectId),
           doc_type: selectedDocType,
           academic_year: academicYear,
@@ -153,9 +202,15 @@ export function ContributeModal({
           setSubmitting(false);
           return;
         }
-      } else if (targetDocs[0]) {
+      } else {
+        const sourceDocId = initialDocs[0]?.id || Number(selectedDocId);
+        if (!sourceDocId) {
+          setError("Chưa chọn tài liệu nguồn hợp lệ.");
+          setSubmitting(false);
+          return;
+        }
         await libraryService.submit({
-          source_document_id: targetDocs[0].id,
+          source_document_id: sourceDocId,
           subject_id: Number(selectedSubjectId),
           doc_type: selectedDocType,
           academic_year: academicYear,
@@ -195,7 +250,7 @@ export function ContributeModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none"
+            className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -224,11 +279,36 @@ export function ContributeModal({
               <form onSubmit={handleNext} className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
-                    Tài liệu đóng góp {isBulk && `(${targetDocs.length})`}
+                    Tài liệu đóng góp {isBulk && `(${initialDocs.length})`} <span className="text-red-500">*</span>
                   </label>
-                  <p className="text-sm font-medium text-gray-900 bg-gray-50 p-2.5 rounded-lg border border-gray-200 truncate">
-                    {displayTitle}
-                  </p>
+                  {initialDocs.length > 0 ? (
+                    <p className="text-sm font-medium text-gray-900 bg-gray-50 p-2.5 rounded-lg border border-gray-200 truncate">
+                      {chosenDocTitle}
+                    </p>
+                  ) : (
+                    <div>
+                      {loadingPersonalDocs ? (
+                        <div className="h-10 bg-gray-100 rounded-lg animate-pulse" />
+                      ) : personalDocs.length > 0 ? (
+                        <select
+                          value={selectedDocId}
+                          onChange={(e) => setSelectedDocId(Number(e.target.value))}
+                          className="w-full h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                          required
+                        >
+                          {personalDocs.map((doc) => (
+                            <option key={doc.id} value={doc.id}>
+                              {doc.title}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
+                          Kho cá nhân chưa có tài liệu nào. Vui lòng tải tài liệu lên kho cá nhân trước khi đóng góp!
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -335,7 +415,7 @@ export function ContributeModal({
                   <Button
                     type="submit"
                     variant="primary"
-                    disabled={!selectedFacultyId || !selectedSubjectId}
+                    disabled={!selectedFacultyId || !selectedSubjectId || (!selectedDocId && initialDocs.length === 0)}
                     icon={<ArrowRight className="h-4 w-4" />}
                   >
                     Tiếp tục
@@ -348,39 +428,47 @@ export function ContributeModal({
                   <div className="flex justify-between py-1 border-b border-gray-200/60">
                     <span className="text-gray-500">Tài liệu:</span>
                     <span className="font-semibold text-gray-900 truncate max-w-[260px]">
-                      {displayTitle}
+                      {chosenDocTitle}
                     </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-gray-200/60">
-                    <span className="text-gray-500">Khoa:</span>
-                    <span className="font-medium text-gray-900">{selectedFaculty?.name}</span>
+                    <span className="text-gray-500">Khoa tiếp nhận:</span>
+                    <span className="font-semibold text-gray-900">
+                      {selectedFaculty?.name}
+                    </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-gray-200/60">
                     <span className="text-gray-500">Môn học:</span>
-                    <span className="font-medium text-gray-900">{selectedSubject?.name}</span>
+                    <span className="font-semibold text-gray-900">
+                      {selectedSubject?.name}
+                    </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-gray-200/60">
                     <span className="text-gray-500">Loại tài liệu:</span>
-                    <span className="font-medium text-primary-700">{selectedDocType}</span>
+                    <span className="font-medium text-gray-900">
+                      {selectedDocType}
+                    </span>
                   </div>
-                  <div className="flex justify-between py-1">
+                  <div className="flex justify-between py-1 border-b border-gray-200/60">
                     <span className="text-gray-500">Năm học:</span>
-                    <span className="font-medium text-gray-900">{academicYear}</span>
+                    <span className="font-medium text-gray-900">
+                      {academicYear}
+                    </span>
                   </div>
                   {note && (
-                    <div className="pt-2 border-t border-gray-200/60">
-                      <span className="text-gray-500 block text-xs mb-1">Ghi chú:</span>
-                      <p className="text-xs text-gray-700 italic bg-white p-2 rounded border border-gray-200">
+                    <div className="flex flex-col py-1">
+                      <span className="text-gray-500 mb-0.5">Ghi chú:</span>
+                      <span className="text-gray-700 italic text-xs bg-white p-2 rounded border border-gray-200">
                         {note}
-                      </p>
+                      </span>
                     </div>
                   )}
                 </div>
 
-                <div className="flex items-start gap-2.5 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
+                <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800 flex items-start gap-2">
                   <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
                   <span>
-                    Tài liệu sẽ được quản trị viên khoa kiểm tra và phê duyệt trước khi xuất hiện công khai trên Kho học liệu cộng đồng.
+                    Tài liệu sẽ được gửi tới Ban quản trị khoa để duyệt trước khi xuất hiện công khai trên Kho học liệu cộng đồng.
                   </span>
                 </div>
 
@@ -389,6 +477,7 @@ export function ContributeModal({
                     type="button"
                     variant="outline"
                     onClick={() => setStep(1)}
+                    disabled={submitting}
                     icon={<ArrowLeft className="h-4 w-4" />}
                   >
                     Quay lại
@@ -396,11 +485,10 @@ export function ContributeModal({
                   <Button
                     type="button"
                     variant="primary"
-                    disabled={submitting}
                     onClick={handleSubmit}
-                    icon={<Upload className="h-4 w-4" />}
+                    disabled={submitting}
                   >
-                    {submitting ? "Đang gửi..." : "Gửi đóng góp"}
+                    {submitting ? "Đang gửi..." : "Xác nhận gửi đóng góp"}
                   </Button>
                 </div>
               </div>

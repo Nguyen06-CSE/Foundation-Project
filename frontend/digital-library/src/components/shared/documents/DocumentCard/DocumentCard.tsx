@@ -3,55 +3,24 @@
 import { Check } from "lucide-react";
 import { FileDocumentCard } from "./FileDocumentCard";
 import { BundleDocumentCard } from "./BundleDocumentCard";
+import { CommunityDocumentCard } from "./CommunityDocumentCard";
 import { cn } from "@/utils/cn";
-import type { FileTypeMap } from "@/components/shared/documents/FileIcon";
-import type { DocumentAction, DocumentMenuItem } from "@/components/shared/documents/DocumentContextMenu";
+import type {
+  DocumentItem,
+  DocumentCardProps,
+  DocumentTag,
+} from "./DocumentCard.types";
 
-// ======================================================
-// Types
-// ======================================================
-
-export interface DocumentTag {
-  id: number;
-  name: string;
-}
-
-export interface DocumentItem {
-  id: string;
-  name: string;
-  type: FileTypeMap | string;
-  updatedAt: string;
-  size: string;
-  extension?: string;
-  thumbnail_path?: string | null;
-  markdown_path?: string | null;
-  markdownPath?: string | null;
-  tags?: DocumentTag[];
-  is_bundle?: boolean;
-  bundle_parent_id?: number | null;
-  bundle_children_count?: number | null;
-  view_count?: number;
-  personal_view_count?: number;
-  trending_score?: number;
-  owner?: { name: string; avatar?: string };
-}
-
-export interface DocumentCardProps {
-  document: DocumentItem;
-  onAction: (action: DocumentAction | string, documentId: string) => void;
-  basePath?: string;
-  allowedActions?: DocumentAction[];
-  extraItems?: DocumentMenuItem[];
-  isSelected?: boolean;
-  onToggleSelect?: (id: string) => void;
-}
+export type { DocumentItem, DocumentCardProps, DocumentTag };
 
 // ======================================================
 // Main Router / Wrapper Component
 // ======================================================
 
 export function DocumentCard(props: DocumentCardProps) {
-  const { isSelected = false, onToggleSelect } = props;
+  const { isSelected = false, onToggleSelect, variant } = props;
+
+  const isCommunity = variant === "community" || props.document.rating_avg !== undefined;
 
   return (
     <div
@@ -78,7 +47,9 @@ export function DocumentCard(props: DocumentCardProps) {
           <Check className="h-3.5 w-3.5 stroke-[3]" />
         </button>
       )}
-      {props.document.is_bundle ? (
+      {isCommunity ? (
+        <CommunityDocumentCard {...props} />
+      ) : props.document.is_bundle ? (
         <BundleDocumentCard {...props} />
       ) : (
         <FileDocumentCard {...props} />
