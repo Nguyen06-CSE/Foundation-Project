@@ -21,6 +21,7 @@ Nếu bạn là người mới tiếp cận dự án, hãy tham khảo các tài
 * 🌟 **[Danh Sách Tính Năng Cốt Lõi (Key Features)](./overview/KEY_FEATURES.md):** Bản đồ kết nối 10 phân hệ nghiệp vụ chuyên sâu.
 * 🛡️ **[Vai Trò & Ma Trận Phân Quyền (User Roles & RBAC)](./overview/USER_ROLES_AND_PERMISSIONS.md):** Ma trận kiểm soát truy cập giữa Sinh viên, Giảng viên, Ban cán sự và Quản trị viên.
 * 📖 **[Từ Điển Thuật Ngữ (Glossary)](./overview/GLOSSARY.md):** Thống nhất các khái niệm: Fork/Clone, SHA-256 Deduplication, Trending Score, Soft Delete,...
+* 📋 **[Yêu Cầu & Nghiệp Vụ Cấp Sản Phẩm (Requirements)](./requirements/README.md):** Khảo sát mục tiêu kinh doanh (BRD), yêu cầu chức năng (FRD), phi chức năng (NFR), quy tắc nghiệp vụ dùng chung và 6 luồng Use Cases.
 
 ---
 
@@ -35,6 +36,13 @@ docs/
 │   ├── KEY_FEATURES.md             # Bản đồ 10 tính năng cốt lõi
 │   ├── USER_ROLES_AND_PERMISSIONS.md # Ma trận phân quyền RBAC
 │   └── GLOSSARY.md                 # Từ điển thuật ngữ chuẩn hóa
+├── requirements/                   # 📋 Phân hệ Yêu cầu & Nghiệp vụ (Giai đoạn 2)
+│   ├── README.md                   # Tổng quan quản lý yêu cầu & Implementation Gaps
+│   ├── BUSINESS_REQUIREMENTS.md    # Yêu cầu nghiệp vụ cấp cao (BRD) & KPIs
+│   ├── FUNCTIONAL_REQUIREMENTS.md  # Yêu cầu chức năng chi tiết (FRD)
+│   ├── NON_FUNCTIONAL_REQUIREMENTS.md # Yêu cầu phi chức năng (NFR & Security)
+│   ├── BUSINESS_RULES.md           # Quy tắc dùng chung cấp sản phẩm (Invariants)
+│   └── use-cases/                  # 6 luồng nghiệp vụ trọng yếu (Use Cases)
 ├── feat/                           # 🚀 Đặc tả kỹ thuật chi tiết của 10 tính năng (Giữ nguyên)
 │   ├── personal-dashboard/         # Trang tổng quan & kho lưu trữ cá nhân
 │   ├── community-library/          # Thư viện học liệu mở phân cấp theo Khoa & Môn học

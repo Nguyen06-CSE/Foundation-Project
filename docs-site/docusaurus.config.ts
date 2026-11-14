@@ -90,7 +90,7 @@ const config: Config = {
           items: [
             { label: 'Tổng Quan Dự Án', to: '/' },
             { label: 'Hướng Dẫn Phát Triển', to: '/LOCAL_DEVELOPMENT_GUIDE' },
-            { label: 'Deployment', to: '/deployment/README' },
+            { label: 'Deployment', to: '/deployment' },
           ],
         },
         {
