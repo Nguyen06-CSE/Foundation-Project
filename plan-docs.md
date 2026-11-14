@@ -31,22 +31,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 6 — API
 - *Trạng thái:* `[x] DONE` — Tạo `docs/api/` (README, API_CONVENTIONS, AUTHENTICATION, ERROR_HANDLING, API_CATALOG), trích xuất chuẩn `openapi.json` và `openapi.yaml` (128 endpoints thực tế) từ FastAPI runtime, cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 7 — Database và dữ liệu
-
-**Mục tiêu:** Tạo tài liệu tra cứu schema toàn hệ thống.
-
-**Tài liệu:**
-
-- `docs/data/README.md`
-- `DATABASE_OVERVIEW.md`
-- `DATA_DICTIONARY.md`
-- `ERD` hoặc sơ đồ quan hệ được tạo từ schema hiện hành.
-- `MIGRATIONS.md` nếu repository có lịch sử migration xác thực.
-- Chỉ mục tới SQL tham khảo và tài liệu database theo feature đang có.
-
-**Yêu cầu:** Xác định schema/migration nào là hiện hành; không coi mọi file SQL trong references là nguồn chuẩn. Kiểm tra quyền truy cập và dữ liệu nhạy cảm ở mức tài liệu.
-
-**Tiêu chí hoàn thành:** ERD và từ điển dữ liệu phản ánh schema hiện hành, ghi rõ điểm chưa chắc chắn.
+## [x] Giai đoạn 7 — Database và dữ liệu
+- *Trạng thái:* `[x] DONE` — Tạo `docs/data/` (README, DATABASE_OVERVIEW, DATA_DICTIONARY với đầy đủ 26 bảng, ERD với sơ đồ Mermaid, MIGRATIONS với chuỗi 7 revision Alembic và hướng dẫn lệnh), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 8 — Tài liệu feature mới và chỉ mục feature
 

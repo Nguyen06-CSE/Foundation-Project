@@ -119,6 +119,20 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+    // ── CƠ SỞ DỮ LIỆU & DỮ LIỆU ─────────────────────────────────────
+    {
+      type: 'category',
+      label: '🗄️ Cơ Sở Dữ Liệu',
+      collapsed: false,
+      items: [
+        'data/README',
+        'data/DATABASE_OVERVIEW',
+        'data/DATA_DICTIONARY',
+        'data/ERD',
+        'data/MIGRATIONS',
+      ],
+    },
+
     // ── ĐẶC TẢ TÍNH NĂNG ───────────────────────────────────────────
     {
       type: 'category',
