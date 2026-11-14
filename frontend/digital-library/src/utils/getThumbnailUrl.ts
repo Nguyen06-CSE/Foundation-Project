@@ -1,4 +1,4 @@
-export function getThumbnailUrl(path?: string | null): string | null {
+export function getThumbnailUrl(path?: string | null, version?: string | number | null): string | null {
   if (!path) return null;
   if (
     path.startsWith("data:") ||
@@ -7,11 +7,8 @@ export function getThumbnailUrl(path?: string | null): string | null {
   ) {
     return path;
   }
-  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) {
-    return path;
-  }
   
   const baseUrl = import.meta.env.VITE_API_URL || "";
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  return `${baseUrl}${cleanPath}?t=${Date.now()}`;
+  return version ? `${baseUrl}${cleanPath}?v=${version}` : `${baseUrl}${cleanPath}`;
 }

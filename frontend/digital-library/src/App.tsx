@@ -46,6 +46,8 @@ import { LibraryAdminStructure } from "@/pages/library/admin/LibraryAdminStructu
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 30 * 1000,
+      gcTime: 10 * 60 * 1000,
       refetchOnWindowFocus: false,
       retry: 1,
     },

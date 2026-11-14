@@ -54,6 +54,11 @@ export function DocumentsTab({
   members = [],
   selectedUploaderId,
   setSelectedUploaderId,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
+  isError,
+  total,
 }: DocumentsTabProps) {
   const [internalViewMode, setInternalViewMode] = useState<ViewMode>(
     (currentView as ViewMode) || "detail"
@@ -203,6 +208,11 @@ export function DocumentsTab({
         currentView={currentView}
         viewMode={internalViewMode}
         onViewModeChange={setInternalViewMode}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        fetchNextPage={fetchNextPage}
+        isError={isError}
+        total={total}
       />
     </div>
   );

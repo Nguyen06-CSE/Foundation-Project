@@ -1,5 +1,6 @@
 // src/pages/group/components/GroupDocumentCard.tsx
 
+import { memo } from "react";
 import { DocumentCard } from "@/components/shared/documents/DocumentCard";
 import type { DocumentAction, DocumentMenuItem } from "@/components/shared/documents/DocumentContextMenu";
 import { formatRelativeDate } from "@/utils/formatDate";
@@ -14,7 +15,7 @@ interface GroupDocumentCardProps {
   extraItems?: DocumentMenuItem[];
 }
 
-export function GroupDocumentCard({
+export const GroupDocumentCard = memo(function GroupDocumentCard({
   document,
   groupId,
   onDocumentAction,
@@ -55,4 +56,4 @@ export function GroupDocumentCard({
       extraItems={extraItems}
     />
   );
-}
+});

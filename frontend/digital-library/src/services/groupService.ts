@@ -1,7 +1,7 @@
 // frontend/digital-library/src/services/groupService.ts
 
 import api from "@/services/api";
-import type { Document, Folder, PaginatedDocuments } from "@/types/document";
+import type { Document, Folder, PaginatedDocuments, DocumentQueryParams } from "@/types/document";
 import type {
   GroupListItem,
   PermissionLevel,
@@ -35,7 +35,7 @@ export const groupService = {
 
   dissolve: (id: number) => api.delete(`/groups/${id}`),
 
-  getDocuments: (id: number, params?: { page?: number; folder_id?: number }) =>
+  getDocuments: (id: number, params?: DocumentQueryParams) =>
     api.get<PaginatedDocuments>(`/groups/${id}/documents/`, { params }).then((r) => r.data),
 
   uploadDocument: (id: number, formData: FormData) =>

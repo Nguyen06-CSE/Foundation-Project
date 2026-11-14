@@ -1,7 +1,15 @@
 // src/pages/personal/hooks/usePersonalDocuments.ts
-import { useState, useMemo } from "react";
+
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+  type InfiniteData,
+} from "@tanstack/react-query";
+import { useAuthStore } from "@/stores/authStore";
 import { documentService } from "@/services/documentService";
 import { activityService } from "@/services/activityService";
 import { invalidateDashboard } from "@/utils/dashboardUtils";
@@ -10,37 +18,8 @@ import { getFileExtension } from "@/utils/file";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import type { FolderType } from "../components/PersonalFoldersSection";
-import type { TabKey } from "@/hooks/useDocumentFilters";
-
-// --- HÀM HỖ TRỢ KIỂM TRA THỜI GIAN (ĐẶT BÊN NGOÀI HOOK) ---
-const isWithinTimeRange = (dateStr?: string | null, filter?: string | null): boolean => {
-  if (!filter || !dateStr) return true;
-
-  const targetDate = new Date(dateStr);
-  if (isNaN(targetDate.getTime())) return true;
-
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  switch (filter) {
-    case "today":
-      return targetDate >= startOfToday;
-    case "last_7_days": {
-      const sevenDaysAgo = new Date(startOfToday);
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-      return targetDate >= sevenDaysAgo;
-    }
-    case "last_30_days": {
-      const thirtyDaysAgo = new Date(startOfToday);
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      return targetDate >= thirtyDaysAgo;
-    }
-    case "this_year":
-      return targetDate.getFullYear() === now.getFullYear();
-    default:
-      return true;
-  }
-};
+import { useDocumentFilters } from "@/hooks/useDocumentFilters";
+import type { Document, PaginatedDocuments } from "@/types/document";
 
 export function usePersonalDocuments(
   selectedFolderId: number | null,
@@ -48,16 +27,21 @@ export function usePersonalDocuments(
 ) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const user = useAuthStore((s) => s.user);
 
-  // --- 1. STATES BỘ LỌC ---
-  const [activeTab, setActiveTab] = useState<TabKey>("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
-  const [selectedFileType, setSelectedFileType] = useState<string | null>(null);
+  // --- 1. HOOK QUẢN LÝ BỘ LỌC & QUERY STATE (SERVER-SIDE) ---
+  const filters = useDocumentFilters({
+    initialFolderId: selectedFolderId,
+    initialSort: "trending",
+  });
 
-  const [selectedUploadTime, setSelectedUploadTime] = useState<string | null>(null);
+  // Đồng bộ selectedFolderId từ props/URL
+  useEffect(() => {
+    filters.setSelectedFolderId(selectedFolderId);
+  }, [selectedFolderId]);
+
+  // Bộ lọc phụ client (Q3: Chia sẻ, truy cập gần đây)
   const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
-  const [selectedSort, setSelectedSort] = useState<string>("trending");
   const [selectedShareFilter, setSelectedShareFilter] = useState<string | null>(null);
 
   // --- 2. STATES GIAO DIỆN & MODAL ---
@@ -75,16 +59,80 @@ export function usePersonalDocuments(
     queryFn: () => documentService.getFileTypes(),
   });
 
-  const { data: docData, isLoading: docsLoading, isFetching } = useQuery({
-    queryKey: ["documents", selectedSort],
-    queryFn: () => documentService.getAll({ page: 1, page_size: 100, sort: selectedSort }),
+  // 3.2: useInfiniteQuery với page_size: 20 và toàn bộ bộ lọc trong queryKey
+  const {
+    data: infiniteData,
+    isLoading: docsLoading,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    isError,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["documents", "personal", user?.id, filters.queryParams],
+    queryFn: ({ pageParam = 1 }) =>
+      documentService.getAll({
+        ...filters.queryParams,
+        page: pageParam as number,
+        page_size: 20,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.has_more ? lastPage.page + 1 : undefined,
+    staleTime: 30 * 1000,
+    enabled: Boolean(user?.id),
   });
 
-  // --- 4. MUTATIONS ---
+  // Khử trùng (deduplicate) theo id khi gộp các trang
+  const rawDocuments = useMemo(() => {
+    if (!infiniteData?.pages) return [];
+    const seen = new Set<number>();
+    const result: Document[] = [];
+    for (const pageItem of infiniteData.pages) {
+      for (const item of pageItem.items) {
+        if (!seen.has(item.id)) {
+          seen.add(item.id);
+          result.push(item);
+        }
+      }
+    }
+    return result;
+  }, [infiniteData]);
+
+  const total = infiniteData?.pages[0]?.total ?? 0;
+
+  const docData = useMemo(
+    () => ({
+      items: rawDocuments,
+      total,
+      page: infiniteData?.pages.length ?? 1,
+      page_size: 20,
+      total_pages: Math.ceil(total / 20) || 1,
+      has_more: hasNextPage,
+    }),
+    [rawDocuments, total, infiniteData?.pages.length, hasNextPage]
+  );
+
+  // --- 4. MUTATIONS (TỐI ƯU VỚI setQueryData) ---
   const deleteMutation = useMutation({
     mutationFn: (id: string) => documentService.delete(Number(id)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    onSuccess: (_, deletedId) => {
+      // 3.5: Cập nhật trực tiếp các trang đã nạp bằng setQueriesData, tránh refetch toàn bộ
+      queryClient.setQueriesData<InfiniteData<PaginatedDocuments>>(
+        { queryKey: ["documents", "personal"] },
+        (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            pages: oldData.pages.map((p) => ({
+              ...p,
+              items: p.items.filter((doc) => doc.id.toString() !== deletedId.toString()),
+              total: Math.max(0, p.total - 1),
+            })),
+          };
+        }
+      );
       invalidateDashboard(queryClient);
     },
   });
@@ -92,8 +140,23 @@ export function usePersonalDocuments(
   const renameDocumentMutation = useMutation({
     mutationFn: ({ id, title }: { id: number | string; title: string }) =>
       documentService.update(Number(id), { title }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
+    onSuccess: (_, { id, title }) => {
+      // 3.5: Cập nhật trực tiếp tên trong cache bằng setQueriesData
+      queryClient.setQueriesData<InfiniteData<PaginatedDocuments>>(
+        { queryKey: ["documents", "personal"] },
+        (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            pages: oldData.pages.map((p) => ({
+              ...p,
+              items: p.items.map((doc) =>
+                doc.id.toString() === id.toString() ? { ...doc, title } : doc
+              ),
+            })),
+          };
+        }
+      );
       invalidateDashboard(queryClient);
       setIsRenameModalOpen(false);
       setRenamingDoc(null);
@@ -103,78 +166,81 @@ export function usePersonalDocuments(
   const uploadMutation = useMutation({
     mutationFn: (fd: FormData) => documentService.upload(fd),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      queryClient.invalidateQueries({ queryKey: ["documents", "personal"] });
       invalidateDashboard(queryClient);
     },
   });
 
   // --- 5. HANDLERS ---
-  const handleDocumentAction = (action: DocumentAction | string, documentId: string) => {
-    if (action === "view") {
-      navigate(`/ca-nhan/tai-lieu/${documentId}`);
-    } else if (action === "download") {
-      const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
-      if (targetDoc) {
-        activityService.downloadDocumentFile(targetDoc.id, targetDoc.title || "document").catch((err) => {
-          console.error("Lỗi khi tải file qua API, fallback:", err);
-          if (targetDoc.file_path) {
-            const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${targetDoc.file_path}`;
-            const link = document.createElement("a");
-            link.href = fileDownloadUrl;
-            link.download = targetDoc.title;
-            link.target = "_blank";
-            link.rel = "noreferrer";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
-        });
-      } else {
-        alert("Không tìm thấy thông tin tài liệu để tải xuống.");
+  const handleDocumentAction = useCallback(
+    (action: DocumentAction | string, documentId: string) => {
+      if (action === "view") {
+        navigate(`/ca-nhan/tai-lieu/${documentId}`);
+      } else if (action === "download") {
+        const targetDoc = rawDocuments.find((d) => d.id.toString() === documentId);
+        if (targetDoc) {
+          activityService.downloadDocumentFile(targetDoc.id, targetDoc.title || "document").catch((err) => {
+            console.error("Lỗi khi tải file qua API, fallback:", err);
+            if (targetDoc.file_path) {
+              const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${targetDoc.file_path}`;
+              const link = document.createElement("a");
+              link.href = fileDownloadUrl;
+              link.download = targetDoc.title;
+              link.target = "_blank";
+              link.rel = "noreferrer";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          });
+        } else {
+          alert("Không tìm thấy thông tin tài liệu để tải xuống.");
+        }
+      } else if (action === "download-markdown") {
+        const targetDoc = rawDocuments.find((d) => d.id.toString() === documentId);
+        const mdPath = targetDoc?.markdown_path;
+        if (mdPath) {
+          const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${mdPath}`;
+          const link = document.createElement("a");
+          link.href = fileDownloadUrl;
+          link.download = `${targetDoc.title || "document"}.md`;
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          alert("Tài liệu không có tệp Markdown để tải xuống.");
+        }
+      } else if (action === "share") {
+        const docToShare = rawDocuments.find((d) => d.id.toString() === documentId);
+        if (docToShare) {
+          setShareDoc({ id: docToShare.id, title: docToShare.title });
+        }
+      } else if (action === "rename") {
+        const docToRename = rawDocuments.find((d) => d.id.toString() === documentId);
+        if (docToRename) {
+          setRenamingDoc({ id: docToRename.id.toString(), title: docToRename.title });
+          setIsRenameModalOpen(true);
+        }
+      } else if (action === "contribute") {
+        const docToContribute = rawDocuments.find((d) => d.id.toString() === documentId);
+        if (docToContribute) {
+          setContributeDoc({ id: docToContribute.id, title: docToContribute.title });
+          setIsContributeModalOpen(true);
+        }
+      } else if (action === "delete") {
+        if (window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")) {
+          deleteMutation.mutate(documentId);
+        }
       }
-    } else if (action === "download-markdown") {
-      const targetDoc = docData?.items.find((d) => d.id.toString() === documentId);
-      const mdPath = targetDoc?.markdown_path;
-      if (mdPath) {
-        const fileDownloadUrl = `${import.meta.env.VITE_API_URL}/${mdPath}`;
-        const link = document.createElement("a");
-        link.href = fileDownloadUrl;
-        link.download = `${targetDoc.title || "document"}.md`;
-        link.target = "_blank";
-        link.rel = "noreferrer";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        alert("Tài liệu không có tệp Markdown để tải xuống.");
-      }
-    } else if (action === "share") {
-      const docToShare = docData?.items.find((d) => d.id.toString() === documentId);
-      if (docToShare) {
-        setShareDoc({ id: docToShare.id, title: docToShare.title });
-      }
-    } else if (action === "rename") {
-      const docToRename = docData?.items.find((d) => d.id.toString() === documentId);
-      if (docToRename) {
-        setRenamingDoc({ id: docToRename.id.toString(), title: docToRename.title });
-        setIsRenameModalOpen(true);
-      }
-    } else if (action === "contribute") {
-      const docToContribute = docData?.items.find((d) => d.id.toString() === documentId);
-      if (docToContribute) {
-        setContributeDoc({ id: docToContribute.id, title: docToContribute.title });
-        setIsContributeModalOpen(true);
-      }
-    } else if (action === "delete") {
-      if (window.confirm("Xóa tài liệu này? Bạn có thể khôi phục trong thùng rác.")) {
-        deleteMutation.mutate(documentId);
-      }
-    }
-  };
+    },
+    [navigate, rawDocuments, deleteMutation]
+  );
 
-  // --- 6. CHUẨN HÓA DỮ LIỆU ---
+  // --- 6. CHUẨN HÓA DỮ LIỆU HIỂN THỊ (DOC CARDS) ---
   const allDocCards = useMemo(() => {
-    return (docData?.items ?? []).map((doc) => {
+    return rawDocuments.map((doc) => {
       const meta = (doc as any).metadata ?? null;
       const sharedBy = meta?.shared_by;
       const sharerName = sharedBy
@@ -208,163 +274,89 @@ export function usePersonalDocuments(
         share_count: doc.share_count ?? 0,
         metadata: meta,
 
-        // LƯU CÁC MỐC THỜI GIAN ĐỂ PHỤC VỤ BỘ LỌC
         created_at: doc.created_at,
         last_accessed_at: (doc as any).last_accessed_at || (doc as any).updated_at || doc.created_at,
       };
     });
-  }, [docData]);
+  }, [rawDocuments]);
 
-  // --- 7. LOGIC TÌM KIẾM ĐA TRƯỜNG & BỘ LỌC TỐC ĐỘ CAO ---
-  const { filteredFolders, filteredDocuments } = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim();
+  // Lọc thư mục theo từ khóa tìm kiếm (Folders load độc lập nên vẫn filter nhẹ ở client)
+  const filteredFolders = useMemo(() => {
+    const q = filters.searchQuery.toLowerCase().trim();
+    return folders.filter((f) => (q ? f.name.toLowerCase().includes(q) : true));
+  }, [folders, filters.searchQuery]);
 
-    // A. Lọc Thư mục (Folders) theo từ khóa tìm kiếm
-    const matchedFolders = folders.filter((f) =>
-      query ? f.name.toLowerCase().includes(query) : true
-    );
-
-    const matchedFolderTagIds = new Set(
-      matchedFolders.flatMap((f) => (f.tags || []).map((t: any) => t.id ?? t.tag_id))
-    );
-    const matchedFolderIds = new Set(matchedFolders.map((f) => f.id));
-
-    // B. Lọc Tài liệu (Documents)
-    const matchedDocs = allDocCards.filter((doc) => {
-      // 1. Lọc theo Folder đang chọn
-      if (selectedFolderId !== null) {
-        const activeFolder = folders.find((f) => f.id === selectedFolderId);
-        const folderTagIds = activeFolder?.tags?.map((t: any) => t.id ?? t.tag_id) || [];
-        const belongsToFolder = doc.tags?.some((docTag: any) =>
-          folderTagIds.includes(docTag.id ?? docTag.tag_id)
-        );
-        if (!belongsToFolder && doc.folder_id !== selectedFolderId) {
-          return false;
-        }
-      }
-
-      // 2. Lọc theo Dropdown "Nhãn dán"
-      if (selectedTagId !== null) {
-        const hasTag = doc.tags?.some((t: any) => (t.id ?? t.tag_id) === selectedTagId);
-        if (!hasTag) return false;
-      }
-
-      // 3. Lọc theo Dropdown "Loại tài liệu"
-      if (selectedFileType !== null) {
-        if (doc.type !== selectedFileType && doc.rawType !== selectedFileType) {
-          return false;
-        }
-      }
-
-      // 4. Lọc theo Tabs loại tệp (PDF, Image, Docs...)
-      if (activeTab !== "all") {
-        const fileType = (doc.rawType || "").toLowerCase();
-        const ext = (doc.extension || "").toLowerCase();
-
-        if (activeTab === "pdf") {
-          if (!fileType.includes("pdf") && ext !== "pdf") return false;
-        } else if (activeTab === "image") {
-          if (!fileType.startsWith("image/") && !["jpg", "jpeg", "png", "webp", "svg"].includes(ext)) return false;
-        } else if (activeTab === "document") {
-          const isDoc =
-            fileType.includes("word") ||
-            fileType.includes("presentation") ||
-            fileType.includes("spreadsheet") ||
-            ["doc", "docx", "ppt", "pptx", "xls", "xlsx", "txt"].includes(ext);
-          if (!isDoc) return false;
-        } else if (activeTab === "other") {
-          const isKnown =
-            fileType.includes("pdf") ||
-            fileType.startsWith("image/") ||
-            fileType.includes("word") ||
-            fileType.includes("presentation") ||
-            fileType.includes("spreadsheet") ||
-            ["pdf", "jpg", "jpeg", "png", "webp", "doc", "docx", "ppt", "pptx", "xls", "xlsx"].includes(ext);
-          if (isKnown) return false;
-        }
-      }
-
-      // 5. Lọc theo THỜI GIAN TẢI LÊN (Upload Time)
-      if (!isWithinTimeRange(doc.created_at, selectedUploadTime)) {
-        return false;
-      }
-
-      // 6. Lọc theo THỜI GIAN TRUY CẬP (Access Time)
-      if (!isWithinTimeRange(doc.last_accessed_at, selectedAccessTime)) {
-        return false;
-      }
-
-      // 6b. Lọc theo NGUỒN CHIA SẺ (Đã chia sẻ / Nhận từ chia sẻ)
+  // Bộ lọc tài liệu đã được máy chủ thực hiện đầy đủ (Chỉ kèm fallback chia sẻ nếu chọn)
+  const filteredDocuments = useMemo(() => {
+    if (!selectedShareFilter) return allDocCards;
+    return allDocCards.filter((doc) => {
       if (selectedShareFilter === "shared_by_me") {
-        const isSharedByMe =
-          doc.metadata?.is_shared === true || (doc.share_count ?? 0) > 0;
-        if (!isSharedByMe) return false;
-      } else if (selectedShareFilter === "received_from_share") {
-        if (!doc.metadata?.shared_by) return false;
+        return doc.metadata?.is_shared === true || (doc.share_count ?? 0) > 0;
       }
-
-      // 7. Lọc theo TÌM KIẾM ĐA TRƯỜNG (Instant Search)
-      if (query) {
-        const matchName = doc.name.toLowerCase().includes(query);
-        const matchTag = doc.tags?.some((t: any) => t.name.toLowerCase().includes(query));
-
-        const matchFolder =
-          (doc.folder_id && matchedFolderIds.has(doc.folder_id)) ||
-          doc.tags?.some((t: any) => matchedFolderTagIds.has(t.id ?? t.tag_id));
-
-        if (!matchName && !matchTag && !matchFolder) return false;
+      if (selectedShareFilter === "received_from_share") {
+        return !!doc.metadata?.shared_by;
       }
-
       return true;
     });
-
-    return {
-      filteredFolders: matchedFolders,
-      filteredDocuments: matchedDocs,
-    };
-  }, [
-    allDocCards,
-    folders,
-    searchQuery,
-    selectedTagId,
-    selectedFileType,
-    activeTab,
-    selectedFolderId,
-    selectedUploadTime,
-    selectedAccessTime,
-    selectedShareFilter,
-  ]);
+  }, [allDocCards, selectedShareFilter]);
 
   return {
     // States
-    page, setPage,
-    isUploadOpen, setIsUploadOpen,
-    isRenameModalOpen, setIsRenameModalOpen,
-    renamingDoc, setRenamingDoc,
-    isContributeModalOpen, setIsContributeModalOpen,
-    contributeDoc, setContributeDoc,
-    shareDoc, setShareDoc,
-    activeTab, setActiveTab,
-    searchQuery, setSearchQuery,
-    selectedTagId, setSelectedTagId,
-    selectedFileType, setSelectedFileType,
+    page,
+    setPage,
+    isUploadOpen,
+    setIsUploadOpen,
+    isRenameModalOpen,
+    setIsRenameModalOpen,
+    renamingDoc,
+    setRenamingDoc,
+    isContributeModalOpen,
+    setIsContributeModalOpen,
+    contributeDoc,
+    setContributeDoc,
+    shareDoc,
+    setShareDoc,
 
-    selectedUploadTime,
-    setSelectedUploadTime,
+    // Filters (từ useDocumentFilters)
+    activeTab: filters.activeTab,
+    setActiveTab: filters.setActiveTab,
+    searchQuery: filters.searchQuery,
+    setSearchQuery: filters.setSearchQuery,
+    selectedTagId: filters.selectedTagId,
+    setSelectedTagId: filters.setSelectedTagId,
+    selectedFileType: filters.selectedFileType,
+    setSelectedFileType: filters.setSelectedFileType,
+    selectedUploadTime: filters.selectedUploadTime,
+    setSelectedUploadTime: filters.setSelectedUploadTime,
+    selectedSort: filters.selectedSort,
+    setSelectedSort: filters.setSelectedSort,
+
+    // Extra Filters
     selectedAccessTime,
     setSelectedAccessTime,
-    selectedSort,
-    setSelectedSort,
     selectedShareFilter,
     setSelectedShareFilter,
 
-    // Data (Đã lọc)
-    fileTypes, docData, docsLoading, isFetching,
+    // Data
+    fileTypes,
+    docData,
+    docsLoading,
+    isFetching,
     filteredFolders,
     filteredDocuments,
 
+    // Infinite Scroll Controls
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    isError,
+    refetch,
+    total,
+
     // Actions
-    deleteMutation, renameDocumentMutation, uploadMutation,
+    deleteMutation,
+    renameDocumentMutation,
+    uploadMutation,
     handleDocumentAction,
   };
 }

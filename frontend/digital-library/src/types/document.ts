@@ -68,4 +68,17 @@ export interface PaginatedDocuments {
   page: number;
   page_size: number;
   total_pages: number;
+  has_more?: boolean;
+}
+
+export interface DocumentQueryParams {
+  folder_id?: number;
+  q?: string;
+  tag_id?: number;
+  category?: string;
+  file_type?: string;
+  uploaded_within?: string;
+  sort?: string;
+  page?: number;
+  page_size?: number;
 }

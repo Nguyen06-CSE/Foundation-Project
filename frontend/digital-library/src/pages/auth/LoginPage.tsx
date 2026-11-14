@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useAuthStore } from "@/stores/authStore";
 import { authService } from "@/services/authService";
+import { useQueryClient } from "@tanstack/react-query";
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
@@ -32,6 +33,7 @@ const roleRoutes: Record<string, string> = {
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { setAuth, isAuthenticated } = useAuthStore();
 
   const [identifier, setIdentifier] = useState("");
@@ -76,6 +78,7 @@ export function LoginPage() {
     setIsLoading(true);
     try {
       const data = await authService.login({ identifier, password });
+      queryClient.clear();
       setAuth(data.access_token, data.user);
       
       const redirect = sessionStorage.getItem('redirect_after_login');

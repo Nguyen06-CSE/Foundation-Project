@@ -35,14 +35,24 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Đảm bảo thư mục lưu trữ thumbnail tồn tại và mount static path
+# Đảm bảo thư mục lưu trữ thumbnail tồn tại và mount static path kèm cache header
 os.makedirs("storage/thumbnails", exist_ok=True)
 os.makedirs("storage/personal", exist_ok=True)
 os.makedirs("storage/groups", exist_ok=True)
 os.makedirs("storage/orphaned", exist_ok=True)
 os.makedirs("storage/community", exist_ok=True)
 os.makedirs("storage/markdowns", exist_ok=True)
-app.mount("/storage", StaticFiles(directory="storage"), name="storage")
+
+class CachedStaticFiles(StaticFiles):
+    """Phục vụ file tĩnh kèm Cache-Control header chuẩn HTTP"""
+    def file_response(self, *args, **kwargs):
+        response = super().file_response(*args, **kwargs)
+        if response.status_code == 200:
+            # 3600s (1h) cân bằng giữa HTTP caching và làm mới khi file được update
+            response.headers["Cache-Control"] = "public, max-age=3600"
+        return response
+
+app.mount("/storage", CachedStaticFiles(directory="storage"), name="storage")
 
 app.add_middleware(
     CORSMiddleware,

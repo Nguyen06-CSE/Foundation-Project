@@ -1,5 +1,6 @@
 // frontend/digital-library/src/components/shared/FolderCard.tsx
 
+import { memo } from "react";
 import { Folder } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import {
@@ -27,7 +28,7 @@ export interface FolderCardProps {
   extraItems?: FolderMenuItem[];
 }
 
-export function FolderCard({
+export const FolderCard = memo(function FolderCard({
   id,
   name,
   count,
@@ -160,4 +161,4 @@ export function FolderCard({
       </div>
     </Card>
   );
-}
+});

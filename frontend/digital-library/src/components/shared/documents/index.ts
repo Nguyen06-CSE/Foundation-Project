@@ -10,3 +10,4 @@ export * from "./DocumentTypeTabs";
 export * from "./FileIcon";
 export * from './DocumentDetailView'
 export * from './documentView.types'
+export * from "./InfiniteScrollSentinel";

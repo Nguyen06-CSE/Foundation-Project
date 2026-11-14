@@ -1,5 +1,5 @@
 // src/pages/group/hooks/useGroupSpace.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import type { GroupTab } from "../types/groupSpace.types";
@@ -22,10 +22,7 @@ export function useGroupSpace() {
   // 1. Quản lý Dữ liệu nhóm & Thành viên
   const groupData = useGroupData(groupId);
 
-  // 2. Quản lý Tài liệu
-  const groupDocs = useGroupDocuments(groupId, !!groupData.workspace);
-
-  // 3. Quản lý Thư mục (Khởi tạo trước để lấy danh sách groupFolders.folders)
+  // 2. Quản lý Thư mục (Khởi tạo trước để lấy danh sách groupFolders.folders)
   const groupFolders = useGroupFolders(
     groupId,
     !!groupData.workspace,
@@ -36,8 +33,23 @@ export function useGroupSpace() {
     }
   );
 
-  // 4. Quản lý Bộ lọc & Instant Search (TRUYỀN ĐÚNG groupFolders.folders)
-  const groupFilters = useGroupFilters(groupDocs.documents, groupFolders.folders);
+  // 3. Quản lý Bộ lọc & Instant Search (Server-side queryParams)
+  const groupFilters = useGroupFilters(groupFolders.folders);
+
+  // 4. Quản lý Tài liệu với useInfiniteQuery và Server-side filtering
+  const groupDocs = useGroupDocuments(groupId, !!groupData.workspace, groupFilters.queryParams);
+
+  // Lọc tài liệu theo người tải lên (nếu người dùng chọn từ dropdown)
+  const filteredDocuments = useMemo(() => {
+    if (groupFilters.selectedUploaderId !== null) {
+      return groupDocs.documents.filter((doc: any) => {
+        const uploaderId =
+          doc.uploader_id ?? doc.user_id ?? doc.created_by ?? doc.uploaded_by ?? doc.owner?.id ?? doc.owner_id;
+        return Number(uploaderId) === Number(groupFilters.selectedUploaderId);
+      });
+    }
+    return groupDocs.documents;
+  }, [groupDocs.documents, groupFilters.selectedUploaderId]);
 
   // Guard điều hướng
   useEffect(() => {
@@ -57,11 +69,12 @@ export function useGroupSpace() {
     queryClient,
     shareModal,
     setShareModal,
-    
+
     ...groupData,
     ...groupDocs,
     ...groupFolders,
     ...groupFilters,
+    filteredDocuments,
 
     // Ghi đè hàm handleFolderAction để hỗ trợ setShareModal
     handleFolderAction: (action: any, folderId: number) =>

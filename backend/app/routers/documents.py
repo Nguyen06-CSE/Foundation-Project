@@ -63,6 +63,7 @@ from app.services.file_processor import (
     generate_markdown,
 )
 from app.services.folder_service import get_documents_by_folder
+from app.services.document_query_service import DocumentQueryService
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -450,6 +451,11 @@ async def get_bundle_children(
 async def list_documents(
     workspace_id: Optional[int] = Query(None),
     folder_id: Optional[int] = Query(None),
+    q: Optional[str] = Query(None),
+    tag_id: Optional[int] = Query(None),
+    category: Optional[str] = Query(None),
+    file_type: Optional[str] = Query(None),
+    uploaded_within: Optional[str] = Query(None),
     sort: str = Query("trending", pattern="^(trending|newest|views|title)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -460,142 +466,22 @@ async def list_documents(
         folder = await db.get(Folder, folder_id)
         if not folder or folder.owner_id != current_user.id:
             raise HTTPException(status_code=404, detail="Không tìm thấy thư mục")
-        folder_docs = await get_documents_by_folder(
-            db, current_user.id, folder_id, page, page_size, workspace_id=folder.workspace_id
-        )
-        items = folder_docs["items"]
-        bundle_ids = [d.id for d in items if getattr(d, "is_bundle", False)]
-        counts_map = {}
-        if bundle_ids:
-            counts_res = await db.execute(
-                select(Document.bundle_parent_id, func.count(Document.id))
-                .where(Document.bundle_parent_id.in_(bundle_ids), Document.is_deleted == False)
-                .group_by(Document.bundle_parent_id)
-            )
-            counts_map = dict(counts_res.all())
 
-        doc_ids = [d.id for d in items]
-        stats_map = {}
-        personal_views_map = {}
-        if doc_ids:
-            s_res = await db.execute(select(DocumentStats).where(DocumentStats.document_id.in_(doc_ids)))
-            stats_map = {s.document_id: s for s in s_res.scalars().all()}
-            p_res = await db.execute(
-                select(DownloadLog.document_id, func.count(DownloadLog.id))
-                .where(
-                    DownloadLog.document_id.in_(doc_ids),
-                    DownloadLog.user_id == current_user.id,
-                    DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
-                )
-                .group_by(DownloadLog.document_id)
-            )
-            personal_views_map = dict(p_res.all())
-
-        items_out = []
-        for doc in items:
-            doc_out = DocumentOut.model_validate(doc)
-            if doc.is_bundle:
-                doc_out.bundle_children_count = counts_map.get(doc.id, 0)
-            st = stats_map.get(doc.id)
-            doc_out.trending_score = float(st.trending_score) if st else 0.0
-            doc_out.view_count = int(st.view_count) if st else 0
-            doc_out.download_count = int(st.download_count) if st else 0
-            doc_out.share_count = int(st.share_count) if st else 0
-            doc_out.personal_view_count = int(personal_views_map.get(doc.id, 0))
-            items_out.append(doc_out)
-        return {
-            "items": items_out,
-            "total": folder_docs["total"],
-            "page": folder_docs["page"],
-            "page_size": folder_docs["page_size"],
-            "total_pages": folder_docs["total_pages"],
-        }
-
-    offset = (page - 1) * page_size
-
-    # Đã thêm Document.is_public == False để ngăn lấy tài liệu công khai đã được approve
-    query = (
-        select(Document, DocumentStats)
-        .outerjoin(DocumentStats, DocumentStats.document_id == Document.id)
-        .options(selectinload(Document.tags))
-        .where(
-            Document.owner_id == current_user.id,
-            Document.is_deleted == False,
-            Document.is_public == False,
-            Document.bundle_parent_id.is_(None),
-        )
+    return await DocumentQueryService.query_documents(
+        db,
+        current_user.id,
+        scope="personal",
+        workspace_id=workspace_id,
+        folder_id=folder_id,
+        q=q,
+        tag_id=tag_id,
+        category=category,
+        file_type=file_type,
+        uploaded_within=uploaded_within,
+        sort=sort,
+        page=page,
+        page_size=page_size,
     )
-    if workspace_id is not None:
-        query = query.where(Document.workspace_id == workspace_id)
-    else:
-        query = query.where(Document.workspace_id.is_(None))
-
-    count_result = await db.execute(select(func.count()).select_from(query.subquery()))
-    total = count_result.scalar() or 0
-
-    if sort == "newest":
-        query = query.order_by(Document.created_at.desc())
-    elif sort == "views":
-        query = query.order_by(
-            func.coalesce(DocumentStats.view_count, 0).desc(),
-            Document.created_at.desc(),
-        )
-    elif sort == "title":
-        query = query.order_by(Document.title.asc(), Document.created_at.desc())
-    else:  # "trending"
-        query = query.order_by(
-            func.coalesce(DocumentStats.trending_score, 0.0).desc(),
-            Document.created_at.desc(),
-        )
-
-    query = query.offset(offset).limit(page_size)
-    result = await db.execute(query)
-    rows = result.all()
-
-    items = [doc for doc, _ in rows]
-    bundle_ids = [d.id for d in items if d.is_bundle]
-    counts_map = {}
-    if bundle_ids:
-        counts_res = await db.execute(
-            select(Document.bundle_parent_id, func.count(Document.id))
-            .where(Document.bundle_parent_id.in_(bundle_ids), Document.is_deleted == False)
-            .group_by(Document.bundle_parent_id)
-        )
-        counts_map = dict(counts_res.all())
-
-    doc_ids = [d.id for d in items]
-    personal_views_map = {}
-    if doc_ids:
-        p_res = await db.execute(
-            select(DownloadLog.document_id, func.count(DownloadLog.id))
-            .where(
-                DownloadLog.document_id.in_(doc_ids),
-                DownloadLog.user_id == current_user.id,
-                DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
-            )
-            .group_by(DownloadLog.document_id)
-        )
-        personal_views_map = dict(p_res.all())
-
-    items_out = []
-    for doc, stats in rows:
-        doc_out = DocumentOut.model_validate(doc)
-        if doc.is_bundle:
-            doc_out.bundle_children_count = counts_map.get(doc.id, 0)
-        doc_out.trending_score = float(stats.trending_score) if stats else 0.0
-        doc_out.view_count = int(stats.view_count) if stats else 0
-        doc_out.download_count = int(stats.download_count) if stats else 0
-        doc_out.share_count = int(stats.share_count) if stats else 0
-        doc_out.personal_view_count = int(personal_views_map.get(doc.id, 0))
-        items_out.append(doc_out)
-
-    return {
-        "items": items_out,
-        "total": total,
-        "page": page,
-        "page_size": page_size,
-        "total_pages": (total + page_size - 1) // page_size if page_size else 1,
-    }
 
 
 @router.get("/file-types", response_model=list[str])

@@ -110,6 +110,10 @@ export function PersonalDocuments() {
     setSelectedShareFilter,
     filteredDocuments: filteredDocCards,
     filteredFolders,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    isError,
   } = usePersonalDocuments(selectedFolderId, folders);
 
   // 4. TỰ ĐỘNG BỎ LỌC NẾU THƯ MỤC ĐANG CHỌN BỊ XÓA KHỎI DANH SÁCH
@@ -202,6 +206,10 @@ export function PersonalDocuments() {
         isFilterActive={isFilterActive}
         searchQuery={searchQuery}
         selectedTagId={selectedTagId}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        fetchNextPage={fetchNextPage}
+        isError={isError}
       />
 
       {/* --- CÁC MODALS --- */}

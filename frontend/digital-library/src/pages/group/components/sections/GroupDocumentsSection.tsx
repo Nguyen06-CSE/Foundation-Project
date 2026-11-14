@@ -9,6 +9,7 @@ import {
   DocumentListView,
   DocumentDetailView,
   type DocumentListItem,
+  InfiniteScrollSentinel,
 } from "@/components/shared/documents";
 import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
 import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
@@ -33,6 +34,11 @@ export interface GroupDocumentsSectionProps {
   currentView?: "grid" | "list" | "detail";
   viewMode?: ViewMode;
   onViewModeChange?: (mode: ViewMode) => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  fetchNextPage?: () => void;
+  isError?: boolean;
+  total?: number;
 }
 
 function parseSizeToBytes(size?: string | number): number | undefined {
@@ -71,6 +77,11 @@ export function GroupDocumentsSection({
   currentView = "detail",
   viewMode: controlledViewMode,
   onViewModeChange: controlledOnViewModeChange,
+  hasNextPage,
+  isFetchingNextPage = false,
+  fetchNextPage = () => {},
+  isError = false,
+  total,
 }: GroupDocumentsSectionProps) {
   const [internalViewMode, setInternalViewMode] = useState<ViewMode>(
     (currentView as ViewMode) || "detail"
@@ -368,6 +379,15 @@ export function GroupDocumentsSection({
               onToggleSelect={toggleSelectDoc}
             />
           )}
+
+          {/* Infinite Scroll Sentinel */}
+          <InfiniteScrollSentinel
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+            isError={isError}
+            totalItems={total ?? documents.length}
+          />
         </>
       ) : (
         <EmptyState

@@ -1,5 +1,6 @@
 // src/components/shared/DocumentCard.tsx
 
+import { memo } from "react";
 import { Check } from "lucide-react";
 import { FileDocumentCard } from "./FileDocumentCard";
 import { BundleDocumentCard } from "./BundleDocumentCard";
@@ -50,7 +51,7 @@ export interface DocumentCardProps {
 // Main Router / Wrapper Component
 // ======================================================
 
-export function DocumentCard(props: DocumentCardProps) {
+export const DocumentCard = memo(function DocumentCard(props: DocumentCardProps) {
   const { isSelected = false, onToggleSelect } = props;
 
   return (
@@ -85,4 +86,4 @@ export function DocumentCard(props: DocumentCardProps) {
       )}
     </div>
   );
-}
+});

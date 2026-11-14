@@ -72,6 +72,7 @@ export function LibrarySubject() {
         doc_type: activeTab,
         academic_year: selectedYear,
       }),
+    staleTime: 20 * 1000, // 20s cho kho học liệu chung
     enabled: Boolean(sId),
   });
 

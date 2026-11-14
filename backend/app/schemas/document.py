@@ -110,6 +110,7 @@ class PaginatedDocuments(BaseModel):
     page: int
     page_size: int
     total_pages: int
+    has_more: bool = False
 
 
 class SkippedFileOut(BaseModel):

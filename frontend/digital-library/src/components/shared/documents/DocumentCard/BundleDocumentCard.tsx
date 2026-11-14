@@ -1,5 +1,6 @@
 // src/components/shared/BundleDocumentCard.tsx
 
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Package } from "lucide-react";
 import { DocumentContextMenu } from "@/components/shared/documents/DocumentContextMenu";
@@ -7,7 +8,7 @@ import type { DocumentCardProps } from "./DocumentCard";
 import { getActivityHeat } from "@/utils/activityHeat";
 import { cn } from "@/utils/cn";
 
-export function BundleDocumentCard({
+export const BundleDocumentCard = memo(function BundleDocumentCard({
   document,
   onAction,
   basePath = "/personal/documents",
@@ -146,4 +147,4 @@ export function BundleDocumentCard({
       </div>
     </div>
   );
-}
+});

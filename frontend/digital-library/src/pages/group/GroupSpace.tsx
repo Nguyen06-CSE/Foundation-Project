@@ -104,6 +104,11 @@ export default function GroupSpace() {
     selectedFolderId,
     handleSelectFolder,
     groups,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    isError,
+    total,
   } = useGroupSpace();
 
   useHighlightElement("highlight_doc");
@@ -253,6 +258,11 @@ export default function GroupSpace() {
           members={members}
           selectedUploaderId={selectedUploaderId}
           setSelectedUploaderId={setSelectedUploaderId}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+          isError={isError}
+          total={total}
         />
       )}
 

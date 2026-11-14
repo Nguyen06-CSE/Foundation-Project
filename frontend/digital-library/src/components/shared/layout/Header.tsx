@@ -83,6 +83,7 @@ export function Header({ scopeLabel, onMenuClick }: HeaderProps) {
   };
 
   const handleLogout = () => {
+    queryClient.clear();
     logout();
     navigate("/login");
   };

@@ -215,7 +215,9 @@ def create_thumbnail(file_path: str, mime_type: str, doc_id: int, page_number: i
             from pdf2image import convert_from_path
             images = convert_from_path(str(path), first_page=page_number, last_page=page_number, dpi=150)
             if images:
-                images[0].convert("RGB").save(str(out_path), "JPEG", quality=85)
+                pdf_img = images[0].convert("RGB")
+                pdf_img.thumbnail((400, 600))  # Giữ tỉ lệ, chiều rộng tối đa khoảng 400px
+                pdf_img.save(str(out_path), "JPEG", quality=85)
                 return f"storage/thumbnails/{doc_id}.jpg"
 
         elif group == "image":

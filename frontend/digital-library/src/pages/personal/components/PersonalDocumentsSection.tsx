@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FileX, LayoutGrid, CheckSquare } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { DocumentCard } from "@/components/shared/documents/DocumentCard";
 import { BundleExpandedFrame } from "./BundleExpandedFrame";
 import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
@@ -11,6 +10,7 @@ import {
   DocumentListView,
   DocumentDetailView,
   type DocumentListItem,
+  InfiniteScrollSentinel,
 } from "@/components/shared/documents";
 import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
 import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
@@ -66,6 +66,10 @@ interface PersonalDocumentsSectionProps {
   selectedTagId?: number | null;
   showOwner?: boolean;
   sectionTitle?: string;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  fetchNextPage?: () => void;
+  isError?: boolean;
 }
 
 /**
@@ -121,9 +125,9 @@ export function PersonalDocumentsSection({
   docsLoading,
   isFetching,
   filteredDocCards,
-  docData,
-  page,
-  setPage,
+  docData: _docData,
+  page: _page,
+  setPage: _setPage,
   onDocumentAction,
   onOpenUploadModal,
   CardSkeleton,
@@ -132,6 +136,10 @@ export function PersonalDocumentsSection({
   selectedTagId = null,
   showOwner = false,
   sectionTitle = "Tài liệu",
+  hasNextPage,
+  isFetchingNextPage = false,
+  fetchNextPage = () => {},
+  isError = false,
 }: PersonalDocumentsSectionProps) {
   const queryClient = useQueryClient();
   const [viewMode, setViewMode] = useState<ViewMode>("detail");
@@ -467,32 +475,14 @@ export function PersonalDocumentsSection({
         />
       )}
 
-      {/* Pagination */}
-      {docData && docData.total_pages > 1 && (
-        <div className="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm text-gray-600">
-          <span>
-            Trang {page} / {docData.total_pages} (Tổng {docData.total} tài liệu)
-          </span>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              ← Trước
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page === docData.total_pages}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Tiếp →
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Infinite Scroll Sentinel */}
+      <InfiniteScrollSentinel
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        fetchNextPage={fetchNextPage}
+        isError={isError}
+        totalItems={_docData?.total ?? filteredDocCards.length}
+      />
     </section>
   );
 }

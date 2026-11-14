@@ -1,15 +1,10 @@
 // frontend/digital-library/src/services/documentService.ts
 
 import api from '@/services/api'
-import type { PaginatedDocuments, Document } from '@/types/document'
+import type { PaginatedDocuments, Document, DocumentQueryParams } from '@/types/document'
 
 export const createDocumentService = (getBaseUrl: (groupId?: number | string) => string) => ({
-  getAll: (params?: {
-    folder_id?: number
-    page?: number
-    page_size?: number
-    sort?: string
-  }, groupId?: number | string) =>
+  getAll: (params?: DocumentQueryParams, groupId?: number | string) =>
     api.get<PaginatedDocuments>(`${getBaseUrl(groupId)}/`, { params })
       .then(r => r.data),
 

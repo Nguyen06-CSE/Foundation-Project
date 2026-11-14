@@ -1,6 +1,6 @@
 // src/components/shared/FileDocumentCard.tsx
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
@@ -178,7 +178,7 @@ const CODE_EXTENSIONS = [
 // Component
 // ======================================================
 
-export function FileDocumentCard({
+export const FileDocumentCard = memo(function FileDocumentCard({
   document,
   onAction,
   basePath = "/personal/documents",
@@ -328,6 +328,8 @@ export function FileDocumentCard({
                 <img
                   src={thumbnailUrl}
                   alt={document.name}
+                  loading="lazy"
+                  decoding="async"
                   onLoad={checkScrollable}
                   onError={() => setImageError(true)}
                   className="block h-auto w-full select-none object-contain"
@@ -338,6 +340,8 @@ export function FileDocumentCard({
               <img
                 src={thumbnailUrl}
                 alt={document.name}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
                 onError={() => setImageError(true)}
               />
@@ -531,4 +535,4 @@ export function FileDocumentCard({
         )}
     </>
   );
-}
+});

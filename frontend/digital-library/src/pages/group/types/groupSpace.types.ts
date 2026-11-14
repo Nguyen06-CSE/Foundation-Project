@@ -61,6 +61,11 @@ export interface GroupDocumentsSectionProps {
   currentView?: "grid" | "list" | "detail";
   viewMode?: ViewMode;
   onViewModeChange?: (mode: ViewMode) => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  fetchNextPage?: () => void;
+  isError?: boolean;
+  total?: number;
 }
 
 export interface DocumentsTabProps {
@@ -103,6 +108,11 @@ export interface DocumentsTabProps {
   members?: WorkspaceMember[] | any[];
   selectedUploaderId?: number | null;
   setSelectedUploaderId?: (id: number | null) => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  fetchNextPage?: () => void;
+  isError?: boolean;
+  total?: number;
 }
 
 export interface LocalGroupDocumentCardProps {

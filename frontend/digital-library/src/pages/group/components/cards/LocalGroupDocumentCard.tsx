@@ -1,6 +1,6 @@
 // frontend/digital-library/src/pages/group/components/LocalGroupDocumentCard.tsx
 
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
@@ -59,7 +59,7 @@ const DEFAULT_THEME = { bg: "bg-gray-50/70 hover:bg-gray-50", badgeBg: "bg-gray-
 // Component
 // ======================================================
 
-export default function LocalGroupDocumentCard({
+export default memo(function LocalGroupDocumentCard({
   document,
   permission,
   groupId,
@@ -285,4 +285,4 @@ export default function LocalGroupDocumentCard({
       </div>
     </div>
   );
-}
+});
