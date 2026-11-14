@@ -39,7 +39,7 @@ flowchart TD
 1. [Giới Thiệu Dự Án](./PROJECT_INTRODUCTION.md) — Hiểu bài toán sản phẩm và cấu trúc người dùng.
 2. [Phạm Vi & Ranh Giới](./PROJECT_SCOPE.md) — Nắm rõ những gì hệ thống hỗ trợ và giới hạn kỹ thuật.
 3. [Hướng Dẫn Phát Triển Local (Offline)](../LOCAL_DEVELOPMENT_GUIDE.md) — Thiết lập môi trường chạy độc lập không cần Cloud, kết nối Database cục bộ và khởi chạy Backend/Frontend.
-4. [Kiến Trúc Hệ Thống](../system-architecture/index.md) — Xem sơ đồ luồng dữ liệu (Dataflow) và kiến trúc tổng quan.
+4. [Kiến Trúc Hệ Thống](../system-architecture/README.md) — Xem sơ đồ luồng dữ liệu (Dataflow) và kiến trúc tổng quan.
 5. [Đặc Tả Tính Năng Cốt Lõi](../feat/document-query-and-performance/README.md) — Đọc chi tiết các module trong mục **Feature Specs** tương ứng với task được giao.
 
 ---

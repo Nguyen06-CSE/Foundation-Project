@@ -96,7 +96,7 @@ docs/
 ---
 
 ### 2. Kiến Trúc & Triển Khai Hạ Tầng
-* **[Kiến Trúc Hệ Thống Tổng Thể](./system-architecture/index.md):** Sơ đồ khối tương tác giữa React Client, FastAPI Server và Cloudflare R2 / Local Storage.
+* **[Kiến Trúc Hệ Thống Tổng Thể](./system-architecture/README.md):** Sơ đồ khối tương tác giữa React Client, FastAPI Server và Cloudflare R2 / Local Storage.
 * **[Chuyên Đề Kiến Trúc Lưu Trữ & Deduplication](./architecture/STORAGE_SYSTEM.md):** 11 chương phân tích cơ sở toán học SHA-256, tối ưu RAM, cơ chế dọn rác nền APScheduler.
 * **[Hướng Dẫn Vận Hành Offline (100% Localhost)](./LOCAL_DEVELOPMENT_GUIDE.md):** Thiết lập và chạy toàn bộ dự án offline phục vụ kiểm thử và chấm bài.
 * **[Tài Liệu Triển Khai (Deployment)](./deployment/README.md):** Cấu hình môi trường đám mây Cloudflare R2, cơ sở dữ liệu PostgreSQL Serverless.

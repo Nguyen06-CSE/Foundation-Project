@@ -2024,9 +2024,9 @@
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1794627570.8092806,
-    "seen": 1794627595.8120189,
-    "ast_hash": "27667cb37269d85a8832e10bb4f6b7b6",
+    "mtime": 1794628153.232508,
+    "seen": 1794628192.94626,
+    "ast_hash": "4300d7568c7e258989e5bfa8cd5b65b9",
     "semantic_hash": ""
   },
   "docs/architecture/STORAGE_SYSTEM.md": {
@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794627558.9165657,
-    "seen": 1794627595.802651,
-    "ast_hash": "a36938867fed11d05879c5b395fda6fc",
+    "mtime": 1794628135.4200406,
+    "seen": 1794628192.93908,
+    "ast_hash": "c3176b9146d1cea562ed25c8202c2b43",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3245,12 +3245,6 @@
     "mtime": 1793969748.9311035,
     "seen": 1794543497.16297,
     "ast_hash": "611233054dce7c30641f25674ea46727",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/index.md": {
-    "mtime": 1794627022.7704546,
-    "seen": 1794627595.813946,
-    "ast_hash": "7a1aad64ec3189483f213d5b4c6e79d7",
     "semantic_hash": ""
   },
   "docs-site/static/img/docusaurus-social-card.jpg": {
@@ -3392,9 +3386,9 @@
     "semantic_hash": ""
   },
   "docs/overview/README.md": {
-    "mtime": 1794626858.134495,
-    "seen": 1794627595.813525,
-    "ast_hash": "0889905948085dd1b1c7e95ee661fcb5",
+    "mtime": 1794628161.3474739,
+    "seen": 1794628192.947684,
+    "ast_hash": "ff701d5d3a5b606a7a737dca45e83a03",
     "semantic_hash": ""
   },
   "docs/overview/USER_ROLES_AND_PERMISSIONS.md": {
@@ -3473,6 +3467,96 @@
     "mtime": 1794627547.9046545,
     "seen": 1794627595.813791,
     "ast_hash": "ca4532668d37d518e658e43b8e167532",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/BACKEND_ARCHITECTURE.md": {
+    "mtime": 1794628001.7795823,
+    "seen": 1794628192.94822,
+    "ast_hash": "24a98ae2d4fd2108fb9bbe977e421920",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/DATABASE_ARCHITECTURE.md": {
+    "mtime": 1794628021.449814,
+    "seen": 1794628192.948221,
+    "ast_hash": "cd1d5f8c0a918de2d661d956c2a4c9b6",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/FRONTEND_ARCHITECTURE.md": {
+    "mtime": 1794627983.151685,
+    "seen": 1794628192.948222,
+    "ast_hash": "c238c96746fdd85dcb451a8205727f47",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/README.md": {
+    "mtime": 1794627910.5813868,
+    "seen": 1794628192.9482229,
+    "ast_hash": "4a49f8c204337eae7a0bd43496677380",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/SECURITY_ARCHITECTURE.md": {
+    "mtime": 1794628059.3695762,
+    "seen": 1794628192.948224,
+    "ast_hash": "2152c0881a1ecda48a7f79d088972796",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/STORAGE_ARCHITECTURE.md": {
+    "mtime": 1794628038.3405504,
+    "seen": 1794628192.948224,
+    "ast_hash": "266ab22ece633194dc8dec89ebdc3e85",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/SYSTEM_OVERVIEW.md": {
+    "mtime": 1794627933.329696,
+    "seen": 1794628192.948225,
+    "ast_hash": "2b1ac7131b6b17c1b77be4e6c9314eb7",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/TECHNOLOGY_STACK.md": {
+    "mtime": 1794627961.423425,
+    "seen": 1794628192.948226,
+    "ast_hash": "311d1bd6c554e41b22f22c4398c5b908",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/adr/ADR-001-HYBRID-STORAGE-R2-LOCAL.md": {
+    "mtime": 1794628079.5008101,
+    "seen": 1794628192.9482272,
+    "ast_hash": "89c5a95fb4cd0206e158118f26b4c86d",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/adr/ADR-002-DOCUMENT-CLONING-FORKING.md": {
+    "mtime": 1794628088.4125383,
+    "seen": 1794628192.9482281,
+    "ast_hash": "e433b00e5bd963b7de855fcdd2d47432",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/adr/ADR-003-POSTGRESQL-FULLTEXT-SEARCH.md": {
+    "mtime": 1794628098.9580383,
+    "seen": 1794628192.948229,
+    "ast_hash": "21b93b9b9f65cc8a2ebd53efa1b4a5b1",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/adr/ADR-004-CLIENT-SIDE-DOCUMENT-PREVIEW.md": {
+    "mtime": 1794628109.321159,
+    "seen": 1794628192.9482298,
+    "ast_hash": "2a25f1a027c238535d1e6d50602e66e0",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/adr/ADR-005-SHA256-DEDUPLICATION.md": {
+    "mtime": 1794628124.6571407,
+    "seen": 1794628192.948231,
+    "ast_hash": "5b66ba31f4b17f051e1d09f5f36caf7e",
+    "semantic_hash": ""
+  },
+  "docs/system-architecture/adr/README.md": {
+    "mtime": 1794628069.3802793,
+    "seen": 1794628192.948232,
+    "ast_hash": "4261757cdc336b04f72dd087206e2d5e",
+    "semantic_hash": ""
+  },
+  "plan-docs.md": {
+    "mtime": 1794628185.1821454,
+    "seen": 1794628192.948698,
+    "ast_hash": "6dd547f89882816ce021cd95b7d0307d",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {
