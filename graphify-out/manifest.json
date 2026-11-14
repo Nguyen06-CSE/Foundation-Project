@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794629362.3921528,
-    "seen": 1794629389.409685,
-    "ast_hash": "6788742e6584f1fda5d6e5f1a627ba7c",
+    "mtime": 1794629506.111898,
+    "seen": 1794629535.8440478,
+    "ast_hash": "cd5336a862340a3da548b8b32e691b8a",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3554,9 +3554,9 @@
     "semantic_hash": ""
   },
   "plan-docs.md": {
-    "mtime": 1794629382.5940378,
-    "seen": 1794629389.423244,
-    "ast_hash": "747b1e3e14f92756142a10b3c121b52b",
+    "mtime": 1794629529.095781,
+    "seen": 1794629535.858114,
+    "ast_hash": "e6fa5b5119abcf62d9adf12d5c190d1d",
     "semantic_hash": ""
   },
   "docs/development/DATABASE_SETUP.md": {
@@ -3719,6 +3719,42 @@
     "mtime": 1794629328.8963006,
     "seen": 1794629389.4228082,
     "ast_hash": "37326aac9bcbc94927a4f1dafb39ca20",
+    "semantic_hash": ""
+  },
+  "docs/security/AUTHORIZATION_AND_ACCESS_CONTROL.md": {
+    "mtime": 1794629446.2629867,
+    "seen": 1794629535.856941,
+    "ast_hash": "ce5371f8ca851d0f70442b3d3ce5a086",
+    "semantic_hash": ""
+  },
+  "docs/security/DATA_HANDLING.md": {
+    "mtime": 1794629476.7341552,
+    "seen": 1794629535.8569422,
+    "ast_hash": "d3cf502a29ba685d707e53d750a144e4",
+    "semantic_hash": ""
+  },
+  "docs/security/README.md": {
+    "mtime": 1794629413.463939,
+    "seen": 1794629535.8569431,
+    "ast_hash": "29b2511ac80da3f78d323214ffc697be",
+    "semantic_hash": ""
+  },
+  "docs/security/SECRETS_AND_CONFIGURATION.md": {
+    "mtime": 1794629461.0187712,
+    "seen": 1794629535.856944,
+    "ast_hash": "f35f83b1b75611480c81a721fd4278f8",
+    "semantic_hash": ""
+  },
+  "docs/security/SECURITY_OVERVIEW.md": {
+    "mtime": 1794629429.9463384,
+    "seen": 1794629535.8569448,
+    "ast_hash": "9387befc12a0ac426737640dacaf2431",
+    "semantic_hash": ""
+  },
+  "docs/security/SECURITY_REPORTING.md": {
+    "mtime": 1794629488.5409086,
+    "seen": 1794629535.856946,
+    "ast_hash": "29c066858fefd674a98d678a0d87fc3c",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {

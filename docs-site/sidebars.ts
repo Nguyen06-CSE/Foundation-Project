@@ -207,6 +207,21 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+    // ── AN NINH & BẢO MẬT ───────────────────────────────────────────
+    {
+      type: 'category',
+      label: '🛡️ An Ninh & Bảo Mật',
+      collapsed: false,
+      items: [
+        'security/README',
+        'security/SECURITY_OVERVIEW',
+        'security/AUTHORIZATION_AND_ACCESS_CONTROL',
+        'security/SECRETS_AND_CONFIGURATION',
+        'security/DATA_HANDLING',
+        'security/SECURITY_REPORTING',
+      ],
+    },
+
     // ── QUẢN LÝ DỰ ÁN ──────────────────────────────────────────────
     {
       type: 'category',

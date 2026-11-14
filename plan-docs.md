@@ -40,20 +40,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 9 — Kiểm thử và chất lượng
 - *Trạng thái:* `[x] DONE` — Tạo `docs/testing/` (README, TESTING_STRATEGY, RUNNING_TESTS, TEST_CASES ánh xạ 6 Use Cases, QUALITY_AND_KNOWN_LIMITATIONS phân tích trung thực khoảng trống và lộ trình), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 10 — Bảo mật và quyền riêng tư
-
-**Mục tiêu:** Tập hợp thông tin bảo mật thành tài liệu dễ tra cứu; nội dung nền tảng đã được xem xét từ giai đoạn 2, 3, 6 và 7.
-
-**Tài liệu:**
-
-- `docs/security/README.md`
-- `SECURITY_OVERVIEW.md`
-- `AUTHORIZATION_AND_ACCESS_CONTROL.md`
-- `SECRETS_AND_CONFIGURATION.md`
-- `DATA_HANDLING.md`
-- `SECURITY_REPORTING.md` nếu đã xác nhận kênh/quy trình báo cáo.
-
-**Tiêu chí hoàn thành:** Mô tả đúng biện pháp hiện có, giới hạn và điểm cần xử lý; không để lộ bí mật. Quy trình chưa có phải được đánh dấu cần nhóm quyết định.
+## [x] Giai đoạn 10 — Bảo mật và quyền riêng tư
+- *Trạng thái:* `[x] DONE` — Tạo `docs/security/` (README, SECURITY_OVERVIEW, AUTHORIZATION_AND_ACCESS_CONTROL, SECRETS_AND_CONFIGURATION, DATA_HANDLING, SECURITY_REPORTING), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 11 — Quy chuẩn duy trì tài liệu
 
