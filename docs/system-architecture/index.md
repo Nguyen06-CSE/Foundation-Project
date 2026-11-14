@@ -28,6 +28,6 @@ Tổng quan kiến trúc tổng thể và luồng dữ liệu của hệ thống
 
 ## Tài Liệu Liên Quan
 
-- [Hệ Thống Lưu Trữ (Storage System)](../architecture/STORAGE_SYSTEM) — Chi tiết về Storage architecture
-- [Deployment & Storage R2](../deployment/STORAGE_R2) — Cấu hình Cloudflare R2
-- [Biến Môi Trường](../deployment/ENV_VARIABLES) — Danh sách environment variables
+- [Hệ Thống Lưu Trữ (Storage System)](../architecture/STORAGE_SYSTEM.md) — Chi tiết về Storage architecture
+- [Deployment & Storage R2](../deployment/STORAGE_R2.md) — Cấu hình Cloudflare R2
+- [Biến Môi Trường](../deployment/ENV_VARIABLES.md) — Danh sách environment variables
