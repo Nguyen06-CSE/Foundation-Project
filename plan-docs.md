@@ -43,19 +43,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 10 — Bảo mật và quyền riêng tư
 - *Trạng thái:* `[x] DONE` — Tạo `docs/security/` (README, SECURITY_OVERVIEW, AUTHORIZATION_AND_ACCESS_CONTROL, SECRETS_AND_CONFIGURATION, DATA_HANDLING, SECURITY_REPORTING), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 11 — Quy chuẩn duy trì tài liệu
-
-**Mục tiêu:** Đặt quy ước chính thức để tài liệu được cập nhật nhất quán.
-
-**Tài liệu:**
-
-- `docs/DOCUMENTATION_GUIDE.md`
-- `docs/templates/FEATURE_TEMPLATE.md` — dùng cho feature mới, không dùng để sửa nội dung hiện có trong `docs/feat/`.
-- `ADR_TEMPLATE.md`
-- `TEST_CASE_TEMPLATE.md`
-- Quy ước trạng thái tài liệu, nguồn chuẩn, liên kết code/API/schema và quy trình cập nhật docs cùng thay đổi sản phẩm.
-
-**Tiêu chí hoàn thành:** Người đóng góp biết cách tạo tài liệu mới và cập nhật đúng nguồn mà không sao chép nội dung từ nơi khác.
+## [x] Giai đoạn 11 — Quy chuẩn duy trì tài liệu
+- *Trạng thái:* `[x] DONE` — Tạo `docs/DOCUMENTATION_GUIDE.md` và 3 biểu mẫu chuẩn hóa trong `docs/templates/` (`FEATURE_TEMPLATE.md`, `ADR_TEMPLATE.md`, `TEST_CASE_TEMPLATE.md`), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 12 — Tích hợp website và duyệt cuối
 

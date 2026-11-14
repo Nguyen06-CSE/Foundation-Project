@@ -222,6 +222,19 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+    // ── QUY CHUẨN & BIỂU MẪU ───────────────────────────────────────
+    {
+      type: 'category',
+      label: '📐 Quy Chuẩn & Biểu Mẫu',
+      collapsed: false,
+      items: [
+        'DOCUMENTATION_GUIDE',
+        'templates/FEATURE_TEMPLATE',
+        'templates/ADR_TEMPLATE',
+        'templates/TEST_CASE_TEMPLATE',
+      ],
+    },
+
     // ── QUẢN LÝ DỰ ÁN ──────────────────────────────────────────────
     {
       type: 'category',

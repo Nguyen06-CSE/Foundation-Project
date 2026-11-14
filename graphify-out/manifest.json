@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794629506.111898,
-    "seen": 1794629535.8440478,
-    "ast_hash": "cd5336a862340a3da548b8b32e691b8a",
+    "mtime": 1794629613.7588253,
+    "seen": 1794629659.667941,
+    "ast_hash": "0e664ef43dae8180affbb0fd4b6819cb",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3554,9 +3554,9 @@
     "semantic_hash": ""
   },
   "plan-docs.md": {
-    "mtime": 1794629529.095781,
-    "seen": 1794629535.858114,
-    "ast_hash": "e6fa5b5119abcf62d9adf12d5c190d1d",
+    "mtime": 1794629651.5892935,
+    "seen": 1794629659.679878,
+    "ast_hash": "427e603c53935f458e51c4f006716623",
     "semantic_hash": ""
   },
   "docs/development/DATABASE_SETUP.md": {
@@ -3755,6 +3755,30 @@
     "mtime": 1794629488.5409086,
     "seen": 1794629535.856946,
     "ast_hash": "29c066858fefd674a98d678a0d87fc3c",
+    "semantic_hash": ""
+  },
+  "docs/DOCUMENTATION_GUIDE.md": {
+    "mtime": 1794629564.3086364,
+    "seen": 1794629659.675475,
+    "ast_hash": "d5ba32ccb99c8875b043e1c1dfacf517",
+    "semantic_hash": ""
+  },
+  "docs/templates/ADR_TEMPLATE.md": {
+    "mtime": 1794629590.0242624,
+    "seen": 1794629659.679088,
+    "ast_hash": "0934d86a5d3cf970d6d0cc14666c063d",
+    "semantic_hash": ""
+  },
+  "docs/templates/FEATURE_TEMPLATE.md": {
+    "mtime": 1794629577.502135,
+    "seen": 1794629659.6790888,
+    "ast_hash": "79bc3648d1a1c21dd0c87583e7e9e120",
+    "semantic_hash": ""
+  },
+  "docs/templates/TEST_CASE_TEMPLATE.md": {
+    "mtime": 1794629630.1776984,
+    "seen": 1794629659.67909,
+    "ast_hash": "215532cf7310a2c0cbeedc6e60d0b6e9",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {
