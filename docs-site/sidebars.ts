@@ -193,6 +193,20 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+    // ── KIỂM THỬ & CHẤT LƯỢNG ──────────────────────────────────────
+    {
+      type: 'category',
+      label: '🧪 Kiểm Thử & Chất Lượng',
+      collapsed: false,
+      items: [
+        'testing/README',
+        'testing/TESTING_STRATEGY',
+        'testing/RUNNING_TESTS',
+        'testing/TEST_CASES',
+        'testing/QUALITY_AND_KNOWN_LIMITATIONS',
+      ],
+    },
+
     // ── QUẢN LÝ DỰ ÁN ──────────────────────────────────────────────
     {
       type: 'category',

@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794629159.337043,
-    "seen": 1794629204.123914,
-    "ast_hash": "ed06988924c559db1740295135027740",
+    "mtime": 1794629362.3921528,
+    "seen": 1794629389.409685,
+    "ast_hash": "6788742e6584f1fda5d6e5f1a627ba7c",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3554,9 +3554,9 @@
     "semantic_hash": ""
   },
   "plan-docs.md": {
-    "mtime": 1794629196.935038,
-    "seen": 1794629204.136183,
-    "ast_hash": "652bb2fa933661e52d3361b94ba40087",
+    "mtime": 1794629382.5940378,
+    "seen": 1794629389.423244,
+    "ast_hash": "747b1e3e14f92756142a10b3c121b52b",
     "semantic_hash": ""
   },
   "docs/development/DATABASE_SETUP.md": {
@@ -3689,6 +3689,36 @@
     "mtime": 1794629175.5961664,
     "seen": 1794629204.133157,
     "ast_hash": "d6fc552bdc7f2925218585427b32a915",
+    "semantic_hash": ""
+  },
+  "docs/testing/QUALITY_AND_KNOWN_LIMITATIONS.md": {
+    "mtime": 1794629347.7593575,
+    "seen": 1794629389.422803,
+    "ast_hash": "4b201db7d0602eb50abab4713ba50687",
+    "semantic_hash": ""
+  },
+  "docs/testing/README.md": {
+    "mtime": 1794629277.0080159,
+    "seen": 1794629389.422805,
+    "ast_hash": "d6ac7a69bd2cf9742eb563d07dad8a3c",
+    "semantic_hash": ""
+  },
+  "docs/testing/RUNNING_TESTS.md": {
+    "mtime": 1794629305.532874,
+    "seen": 1794629389.422806,
+    "ast_hash": "c184140e1428c09c234f64ef03ad92bc",
+    "semantic_hash": ""
+  },
+  "docs/testing/TESTING_STRATEGY.md": {
+    "mtime": 1794629291.9582853,
+    "seen": 1794629389.422807,
+    "ast_hash": "f5068926520faa195dba136c03fe2f3d",
+    "semantic_hash": ""
+  },
+  "docs/testing/TEST_CASES.md": {
+    "mtime": 1794629328.8963006,
+    "seen": 1794629389.4228082,
+    "ast_hash": "37326aac9bcbc94927a4f1dafb39ca20",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {

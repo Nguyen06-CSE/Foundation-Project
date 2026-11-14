@@ -37,19 +37,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 8 — Tài liệu feature mới và chỉ mục feature
 - *Trạng thái:* `[x] DONE` — Tạo `docs/feat/README.md` làm danh mục chỉ mục tổng thể cho 10 phân hệ tính năng, liên kết chéo với `KEY_FEATURES.md`, bảo toàn 100% nguyên vẹn cấu trúc và file hiện có trong `docs/feat/`, cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 9 — Kiểm thử và chất lượng
-
-**Mục tiêu:** Mô tả cách kiểm tra chất lượng dựa trên test và quy trình thực tế.
-
-**Tài liệu:**
-
-- `docs/testing/README.md`
-- `TESTING_STRATEGY.md`
-- `RUNNING_TESTS.md`
-- Test case theo use case/feature nếu có căn cứ.
-- `QUALITY_AND_KNOWN_LIMITATIONS.md`
-
-**Tiêu chí hoàn thành:** Phân biệt rõ kiểm thử đang tồn tại, phạm vi đã chạy, khoảng trống và kế hoạch. Không khẳng định có kiểm thử nếu chưa xác minh.
+## [x] Giai đoạn 9 — Kiểm thử và chất lượng
+- *Trạng thái:* `[x] DONE` — Tạo `docs/testing/` (README, TESTING_STRATEGY, RUNNING_TESTS, TEST_CASES ánh xạ 6 Use Cases, QUALITY_AND_KNOWN_LIMITATIONS phân tích trung thực khoảng trống và lộ trình), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 10 — Bảo mật và quyền riêng tư
 

@@ -1,43 +1,43 @@
 # Graph Report - Foundation-Project  (2026-11-14)
 
 ## Corpus Check
-- 489 files · ~469,955 words
+- 494 files · ~474,006 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 12 file(s) not represented in the graph (top: (none) 5, .css 3, .example 1)
 
 ## Summary
-- 3733 nodes · 9307 edges · 213 communities (185 shown, 28 thin omitted)
-- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 952 edges (avg confidence: 0.95)
+- 3790 nodes · 9374 edges · 244 communities (211 shown, 33 thin omitted)
+- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 954 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c508633c`
+- Built from commit: `c0d31dec`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - pydantic
-- Shared components
-- User
+- activityService.ts
+- 4. 🏛️ Thư Viện Cộng Đồng & Học Thuật (Community Library & Academics)
 - User
 - App.tsx
 - sqlalchemy
 - routers/auth.py
 - DocumentDetail/DocumentDetail.tsx
-- hard_delete_document
+- scheduler.py
 - documents.py
 - groupSpace.types.ts
-- PersonalDocuments.tsx
+- react
 - group.py
 - docs-site/package.json
 - workspace_tags.py
-- Card
+- Button
 - with
-- get_my_stats
+- categories.py
 - compilerOptions
 - _process_document_background
 - Troubleshooting: Các Sự Cố Đã Gặp & Giải Pháp Triệt Để
-- cn
+- PersonalDocuments.tsx
 - TrashTab.tsx
 - frontend/package.json
 - DocumentOut
@@ -48,17 +48,17 @@
 - ⚡ Khởi Động Nhanh Trong 5 Bước (Quick Start)
 - components.json
 - implementation.md
-- schemas/library.py
+- get
 - 2. Implemented Features & Completed Tasks
 - seed_incremental.py
 - AsyncSession
-- database.py
-- schemas/tag.py
+- workspace_tags.py
+- schemas/document.py
 - PROJECT_STATUS_REPORT.md
 - env.py
 - compilerOptions
 - PHẦN I: NỀN TẢNG LÝ THUYẾT VỀ LƯU TRỮ FILE VÀ HỆ THỐNG TỆP
-- 2. PHÂN TÍCH 5 KỊCH BẢN CỤ THỂ THEO ĐÚNG YÊU CẦU CỦA BẠN
+- CodeViewer
 - SearchService
 - STORAGE_SYSTEM.md
 - Đặc Tả Tính Năng: Xem Trước Đa Định Dạng & Tùy Chỉnh Ảnh Bìa (Document Preview & Cover Management)
@@ -106,11 +106,11 @@
 - Quy Tắc Nghiệp Vụ: Preview & Thumbnail Management
 - 🚀 Hướng Dẫn Triển Khai Thực Tế (Production Deployment Guide)
 - 📊 Project Progress & Status Report
-- test_storage_dedup.py
+- Hướng Dẫn Triển Khai & Cấu Hình Cloudflare R2 Storage (S3-Compatible)
 - 2. Thiết Lập Trigger Full-Text Search (FTS) Cho File Mã Nguồn
 - SettingsPage.tsx
 - design-from-figma.md
-- schemas/user.py
+- Header.tsx
 - 2. Kế Hoạch Khôi Phục Khẩn Cấp (Emergency Rollback Protocol)
 - 2. Chi Tiết Từng Endpoint
 - 20.4. Trang chi tiết tài liệu
@@ -121,7 +121,7 @@
 - API Endpoints: Document Bundle
 - 48. Kiểm thử luồng 1 — Guest
 - Từ Điển Dữ Liệu Chi Tiết (Data Dictionary)
-- Hướng Dẫn Kiến Trúc & Triển Khai Hệ Thống Lưu Trữ (Storage Deployment Architecture)
+- PdfViewer
 - 2. Bảo Mật & Quyền Riêng Tư (Security & Privacy Specifications)
 - Bổ sung Phân rã Chức năng: Document Sharing & Favorites
 - 🚀 Quy Trình Phát Triển & Chuẩn Mực Mã Nguồn (Development Workflow)
@@ -129,7 +129,7 @@
 - 2. Cẩm Nang Lệnh Vận Hành Alembic
 - 2. Hướng Dẫn Cài Đặt Từng Nền Tảng
 - BÁO CÁO KỸ THUẬT: KHẮC PHỤC LỖI ĐẾM SỐ LƯỢNG TÀI LIỆU KHO HỌC LIỆU CỘNG ĐỒNG
-- react
+- RecipientPicker.tsx
 - Component Inventory
 - Danh sách màn hình (map với ảnh trong docs/design-reference/)
 - DocumentCard
@@ -159,7 +159,7 @@
 - folders.py
 - 4. Chi Tiết Kỹ Thuật Từng Thành Phần
 - Cấu trúc Components
-- test_new_features.py
+- verify_faculty_access
 - 5. Cụm Hoạt Động & Cá Nhân Hóa
 - 3.1. Backend (FastAPI + PostgreSQL)
 - 2. Chi tiết Request & Response
@@ -181,15 +181,16 @@
 - API: Đặc Tả Endpoint Truy Vấn & Phân Trang Tài Liệu
 - test_register_and_login
 - sidebars.ts
-- Danh Mục Đặc Tả Tính Năng (Feature Specifications Index)
+- Cẩm Nang Xử Lý Sự Cố Chuyên Sâu (Deep Dive Troubleshooting & Postmortem Guide)
 - Quy Chuẩn Xử Lý Lỗi API (Error Handling)
 - System Enhancements (Quản trị, Thông báo, Việc cần làm, Thao tác hàng loạt & Quản lý Nhãn)
 - CachedStaticFiles
 - 2. Mục Tiêu & Giải Pháp Đột Phá Của Hệ Thống
-- Chia sẻ tài liệu (Copy-on-Accept)
-- tailwindcss
+- useDebounce
+- testing/README.md
 - 📤 UC-01: Tải Lên Tài Liệu & Kiểm Tra Trùng Lặp (Upload & Deduplication)
 - 🗑️ UC-05: Vòng Đời Thùng Rác & Tự Động Dọn Dẹp (Trash Lifecycle & Purge)
+- Cẩm Nang Thực Thi Kiểm Thử (Running Tests Guide)
 - 2. Danh Mục 20 Bảng Dữ Liệu Theo Phân Cụm Chức Năng
 - workspaceService.ts
 - 1. Phạm Vi Triển Khai Đã Xác Nhận (In-Scope)
@@ -199,17 +200,44 @@
 - 📚 Cổng Thông Tin & Tài Liệu Dự Án Thư Viện Số
 - 🔍 UC-04: Tìm Kiếm Toàn Văn & Xem Trước Đa Định Dạng (Search & Preview)
 - 🔗 UC-03: Nhân Bản Tài Liệu & Cơ Chế Chia Sẻ (Forking & Sharing)
-- ref_lucide_react
+- Danh Mục Ca Kiểm Thử Trọng Yếu (Test Cases Matrix)
 - 1. Cài Đặt Môi Trường & Thư Viện Phụ Thuộc
-- DocumentQueryService
+- seed_inc_user.py
 - data/README.md
-- 4. Phân Hệ Kho Học Liệu Cộng Đồng (Community Library)
+- 2. Các Giới Hạn Đã Biết (Known Limitations)
 - clsx
 - 3. Cụm Phân Loại & Cây Thư Mục
 - 8. Các Tính Năng Đang Trong Quá Trình Hoàn Thiện (Implementation Gaps)
 - 2. Phân Vùng 5 Cụm Dữ Liệu Logic (Data Clusters)
 - system-architecture/README.md
 - Sơ Đồ Thực Thể Quan Hệ (Entity Relationship Diagram - ERD)
+- 93f46eb359df_add_workspace_tags_table.py
+- get_file_url
+- 3.1. Backend (FastAPI + PostgreSQL)
+- api.ts
+- shareService.ts
+- 2. Chi Tiết Từng Endpoint
+- 📦 Kiến Trúc Lưu Trữ Bền Vững (Storage Architecture)
+- 📜 ADR-002: Lựa Chọn Mô Hình Nhân Bản Độc Lập (Document Cloning / Forking)
+- 1. Sự Cố 1: Lỗi 404 Do Trình Duyệt Gửi Request File Tương Đối Tới Backend
+- 10. Thông tin khi đóng góp
+- 2. Bảo Mật & Quyền Riêng Tư (Security & Privacy Specifications)
+- 👥 UC-06: Cộng Tác Không Gian Nhóm Học Tập (Group Collaboration)
+- 📜 ADR-001: Lựa Chọn Kiến Trúc Lưu Trữ Lai (Cloudflare R2 + Local Filesystem)
+- 📜 ADR-004: Dựng Hình Xem Trước Tài Liệu Phía Trình Duyệt (Client-Side Preview)
+- 📜 ADR-005: Lựa Chọn Thuật Toán SHA-256 Để Nhận Diện Trùng Lặp (Deduplication)
+- 2. Phân Hệ Kho Cá Nhân (Personal Space)
+- 📋 Tổng Quan Yêu Cầu & Nghiệp Vụ Hệ Thống (Requirements Overview)
+- 🏛️ UC-02: Đóng Góp & Thẩm Định Học Liệu Cộng Đồng (Submission & Moderation)
+- get_classes
+- 11. Trạng thái tài liệu đóng góp
+- 19. Bộ lọc tài liệu
+- 22. Thông báo
+- 8. Cấu trúc phân cấp
+- 3. Phân Hệ Không Gian Nhóm (Group Workspace)
+- 7. Phân Hệ Vòng Đời Dữ Liệu & Thống Kê (Lifecycle & Analytics)
+- MÔ TẢ CHỨC NĂNG — KHO HỌC LIỆU CỘNG ĐỒNG
+- 4. Phân quyền
 
 ## God Nodes (most connected - your core abstractions)
 1. `User` - 124 edges
@@ -224,33 +252,33 @@
 10. `TimestampMixin` - 41 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `1.1. Các Phân Hệ Được Kiểm Thử Tốt (High Coverage & Stable)` --references--> `role_rank()`  [INFERRED]
+  docs/testing/QUALITY_AND_KNOWN_LIMITATIONS.md → backend/app/core/roles.py
+- `TC-SHARE-01: Giảng viên chia sẻ tài liệu cho Sinh viên (Tự động duyệt)` --references--> `is_auto_accept()`  [INFERRED]
+  docs/testing/TEST_CASES.md → backend/app/core/roles.py
 - `2.4. Khóa dòng Row-Level Locking: `SELECT ... FOR UPDATE`` --references--> `DocumentShare`  [INFERRED]
   docs/feat/document-sharing/DATABASE.md → backend/app/models/document_share.py
-- `Kỹ thuật tối ưu mới trong `DocumentQueryService`` --references--> `DocumentQueryService`  [INFERRED]
-  docs/feat/document-query-and-performance/DATABASE.md → backend/app/services/document_query_service.py
-- `A. Danh sách Tài liệu Cá nhân: `GET /documents/`` --references--> `DocumentOut`  [INFERRED]
-  docs/feat/activity-tracking/API.md → backend/app/schemas/document.py
-- `2. Lấy danh sách children của một bundle` --references--> `DocumentOut`  [INFERRED]
-  docs/feat/bundle/API.md → backend/app/schemas/document.py
-- `Computed Properties` --references--> `DocumentOut`  [INFERRED]
-  docs/feat/bundle/DATABASE.md → backend/app/schemas/document.py
+- `6.2. `GET /documents/{document_id}/stats`` --references--> `DocumentStatsResponse`  [INFERRED]
+  docs/ACTIVITY_TRACKING.md → backend/app/schemas/activity.py
+- `6.3. `GET /stats/me`` --references--> `MyStatsResponse`  [INFERRED]
+  docs/ACTIVITY_TRACKING.md → backend/app/schemas/activity.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (213 total, 28 thin omitted)
+## Communities (244 total, 33 thin omitted)
 
 ### Community 0 - "pydantic"
+Cohesion: 0.11
+Nodes (15): Note, get_my_download_logs(), add_favorite(), list_favorites(), remove_favorite(), create_note(), delete_note(), list_notes() (+7 more)
+
+### Community 1 - "activityService.ts"
+Cohesion: 0.48
+Nodes (5): 7. Frontend Kiến trúc & Giao diện, ActivityListResponse, ActivityLog, DocumentStats, MyStats
+
+### Community 2 - "4. 🏛️ Thư Viện Cộng Đồng & Học Thuật (Community Library & Academics)"
 Cohesion: 0.09
-Nodes (17): Note, get_my_download_logs(), add_favorite(), list_favorites(), remove_favorite(), create_note(), delete_note(), list_notes() (+9 more)
-
-### Community 1 - "Shared components"
-Cohesion: 0.07
-Nodes (36): 7. Frontend Kiến trúc & Giao diện, 3.2.2. Component dùng chung, 3.2.2. Component dùng chung, DocumentActionCardProps, DocumentRow(), ProcessingDonut(), ProcessingDonutProps, ProcessingLegendItem (+28 more)
-
-### Community 2 - "User"
-Cohesion: 0.12
-Nodes (17): approve_submission(), check_admin_permission(), create_faculty(), create_or_update_rating(), create_subject(), download_community_document(), get_admin_submission_detail(), get_admin_submissions() (+9 more)
+Nodes (27): approve_submission(), check_admin_permission(), create_or_update_rating(), get_admin_submission_detail(), get_admin_submissions(), get_document_ratings(), get_my_submissions(), reject_submission() (+19 more)
 
 ### Community 3 - "User"
 Cohesion: 0.13
@@ -258,39 +286,39 @@ Nodes (48): accept_invitation(), add_tags_to_group_document(), bulk_delete_group
 
 ### Community 4 - "App.tsx"
 Cohesion: 0.05
-Nodes (70): 3.2.1. Hệ thống & Layout, 3.2.1. Hệ thống & Layout, 3.2.3. Trang đã xây dựng, 3.2.3. Trang đã xây dựng, App(), AppRoutes(), queryClient, CARD_COLORS (+62 more)
+Nodes (69): 3.2.1. Hệ thống & Layout, 3.2.1. Hệ thống & Layout, 3.2. Frontend (React + Vite + TypeScript + TailwindCSS), 3.2. Frontend (React + Vite + TypeScript + TailwindCSS), App(), AppRoutes(), queryClient, CARD_COLORS (+61 more)
 
 ### Community 5 - "sqlalchemy"
-Cohesion: 0.17
-Nodes (23): downgrade(), upgrade(), upgrade(), upgrade(), downgrade(), upgrade(), Class, Base (+15 more)
+Cohesion: 0.16
+Nodes (23): upgrade(), Class, Base, TimestampMixin, CommunitySubmission, Document, DocumentRating, DocumentStats (+15 more)
 
 ### Community 6 - "routers/auth.py"
-Cohesion: 0.08
-Nodes (26): create_access_token(), hash_password(), verify_password(), get_me(), login(), register(), read_me(), search_users() (+18 more)
+Cohesion: 0.09
+Nodes (24): create_access_token(), hash_password(), verify_password(), get_me(), login(), register(), read_me(), search_users() (+16 more)
 
 ### Community 7 - "DocumentDetail/DocumentDetail.tsx"
-Cohesion: 0.05
-Nodes (60): 1. Tổng Quan Kiến Trúc Lưu Trữ (Architecture Overview), Hiện trạng lỗi (Symptom), Giai đoạn 3 (Phase 3): Hoàn Thiện Giao Diện & Khắc Phục Lỗi Download, Kịch Bản 2: Đổi Trang Bìa DOCX Trong `DocumentDetail`, 5.4. Xây dựng Giao diện Xem Trước Đa Định Dạng trong `DocumentDetail.tsx`, 7.2. Phía Frontend, 1.2. Phân hệ Xử lý & Xem trước Tài liệu (Document Processing & Multi-view), NFR-SEC-03: Phòng chống Tấn công XSS khi Xem trước (XSS Prevention) (+52 more)
+Cohesion: 0.06
+Nodes (53): Giai đoạn 3 (Phase 3): Hoàn Thiện Giao Diện & Khắc Phục Lỗi Download, Kịch Bản 2: Đổi Trang Bìa DOCX Trong `DocumentDetail`, DocumentActionCard(), DocumentActionCardProps, DocumentCoverSelector(), DocumentCoverSelectorProps, PageCoverSelector(), PageCoverSelectorProps (+45 more)
 
-### Community 8 - "hard_delete_document"
-Cohesion: 0.11
-Nodes (9): delete_notification(), get_unread_count(), list_notifications(), mark_all_as_read(), mark_as_read(), hard_delete_document(), list_trash(), restore_document() (+1 more)
+### Community 8 - "scheduler.py"
+Cohesion: 0.05
+Nodes (26): cleanup_deleted_documents(), cleanup_orphaned_documents(), dissolve_workspace(), execute_group_dissolution(), refresh_document_stats(), register_jobs(), remind_due_todos(), shutdown() (+18 more)
 
 ### Community 9 - "documents.py"
-Cohesion: 0.10
-Nodes (42): add_files_to_bundle(), add_from_personal_to_bundle(), AddFromPersonalPayload, bulk_download_documents_zip(), bulk_soft_delete_documents(), download_bundle_zip(), get_bundle_children(), get_document() (+34 more)
+Cohesion: 0.17
+Nodes (23): add_from_personal_to_bundle(), AddFromPersonalPayload, bulk_download_documents_zip(), bulk_soft_delete_documents(), download_bundle_zip(), get_bundle_children(), get_document(), get_document_activities() (+15 more)
 
 ### Community 10 - "groupSpace.types.ts"
-Cohesion: 0.07
-Nodes (55): Giải pháp triệt để, ViewMode, CODE_EXTENSIONS, TabKey, useDocumentFilters(), UseDocumentFiltersOptions, mockGroupDocuments, mockGroupFolders (+47 more)
+Cohesion: 0.05
+Nodes (62): DocumentFilterBar(), DocumentFilterBarProps, TagOption, TIME_FILTER_OPTIONS, DEFAULT_TABS, DocumentTypeTabsProps, TabItem, DynamicFilterDropdown() (+54 more)
 
-### Community 11 - "PersonalDocuments.tsx"
-Cohesion: 0.08
-Nodes (36): Kịch Bản 1: Tự Động Tạo Ảnh Bìa DOCX Khi Upload, Kịch Bản 4: Upload & Xem File Mã Nguồn (Code Preview), 1.1. Vị trí mã nguồn, 1. Kho Tài Liệu Cá Nhân (`PersonalDocuments`), 3.3 Chiến lược Invalidation (`invalidateDashboard`), DEFAULT_TABS, DocumentTypeTabs(), DocumentTypeTabsProps (+28 more)
+### Community 11 - "react"
+Cohesion: 0.06
+Nodes (57): 7.2. Phía Frontend, Giải pháp triệt để, 3.3 Chiến lược Invalidation (`invalidateDashboard`), TAG_COLORS, TagItem, TagSelector(), TagSelectorProps, AddToBundleModalProps (+49 more)
 
 ### Community 12 - "group.py"
-Cohesion: 0.18
-Nodes (15): _role_for(), BulkInviteCreate, BulkInviteOut, GroupCreate, GroupListItem, GroupUpdate, InvitationOut, InviteCreate (+7 more)
+Cohesion: 0.23
+Nodes (14): BulkInviteCreate, BulkInviteOut, GroupCreate, GroupListItem, GroupUpdate, InvitationOut, InviteCreate, MemberOut (+6 more)
 
 ### Community 13 - "docs-site/package.json"
 Cohesion: 0.07
@@ -300,45 +328,45 @@ Nodes (37): config, browserslist, development, production, dependencies, @docusa
 Cohesion: 0.10
 Nodes (9): WorkspaceTag, create_workspace_tag(), create_workspace_tags_bulk(), delete_workspace_tag(), get_workspace_or_404(), import_tags(), list_workspace_tags(), update_workspace_tag() (+1 more)
 
-### Community 15 - "Card"
-Cohesion: 0.07
-Nodes (43): 1.2 Phạm vi, HeaderProps, ActivityFeed(), ActivityFeedProps, ContributionCard(), DashboardModals(), DashboardError(), DashboardErrorProps (+35 more)
+### Community 15 - "Button"
+Cohesion: 0.06
+Nodes (76): 1.2 Phạm vi, 3.2.3. Trang đã xây dựng, 3.2.3. Trang đã xây dựng, ProcessingDonutProps, ProcessingLegendItem, StatCardProps, TagDistributionItem, TagDistributionProps (+68 more)
 
 ### Community 16 - "with"
 Cohesion: 0.07
 Nodes (27): name, runs-on, steps, NODE_OPTIONS, jobs, deploy, name, on (+19 more)
 
-### Community 17 - "get_my_stats"
-Cohesion: 0.26
-Nodes (7): get_my_stats(), ActivityListResponse, ActivityLogResponse, DocumentStatsResponse, MyStatsResponse, 5. Chi Tiết Triển Khai & Các Giai Đoạn, Giai đoạn 2 (Phase 2): Xây Dựng RESTful API Backend
+### Community 17 - "categories.py"
+Cohesion: 0.23
+Nodes (9): Category, create_category(), delete_category(), list_categories(), update_category(), CategoryBase, CategoryCreate, CategoryOut (+1 more)
 
 ### Community 18 - "compilerOptions"
 Cohesion: 0.06
 Nodes (33): compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, baseUrl, erasableSyntaxOnly, ignoreDeprecations, jsx, lib (+25 more)
 
 ### Community 19 - "_process_document_background"
-Cohesion: 0.07
-Nodes (34): _process_document_background(), update_group_document_thumbnail(), create_thumbnail(), extract_first_image_from_markdown(), extract_text(), _ocr_image(), _ocr_pdf(), download_r2_to_temp_file() (+26 more)
+Cohesion: 0.08
+Nodes (40): add_files_to_bundle(), _process_document_background(), upload_batch_documents(), update_group_document_thumbnail(), upload_group_batch_documents(), create_document_from_upload(), create_thumbnail(), extract_first_image_from_markdown() (+32 more)
 
 ### Community 20 - "Troubleshooting: Các Sự Cố Đã Gặp & Giải Pháp Triệt Để"
 Cohesion: 0.10
 Nodes (20): 1. Sự cố 1: Phân trang Giao diện bị kẹt cứng ở Trang 1, 2. Sự cố 2: Nhóm bị giới hạn cứng 20 tài liệu, 3. Sự cố 3: Thumbnail mất hoàn toàn HTTP Cache & Thiếu Cache-Control, 4. Sự cố 4: Rò rỉ Dữ liệu Cache giữa các Tài khoản (User Session Leak), 5. Sự cố 5: Vòng lặp Tải Vô Tận Backend do InfiniteScrollSentinel, Giải pháp triệt để, Giải pháp triệt để, Giải pháp triệt để (+12 more)
 
-### Community 21 - "cn"
-Cohesion: 0.10
-Nodes (47): DocumentActionCard(), COLORS, CreateFolderModal(), CreateFolderModalProps, FolderInitialData, FolderSubmitData, Badge(), BadgeProps (+39 more)
+### Community 21 - "PersonalDocuments.tsx"
+Cohesion: 0.13
+Nodes (25): 1.1. Vị trí mã nguồn, 1. Kho Tài Liệu Cá Nhân (`PersonalDocuments`), DocumentTypeTabs(), COLORS, CreateFolderModal(), CreateFolderModalProps, FolderInitialData, FolderSubmitData (+17 more)
 
 ### Community 22 - "TrashTab.tsx"
 Cohesion: 0.08
-Nodes (45): MobileTrashBatch(), MobileTrashBatchProps, TrashBatchRow(), TrashBatchRowProps, TrashConfirmModal(), DocModalProps, TrashDetailModal(), TrashPreviewModal() (+37 more)
+Nodes (46): MobileTrashBatch(), MobileTrashBatchProps, TrashBatchRow(), TrashBatchRowProps, TrashConfirmModal(), TrashConfirmModalProps, DocModalProps, TrashDetailModal() (+38 more)
 
 ### Community 23 - "frontend/package.json"
 Cohesion: 0.09
 Nodes (28): lucide-react@^1.37.0, react-router-dom@^7.18.3, recharts@^3.10.1, tailwind-merge@^3.6.0, @tanstack/react-query@^5.102.8, zustand@^5.0.15, dependencies, axios@^1.20.0 (+20 more)
 
 ### Community 24 - "DocumentOut"
-Cohesion: 0.09
-Nodes (25): BatchUploadOut, DocumentBase, DocumentCreate, DocumentOut, DocumentOwnerOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments (+17 more)
+Cohesion: 0.19
+Nodes (8): DocumentOut, test_document_out_schema_stats(), test_upload_document_duplicate_checksum(), test_share_activity_actions_and_metadata_schema(), 3. Sự cố 3: Lỗi 500 CORS khi lấy danh sách tài liệu (`GET /documents/`), Giải pháp triệt để:, Hiện tượng, Nguyên nhân gốc rễ:
 
 ### Community 25 - "test_list_documents_trending_sort_order"
 Cohesion: 0.08
@@ -346,15 +374,15 @@ Nodes (21): test_list_documents_trending_sort_order(), 1.1. Yêu Cầu Phía Bac
 
 ### Community 26 - "digital-library/package.json"
 Cohesion: 0.08
-Nodes (32): dependencies, axios@^1.20.0, class-variance-authority@^0.7.1, clsx@^2.1.1, @cyntler/react-doc-viewer@^1.17.1, @fontsource-variable/geist@^5.3.0, jspdf@^4.2.1, react@^19.2.8 (+24 more)
+Nodes (31): dependencies, axios@^1.20.0, class-variance-authority@^0.7.1, clsx@^2.1.1, @cyntler/react-doc-viewer@^1.17.1, @fontsource-variable/geist@^5.3.0, jspdf@^4.2.1, react@^19.2.8 (+23 more)
 
 ### Community 27 - "dashboard_service.py"
 Cohesion: 0.22
 Nodes (13): read_dashboard_summary(), ContributionStats, DashboardSummaryOut, GroupStats, RecentActivityItem, RecentGroupItem, RecentViewedDocument, RejectedSubmissionBrief (+5 more)
 
 ### Community 28 - "devDependencies"
-Cohesion: 0.17
-Nodes (11): devDependencies, oxlint@^1.79.0, @types/node@^24.13.3, @types/react-dom@^19.2.4, vite@^8.2.2, @vitejs/plugin-react@^6.1.0, oxlint, @types/node (+3 more)
+Cohesion: 0.14
+Nodes (13): @tailwindcss/vite@^4.3.3, devDependencies, oxlint@^1.79.0, @types/node@^24.13.3, @types/react-dom@^19.2.4, vite@^8.2.2, @vitejs/plugin-react@^6.1.0, oxlint (+5 more)
 
 ### Community 29 - "⚡ Khởi Động Nhanh Trong 5 Bước (Quick Start)"
 Cohesion: 0.25
@@ -368,9 +396,9 @@ Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent 
 Cohesion: 0.04
 Nodes (49): 10. Router Layer, 11. Public API, 12. Optional Authentication, 13. API tải tài liệu, 14. API tìm kiếm, 15. API đánh giá, 16. Sửa đánh giá, 17. Xóa đánh giá (+41 more)
 
-### Community 32 - "schemas/library.py"
-Cohesion: 0.13
-Nodes (20): get_documents_by_subject(), search_community_documents(), update_faculty(), update_rating(), update_subject(), CommunityDocumentOut, FacultyCreate, FacultyLibraryOut (+12 more)
+### Community 32 - "get"
+Cohesion: 0.20
+Nodes (6): download_community_document(), get_documents_by_subject(), search_community_documents(), CommunityDocumentOut, PaginatedCommunityDocuments, 9. Schema Layer
 
 ### Community 33 - "2. Implemented Features & Completed Tasks"
 Cohesion: 0.20
@@ -384,13 +412,13 @@ Nodes (14): generate_checksum(), get_one(), get_or_create(), get_or_create_m2m()
 Cohesion: 0.20
 Nodes (13): clear_data(), create_if_not_exists(), create_users_if_not_exists(), generate_checksum(), get_or_create(), seed_academics(), seed_classifications(), seed_database() (+5 more)
 
-### Community 36 - "database.py"
-Cohesion: 0.06
-Nodes (23): get_db(), get_current_user(), get_optional_user(), decode_access_token(), shutdown(), startup(), get_classes(), get_faculties() (+15 more)
+### Community 36 - "workspace_tags.py"
+Cohesion: 0.12
+Nodes (8): ClassOut, FacultyOut, FullSearchOut, QuickSearchOut, WorkspaceTagCreate, WorkspaceTagImport, WorkspaceTagOut, WorkspaceTagUpdate
 
-### Community 37 - "schemas/tag.py"
-Cohesion: 0.43
-Nodes (6): TagBase, TagCreate, TagMergeIn, TagOut, TagStatsOut, TagUpdate
+### Community 37 - "schemas/document.py"
+Cohesion: 0.20
+Nodes (14): BatchUploadOut, DocumentBase, DocumentCreate, DocumentOwnerOut, DocumentTagsUpdate, DocumentUpdate, PaginatedDocuments, SkippedFileOut (+6 more)
 
 ### Community 38 - "PROJECT_STATUS_REPORT.md"
 Cohesion: 0.18
@@ -408,9 +436,9 @@ Nodes (16): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib
 Cohesion: 0.22
 Nodes (9): 1. Bản chất của file ở góc độ hệ điều hành, 2. File vật lý và Metadata: Vì sao phải phân tách?, 3. Cơ sở dữ liệu quan hệ (RDBMS) và bài toán lưu trữ nhị phân (BLOB vs Filesystem), 4. Phân tích Local Filesystem so với Object Storage (S3-compatible), 5. Phân định các môi trường: Client, Backend Server, Filesystem và Database, Bảng minh chứng: Phân tích tài liệu `DeCuong.pdf` trong Digital Library **[Đang triển khai]**, Các nguyên nhân kỹ thuật khiến tài liệu không hiển thị **[Nhận định kỹ thuật]**, PHẦN I: NỀN TẢNG LÝ THUYẾT VỀ LƯU TRỮ FILE VÀ HỆ THỐNG TỆP (+1 more)
 
-### Community 42 - "2. PHÂN TÍCH 5 KỊCH BẢN CỤ THỂ THEO ĐÚNG YÊU CẦU CỦA BẠN"
-Cohesion: 0.25
-Nodes (8): 1. NGUYÊN TẮC CỐT LÕI CỦA KIẾN TRÚC BẠN YÊU CẦU, 2. PHÂN TÍCH 5 KỊCH BẢN CỤ THỂ THEO ĐÚNG YÊU CẦU CỦA BẠN, 31. Tài liệu tham khảo kỹ thuật chính thức, Kịch bản 1: Cùng 1 người upload file vào Cá nhân rồi upload vào Nhóm, Kịch bản 2: Hai người lạ không quen biết, khác nhóm cùng upload 1 file, Kịch bản 3: Chia sẻ từ Kho cá nhân vào Nhóm (share_document_to_group), Kịch bản 4: Xóa vĩnh viễn (Hard delete / Purge / Tự động dọn dẹp sau 30 ngày), Kịch bản 5: Bảo vệ "Kho tài liệu cộng đồng" (Community Library)
+### Community 42 - "CodeViewer"
+Cohesion: 0.13
+Nodes (15): 2. Sự Cố 2: Lỗi Xung Đột Chuỗi Ngầm `.r` Trong Domain `.r2.dev` (Subtle String Collision), Giải pháp khắc phục triệt để, Hiện trạng lỗi (Symptom), Quá trình điều tra & Nguyên nhân cốt lõi (Root Cause), 2.1. Phân loại định dạng tài liệu (MIME & Extension Groups), 2.2. Yêu cầu phi chức năng (Non-Functional Requirements), 2. Phân Tích Nghiệp Vụ & Yêu Cầu Kỹ Thuật, 5.1. Triển khai Module Thumbnail DOCX phía Frontend (+7 more)
 
 ### Community 43 - "SearchService"
 Cohesion: 0.27
@@ -418,11 +446,11 @@ Nodes (8): full_text_search(), quick_search(), search(), SearchResultItem, searc
 
 ### Community 44 - "STORAGE_SYSTEM.md"
 Cohesion: 0.06
-Nodes (30): 10. Mô hình toán học ước lượng thời gian xử lý (Latency Modeling), 11. Phân tích dung lượng RAM tiêu thụ và rủi ro tải đồng thời (Concurrency), 12. Đánh giá tính hợp lý và các giới hạn kích thước file hiện tại, 22. Phân biệt Xóa mềm (Soft Delete) và Xóa vĩnh viễn (Hard Purge), 23.1. Khôi phục tài liệu (Restore), 23. Tiến trình khôi phục và Dọn rác tự động, 26. Các ưu điểm nổi bật của thiết kế hiện tại **[Nhận định kỹ thuật]**, 27. Ma trận rủi ro kỹ thuật và biện pháp khắc phục **[Nhận định kỹ thuật]** (+22 more)
+Nodes (32): 10. Mô hình toán học ước lượng thời gian xử lý (Latency Modeling), 11. Phân tích dung lượng RAM tiêu thụ và rủi ro tải đồng thời (Concurrency), 12. Đánh giá tính hợp lý và các giới hạn kích thước file hiện tại, 1. NGUYÊN TẮC CỐT LÕI CỦA KIẾN TRÚC BẠN YÊU CẦU, 22. Phân biệt Xóa mềm (Soft Delete) và Xóa vĩnh viễn (Hard Purge), 23.1. Khôi phục tài liệu (Restore), 23. Tiến trình khôi phục và Dọn rác tự động, 26. Các ưu điểm nổi bật của thiết kế hiện tại **[Nhận định kỹ thuật]** (+24 more)
 
 ### Community 45 - "Đặc Tả Tính Năng: Xem Trước Đa Định Dạng & Tùy Chỉnh Ảnh Bìa (Document Preview & Cover Management)"
-Cohesion: 0.10
-Nodes (21): 1.1. Hiện trạng trước khi triển khai, 1.2. Ý tưởng giải pháp, 1. Bối Cảnh & Ý Tưởng Phát Triển, 2.1. Phân loại định dạng tài liệu (MIME & Extension Groups), 2.2. Yêu cầu phi chức năng (Non-Functional Requirements), 2. Phân Tích Nghiệp Vụ & Yêu Cầu Kỹ Thuật, 3.1. Frontend Stack, 3.2. Backend Stack (+13 more)
+Cohesion: 0.11
+Nodes (19): 1.1. Hiện trạng trước khi triển khai, 1.2. Ý tưởng giải pháp, 1. Bối Cảnh & Ý Tưởng Phát Triển, 3.1. Frontend Stack, 3.2. Backend Stack, 3. Công Nghệ & Thư Viện Sử Dụng, 4.1. Luồng 1: Tự Động Tạo Ảnh Bìa DOCX Khi Upload, 4.2. Luồng 2: Tùy Chỉnh Chọn Trang Làm Bìa Cho PDF & DOCX Trong DocumentDetail (+11 more)
 
 ### Community 46 - "4. BÁO CÁO CHI TIẾT CHỨC NĂNG & MINH HỌA GIAO DIỆN"
 Cohesion: 0.08
@@ -441,8 +469,8 @@ Cohesion: 0.08
 Nodes (23): 1. Cấu trúc dữ liệu, 2. Luật phân quyền trong Nhóm, 3. Luật chia sẻ tài liệu Cá nhân → Nhóm, 4. Luật "Lưu về cá nhân" từ Nhóm, 5. Luật Thùng rác Nhóm, 6. Thùng rác Cá nhân — phân biệt nguồn gốc, 7. Orphaned documents — tài liệu mồ côi, API chỉ dành cho system_admin: (+15 more)
 
 ### Community 50 - "documents.py"
-Cohesion: 0.05
-Nodes (35): ActivityAction, Settings, cleanup_deleted_documents(), cleanup_orphaned_documents(), dissolve_workspace(), execute_group_dissolution(), refresh_document_stats(), register_jobs() (+27 more)
+Cohesion: 0.07
+Nodes (27): ActivityAction, Settings, get_db(), get_current_user(), get_optional_user(), is_admin(), decode_access_token(), DownloadLog (+19 more)
 
 ### Community 51 - "Tài liệu Kỹ thuật Chức năng: Activity Tracking (Theo dõi Hoạt động)"
 Cohesion: 0.14
@@ -457,8 +485,8 @@ Cohesion: 0.33
 Nodes (5): plugins, rules, react/only-export-components, react/rules-of-hooks, $schema
 
 ### Community 54 - "cn.ts"
-Cohesion: 0.07
-Nodes (60): 7.2. Nguyên Tắc Lấy Dữ Liệu Lượt Xem, 2.1. Interface `DocumentListItem`, 2.2. Interface `BaseDocumentViewProps`, 2. Giao Thức Kiểu Dữ Liệu (`documentView.types.ts`), 6. Mạng Lưới Tái Sử Dụng Trên Toàn Hệ Thống, 1.2. Đặc điểm triển khai, 11. Hiển Thị Số Trang Tài Liệu Trên `DocumentCard` & `DocumentListView`, 📌 Bổ Sung Các Hạng Mục Cần Cải Thiện (Đợt 2) (+52 more)
+Cohesion: 0.06
+Nodes (71): 7.2. Nguyên Tắc Lấy Dữ Liệu Lượt Xem, Kịch Bản 1: Tự Động Tạo Ảnh Bìa DOCX Khi Upload, 2.1. Interface `DocumentListItem`, 2.2. Interface `BaseDocumentViewProps`, 2. Giao Thức Kiểu Dữ Liệu (`documentView.types.ts`), 6. Mạng Lưới Tái Sử Dụng Trên Toàn Hệ Thống, 1.2. Đặc điểm triển khai, 11. Hiển Thị Số Trang Tài Liệu Trên `DocumentCard` & `DocumentListView` (+63 more)
 
 ### Community 55 - "scripts"
 Cohesion: 0.40
@@ -470,15 +498,15 @@ Nodes (25): 1. Sự Cố Xung Đột Cổng Mạng (Port 8000 / 5173 Already in 
 
 ### Community 57 - "KEY_FEATURES.md"
 Cohesion: 0.09
-Nodes (9): Business Rules: Document Bundle, API Services (`documentService.ts`), Frontend Components & Services: Document Bundle, 1. Danh Sách Endpoints, Đặc Tả API: Preview & Thumbnail Management, Business Rules: Markdown View, Database Schema: Markdown Integration, 1. Ý tưởng & Động lực (Idea & Motivation) (+1 more)
+Nodes (9): Business Rules: Document Bundle, Business Rules: Markdown View, Database Schema: Markdown Integration, 1. Ý tưởng & Động lực (Idea & Motivation), Tính năng: Markdown View & Export, 1. Ma Trận Chỉ Mục 10 Phân Hệ Tính Năng, 2. Kiến Trúc Phân Tầng Của Mỗi Phân Hệ, 3. Quy Định Duy Trì Tài Liệu Tính Năng (+1 more)
 
 ### Community 58 - "Frontend: Chiến Lược TanStack Query & Tối Ưu Rendering"
-Cohesion: 0.15
+Cohesion: 0.17
 Nodes (12): 1.1. Cấu hình `useInfiniteQuery` Chuẩn Hóa, 1.2. Khử trùng (Deduplication) khi gộp các trang, 1. Kiến Trúc Quản Lý Server State với TanStack Query v5, 2.1. Tự động Debounce Tìm kiếm 300ms, 2.2. Sinh `queryParams` Ổn Định, 2. Quản Lý Bộ Lọc Tập Trung với `useDocumentFilters`, 3. Thành Phần Phân Trang Vô Tận (`InfiniteScrollSentinel`), 4.1. `React.memo` trên toàn bộ Card Components (+4 more)
 
 ### Community 59 - "DocumentShare"
-Cohesion: 0.31
-Nodes (12): DocumentShareOut, DocumentShareStatusOut, PredictedUser, ShareCreate, ShareCreateOut, SharePreviewOut, ShareRecipientResult, UserMini (+4 more)
+Cohesion: 0.22
+Nodes (17): is_auto_accept(), role_rank(), DocumentShareOut, DocumentShareStatusOut, PredictedUser, ShareCreate, ShareCreateOut, SharePreviewOut (+9 more)
 
 ### Community 60 - "📚 Hệ thống Thư viện số - Quản lý Tài liệu Học tập"
 Cohesion: 0.09
@@ -489,8 +517,8 @@ Cohesion: 0.18
 Nodes (11): 1. Phương Thức HTTP (HTTP Methods), 2. Quy Tắc Đặt Tên Điểm Cuối (Endpoint Naming), 3.1. Chuẩn đặt tên thuộc tính (Key Naming), 3.2. Định dạng Thời Gian (Date and Time), 3.3. Dữ liệu File Upload (Multipart Form Data), 3. Định Dạng Dữ Liệu (Payload & Data Types), 4.1. Phân trang kiểu Skip / Limit, 4.2. Phân trang kiểu Page / Page Size (+3 more)
 
 ### Community 70 - "Button"
-Cohesion: 0.10
-Nodes (36): 4. `BundleDetailPage.tsx`, Các bài toán cốt lõi đã giải quyết, 5. Quy Tắc Thao Tác Chọn Nhiều & Bộ Nhớ Lựa Chọn (Multi-Select Persistence), 2.1. Vị trí mã nguồn, 2.2. Đặc điểm triển khai, 2. Workspace Nhóm Học Tập (`GroupDocumentsSection`), 📦 Danh Mục Git Commits (Milestones), 12. Chế Độ Hiển Thị Kết Hợp Card + List (Hybrid View) — Đặt Làm Mặc Định (+28 more)
+Cohesion: 0.08
+Nodes (47): 4. `BundleDetailPage.tsx`, 5. Quy Tắc Thao Tác Chọn Nhiều & Bộ Nhớ Lựa Chọn (Multi-Select Persistence), 📦 Danh Mục Git Commits (Milestones), DocumentBulkActionBar(), DocumentBulkActionBarProps, DocumentCardProps, DocumentItem, DocumentTag (+39 more)
 
 ### Community 71 - "SPEC: Kho tài liệu cộng đồng (Community Library)"
 Cohesion: 0.09
@@ -513,8 +541,8 @@ Cohesion: 0.11
 Nodes (18): 1.1. Hiện trạng trước khi triển khai, 1.2. Ý tưởng giải pháp, 1. Bối Cảnh & Ý Tưởng Phát Triển, 2.1. Phân loại mã hành động (Activity Actions), 2.2. Yêu cầu phi chức năng (Non-Functional Requirements), 2. Phân Tích Nghiệp Vụ & Yêu Cầu Kỹ Thuật, 3.2. Frontend Stack, 3. Công Nghệ & Thư Viện Sử Dụng (+10 more)
 
 ### Community 76 - "spec.md"
-Cohesion: 0.05
-Nodes (43): 10. Thông tin khi đóng góp, 11. Trạng thái tài liệu đóng góp, 12. Cơ chế công khai tài liệu, 13. Cơ chế lưu tài liệu về cá nhân, 14. Đánh giá tài liệu, 15. Bình luận, 16. Thống kê đánh giá, 17. Theo dõi lượt tải (+35 more)
+Cohesion: 0.11
+Nodes (17): 12. Cơ chế công khai tài liệu, 13. Cơ chế lưu tài liệu về cá nhân, 14. Đánh giá tài liệu, 15. Bình luận, 16. Thống kê đánh giá, 17. Theo dõi lượt tải, 18. Tìm kiếm, 21. Trang quản trị duyệt tài liệu (+9 more)
 
 ### Community 77 - "Tài liệu kỹ thuật: Nâng cấp Hệ thống Quản trị, Thông báo, Việc cần làm, Thao tác hàng loạt & Quản lý Nhãn (2026)"
 Cohesion: 0.11
@@ -545,8 +573,8 @@ Cohesion: 0.12
 Nodes (16): 10. AI Tổng hợp dữ liệu & Trợ lý học tập (Lấy cảm hứng từ NotebookLM), 11. Khảo sát & Mở rộng phương thức lưu trữ, 1. Tối ưu lại logic lưu trữ và chia sẻ của hệ thống, 2. Tích hợp Real-time (WebSockets) cho không gian nhóm, 3. Thêm trang "Cá nhân" (Personal Home / Quick Access), 4. Thêm trang Dashboard (Tổng quan dữ liệu), 5. Thêm trang Thông báo (Notifications Center), 6. Thêm trang dành riêng cho Role Quản trị (Admin Panel) (+8 more)
 
 ### Community 84 - "⚙️ Yêu Cầu Chức Năng (Functional Requirements Document - FRD)"
-Cohesion: 0.09
-Nodes (22): 1. Phân Hệ Xác Thực & Quản Lý Người Dùng (Authentication & User Profile), 2. Phân Hệ Kho Cá Nhân (Personal Space), 3. Phân Hệ Không Gian Nhóm (Group Workspace), 5. Phân Hệ Nhân Bản Tài Liệu (Document Cloning / Forking), 6. Phân Hệ Tìm Kiếm & Xem Trước (Search & Multi-View), 7. Phân Hệ Vòng Đời Dữ Liệu & Thống Kê (Lifecycle & Analytics), FR-ACT-01: Nhật ký Tương tác & Xếp hạng Xu hướng, FR-AUTH-01: Đăng nhập & Duy trì Phiên làm việc (+14 more)
+Cohesion: 0.13
+Nodes (14): 1. Phân Hệ Xác Thực & Quản Lý Người Dùng (Authentication & User Profile), 4. Phân Hệ Kho Học Liệu Cộng Đồng (Community Library), 5. Phân Hệ Nhân Bản Tài Liệu (Document Cloning / Forking), 6. Phân Hệ Tìm Kiếm & Xem Trước (Search & Multi-View), FR-AUTH-01: Đăng nhập & Duy trì Phiên làm việc, FR-AUTH-02: Đăng ký & Tự động Phân bổ Học thuật, FR-COMM-01: Duyệt Học liệu theo Khoa & Môn học, FR-COMM-02: Đóng góp Học liệu (Community Submission) (+6 more)
 
 ### Community 85 - "Báo cáo kiểm toán ứng dụng Thư viện số"
 Cohesion: 0.13
@@ -569,11 +597,11 @@ Cohesion: 0.15
 Nodes (13): 6.1. Định nghĩa toán học, 6.2. Vì sao Tên file, Extension và Kích thước là không đủ?, 6.3. Minh họa trực quan: Tính chất của SHA-256, 6.4. Các nguyên lý an toàn cốt lõi cần làm rõ khi bảo vệ đồ án **[Nhận định kỹ thuật]**, 6. Khái niệm Checksum, Hash Function và Digest, 7.1. Cấu trúc bit và biểu diễn Hexadecimal, 7.2. Nguyên lý khối (Block-based Merkle–Damgård Construction), 7.3. Ma trận so sánh các thuật toán băm phổ biến **[Nhận định kỹ thuật]** (+5 more)
 
 ### Community 90 - "use-cases/README.md"
-Cohesion: 0.12
-Nodes (13): 🎭 Danh Mục Luồng Nghiệp Vụ Trọng Yếu (Use Cases), 📋 Danh Sách Các Use Case Chi Tiết, 🗺️ Sơ Đồ Use Case Tổng Thể (System Use Case Diagram), 1. Thông Tin Tổng Quan, 2. Tiền Điều Kiện, 3. Luồng Sự Kiện Chính (Main Flow), 4. Các Quy Tắc Nghiệp Vụ Cần Tuân Thủ, 🏛️ UC-02: Đóng Góp & Thẩm Định Học Liệu Cộng Đồng (Submission & Moderation) (+5 more)
+Cohesion: 0.31
+Nodes (3): 🎭 Danh Mục Luồng Nghiệp Vụ Trọng Yếu (Use Cases), 📋 Danh Sách Các Use Case Chi Tiết, 🗺️ Sơ Đồ Use Case Tổng Thể (System Use Case Diagram)
 
 ### Community 91 - "system-enhancements-2026/README.md"
-Cohesion: 0.17
+Cohesion: 0.15
 Nodes (12): 1. Cây Phân Cấp Components (Component Hierarchy), 2.1. Phân khu Quản Trị & Menu trên `Sidebar.tsx`, 2.2. Tab "Việc cần làm" & Modal `TodoFormModal.tsx`, 2.3. Thanh Thao Tác Hàng Loạt Nổi: `DocumentBulkActionBar.tsx`, 2.4. Mở rộng `ContributeModal.tsx` (Đơn lẻ & Hàng loạt), 2.5. Trang Quản Lý Nhãn: `TagsManagementPage.tsx`, 2. Chi Tiết Các Màn Hình & Thành Phần Trọng Tâm, 3.1. Hook Điều Hướng & Làm Nổi Bật: `useHighlightElement.ts` (+4 more)
 
 ### Community 92 - "PHẦN IV: CƠ CHẾ KIỂM TRA TRÙNG LẶP (DEDUPLICATION LOGIC)"
@@ -581,12 +609,12 @@ Cohesion: 0.17
 Nodes (12): 13. Bản chất của Deduplication: Phát hiện trùng lặp vs Lưu trữ khử trùng lặp, 14. Luồng thực thi kiểm tra trùng lặp từ Endpoint đến Database và Storage, 15. Kiểm tra trùng trong Kho cá nhân (Personal Space), 16. Kiểm tra trùng trong Không gian nhóm (Group Workspace), 17. Upload batch và Cấu trúc Bundle, 18. Bảng kịch bản thực nghiệm đối chiếu ma trận Deduplication, Cơ chế Deduplication và Danh sách Bỏ qua (Skipped List) **[Đang triển khai]**:, PHẦN IV: CƠ CHẾ KIỂM TRA TRÙNG LẶP (DEDUPLICATION LOGIC) (+4 more)
 
 ### Community 93 - "todos.py"
-Cohesion: 0.27
-Nodes (8): health_check(), UserTodo, create_todo(), delete_todo(), list_todos(), _to_todo_out(), update_todo(), 11. 📊 Dashboard & ✅ Kế Hoạch Cá Nhân (Todos)
+Cohesion: 0.15
+Nodes (14): health_check(), UserTodo, create_todo(), delete_todo(), list_todos(), _to_todo_out(), update_todo(), TodoCreate (+6 more)
 
 ### Community 94 - "Quy Tắc Nghiệp Vụ: Preview & Thumbnail Management"
-Cohesion: 0.33
-Nodes (6): 1.1. Ưu Tiên Phân Loại, 1.2. Giới Hạn Dung Lượng, 1. Quy Tắc Xác Thực & Phân Loại Định Dạng (File Type Validation), 3. Quy Tắc Ưu Tiên Chế Độ Xem Trước (Preview Mode Priority), 4. Quy Tắc Phân Quyền Thao Tác (Permissions), Quy Tắc Nghiệp Vụ: Preview & Thumbnail Management
+Cohesion: 0.22
+Nodes (9): 1.1. Ưu Tiên Phân Loại, 1.2. Giới Hạn Dung Lượng, 1. Quy Tắc Xác Thực & Phân Loại Định Dạng (File Type Validation), 2.1. Quy Tắc Tự Động Gán Ảnh Bìa Khi Upload, 2.3. Quy Tắc Đổi Trang Bìa (Cover Page Selection), 2. Quy Tắc Tạo & Cập Nhật Ảnh Bìa (Thumbnail Rules), 3. Quy Tắc Ưu Tiên Chế Độ Xem Trước (Preview Mode Priority), 4. Quy Tắc Phân Quyền Thao Tác (Permissions) (+1 more)
 
 ### Community 95 - "🚀 Hướng Dẫn Triển Khai Thực Tế (Production Deployment Guide)"
 Cohesion: 0.17
@@ -596,25 +624,25 @@ Nodes (11): 1. Triển Khai Cơ Sở Dữ Liệu PostgreSQL Đám Mây (Neon / R
 Cohesion: 0.20
 Nodes (10): 1. Executive Summary, 4. System Architecture & Tech Stack Summary, 5. Key Documentation & Artifacts, Architectural risks, Architectural strengths, Core request/data flow, Git Activity Snapshot, Overall completion estimate (+2 more)
 
-### Community 97 - "test_storage_dedup.py"
-Cohesion: 0.05
-Nodes (38): get_file_url(), 1. Biến Môi Trường Backend (FastAPI - `.env` tại thư mục gốc), 2. Biến Môi Trường Frontend (React/Vite - `.env` tại thư mục frontend), 3. Các Lỗi Thường Gặp Về Cấu Hình (Common Pitfalls), 4. File Mẫu Môi Trường Hoàn Chỉnh, Backend `.env` Mẫu:, Danh Mục Biến Môi Trường (Environment Variables Reference), Frontend `.env` Mẫu: (+30 more)
+### Community 97 - "Hướng Dẫn Triển Khai & Cấu Hình Cloudflare R2 Storage (S3-Compatible)"
+Cohesion: 0.18
+Nodes (11): 1. Tại Sao Lựa Chọn Cloudflare R2?, 2. Hướng Dẫn Cấu Hình Cloudflare R2 Từng Bước (Step-by-Step Setup), 3. Cấu Hình CORS Cho R2 Bucket (Tối Quan Trọng), 4. Chiến Lược Lưu Trữ Lai & Vùng Đệm Tạm Thời (Hybrid & On-Demand Temp Buffer), 5. Quy Chuẩn Đặt Tên & Cấu Trúc Khóa R2 (R2 Key Structure), Bước 1: Tạo Bucket trên Cloudflare Dashboard, Bước 2: Kích Hoạt Public Access (R2.dev Subdomain hoặc Custom Domain), Bước 3: Tạo R2 API Tokens (Access Key & Secret Key) (+3 more)
 
 ### Community 98 - "2. Thiết Lập Trigger Full-Text Search (FTS) Cho File Mã Nguồn"
-Cohesion: 0.20
+Cohesion: 0.18
 Nodes (10): 1.1. Bối Cảnh & Vấn Đề, 1.2. Giải Pháp Nâng Cấp Schema, 1.3. Ánh Xạ SQLAlchemy ORM (`backend/app/models/document.py`), 1. Thay Đổi Cột `thumbnail_path` Trên Bảng `documents`, 2.1. Mục Tiêu, 2.2. Hàm Trigger PL/pgSQL & Trigger Đồng Bộ, 2.3. Cấu Hình Index GIN Tăng Tốc Độ Truy Vấn, 2.4. So Sánh Hiệu Năng & Trọng Số (Weights) (+2 more)
 
 ### Community 99 - "SettingsPage.tsx"
-Cohesion: 0.06
-Nodes (38): AdvancedPickerForm(), BasicPickerForm(), RecipientPickerProps, SelectedItem, SelectionType, SubFormProps, formatDate(), getInitials() (+30 more)
+Cohesion: 0.17
+Nodes (16): formatDate(), getInitials(), getRoleInfo(), PreferencesTab(), ProfileTab(), ReadOnlyField(), ROLE_LABELS, SecurityTab() (+8 more)
 
 ### Community 100 - "design-from-figma.md"
 Cohesion: 0.20
 Nodes (9): Component chuẩn nhận diện từ ảnh, Màu chức năng, Màu sắc (đưa vào tailwind.config.ts), Màu theo loại file (icon badge), Neutral (dùng bảng gray mặc định của Tailwind), Primary (xanh lá — thương hiệu), Shadow, Spacing & Radius (+1 more)
 
-### Community 101 - "schemas/user.py"
-Cohesion: 0.48
-Nodes (5): PasswordUpdate, UserBase, UserCreate, UserOut, UserUpdate
+### Community 101 - "Header.tsx"
+Cohesion: 0.19
+Nodes (8): HeaderProps, COLORS, ManageTagsModalProps, TagItem, notificationService, searchService, Notification, NotificationType
 
 ### Community 102 - "2. Kế Hoạch Khôi Phục Khẩn Cấp (Emergency Rollback Protocol)"
 Cohesion: 0.22
@@ -642,7 +670,7 @@ Nodes (8): 19.1. Nguy cơ bảo mật của tên file gốc (Path Traversal Vuln
 
 ### Community 108 - "Kế hoạch hoàn thiện tài liệu dự án"
 Cohesion: 0.12
-Nodes (16): [ ] Giai đoạn 10 — Bảo mật và quyền riêng tư, [ ] Giai đoạn 11 — Quy chuẩn duy trì tài liệu, [ ] Giai đoạn 12 — Tích hợp website và duyệt cuối, [ ] Giai đoạn 9 — Kiểm thử và chất lượng, Kiểm định bắt buộc sau mỗi giai đoạn, Kế hoạch hoàn thiện tài liệu dự án, Nguyên tắc bắt buộc, [x] Giai đoạn 0 — Khảo sát repository và tài liệu (+8 more)
+Nodes (16): [ ] Giai đoạn 10 — Bảo mật và quyền riêng tư, [ ] Giai đoạn 11 — Quy chuẩn duy trì tài liệu, [ ] Giai đoạn 12 — Tích hợp website và duyệt cuối, Kiểm định bắt buộc sau mỗi giai đoạn, Kế hoạch hoàn thiện tài liệu dự án, Nguyên tắc bắt buộc, [x] Giai đoạn 0 — Khảo sát repository và tài liệu, [x] Giai đoạn 1 — Tổng quan dự án (+8 more)
 
 ### Community 109 - "API Endpoints: Document Bundle"
 Cohesion: 0.25
@@ -656,13 +684,13 @@ Nodes (8): 48. Kiểm thử luồng 1 — Guest, Bước 1, Bước 2, Bước 3
 Cohesion: 0.20
 Nodes (10): 1.1. Bảng `users`, 1.2. Bảng `faculties`, 1.3. Bảng `classes`, 1. Cụm Người Dùng & Học Thuật, 2.1. Bảng `documents`, 2.2. Bảng `document_versions`, 2.3. Bảng `document_stats`, 2.4. Bảng `processing_jobs` (+2 more)
 
-### Community 112 - "Hướng Dẫn Kiến Trúc & Triển Khai Hệ Thống Lưu Trữ (Storage Deployment Architecture)"
-Cohesion: 0.33
-Nodes (6): 2.1. Luồng Tải Lên (Upload Pipeline), 2.2. Luồng Xem Chi Tiết Tài Liệu (Document Preview Pipeline), 2. Luồng Xử Lý Dữ Liệu (Data Flows), 3. Cấu Trúc Tài Liệu Chi Tiết, 4. Các Nguyên Tắc Thiết Kế Trọng Yếu (Design Principles), Hướng Dẫn Kiến Trúc & Triển Khai Hệ Thống Lưu Trữ (Storage Deployment Architecture)
+### Community 112 - "PdfViewer"
+Cohesion: 0.17
+Nodes (15): 1. Tổng Quan Kiến Trúc Lưu Trữ (Architecture Overview), 2.1. Luồng Tải Lên (Upload Pipeline), 2.2. Luồng Xem Chi Tiết Tài Liệu (Document Preview Pipeline), 2. Luồng Xử Lý Dữ Liệu (Data Flows), 3. Cấu Trúc Tài Liệu Chi Tiết, 4. Các Nguyên Tắc Thiết Kế Trọng Yếu (Design Principles), Hướng Dẫn Kiến Trúc & Triển Khai Hệ Thống Lưu Trữ (Storage Deployment Architecture), Backend (+7 more)
 
 ### Community 113 - "2. Bảo Mật & Quyền Riêng Tư (Security & Privacy Specifications)"
-Cohesion: 0.13
-Nodes (14): 1. Hiệu Năng & Độ Trễ (Performance & Latency), 2. Bảo Mật & Quyền Riêng Tư (Security & Privacy Specifications), 3. Độ Sẵn Sàng & Khả Năng Chịu Lỗi (Availability & Reliability), 4. Khả Năng Mở Rộng & Chi Phí Hạ Tầng (Scalability & Cost Efficiency), 5. Khả Năng Tương Thích & Trải Nghiệm Người Dùng (Usability & Compatibility), NFR-AVAIL-01: Khả năng Vận hành Ngoại tuyến (100% Offline Capability), NFR-AVAIL-02: Tính Toàn Vẹn Giao Tác & Cơ Chế Bù Trừ (Compensating Actions), NFR-SCALE-01: Kiến Trúc Máy Chủ Không Trạng Thái (Stateless Backend) (+6 more)
+Cohesion: 0.22
+Nodes (9): 1. Hiệu Năng & Độ Trễ (Performance & Latency), 3. Độ Sẵn Sàng & Khả Năng Chịu Lỗi (Availability & Reliability), 4. Khả Năng Mở Rộng & Chi Phí Hạ Tầng (Scalability & Cost Efficiency), 5. Khả Năng Tương Thích & Trải Nghiệm Người Dùng (Usability & Compatibility), NFR-AVAIL-01: Khả năng Vận hành Ngoại tuyến (100% Offline Capability), NFR-AVAIL-02: Tính Toàn Vẹn Giao Tác & Cơ Chế Bù Trừ (Compensating Actions), NFR-SCALE-01: Kiến Trúc Máy Chủ Không Trạng Thái (Stateless Backend), NFR-SCALE-02: Zero Egress Cost Scalability (+1 more)
 
 ### Community 114 - "Bổ sung Phân rã Chức năng: Document Sharing & Favorites"
 Cohesion: 0.29
@@ -673,8 +701,8 @@ Cohesion: 0.18
 Nodes (11): 1. Vòng Đời Phát Triển Một Tính Năng Mới (Feature Lifecycle), 2.1. Kiểm tra Linter Giao Diện (Frontend Linting với Oxlint), 2.2. Kiểm tra Kiểu Dữ Liệu TypeScript (Type Checking), 2.3. Chạy Bộ Kiểm Thử Máy Chủ (Backend Testing với Pytest), 2. Kiểm Tra Chất Lượng Mã Nguồn (Linting & Testing), 3. Quy Ước Đặt Tên Commit Git (Conventional Commits), 4. Quy Trình Tạo Pull Request (PR) & Hợp Nhất Nhánh (Merge), Bước 1: Tạo nhánh Git riêng biệt (+3 more)
 
 ### Community 116 - "DocumentQueryService"
-Cohesion: 0.18
-Nodes (11): 1. Mô hình Bảng liên quan & Ràng buộc, 2. Chiến Lược Lập Chỉ Mục (Composite & Partial Indexing), 3. Kỹ Thuật Phân Trang Cửa Sổ Trượt (Window Look-Ahead), 4.1. Hydrate Bundle Children Count, 4.2. Hydrate Personal Views Map, 4. Xóa Bỏ Vấn Đề $N+1$ Query Bằng Kỹ Thuật Hydration Tập Trung, 5. Kết Quả Đo Đạc Thực Tế (Benchmark trên 1.000 Records), Database: Kiến Trúc Chỉ Mục & Tối Ưu Truy Vấn PostgreSQL (+3 more)
+Cohesion: 0.13
+Nodes (13): DocumentQueryService, run_verification(), 1. Mô hình Bảng liên quan & Ràng buộc, 2. Chiến Lược Lập Chỉ Mục (Composite & Partial Indexing), 3. Kỹ Thuật Phân Trang Cửa Sổ Trượt (Window Look-Ahead), 4.1. Hydrate Bundle Children Count, 4.2. Hydrate Personal Views Map, 4. Xóa Bỏ Vấn Đề $N+1$ Query Bằng Kỹ Thuật Hydration Tập Trung (+5 more)
 
 ### Community 117 - "2. Cẩm Nang Lệnh Vận Hành Alembic"
 Cohesion: 0.20
@@ -685,12 +713,12 @@ Cohesion: 0.29
 Nodes (7): 1. Bảng Tổng Hợp Công Cụ Cần Thiết, 2.1. Cài đặt Python 3.11+, 2.2. Cài đặt Node.js & npm, 2.3. Khởi Chạy PostgreSQL (Khuyến nghị dùng Docker), 2.4. Cài đặt Tesseract OCR (Tiếng Việt), 2. Hướng Dẫn Cài Đặt Từng Nền Tảng, 📦 Yêu Cầu Tiên Quyết (Prerequisites & Environment Setup)
 
 ### Community 119 - "BÁO CÁO KỸ THUẬT: KHẮC PHỤC LỖI ĐẾM SỐ LƯỢNG TÀI LIỆU KHO HỌC LIỆU CỘNG ĐỒNG"
-Cohesion: 0.18
-Nodes (11): 1. Hiện tượng & Triệu chứng lỗi (Problem Symptoms), 2.1. Lỗi câu lệnh SQL thống kê ở Backend (`backend/app/routers/library.py`), 2.2. Lỗi lọc và cắt ngắn danh sách môn ở Frontend (`LibraryHome.tsx`), 2. Phân tích nguyên nhân gốc rễ (Root Cause Analysis), 3.1. Sửa Backend (`backend/app/routers/library.py`), 3.2. Sửa Frontend (`frontend/digital-library/src/pages/library/LibraryHome.tsx`), 3. Phương pháp xử lý (Solution & Implementation), 4. Kế hoạch Kiểm thử & Seed dữ liệu (Verification & Seeding) (+3 more)
+Cohesion: 0.11
+Nodes (16): get_faculties(), get_subjects_by_faculty(), FacultyLibraryOut, SubjectOut, test_library_document_counts(), 1. Hiện tượng & Triệu chứng lỗi (Problem Symptoms), 2.1. Lỗi câu lệnh SQL thống kê ở Backend (`backend/app/routers/library.py`), 2.2. Lỗi lọc và cắt ngắn danh sách môn ở Frontend (`LibraryHome.tsx`) (+8 more)
 
-### Community 120 - "react"
-Cohesion: 0.09
-Nodes (27): ShareDocumentModalProps, StatCardProps, COLORS, EditTagsModalProps, InviteMode, RecipientPicker(), ButtonProps, buttonVariants (+19 more)
+### Community 120 - "RecipientPicker.tsx"
+Cohesion: 0.18
+Nodes (13): InviteMode, RecipientPickerProps, SelectedItem, SelectionType, SubFormProps, GroupInviteModalProps, LoginPayload, LoginResponse (+5 more)
 
 ### Community 121 - "Component Inventory"
 Cohesion: 0.40
@@ -721,7 +749,7 @@ Cohesion: 0.40
 Nodes (5): Bảng so sánh chỉ số trước & sau tối ưu (Tập dữ liệu 1.000 records), Các bài toán cốt lõi đã giải quyết, Mục lục tài liệu chi tiết, Nguyên tắc thiết kế, Tối ưu hóa Hiệu năng & Truy vấn Tài liệu (Document Query & Performance)
 
 ### Community 128 - "Database Design: Document Bundle"
-Cohesion: 0.29
+Cohesion: 0.33
 Nodes (6): Bảng `documents`, Cascade Behaviors, Computed Properties, Database Design: Document Bundle, Relationships (ORM), Schema Updates
 
 ### Community 129 - "3. Work in Progress & Partial Implementations"
@@ -753,20 +781,20 @@ Cohesion: 0.67
 Nodes (3): 35. ContributeModal, Bước 1, Bước 2
 
 ### Community 137 - "Hướng Dẫn Tái Sử Dụng & Tích Hợp (Reuse & Integration Guide)"
-Cohesion: 0.15
-Nodes (13): 3.1. Vị trí mã nguồn, 3.2. Đặc điểm triển khai, 3. Trang Chi Tiết Gói Tài Liệu (`BundleDetailPage`), 4.1. Vị trí mã nguồn, 4.2. Đặc điểm triển khai, 4. Kho Học Liệu Môn Học (`LibrarySubject`), 5. Hướng Dẫn Tích Hợp Vào Màn Hình Mới, Bước 1: Khởi tạo State Chế Độ Xem & Danh Sách Chọn Nhiều (+5 more)
+Cohesion: 0.12
+Nodes (16): 2.1. Vị trí mã nguồn, 2.2. Đặc điểm triển khai, 2. Workspace Nhóm Học Tập (`GroupDocumentsSection`), 3.1. Vị trí mã nguồn, 3.2. Đặc điểm triển khai, 3. Trang Chi Tiết Gói Tài Liệu (`BundleDetailPage`), 4.1. Vị trí mã nguồn, 4.2. Đặc điểm triển khai (+8 more)
 
 ### Community 140 - "adr/README.md"
-Cohesion: 0.05
-Nodes (31): 1. Trạng Thái, 2. Bối Cảnh (Context), 3. Các Phương Án Đã Cân Nhắc, 4. Quyết Định (Decision), 5. Hệ Quả & Đánh Đổi (Consequences), 📜 ADR-001: Lựa Chọn Kiến Trúc Lưu Trữ Lai (Cloudflare R2 + Local Filesystem), 1. Trạng Thái, 2. Bối Cảnh (Context) (+23 more)
+Cohesion: 0.17
+Nodes (8): 1. Trạng Thái, 2. Bối Cảnh (Context), 3. Các Phương Án Đã Cân Nhắc, 4. Quyết Định (Decision), 5. Hệ Quả & Đánh Đổi (Consequences), 📜 ADR-003: Lựa Chọn PostgreSQL Full-Text Search (FTS) Thay Vì Elasticsearch, 📋 Danh Mục Các Quyết Định Kiến Trúc Đã Ban Hành, 📜 Hồ Sơ Quyết Định Kiến Trúc (Architecture Decision Records - ADR)
 
 ### Community 141 - "4. Cụm Không Gian Nhóm & Tương Tác Cộng Đồng"
 Cohesion: 0.29
 Nodes (7): 4.1. Bảng `workspaces`, 4.2. Bảng `workspace_members`, 4.3. Bảng `workspace_invitations`, 4.4. Bảng `document_shares`, 4.5. Bảng `community_submissions`, 4.6. Bảng `document_ratings`, 4. Cụm Không Gian Nhóm & Tương Tác Cộng Đồng
 
 ### Community 144 - "AsyncSession"
-Cohesion: 0.13
-Nodes (18): DocumentShare, get_document_ratings(), get_faculties(), get_subjects_by_faculty(), accept_share(), _copy_doc_to_user(), create_share(), get_document_share_status() (+10 more)
+Cohesion: 0.14
+Nodes (19): DocumentShare, create_faculty(), get_community_document(), save_community_document_to_personal(), submit_documents_bulk_to_library(), accept_share(), _copy_doc_to_user(), create_share() (+11 more)
 
 ### Community 145 - "pydantic"
 Cohesion: 0.60
@@ -782,27 +810,27 @@ Nodes (13): 1.1. Thách thức trong trải nghiệm duyệt tài liệu số, 1
 
 ### Community 151 - "folders.py"
 Cohesion: 0.11
-Nodes (30): Folder, FolderTag, Tag, User, create_category(), delete_category(), list_categories(), update_category() (+22 more)
+Nodes (29): Folder, FolderTag, Tag, User, get_document_versions(), add_tags_to_folder(), create_folder(), create_workspace_folder() (+21 more)
 
 ### Community 152 - "4. Chi Tiết Kỹ Thuật Từng Thành Phần"
 Cohesion: 0.20
 Nodes (10): 1. Cây Phân Cấp Thành Phần (Component Hierarchy), 3. Hệ Thống Nhận Diện & Bảng Màu Định Dạng Tệp (`FILE_TYPE_THEMES`), 4.1. `ViewToggle.tsx`: Điều Hướng Chế Độ Xem, 4.2. `DocumentDetailView.tsx`: Chế Độ Danh Sách Chi Tiết, 4.3. `DocumentListView.tsx`: Chế Độ Danh Sách Bảng, 4.4. `DocumentCard/`: Chế Độ Lưới Trực Quan, 4.5. `DocumentBulkActionBar.tsx`: Thanh Thao Tác Hàng Loạt, 4. Chi Tiết Kỹ Thuật Từng Thành Phần (+2 more)
 
 ### Community 153 - "Cấu trúc Components"
-Cohesion: 0.40
-Nodes (5): 1. `DocumentListView.tsx`, 2. `DocumentCard.tsx`, 3. `UploadModal.tsx`, 5. Modals bổ trợ, Cấu trúc Components
+Cohesion: 0.25
+Nodes (7): 1. `DocumentListView.tsx`, 2. `DocumentCard.tsx`, 3. `UploadModal.tsx`, 5. Modals bổ trợ, API Services (`documentService.ts`), Cấu trúc Components, Frontend Components & Services: Document Bundle
 
-### Community 154 - "test_new_features.py"
-Cohesion: 0.19
-Nodes (14): verify_faculty_access(), is_admin(), is_auto_accept(), is_global_admin(), norm_role(), role_rank(), delete_rating(), delete_subject() (+6 more)
+### Community 154 - "verify_faculty_access"
+Cohesion: 0.22
+Nodes (8): verify_faculty_access(), is_global_admin(), norm_role(), create_subject(), delete_rating(), delete_subject(), SubjectCreate, test_role_normalization_and_admin_checks()
 
 ### Community 155 - "5. Cụm Hoạt Động & Cá Nhân Hóa"
 Cohesion: 0.29
 Nodes (7): 5.1. Bảng `notes`, 5.2. Bảng `favorites`, 5.3. Bảng `download_logs`, 5.4. Bảng `notifications`, 5.5. Bảng `trash_batches`, 5.6. Bảng `user_todos`, 5. Cụm Hoạt Động & Cá Nhân Hóa
 
 ### Community 156 - "3.1. Backend (FastAPI + PostgreSQL)"
-Cohesion: 0.07
-Nodes (29): 1. Thông tin sinh viên, 2. Tổng quan kiến trúc, 3.1.1. Hệ thống xác thực & người dùng, 3.1.1. Hệ thống xác thực & người dùng, 3.1.2. Tài liệu cá nhân, 3.1.2. Tài liệu cá nhân, 3.1.3. Folder & Tag, 3.1.3. Folder & Tag (+21 more)
+Cohesion: 0.15
+Nodes (13): 1. Thông tin sinh viên, 2. Tổng quan kiến trúc, 3.1.1. Hệ thống xác thực & người dùng, 3.1.2. Tài liệu cá nhân, 3.1.3. Folder & Tag, 3.1.4. Nhóm (Workspace), 3.1.5. Thông báo, 3.1.6. PostgreSQL nâng cao (trọng tâm đề tài) (+5 more)
 
 ### Community 157 - "2. Chi tiết Request & Response"
 Cohesion: 0.25
@@ -829,19 +857,19 @@ Cohesion: 0.25
 Nodes (5): 1. Thông Tin Chung & Điểm Kết Nối, 2. Nguyên Tắc Thiết Kế API, 3. Bản Đồ Tài Liệu API, 4. Kiểm Tra Tình Trạng Hoạt Động (Health Check), Tổng Quan Hệ Thống API — Foundation Project
 
 ### Community 163 - "requirements/README.md"
-Cohesion: 0.17
-Nodes (8): 1. Tầm Nhìn & Mục Tiêu Nghiệp Vụ (Vision & Strategic Goals), 3. Chỉ Số Đo Lường Hiệu Quả (Business KPIs), 🎯 Yêu Cầu Nghiệp Vụ Cấp Cao (Business Requirements Document - BRD), 📊 Bảng Đối Soát Khoảng Trống Triển Khai (Implementation Gaps), 📚 Danh Mục Tài Liệu Thuộc Phân Hệ Yêu Cầu, Quy Ước Nhãn Trạng Thái Yêu Cầu, 🎯 Triết Lý Quản Lý Yêu Cầu, 📋 Tổng Quan Yêu Cầu & Nghiệp Vụ Hệ Thống (Requirements Overview)
+Cohesion: 0.29
+Nodes (3): 1. Tầm Nhìn & Mục Tiêu Nghiệp Vụ (Vision & Strategic Goals), 3. Chỉ Số Đo Lường Hiệu Quả (Business KPIs), 🎯 Yêu Cầu Nghiệp Vụ Cấp Cao (Business Requirements Document - BRD)
 
 ### Community 164 - "save_to_personal"
-Cohesion: 0.43
-Nodes (5): _copy_document_tags(), get_member_permission(), save_to_personal(), share_document_to_group(), share_folder_to_group()
+Cohesion: 0.39
+Nodes (6): _copy_document_tags(), get_member_permission(), mark_group_document_deleted(), save_to_personal(), share_document_to_group(), share_folder_to_group()
 
 ### Community 166 - "pdfBuilder.ts"
 Cohesion: 0.60
 Nodes (3): fileToBase64(), getImageDimensions(), mergeImagesToPdf()
 
 ### Community 167 - "Business Rules: Quy tắc Nghiệp vụ Chia sẻ Tài liệu"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (7): 1. Định tuyến theo Cấp bậc (Role Ranking), 2. Quy tắc cốt lõi: Tối đa Một yêu cầu Pending cho mỗi Bộ ba, 3. Vòng đời Trạng thái của Yêu cầu Chia sẻ, 4. Cơ chế Sao chép Tài liệu (Copy-on-Accept), Business Rules: Quy tắc Nghiệp vụ Chia sẻ Tài liệu, Khi bộ ba này đã có yêu cầu `pending`:, Ma trận xử lý:
 
 ### Community 168 - "Document Bundle Feature"
@@ -849,8 +877,8 @@ Cohesion: 0.50
 Nodes (4): Document Bundle Feature, Document Structure, Key Features, Overview
 
 ### Community 170 - "3. Nhóm API Thao Tác Hàng Loạt (Bulk Document Actions)"
-Cohesion: 0.08
-Nodes (26): NotificationOut, TodoCreate, TodoOut, TodoUpdate, test_todo_create_time_validation(), 1.1. Lấy danh sách thông báo, 1.2. Đếm số thông báo chưa đọc, 1.3. Đánh dấu tất cả thông báo là đã đọc (+18 more)
+Cohesion: 0.10
+Nodes (19): NotificationOut, 1.1. Lấy danh sách thông báo, 1.2. Đếm số thông báo chưa đọc, 1.3. Đánh dấu tất cả thông báo là đã đọc, 1.4. Đánh dấu một thông báo đã đọc, 1. Nhóm API Thông Báo (Notifications), 2.1. Lấy danh sách việc cần làm, 2.4. Xóa việc cần làm (+11 more)
 
 ### Community 171 - "Website"
 Cohesion: 0.33
@@ -869,12 +897,12 @@ Cohesion: 0.29
 Nodes (6): 1. Danh sách Endpoint, 2. Chi tiết Tham số Truy vấn (Query Parameters), 3. Cấu trúc Response Schema (`PaginatedDocuments`), 4. Frontend TypeScript Interfaces, API: Đặc Tả Endpoint Truy Vấn & Phân Trang Tài Liệu, Chú thích các trường quan trọng:
 
 ### Community 178 - "test_register_and_login"
-Cohesion: 0.33
-Nodes (4): test_register_and_login(), fake_execute_login(), scalar_one_or_none(), fake_execute_register()
+Cohesion: 0.22
+Nodes (7): test_register_and_login(), fake_execute_login(), scalar_one_or_none(), fake_execute_register(), 1. 🔐 Phân Hệ Xác Thực & Danh Tính (Authentication), TC-AUTH-01: Đăng ký tài khoản mới hợp lệ, TC-AUTH-02: Đăng nhập sai mật khẩu
 
-### Community 183 - "Danh Mục Đặc Tả Tính Năng (Feature Specifications Index)"
-Cohesion: 0.50
-Nodes (4): 1. Ma Trận Chỉ Mục 10 Phân Hệ Tính Năng, 2. Kiến Trúc Phân Tầng Của Mỗi Phân Hệ, 3. Quy Định Duy Trì Tài Liệu Tính Năng, Danh Mục Đặc Tả Tính Năng (Feature Specifications Index)
+### Community 183 - "Cẩm Nang Xử Lý Sự Cố Chuyên Sâu (Deep Dive Troubleshooting & Postmortem Guide)"
+Cohesion: 0.14
+Nodes (14): 3. Sự Cố 3: File Code/Text Báo 404 Do Tác Vụ Nền Ghi Đè Xóa Sạch Database, 5. Sự Cố 5: Lỗi Điều Hướng Sai Route Trong `usePersonalDocuments.ts`, 6. Sự Cố 6: Nút Toggle Sidebar (Info Icon) & Nút Bản Gốc / Markdown Biến Mất Trong DocumentDetail, 8. Bảng Tổng Hợp Kiểm Thử & Lệnh Xác Minh (Verification Cheatsheet), Cẩm Nang Xử Lý Sự Cố Chuyên Sâu (Deep Dive Troubleshooting & Postmortem Guide), Giải pháp khắc phục, Giải pháp khắc phục, Giải pháp kỹ thuật đã triển khai (+6 more)
 
 ### Community 185 - "Quy Chuẩn Xử Lý Lỗi API (Error Handling)"
 Cohesion: 0.29
@@ -892,21 +920,25 @@ Nodes (4): CachedStaticFiles, 5.1. Cấu hình CORS (Cross-Origin Resource Shari
 Cohesion: 0.20
 Nodes (9): 1. Bối Cảnh & Vấn Đề Thực Tế (Problem Statement), 2.1. Tổ chức theo 5 Không Gian Học Tập (5 Workspaces), 2.2. Triết lý Nhân Bản Độc Lập (Cloning / Forking Principle), 2.3. Tìm kiếm Toàn văn & Trích xuất Nội dung Tự động, 2.4. Khả năng Vận hành Linh hoạt (Cloud & Offline), 2. Mục Tiêu & Giải Pháp Đột Phá Của Hệ Thống, 3. Đối Tượng Sử Dụng & Giá Trị Mang Lại, 4. Công Nghệ Nền Tảng (Technology Stack Overview) (+1 more)
 
-### Community 189 - "Chia sẻ tài liệu (Copy-on-Accept)"
-Cohesion: 0.67
-Nodes (3): Chia sẻ tài liệu (Copy-on-Accept), Mục lục tài liệu chi tiết, Nguyên tắc thiết kế
+### Community 189 - "useDebounce"
+Cohesion: 0.15
+Nodes (14): Chia sẻ tài liệu (Copy-on-Accept), Các bài toán cốt lõi đã giải quyết, Mục lục tài liệu chi tiết, Nguyên tắc thiết kế, 3.2.4. State & Services, 3.2.4. State & Services, AdvancedPickerForm(), BasicPickerForm() (+6 more)
 
-### Community 190 - "tailwindcss"
-Cohesion: 0.50
-Nodes (3): tailwindcss@^4.3.3, config, tailwindcss
+### Community 190 - "testing/README.md"
+Cohesion: 0.14
+Nodes (11): 1. Hiện Trạng Các Tầng Kiểm Thử (Testing Matrix), 2. Bản Đồ Tài Liệu Kiểm Thử, 3. Nguyên Tắc Kiểm Thử Cốt Lõi, Chiến Lược Kiểm Thử & Đảm Bảo Chất Lượng — Foundation Project, 1. Kim Tự Tháp Kiểm Thử Trong Dự Án (Testing Pyramid), 2.1. Thiết lập HTTP Client Bất đồng bộ (`httpx.AsyncClient`), 2.2. Kiểm Thử Phân Bản & Chống Trùng Lặp Lưu Trữ (Deduplication Testing), 2.3. Kiểm Thử Phân Quyền Chia Sẻ Tự Động (Auto-Accept RBAC Testing) (+3 more)
 
 ### Community 191 - "📤 UC-01: Tải Lên Tài Liệu & Kiểm Tra Trùng Lặp (Upload & Deduplication)"
 Cohesion: 0.22
 Nodes (9): 1. Thông Tin Tổng Quan, 2. Tiền Điều Kiện & Ràng Buộc, 3. Luồng Sự Kiện Chính (Main Flow), 4.1. Ngoại lệ 1: File vượt quá kích thước cho phép (> 50MB), 4.2. Ngoại lệ 2: Định dạng tệp không hợp lệ, 4.3. Ngoại lệ 3: Ghi file Storage thành công nhưng lỗi cơ sở dữ liệu (Rollback), 4. Các Luồng Ngoại Lệ (Alternative / Exception Flows), 5. Hậu Điều Kiện (Postconditions) (+1 more)
 
 ### Community 192 - "🗑️ UC-05: Vòng Đời Thùng Rác & Tự Động Dọn Dẹp (Trash Lifecycle & Purge)"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (8): 1. Thông Tin Tổng Quan, 2. Vòng Đời Tài Liệu Qua Các Trạng Thái, 3.1. Luồng 1: Xóa Mềm Tài Liệu (Soft Delete), 3.2. Luồng 2: Khôi Phục Tài Liệu (Restore), 3.3. Luồng 3: Tác Vụ Quét Dọn Tự Động Sau 30 Ngày (Scheduled Purge), 3. Luồng Chi Tiết Các Tình Huống Nghiệp Vụ, 4. Các Biện Pháp An Toàn Khi Xóa Vĩnh Viễn, 🗑️ UC-05: Vòng Đời Thùng Rác & Tự Động Dọn Dẹp (Trash Lifecycle & Purge)
+
+### Community 193 - "Cẩm Nang Thực Thi Kiểm Thử (Running Tests Guide)"
+Cohesion: 0.14
+Nodes (14): 1. Chuẩn Bị Môi Trường Kiểm Thử, 2.1. Chạy Toàn Bộ Bộ Kiểm Thử Backend, 2.2. Chạy Từng File Kiểm Thử Chuyên Biệt, 2.3. Chạy Một Ca Kiểm Thử Cụ Thể (Filter by Keyword), 2.4. Chạy Kịch Bản Kiểm Tra Điểm Cuối Phase 2, 2. Kiểm Thử Backend (Pytest), 3.1. Kiểm Tra Nghiêm Ngặt Kiểu Dữ Liệu TypeScript, 3.2. Quét Lỗi Cú Pháp & Logic Với Oxlint (+6 more)
 
 ### Community 194 - "2. Danh Mục 20 Bảng Dữ Liệu Theo Phân Cụm Chức Năng"
 Cohesion: 0.18
@@ -917,7 +949,7 @@ Cohesion: 0.48
 Nodes (5): useWorkspaceOperations(), createWorkspaceOperations(), WorkspaceConfig, WorkspaceOperations, WorkspaceType
 
 ### Community 196 - "1. Phạm Vi Triển Khai Đã Xác Nhận (In-Scope)"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (8): 1.1. Phân hệ 5 Không Gian Lưu Trữ, 1.3. Phân hệ Kiểm tra Trùng lặp & Lưu trữ Bền vững (Deduplication), 1.4. Phân hệ Tìm kiếm & Chấm điểm Xu hướng (FTS & Analytics), 1.5. Phân hệ Kiểm duyệt Học liệu Cộng đồng (Moderation Workflow), 1. Phạm Vi Triển Khai Đã Xác Nhận (In-Scope), 2. Giới Hạn & Ràng Buộc Kỹ Thuật (System Constraints), 3. Phần Nằm Ngoài Phạm Vi (Out-of-Scope), 🎯 Phạm Vi & Ranh Giới Hệ Thống (Project Scope)
 
 ### Community 197 - "📚 Chi Tiết Từng Lộ Trình"
@@ -937,28 +969,32 @@ Cohesion: 0.29
 Nodes (7): 1. Đặc Tả Chi Tiết 10 Tính Năng (`feat/`), 2. Kiến Trúc & Triển Khai Hạ Tầng, 3. Quản Lý Tiến Độ & Thẩm Định Đồ Án, 🧭 Bắt Đầu Nhanh (Getting Started), 🗂 Cây Thư Mục & Bản Đồ Tài Liệu Toàn Dự Án, 📚 Cổng Thông Tin & Tài Liệu Dự Án Thư Viện Số, 🔗 Liên Kết Nhanh Đến Các Phân Hệ
 
 ### Community 201 - "🔍 UC-04: Tìm Kiếm Toàn Văn & Xem Trước Đa Định Dạng (Search & Preview)"
-Cohesion: 0.29
+Cohesion: 0.33
 Nodes (6): 1. Thông Tin Tổng Quan, 2. Luồng Nghiệp Vụ Tìm Kiếm Toàn Văn (Full-Text Search Flow), 3. Luồng Nghiệp Vụ Xem Trước Đa Định Dạng (Multi-Format Preview Flow), Các tiêu chí lọc kết hợp (Multi-filter):, 🔍 UC-04: Tìm Kiếm Toàn Văn & Xem Trước Đa Định Dạng (Search & Preview), Ưu điểm vượt trội của giải pháp xem trước:
 
 ### Community 202 - "🔗 UC-03: Nhân Bản Tài Liệu & Cơ Chế Chia Sẻ (Forking & Sharing)"
-Cohesion: 0.33
+Cohesion: 0.40
 Nodes (5): 1. Thông Tin Tổng Quan, 2. Luồng Nghiệp Vụ 1: Lưu Về Kho Cá Nhân (Document Forking / Cloning), 3. Luồng Nghiệp Vụ 2: Tạo Liên Kết Chia Sẻ Bảo Mật (Secure Sharing Link), Nguyên tắc bảo toàn độc lập:, 🔗 UC-03: Nhân Bản Tài Liệu & Cơ Chế Chia Sẻ (Forking & Sharing)
 
-### Community 203 - "ref_lucide_react"
-Cohesion: 0.10
-Nodes (25): DocumentFilterBar(), DocumentFilterBarProps, TagOption, TIME_FILTER_OPTIONS, InfiniteScrollSentinelProps, DynamicFilterDropdown(), DynamicFilterDropdownProps, FilterOption (+17 more)
+### Community 203 - "Danh Mục Ca Kiểm Thử Trọng Yếu (Test Cases Matrix)"
+Cohesion: 0.14
+Nodes (14): 2. 📄 Phân Hệ Quản Lý Tài Liệu & Lưu Trữ (Documents & Storage), 3. 🔗 Phân Hệ Chia Sẻ Tài Liệu (Document Sharing & RBAC), 4. 🔍 Phân Hệ Tìm Kiếm Toàn Văn (Full-Text Search), 5. 🗑️ Phân Hệ Thùng Rác & Khôi Phục (Trash Lifecycle), 6. 🏛️ Phân Hệ Thư Viện Cộng Đồng (Community Library), Danh Mục Ca Kiểm Thử Trọng Yếu (Test Cases Matrix), TC-DEDUP-01: Chống nhân bản file lưu trữ bằng mã băm SHA-256, TC-DOC-01: Tải lên tài liệu cá nhân thành công (+6 more)
 
 ### Community 204 - "1. Cài Đặt Môi Trường & Thư Viện Phụ Thuộc"
-Cohesion: 0.20
-Nodes (10): 1.1. Cài Đặt Phía Backend, 1.2. Kích Hoạt Trigger Tìm Kiếm Toàn Văn (PostgreSQL FTS), 1.3. Cài Đặt Phía Frontend, 1. Cài Đặt Môi Trường & Thư Viện Phụ Thuộc, 2. Quy Trình Kiểm Thử Chức Năng (Test Cases & Verification), 3. Khắc Phục Sự Cố Thường Gặp (Troubleshooting), Hướng Dẫn Triển Khai & Kiểm Thử: Preview & Thumbnail Management, Kịch Bản 3: Đổi Trang Bìa PDF (Cá Nhân & Nhóm) (+2 more)
+Cohesion: 0.18
+Nodes (11): 1.1. Cài Đặt Phía Backend, 1.2. Kích Hoạt Trigger Tìm Kiếm Toàn Văn (PostgreSQL FTS), 1.3. Cài Đặt Phía Frontend, 1. Cài Đặt Môi Trường & Thư Viện Phụ Thuộc, 2. Quy Trình Kiểm Thử Chức Năng (Test Cases & Verification), 3. Khắc Phục Sự Cố Thường Gặp (Troubleshooting), Hướng Dẫn Triển Khai & Kiểm Thử: Preview & Thumbnail Management, Kịch Bản 3: Đổi Trang Bìa PDF (Cá Nhân & Nhóm) (+3 more)
+
+### Community 205 - "seed_inc_user.py"
+Cohesion: 0.32
+Nodes (7): get_by(), get_or_create(), main(), make_student_code(), seed_academics(), seed_users(), user_exists()
 
 ### Community 206 - "data/README.md"
 Cohesion: 0.33
 Nodes (4): 1. Nguồn Chuẩn Xác Thực (Single Source of Truth), 2. Bản Đồ Tài Liệu Cơ Sở Dữ Liệu, 3. Thống Kê Tổng Quan Về Schema, Kiến Trúc Dữ Liệu & Cơ Sở Dữ Liệu — Foundation Project
 
-### Community 207 - "4. Phân Hệ Kho Học Liệu Cộng Đồng (Community Library)"
-Cohesion: 0.40
-Nodes (5): 4. Phân Hệ Kho Học Liệu Cộng Đồng (Community Library), FR-COMM-01: Duyệt Học liệu theo Khoa & Môn học, FR-COMM-02: Đóng góp Học liệu (Community Submission), FR-COMM-03: Thẩm định & Phê duyệt Học liệu, FR-COMM-04: Đánh giá & Nhận xét (Rating & Review)
+### Community 207 - "2. Các Giới Hạn Đã Biết (Known Limitations)"
+Cohesion: 0.18
+Nodes (10): 1.1. Các Phân Hệ Được Kiểm Thử Tốt (High Coverage & Stable), 1.2. Các Khoảng Trống Kiểm Thử (Testing Gaps), 1. Đánh Giá Hiện Trạng Bao Phủ Kiểm Thử (Coverage Assessment), 2.1. Phụ Thuộc Vào Tính Năng Bản Địa Của PostgreSQL, 2.2. Xử Lý Tách Từ Tiếng Việt Trong Full-Text Search, 2.3. Tái Sử Dụng Connection Pool Trong Phiên Pytest Đơn Lẻ, 2.4. Phụ Thuộc Vào Tiến Trình APScheduler Trong Quá Trình Dọn Rác, 2. Các Giới Hạn Đã Biết (Known Limitations) (+2 more)
 
 ### Community 209 - "3. Cụm Phân Loại & Cây Thư Mục"
 Cohesion: 0.33
@@ -980,23 +1016,119 @@ Nodes (25): 1. Tổ Chức Mã Nguồn Theo Phân Lớp (`backend/app/`), 2. Lu�
 Cohesion: 0.40
 Nodes (4): 1. Sơ Đồ ERD Tổng Thể, 2. Chi Tiết Thực Thể Cốt Lõi & Ràng Buộc Khóa Ngoại, 3. Quy Tắc Toàn Vẹn Tham Chiếu (Referential Integrity Rules), Sơ Đồ Thực Thể Quan Hệ (Entity Relationship Diagram - ERD)
 
+### Community 214 - "93f46eb359df_add_workspace_tags_table.py"
+Cohesion: 0.20
+Nodes (5): downgrade(), upgrade(), upgrade(), downgrade(), upgrade()
+
+### Community 215 - "get_file_url"
+Cohesion: 0.25
+Nodes (8): get_file_url(), 1. Biến Môi Trường Backend (FastAPI - `.env` tại thư mục gốc), 2. Biến Môi Trường Frontend (React/Vite - `.env` tại thư mục frontend), 3. Các Lỗi Thường Gặp Về Cấu Hình (Common Pitfalls), 4. File Mẫu Môi Trường Hoàn Chỉnh, Backend `.env` Mẫu:, Danh Mục Biến Môi Trường (Environment Variables Reference), Frontend `.env` Mẫu:
+
+### Community 216 - "3.1. Backend (FastAPI + PostgreSQL)"
+Cohesion: 0.22
+Nodes (9): 3.1.1. Hệ thống xác thực & người dùng, 3.1.2. Tài liệu cá nhân, 3.1.3. Folder & Tag, 3.1.4. Nhóm (Workspace), 3.1.5. Thông báo, 3.1. Backend (FastAPI + PostgreSQL), 3.3. PostgreSQL nâng cao (trọng tâm đề tài), DANH SÁCH CHỨC NĂNG ĐÃ XÂY DỰNG (+1 more)
+
+### Community 217 - "api.ts"
+Cohesion: 0.33
+Nodes (4): academicsService, api, dashboardService, trashService
+
+### Community 218 - "shareService.ts"
+Cohesion: 0.22
+Nodes (8): DocumentMini, DocumentShareItem, DocumentShareStatusResponse, PredictedUser, ShareCreateResponse, SharePreviewPayload, SharePreviewResponse, ShareRecipientResult
+
+### Community 219 - "2. Chi Tiết Từng Endpoint"
+Cohesion: 0.25
+Nodes (8): 1. Danh Sách Endpoints, 2.1. Cập nhật Trang Bìa PDF Cá Nhân, 2.2. Cập nhật Trang Bìa PDF Trong Nhóm, 2.3. Lấy Nội Dung Thô Của File (Get Raw File Content), 2.4. Tải Lên Tài Liệu Mở Rộng (Upload Document), 2.5. Cập Nhật Thumbnail Thủ Công Qua API Update, 2. Chi Tiết Từng Endpoint, Đặc Tả API: Preview & Thumbnail Management
+
+### Community 220 - "📦 Kiến Trúc Lưu Trữ Bền Vững (Storage Architecture)"
+Cohesion: 0.25
+Nodes (7): 1. Mô Hình Lưu Trữ Lai Đột Phá (Hybrid Storage Architecture), 2. Kiểm Tra Trùng Lặp Theo Mã Băm SHA-256 (Deduplication Architecture), 3. Tính Toàn Vẹn Dữ Liệu & Cơ Chế Bù Trừ (Compensating Actions), 4. Quản Lý Vòng Đời Tệp Tin (Soft Delete, Restore & Retention), 📦 Kiến Trúc Lưu Trữ Bền Vững (Storage Architecture), So Sánh Hai Chiến Lược Vận Hành, Ưu điểm của mô hình Stream Chunking 64KB:
+
+### Community 221 - "📜 ADR-002: Lựa Chọn Mô Hình Nhân Bản Độc Lập (Document Cloning / Forking)"
+Cohesion: 0.29
+Nodes (6): 1. Trạng Thái, 2. Bối Cảnh (Context), 3. Các Phương Án Đã Cân Nhắc, 4. Quyết Định (Decision), 5. Hệ Quả & Đánh Đổi (Consequences), 📜 ADR-002: Lựa Chọn Mô Hình Nhân Bản Độc Lập (Document Cloning / Forking)
+
+### Community 222 - "1. Sự Cố 1: Lỗi 404 Do Trình Duyệt Gửi Request File Tương Đối Tới Backend"
+Cohesion: 0.33
+Nodes (6): 1. Sự Cố 1: Lỗi 404 Do Trình Duyệt Gửi Request File Tương Đối Tới Backend, 1. Tự động chuyển đổi tại Pydantic Schema ([`schemas/document.py`](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/schemas/document.py)):, 2. Chuẩn hóa Helper Frontend ([`services/api.ts`](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/services/api.ts)):, Giải pháp kỹ thuật đã triển khai (Solution), Hiện trạng lỗi (Symptom), Nguyên nhân gốc rễ (Root Cause)
+
+### Community 223 - "10. Thông tin khi đóng góp"
+Cohesion: 0.33
+Nodes (6): 10. Thông tin khi đóng góp, Ghi chú, Khoa, Loại tài liệu, Môn học, Năm học
+
+### Community 224 - "2. Bảo Mật & Quyền Riêng Tư (Security & Privacy Specifications)"
+Cohesion: 0.33
+Nodes (6): 2. Bảo Mật & Quyền Riêng Tư (Security & Privacy Specifications), NFR-SEC-01: Xác thực JWT & Kiểm soát Phiên (Session Management), NFR-SEC-02: Kiểm soát Ủy quyền Cấp Bản ghi & Phòng chống IDOR, NFR-SEC-03: Phòng chống Tấn công XSS khi Xem trước (XSS Prevention), NFR-SEC-04: An toàn Tệp tin Tải lên & Chống Xuyên thư mục (Path Traversal), NFR-SEC-05: Đánh giá An toàn Lưu trữ Token (Implementation Gap)
+
+### Community 225 - "👥 UC-06: Cộng Tác Không Gian Nhóm Học Tập (Group Collaboration)"
+Cohesion: 0.33
+Nodes (5): 1. Thông Tin Tổng Quan, 2. Luồng Nghiệp Vụ Chính (Main Flow), 3. Ranh Giới Quyền Hạn Trong Không Gian Nhóm, 4. Các Quy Tắc Nghiệp Vụ Cần Lưu Ý, 👥 UC-06: Cộng Tác Không Gian Nhóm Học Tập (Group Collaboration)
+
+### Community 226 - "📜 ADR-001: Lựa Chọn Kiến Trúc Lưu Trữ Lai (Cloudflare R2 + Local Filesystem)"
+Cohesion: 0.33
+Nodes (6): 1. Trạng Thái, 2. Bối Cảnh (Context), 3. Các Phương Án Đã Cân Nhắc, 4. Quyết Định (Decision), 5. Hệ Quả & Đánh Đổi (Consequences), 📜 ADR-001: Lựa Chọn Kiến Trúc Lưu Trữ Lai (Cloudflare R2 + Local Filesystem)
+
+### Community 227 - "📜 ADR-004: Dựng Hình Xem Trước Tài Liệu Phía Trình Duyệt (Client-Side Preview)"
+Cohesion: 0.33
+Nodes (5): 1. Trạng Thái, 2. Bối Cảnh (Context), 3. Các Phương Án Đã Cân Nhắc, 5. Hệ Quả & Đánh Đổi (Consequences), 📜 ADR-004: Dựng Hình Xem Trước Tài Liệu Phía Trình Duyệt (Client-Side Preview)
+
+### Community 228 - "📜 ADR-005: Lựa Chọn Thuật Toán SHA-256 Để Nhận Diện Trùng Lặp (Deduplication)"
+Cohesion: 0.33
+Nodes (6): 1. Trạng Thái, 2. Bối Cảnh (Context), 3. Các Phương Án Đã Cân Nhắc, 4. Quyết Định (Decision), 5. Hệ Quả & Đánh Đổi (Consequences), 📜 ADR-005: Lựa Chọn Thuật Toán SHA-256 Để Nhận Diện Trùng Lặp (Deduplication)
+
+### Community 229 - "2. Phân Hệ Kho Cá Nhân (Personal Space)"
+Cohesion: 0.40
+Nodes (5): 2. Phân Hệ Kho Cá Nhân (Personal Space), FR-PERS-01: Quản lý Cây Thư mục (Folders), FR-PERS-02: Tải lên & Kiểm tra Trùng lặp (Upload & Deduplication), FR-PERS-03: Ghi chú Cá nhân & Gắn Thẻ (Notes & Tags), FR-PERS-04: Danh sách Việc cần làm Học tập (User To-dos)
+
+### Community 230 - "📋 Tổng Quan Yêu Cầu & Nghiệp Vụ Hệ Thống (Requirements Overview)"
+Cohesion: 0.40
+Nodes (5): 📊 Bảng Đối Soát Khoảng Trống Triển Khai (Implementation Gaps), 📚 Danh Mục Tài Liệu Thuộc Phân Hệ Yêu Cầu, Quy Ước Nhãn Trạng Thái Yêu Cầu, 🎯 Triết Lý Quản Lý Yêu Cầu, 📋 Tổng Quan Yêu Cầu & Nghiệp Vụ Hệ Thống (Requirements Overview)
+
+### Community 231 - "🏛️ UC-02: Đóng Góp & Thẩm Định Học Liệu Cộng Đồng (Submission & Moderation)"
+Cohesion: 0.40
+Nodes (5): 1. Thông Tin Tổng Quan, 2. Tiền Điều Kiện, 3. Luồng Sự Kiện Chính (Main Flow), 4. Các Quy Tắc Nghiệp Vụ Cần Tuân Thủ, 🏛️ UC-02: Đóng Góp & Thẩm Định Học Liệu Cộng Đồng (Submission & Moderation)
+
+### Community 233 - "11. Trạng thái tài liệu đóng góp"
+Cohesion: 0.50
+Nodes (4): 11. Trạng thái tài liệu đóng góp, Approved, Pending, Rejected
+
+### Community 234 - "19. Bộ lọc tài liệu"
+Cohesion: 0.50
+Nodes (4): 19. Bộ lọc tài liệu, Theo cách sắp xếp, Theo loại, Theo năm học
+
+### Community 235 - "22. Thông báo"
+Cohesion: 0.50
+Nodes (4): 22. Thông báo, Có tài liệu chờ duyệt, Tài liệu bị từ chối, Tài liệu được duyệt
+
+### Community 236 - "8. Cấu trúc phân cấp"
+Cohesion: 0.50
+Nodes (4): 8. Cấu trúc phân cấp, Document, Faculty, Subject
+
+### Community 237 - "3. Phân Hệ Không Gian Nhóm (Group Workspace)"
+Cohesion: 0.50
+Nodes (4): 3. Phân Hệ Không Gian Nhóm (Group Workspace), FR-GRP-01: Khởi tạo Nhóm & Quản lý Thành viên, FR-GRP-02: Chia sẻ & Quản lý Tài liệu Nhóm, FR-GRP-03: Thùng rác Nhóm Độc lập
+
+### Community 238 - "7. Phân Hệ Vòng Đời Dữ Liệu & Thống Kê (Lifecycle & Analytics)"
+Cohesion: 0.50
+Nodes (4): 7. Phân Hệ Vòng Đời Dữ Liệu & Thống Kê (Lifecycle & Analytics), FR-ACT-01: Nhật ký Tương tác & Xếp hạng Xu hướng, FR-TRSH-01: Xóa mềm & Khôi phục (Soft Delete & Restore), FR-TRSH-02: Tự động Dọn rác Định kỳ sau 30 Ngày
+
 ## Knowledge Gaps
-- **28 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **33 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `save_to_personal()` connect `save_to_personal` to `User`, `sqlalchemy`, `Button`, `documents.py`, `spec.md`, `documents.py`, `cn.ts`, `folders.py`?**
-  _High betweenness centrality (0.128) - this node is a cross-community bridge._
+- **Why does `save_to_personal()` connect `save_to_personal` to `User`, `sqlalchemy`, `Hướng Dẫn Tái Sử Dụng & Tích Hợp (Reuse & Integration Guide)`, `spec.md`, `_process_document_background`, `cn.ts`, `folders.py`?**
+  _High betweenness centrality (0.130) - this node is a cross-community bridge._
 - **Are the 70 inferred relationships involving `User` (e.g. with `get_current_user()` and `get_optional_user()`) actually correct?**
   _`User` has 70 INFERRED edges - model-reasoned connections that need verification._
 - **Should `pydantic` be split into smaller, more focused modules?**
-  _Cohesion score 0.08708708708708708 - nodes in this community are weakly interconnected._
-- **Why does `DocumentDetail()` connect `DocumentDetail/DocumentDetail.tsx` to `test_storage_dedup.py`, `Shared components`, `App.tsx`, `Button`, `Đặc Tả Tính Năng: Theo Dõi Hoạt Động & Thống Kê Tương Tác (Activity Tracking & Analytics)`, `Đặc Tả Tính Năng: Xem Trước Đa Định Dạng & Tùy Chỉnh Ảnh Bìa (Document Preview & Cover Management)`, `_process_document_background`, `cn`, `Quy Tắc Nghiệp Vụ: Preview & Thumbnail Management`, `implementation.md`?**
-  _High betweenness centrality (0.105) - this node is a cross-community bridge._
-- **Should `Shared components` be split into smaller, more focused modules?**
-  _Cohesion score 0.07446808510638298 - nodes in this community are weakly interconnected._
-- **Why does `cn()` connect `cn` to `Shared components`, `SettingsPage.tsx`, `App.tsx`, `Button`, `DocumentDetail/DocumentDetail.tsx`, `groupSpace.types.ts`, `PersonalDocuments.tsx`, `ref_lucide_react`, `Card`, `cn.ts`, `TrashTab.tsx`, `react`?**
-  _High betweenness centrality (0.071) - this node is a cross-community bridge._
+  _Cohesion score 0.11290322580645161 - nodes in this community are weakly interconnected._
+- **Why does `DocumentDetail()` connect `DocumentDetail/DocumentDetail.tsx` to `Button`, `Đặc Tả Tính Năng: Theo Dõi Hoạt Động & Thống Kê Tương Tác (Activity Tracking & Analytics)`, `react`, `Đặc Tả Tính Năng: Xem Trước Đa Định Dạng & Tùy Chỉnh Ảnh Bìa (Document Preview & Cover Management)`, `Button`, `cn.ts`, `Cẩm Nang Xử Lý Sự Cố Chuyên Sâu (Deep Dive Troubleshooting & Postmortem Guide)`, `Quy Tắc Nghiệp Vụ: Preview & Thumbnail Management`, `implementation.md`?**
+  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+- **Should `4. 🏛️ Thư Viện Cộng Đồng & Học Thuật (Community Library & Academics)` be split into smaller, more focused modules?**
+  _Cohesion score 0.09176788124156546 - nodes in this community are weakly interconnected._
+- **Why does `cn()` connect `DocumentDetail/DocumentDetail.tsx` to `SettingsPage.tsx`, `App.tsx`, `Header.tsx`, `Button`, `CodeViewer`, `groupSpace.types.ts`, `react`, `Button`, `PersonalDocuments.tsx`, `cn.ts`, `TrashTab.tsx`?**
+  _High betweenness centrality (0.083) - this node is a cross-community bridge._
 - **Should `User` be split into smaller, more focused modules?**
-  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12596153846153846 - nodes in this community are weakly interconnected._
