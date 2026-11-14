@@ -139,6 +139,7 @@ const sidebars: SidebarsConfig = {
       label: '✨ Feature Specs',
       collapsed: false,
       items: [
+        'feat/README',
         {
           type: 'category',
           label: 'Activity Tracking',

@@ -34,19 +34,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 7 — Database và dữ liệu
 - *Trạng thái:* `[x] DONE` — Tạo `docs/data/` (README, DATABASE_OVERVIEW, DATA_DICTIONARY với đầy đủ 26 bảng, ERD với sơ đồ Mermaid, MIGRATIONS với chuỗi 7 revision Alembic và hướng dẫn lệnh), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 8 — Tài liệu feature mới và chỉ mục feature
-
-**Mục tiêu:** Giúp tìm và hiểu các feature, nhưng giữ nguyên các tài liệu feature hiện tại.
-
-**Tài liệu/việc làm:**
-
-- Tạo `docs/feat/README.md` làm danh mục, nếu chưa có.
-- Tạo chỉ mục tổng thể bên ngoài tài liệu feature, liên kết tới các trang hiện có.
-- Kiểm tra tính đầy đủ của sidebar và khả năng truy cập các tài liệu feature.
-- Chỉ tạo tài liệu bổ sung **bên ngoài `docs/feat/`** nếu cần; tài liệu mới đó có thể liên kết tới nội dung feature hiện tại.
-- Không áp dụng template bằng cách sửa các file feature hiện có.
-
-**Tiêu chí hoàn thành:** Người đọc tìm được tài liệu feature hiện tại từ website; nội dung và file trong `docs/feat/` không bị thay đổi.
+## [x] Giai đoạn 8 — Tài liệu feature mới và chỉ mục feature
+- *Trạng thái:* `[x] DONE` — Tạo `docs/feat/README.md` làm danh mục chỉ mục tổng thể cho 10 phân hệ tính năng, liên kết chéo với `KEY_FEATURES.md`, bảo toàn 100% nguyên vẹn cấu trúc và file hiện có trong `docs/feat/`, cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 9 — Kiểm thử và chất lượng
 
