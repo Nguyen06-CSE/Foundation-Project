@@ -95,10 +95,13 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'deployment/README',
-        'deployment/ENV_VARIABLES',
+        'deployment/DEPLOYMENT_GUIDE',
+        'deployment/ENVIRONMENT_CONFIGURATION',
         'deployment/STORAGE_R2',
+        'deployment/RELEASE_AND_ROLLBACK',
         'deployment/TROUBLESHOOTING',
         'deployment/BUG_FIX_REPORT',
+        'deployment/ENV_VARIABLES',
       ],
     },
 

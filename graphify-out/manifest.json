@@ -2048,9 +2048,9 @@
     "semantic_hash": ""
   },
   "docs/deployment/README.md": {
-    "mtime": 1793954043.322786,
-    "seen": 1794543497.161838,
-    "ast_hash": "6ea2f71eb2bbafc759d98d6861d8531e",
+    "mtime": 1794628495.1558645,
+    "seen": 1794628609.587347,
+    "ast_hash": "318af2e1938bcc09bc958a49102a77fd",
     "semantic_hash": ""
   },
   "docs/deployment/STORAGE_R2.md": {
@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794628341.3042376,
-    "seen": 1794628397.72872,
-    "ast_hash": "77f1e802d83e032f91d387c54bf444d2",
+    "mtime": 1794628542.9200518,
+    "seen": 1794628609.578388,
+    "ast_hash": "d06ea506252a0598ced8e871d6102711",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3554,9 +3554,9 @@
     "semantic_hash": ""
   },
   "plan-docs.md": {
-    "mtime": 1794628387.0205772,
-    "seen": 1794628397.739667,
-    "ast_hash": "aa4a66ba739617abdcd023c55c38e819",
+    "mtime": 1794628602.2447977,
+    "seen": 1794628609.591371,
+    "ast_hash": "368c7fd2f1d36de9ac0dc9d1be5b4e30",
     "semantic_hash": ""
   },
   "docs/development/DATABASE_SETUP.md": {
@@ -3593,6 +3593,24 @@
     "mtime": 1794628319.4967725,
     "seen": 1794628397.7364821,
     "ast_hash": "25cf2deb39001bb25de7c8638356039c",
+    "semantic_hash": ""
+  },
+  "docs/deployment/DEPLOYMENT_GUIDE.md": {
+    "mtime": 1794628446.8654258,
+    "seen": 1794628609.58731,
+    "ast_hash": "89088ac68b09e6e274915bc67b0aae1f",
+    "semantic_hash": ""
+  },
+  "docs/deployment/ENVIRONMENT_CONFIGURATION.md": {
+    "mtime": 1794628462.2845635,
+    "seen": 1794628609.587311,
+    "ast_hash": "a493aef83cf39ea3fb2169c6af2bef7f",
+    "semantic_hash": ""
+  },
+  "docs/deployment/RELEASE_AND_ROLLBACK.md": {
+    "mtime": 1794628480.411203,
+    "seen": 1794628609.587349,
+    "ast_hash": "921cda256368f063f6d3d465371f0a8d",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {

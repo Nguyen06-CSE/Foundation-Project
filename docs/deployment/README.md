@@ -111,14 +111,17 @@ sequenceDiagram
 
 ## 3. Cấu Trúc Tài Liệu Chi Tiết
 
-Hệ thống tài liệu triển khai được phân tách theo từng chuyên đề kỹ thuật:
+Hệ thống tài liệu triển khai và vận hành bao gồm 7 chuyên đề kỹ thuật chuyên sâu:
 
 | Tài liệu | Nội dung trọng tâm |
 | :--- | :--- |
-| [**STORAGE_R2.md**](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/deployment/STORAGE_R2.md) | Hướng dẫn cấu hình Cloudflare R2 từ A-Z: Bucket, CORS, Public URL, R2 API Tokens, kiến trúc On-Demand Temp Buffer. |
-| [**TROUBLESHOOTING.md**](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/deployment/TROUBLESHOOTING.md) | Phân tích chuyên sâu các sự cố 404, xung đột chuỗi ngầm `.r` trong `.r2.dev`, lỗi ghi đè rỗng database, và các phương án xử lý triệt để. |
-| [**ENV_VARIABLES.md**](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/deployment/ENV_VARIABLES.md) | Bảng tra cứu toàn diện các biến môi trường Backend và Frontend cho môi trường Local, Staging và Production. |
-| [**BUG_FIX_REPORT.md**](file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/deployment/BUG_FIX_REPORT.md) | Báo cáo kỹ thuật chi tiết gửi Engineering Manager/Lead: Đánh giá nguyên nhân, giải pháp, tác động kỹ thuật và giá trị kinh doanh. |
+| [**DEPLOYMENT_GUIDE.md**](./DEPLOYMENT_GUIDE.md) | Quy trình triển khai thực tế từ A-Z: FastAPI Backend, Nginx, React SPA, Cloudflare R2, PostgreSQL Cloud và GitHub Pages. |
+| [**ENVIRONMENT_CONFIGURATION.md**](./ENVIRONMENT_CONFIGURATION.md) | Chiến lược quản trị cấu hình theo môi trường (Local, Staging, Production), bảo vệ secret và quy trình chuyển đổi. |
+| [**STORAGE_R2.md**](./STORAGE_R2.md) | Hướng dẫn cấu hình Cloudflare R2: Bucket, CORS, Public URL, R2 API Tokens, và kiến trúc On-Demand Temp Buffer. |
+| [**RELEASE_AND_ROLLBACK.md**](./RELEASE_AND_ROLLBACK.md) | Quy trình phát hành chuẩn hóa theo SemVer, chạy migration CSDL và quy trình Rollback khẩn cấp 3 tình huống. |
+| [**TROUBLESHOOTING.md**](./TROUBLESHOOTING.md) | Cẩm nang xử lý sự cố vận hành đám mây: lỗi 404, CORS, xung đột chuỗi ngầm `.r` trong domain `.r2.dev`, và giải pháp triệt để. |
+| [**BUG_FIX_REPORT.md**](./BUG_FIX_REPORT.md) | Báo cáo kỹ thuật chi tiết gửi Engineering Lead/PO: Phân tích nguyên nhân gốc, giải pháp kỹ thuật và giá trị kinh doanh. |
+| [**ENV_VARIABLES.md**](./ENV_VARIABLES.md) | Bảng tra cứu toàn diện danh mục các biến môi trường cấu hình triển khai. |
 
 ---
 

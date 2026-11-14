@@ -25,20 +25,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 4 — Hướng dẫn phát triển
 - *Trạng thái:* `[x] DONE` — Đã tạo `docs/development/` (README, PREREQUISITES, ENVIRONMENT_VARIABLES, DATABASE_SETUP, DEVELOPMENT_WORKFLOW, TROUBLESHOOTING), chuẩn hóa `LOCAL_DEVELOPMENT_GUIDE.md`, cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 5 — Deployment và vận hành
-
-**Mục tiêu:** Mô tả cách triển khai và vận hành các môi trường đang được sử dụng.
-
-**Tài liệu:**
-
-- Hoàn thiện `docs/deployment/README.md`.
-- `DEPLOYMENT_GUIDE.md` — quy trình đã xác minh.
-- `ENVIRONMENT_CONFIGURATION.md` — khác với danh mục biến môi trường: giải thích cấu hình theo môi trường và dẫn về nguồn chuẩn.
-- Giữ/cập nhật tài liệu storage hiện có ngoài `docs/feat/`.
-- `RELEASE_AND_ROLLBACK.md` nếu quy trình thực sự tồn tại.
-- `TROUBLESHOOTING.md` cho sự cố triển khai/vận hành.
-
-**Tiêu chí hoàn thành:** Quy trình thực tế được mô tả chính xác. Phần chưa được chuẩn hóa phải ghi rõ, không viết thành quy trình chính thức.
+## [x] Giai đoạn 5 — Deployment và vận hành
+- *Trạng thái:* `[x] DONE` — Hoàn thiện `docs/deployment/README.md`, tạo `DEPLOYMENT_GUIDE.md`, `ENVIRONMENT_CONFIGURATION.md`, `RELEASE_AND_ROLLBACK.md`, giữ nguyên tài liệu storage/troubleshooting hiện có (`STORAGE_R2.md`, `TROUBLESHOOTING.md`, `BUG_FIX_REPORT.md`, `ENV_VARIABLES.md`), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 6 — API
 
