@@ -86,11 +86,22 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Tài Liệu',
+          title: 'Tài Liệu Kỹ Thuật',
           items: [
             { label: 'Tổng Quan Dự Án', to: '/' },
-            { label: 'Hướng Dẫn Phát Triển', to: '/LOCAL_DEVELOPMENT_GUIDE' },
-            { label: 'Deployment', to: '/deployment' },
+            { label: 'Kiến Trúc Hệ Thống', to: '/system-architecture' },
+            { label: 'Hệ Thống API', to: '/api' },
+            { label: 'Cơ Sở Dữ Liệu', to: '/data' },
+            { label: 'Triển Khai & Vận Hành', to: '/deployment' },
+          ],
+        },
+        {
+          title: 'Chất Lượng & Bảo Mật',
+          items: [
+            { label: 'Kiểm Thử & Test Cases', to: '/testing' },
+            { label: 'An Ninh & Quyền Riêng Tư', to: '/security' },
+            { label: 'Quy Chuẩn Viết Docs', to: '/DOCUMENTATION_GUIDE' },
+            { label: 'Đặc Tả Tính Năng', to: '/feat' },
           ],
         },
         {
@@ -100,8 +111,8 @@ const config: Config = {
               label: 'GitHub Repository',
               href: 'https://github.com/Nguyen06-CSE/Foundation-Project',
             },
-            { label: 'Roadmap', to: '/project-management/roadmap' },
-            { label: 'Backlog', to: '/project-management/backlog' },
+            { label: 'Lộ Trình Phát Triển', to: '/project-management/roadmap' },
+            { label: 'Kế Hoạch Backlog', to: '/project-management/backlog' },
           ],
         },
       ],

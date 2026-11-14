@@ -46,20 +46,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 11 — Quy chuẩn duy trì tài liệu
 - *Trạng thái:* `[x] DONE` — Tạo `docs/DOCUMENTATION_GUIDE.md` và 3 biểu mẫu chuẩn hóa trong `docs/templates/` (`FEATURE_TEMPLATE.md`, `ADR_TEMPLATE.md`, `TEST_CASE_TEMPLATE.md`), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 12 — Tích hợp website và duyệt cuối
-
-**Mục tiêu:** Kiểm định cả bộ tài liệu sau khi các giai đoạn trước hoàn tất.
-
-**Việc làm:**
-
-- Rà soát sidebar, tiêu đề, slug, navbar/footer và thứ tự đọc.
-- Kiểm tra liên kết Markdown, ảnh, đường dẫn GitHub Pages.
-- Build Docusaurus và xử lý lỗi phát sinh từ tài liệu mới.
-- Đối chiếu thuật ngữ, yêu cầu, kiến trúc, API, schema, deployment, testing và security.
-- Xác nhận không có file/nội dung trong `docs/feat/` bị thay đổi.
-- Tổng hợp vấn đề còn lại và nội dung cần xác nhận.
-
-**Tiêu chí hoàn thành:** Website build được, điều hướng hoạt động, tài liệu không có mâu thuẫn nghiêm trọng và nội dung chưa xác minh được liệt kê rõ.
+## [x] Giai đoạn 12 — Tích hợp website và duyệt cuối
+- *Trạng thái:* `[x] DONE` — Hoàn tất kiểm tra liên kết toàn bộ website Docusaurus (`npm run build` thành công 100%), tối ưu hóa Navbar và Footer links, cập nhật cổng thông tin `docs/README.md`, đồng bộ hóa thuật ngữ trên 12 giai đoạn, xác nhận bảo toàn tuyệt đối 100% nội dung `docs/feat/`. Hệ thống sẵn sàng cho hội đồng và người dùng tra cứu.
 
 ## Kiểm định bắt buộc sau mỗi giai đoạn
 

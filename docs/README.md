@@ -23,6 +23,12 @@ Nếu bạn là người mới tiếp cận dự án, hãy tham khảo các tài
 * 📖 **[Từ Điển Thuật Ngữ (Glossary)](./overview/GLOSSARY.md):** Thống nhất các khái niệm: Fork/Clone, SHA-256 Deduplication, Trending Score, Soft Delete,...
 * 📋 **[Yêu Cầu & Nghiệp Vụ Cấp Sản Phẩm (Requirements)](./requirements/README.md):** Khảo sát mục tiêu kinh doanh (BRD), yêu cầu chức năng (FRD), phi chức năng (NFR), quy tắc nghiệp vụ dùng chung và 6 luồng Use Cases.
 * 🛠️ **[Hướng Dẫn Thiết Lập & Phát Triển (Development Guide)](./development/README.md):** Hướng dẫn 5 bước khởi chạy nhanh, yêu cầu tiên quyết, chuẩn hóa biến môi trường, setup CSDL và workflow chuẩn.
+* 🚀 **[Hướng Dẫn Triển Khai & Vận Hành (Deployment)](./deployment/README.md):** Kiến trúc triển khai Hybrid Storage, Cloudflare R2, cấu hình môi trường và quy trình phát hành / rollback.
+* ⚡ **[Hệ Thống API (API Documentation)](./api/README.md):** Điểm tra cứu 128 endpoints, quy ước RESTful, cơ chế xác thực JWT, xử lý lỗi và file đặc tả `openapi.yaml`.
+* 🗄️ **[Cơ Sở Dữ Liệu & Dữ Liệu (Database)](./data/README.md):** Từ điển dữ liệu 26 bảng, sơ đồ ERD trực quan, kiến trúc PostgreSQL và chuỗi 7 migration Alembic.
+* 🧪 **[Kiểm Thử & Đảm Bảo Chất Lượng (Testing)](./testing/README.md):** Chiến lược kiểm thử, danh mục test cases ánh xạ Use Cases, hướng dẫn chạy test và đánh giá khoảng trống chất lượng.
+* 🛡️ **[An Toàn Thông Tin & Quyền Riêng Tư (Security)](./security/README.md):** Kiến trúc phòng thủ đa tầng OWASP Top 10, phân cấp RBAC 5 vai trò, quản lý bí mật và chính sách báo cáo lỗ hổng.
+* 📖 **[Quy Chuẩn Duy Trì Tài Liệu (Documentation Guide)](./DOCUMENTATION_GUIDE.md):** Hướng dẫn cộng tác, nguồn chuẩn (Single Source of Truth) và các biểu mẫu Feature, ADR, Test Case chuẩn.
 
 ---
 
