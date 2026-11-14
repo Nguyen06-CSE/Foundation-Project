@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794628542.9200518,
-    "seen": 1794628609.578388,
-    "ast_hash": "d06ea506252a0598ced8e871d6102711",
+    "mtime": 1794628806.8086913,
+    "seen": 1794628865.7396412,
+    "ast_hash": "18b21a6b707a8d51f65523409f155589",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3554,9 +3554,9 @@
     "semantic_hash": ""
   },
   "plan-docs.md": {
-    "mtime": 1794628602.2447977,
-    "seen": 1794628609.591371,
-    "ast_hash": "368c7fd2f1d36de9ac0dc9d1be5b4e30",
+    "mtime": 1794628857.9688206,
+    "seen": 1794628865.751044,
+    "ast_hash": "0f6601eec19b9bc8a3d0060b33927221",
     "semantic_hash": ""
   },
   "docs/development/DATABASE_SETUP.md": {
@@ -3611,6 +3611,48 @@
     "mtime": 1794628480.411203,
     "seen": 1794628609.587349,
     "ast_hash": "921cda256368f063f6d3d465371f0a8d",
+    "semantic_hash": ""
+  },
+  "docs/api/openapi.json": {
+    "mtime": 1794628637.1296382,
+    "seen": 1794628865.7396638,
+    "ast_hash": "e1c5d1de818f816db8ce622722ff20c0",
+    "semantic_hash": ""
+  },
+  "docs/api/openapi.yaml": {
+    "mtime": 1794628641.864181,
+    "seen": 1794628865.739666,
+    "ast_hash": "756b7040b7ff0848cb01891b20620b0a",
+    "semantic_hash": ""
+  },
+  "docs/api/API_CATALOG.md": {
+    "mtime": 1794628835.521526,
+    "seen": 1794628865.747643,
+    "ast_hash": "8f4fdd566681ea57ad1fbaa8d4944785",
+    "semantic_hash": ""
+  },
+  "docs/api/API_CONVENTIONS.md": {
+    "mtime": 1794628824.346101,
+    "seen": 1794628865.747644,
+    "ast_hash": "f1473a94ba8381f0e0165d705d62d4bc",
+    "semantic_hash": ""
+  },
+  "docs/api/AUTHENTICATION.md": {
+    "mtime": 1794628829.0746386,
+    "seen": 1794628865.747645,
+    "ast_hash": "d81bcdc9a515fae0128e1f9659cf07a3",
+    "semantic_hash": ""
+  },
+  "docs/api/ERROR_HANDLING.md": {
+    "mtime": 1794628832.4469092,
+    "seen": 1794628865.7476459,
+    "ast_hash": "3b0e15e26432a5ddb4d049b56b0fe3cd",
+    "semantic_hash": ""
+  },
+  "docs/api/README.md": {
+    "mtime": 1794628820.4711237,
+    "seen": 1794628865.747647,
+    "ast_hash": "b595fa52073f232d69c01fda2565517c",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {

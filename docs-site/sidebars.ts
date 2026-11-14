@@ -105,6 +105,20 @@ const sidebars: SidebarsConfig = {
       ],
     },
 
+    // ── HỆ THỐNG API ───────────────────────────────────────────────
+    {
+      type: 'category',
+      label: '⚡ Hệ Thống API',
+      collapsed: false,
+      items: [
+        'api/README',
+        'api/API_CONVENTIONS',
+        'api/AUTHENTICATION',
+        'api/ERROR_HANDLING',
+        'api/API_CATALOG',
+      ],
+    },
+
     // ── ĐẶC TẢ TÍNH NĂNG ───────────────────────────────────────────
     {
       type: 'category',

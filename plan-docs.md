@@ -28,22 +28,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 5 — Deployment và vận hành
 - *Trạng thái:* `[x] DONE` — Hoàn thiện `docs/deployment/README.md`, tạo `DEPLOYMENT_GUIDE.md`, `ENVIRONMENT_CONFIGURATION.md`, `RELEASE_AND_ROLLBACK.md`, giữ nguyên tài liệu storage/troubleshooting hiện có (`STORAGE_R2.md`, `TROUBLESHOOTING.md`, `BUG_FIX_REPORT.md`, `ENV_VARIABLES.md`), cập nhật `sidebars.ts`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 6 — API
-
-**Mục tiêu:** Tạo điểm tra cứu API toàn hệ thống mà không nhân đôi đặc tả.
-
-**Tài liệu:**
-
-- `docs/api/README.md`
-- `API_CONVENTIONS.md`
-- `AUTHENTICATION.md` — cơ chế dùng chung, liên kết tới kiến trúc bảo mật.
-- `ERROR_HANDLING.md`
-- `API_CATALOG.md` — danh mục và liên kết theo nhóm endpoint.
-- `openapi.yaml` chỉ khi có thể lấy từ nguồn API chuẩn hoặc đồng bộ đáng tin cậy.
-
-**Yêu cầu:** Antigravity khảo sát khả năng sinh OpenAPI từ backend và xác định nguồn chuẩn. Catalog chủ yếu làm chỉ mục; không chép lại toàn bộ đặc tả endpoint. Kiểm tra quyền truy cập API và phân biệt endpoint đã có với endpoint dự kiến.
-
-**Tiêu chí hoàn thành:** Catalog/OpenAPI khớp endpoint thực tế và có cách phát hiện sai lệch trong tương lai.
+## [x] Giai đoạn 6 — API
+- *Trạng thái:* `[x] DONE` — Tạo `docs/api/` (README, API_CONVENTIONS, AUTHENTICATION, ERROR_HANDLING, API_CATALOG), trích xuất chuẩn `openapi.json` và `openapi.yaml` (128 endpoints thực tế) từ FastAPI runtime, cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 7 — Database và dữ liệu
 
