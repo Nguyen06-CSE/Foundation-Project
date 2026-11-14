@@ -31,15 +31,15 @@ This estimate reflects a broad implemented feature surface and a usable architec
 
 ### 2.1 Frontend
 
-The frontend under [`frontend/digital-library/src/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/) contains a substantial application shell and feature UI.
+The frontend under [`frontend/digital-library/src/`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/) contains a substantial application shell and feature UI.
 
 #### Application shell and navigation
 
-- React entry point and routing in [`App.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/App.tsx).
+- React entry point and routing in [`App.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/App.tsx).
 - Authenticated and unauthenticated layouts:
-  - [`AuthLayout.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/layouts/AuthLayout.tsx)
-  - [`MainLayout.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/layouts/MainLayout.tsx)
-- Protected-route handling in [`ProtectedRoute.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/components/shared/ProtectedRoute.tsx).
+  - [`AuthLayout.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/layouts/AuthLayout.tsx)
+  - [`MainLayout.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/layouts/MainLayout.tsx)
+- Protected-route handling in [`ProtectedRoute.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/components/shared/ProtectedRoute.tsx).
 - Shared header, sidebar, notifications, toast, loading, empty-state, modal, dropdown, badge, card, and input components.
 
 #### User-facing spaces and pages
@@ -52,22 +52,22 @@ The frontend under [`frontend/digital-library/src/`](/Users/caotiendattx/Develop
 - Statistics/dashboard page.
 - User settings.
 
-Representative pages include [`PersonalDocuments.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/pages/personal/PersonalDocuments.tsx), [`GroupSpace.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/pages/group/GroupSpace.tsx), [`SearchPage.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/pages/search/SearchPage.tsx), and [`StatsPage.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/pages/stats/StatsPage.tsx).
+Representative pages include [`PersonalDocuments.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/pages/personal/PersonalDocuments.tsx), [`GroupSpace.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/pages/group/GroupSpace.tsx), [`SearchPage.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/pages/search/SearchPage.tsx), and [`StatsPage.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/pages/stats/StatsPage.tsx).
 
 #### Frontend services and state
 
 The service layer includes:
 
-- [`api.ts`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/services/api.ts): Axios base URL and bearer-token interceptor.
+- [`api.ts`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/services/api.ts): Axios base URL and bearer-token interceptor.
 - Authentication, user, academic, document, folder, group, notification, search, tag, trash, and workspace services.
 - Zustand stores for authentication, notifications, and toast state.
 - React Query-oriented hooks for documents, workspaces, groups, auth, filtering, and preferences.
-- Card/list document presentation and persisted view preference via [`DocumentListView.tsx`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/components/shared/DocumentListView.tsx) and [`useViewPreference.ts`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/hooks/useViewPreference.ts).
+- Card/list document presentation and persisted view preference via [`DocumentListView.tsx`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/components/shared/DocumentListView.tsx) and [`useViewPreference.ts`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/hooks/useViewPreference.ts).
 - File utilities, file-type icons, size/date formatting, class-name helpers, and PDF preview/building support.
 
 ### 2.2 Backend
 
-The backend is rooted at [`backend/app/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/), with routers, services, models, schemas, core configuration, and scheduled jobs.
+The backend is rooted at [`backend/app/`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/), with routers, services, models, schemas, core configuration, and scheduled jobs.
 
 #### API routers
 
@@ -75,28 +75,28 @@ The following router modules are present and registered/used by the application:
 
 | Domain | Router |
 |---|---|
-| Authentication | [`auth.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/auth.py) |
-| Users and academic data | [`users.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/users.py), [`academic.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/academic.py) |
-| Documents and versions | [`documents.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/documents.py), [`document_versions.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/document_versions.py) |
-| Folders and workspaces | [`folders.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/folders.py), [`workspaces.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/workspaces.py) |
-| Groups | [`groups.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/groups.py) |
-| Categories and tags | [`categories.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/categories.py), [`tags.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/tags.py), [`workspace_tags.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/workspace_tags.py) |
-| Notes and favorites | [`notes.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/notes.py), [`favorites.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/favorites.py) |
-| Search and download history | [`search.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/search.py), [`download_logs.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/download_logs.py) |
-| Notifications and trash | [`notifications.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/notifications.py), [`trash.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/trash.py) |
+| Authentication | [`auth.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/auth.py) |
+| Users and academic data | [`users.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/users.py), [`academic.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/academic.py) |
+| Documents and versions | [`documents.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/documents.py), [`document_versions.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/document_versions.py) |
+| Folders and workspaces | [`folders.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/folders.py), [`workspaces.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/workspaces.py) |
+| Groups | [`groups.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/groups.py) |
+| Categories and tags | [`categories.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/categories.py), [`tags.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/tags.py), [`workspace_tags.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/workspace_tags.py) |
+| Notes and favorites | [`notes.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/notes.py), [`favorites.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/favorites.py) |
+| Search and download history | [`search.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/search.py), [`download_logs.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/download_logs.py) |
+| Notifications and trash | [`notifications.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/notifications.py), [`trash.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/routers/trash.py) |
 
-The FastAPI entry point, router registration, static storage mount, and scheduler lifecycle are in [`main.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/main.py).
+The FastAPI entry point, router registration, static storage mount, and scheduler lifecycle are in [`main.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/main.py).
 
 #### Services and processing
 
-- [`document_service.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/document_service.py): document-level business operations.
-- [`folder_service.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/folder_service.py): folder organization.
-- [`group_service.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/group_service.py): group/workspace operations.
-- [`search_service.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/search_service.py): PostgreSQL-backed search.
-- [`workspace_tag_service.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/workspace_tag_service.py): workspace tag management.
-- [`file_service.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/file_service.py): filesystem persistence and checksums.
-- [`file_processor.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/services/file_processor.py): PDF/DOCX/PPTX/text extraction, OCR fallback, and thumbnails.
-- [`scheduler.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/jobs/scheduler.py): group dissolution, orphan cleanup, and personal trash retention cleanup.
+- [`document_service.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/document_service.py): document-level business operations.
+- [`folder_service.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/folder_service.py): folder organization.
+- [`group_service.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/group_service.py): group/workspace operations.
+- [`search_service.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/search_service.py): PostgreSQL-backed search.
+- [`workspace_tag_service.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/workspace_tag_service.py): workspace tag management.
+- [`file_service.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/file_service.py): filesystem persistence and checksums.
+- [`file_processor.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/services/file_processor.py): PDF/DOCX/PPTX/text extraction, OCR fallback, and thumbnails.
+- [`scheduler.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/jobs/scheduler.py): group dissolution, orphan cleanup, and personal trash retention cleanup.
 
 ### 2.3 Database and models
 
@@ -104,20 +104,20 @@ The model layer contains users, academic classes/faculties, workspaces, groups, 
 
 Key sources:
 
-- [`backend/app/models/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/models/)
-- [`alembic/versions/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/alembic/versions/)
-- [`alembic/env.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/alembic/env.py)
-- SQL reference files under [`docs/sql/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/sql/)
+- [`backend/app/models/`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/models/)
+- [`alembic/versions/`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/alembic/versions/)
+- [`alembic/env.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/alembic/env.py)
+- SQL reference files under [`docs/sql/`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/docs/sql/)
 
-The migration set includes initial schema creation, workspace tags, and group dissolution fields. Search-specific PostgreSQL functionality is documented in [`backend/PROGRESS.MD`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/PROGRESS.MD), including `unaccent`, `pg_trgm`, a search-vector trigger, and GIN indexing.
+The migration set includes initial schema creation, workspace tags, and group dissolution fields. Search-specific PostgreSQL functionality is documented in [`backend/PROGRESS.MD`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/PROGRESS.MD), including `unaccent`, `pg_trgm`, a search-vector trigger, and GIN indexing.
 
 ### 2.4 Testing and generated artifacts
 
-- Test files exist for auth, documents, search, and categories/tags under [`backend/tests/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/tests/).
-- [`backend/PROGRESS.MD`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/PROGRESS.MD) records that syntax checks and the core isolated tests passed.
+- Test files exist for auth, documents, search, and categories/tags under [`backend/tests/`](https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/backend/tests).
+- [`backend/PROGRESS.MD`](https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/backend/PROGRESS.MD) records that syntax checks and the core isolated tests passed.
 - The repository contains validated interactive architecture and data-flow diagrams:
-  - [`foundation-system-architecture.html`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/foundation-system-architecture.html)
-  - [`foundation-dataflow.html`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/foundation-dataflow.html)
+  - [`foundation-system-architecture.html`](pathname:///Foundation-Project/diagrams/foundation-system-architecture.html)
+  - [`foundation-dataflow.html`](pathname:///Foundation-Project/diagrams/foundation-dataflow.html)
 
 ## 3. Work in Progress & Partial Implementations
 
@@ -125,10 +125,10 @@ The migration set includes initial schema creation, workspace tags, and group di
 
 | Location | Finding | Impact |
 |---|---|---|
-| [`workspace_tags.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/routers/workspace_tags.py) | TODO to verify that the user is a workspace member | Authorization gap in workspace tag operations |
-| [`security.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/core/security.py) | `pass` appears in fallback/error-handling paths | Requires explicit review to ensure failures are not silently accepted |
-| [`scheduler.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/jobs/scheduler.py) | Several `pass` statements in cleanup exception paths | Scheduled cleanup may hide individual failures |
-| [`backend/PROGRESS.MD`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/PROGRESS.MD) | End-to-end PostgreSQL validation is listed as next work | Core persistence behavior is not fully integration-tested |
+| [`workspace_tags.py`](https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/backend/app/routers/workspace_tags.py) | TODO to verify that the user is a workspace member | Authorization gap in workspace tag operations |
+| [`security.py`](https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/backend/app/core/security.py) | `pass` appears in fallback/error-handling paths | Requires explicit review to ensure failures are not silently accepted |
+| [`scheduler.py`](https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/backend/app/jobs/scheduler.py) | Several `pass` statements in cleanup exception paths | Scheduled cleanup may hide individual failures |
+| [`backend/PROGRESS.MD`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/PROGRESS.MD) | End-to-end PostgreSQL validation is listed as next work | Core persistence behavior is not fully integration-tested |
 
 ### Documented pending work
 
@@ -143,7 +143,7 @@ The backend progress document explicitly identifies these remaining tasks:
 
 ### Product-scope items explicitly deferred
 
-The product description in [`docs/MoTaDuAn.MD`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/MoTaDuAn.MD) marks the following as later-phase work:
+The product description in [`docs/MoTaDuAn.MD`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/docs/MoTaDuAn.MD) marks the following as later-phase work:
 
 - LMS-style assignment submission in groups.
 - Smart role/permission recommendations.
@@ -154,7 +154,7 @@ The product description in [`docs/MoTaDuAn.MD`](/Users/caotiendattx/Developer/Do
 - `.env` is present at the repository root; secrets should be verified as ignored and rotated if any real credentials were ever committed.
 - Numerous `.DS_Store` and Python cache files appear in the working tree/history, increasing repository noise.
 - No Docker Compose, deployment manifest, CI workflow, health-check definition, or production observability configuration was found at the audited top levels.
-- Frontend mock data remains under [`frontend/digital-library/src/mocks/`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/mocks/), so each screen should be checked to ensure it is using live services rather than mocks.
+- Frontend mock data remains under [`frontend/digital-library/src/mocks/`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/digital-library/src/mocks/), so each screen should be checked to ensure it is using live services rather than mocks.
 
 ## 4. System Architecture & Tech Stack Summary
 
@@ -171,7 +171,7 @@ React/Vite page
   -> JSON/file response back to the client
 ```
 
-Authentication is configured through environment-backed settings in [`config.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/core/config.py), database sessions in [`database.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/core/database.py), and request-user dependencies in [`dependencies.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/core/dependencies.py).
+Authentication is configured through environment-backed settings in [`config.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/core/config.py), database sessions in [`database.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/core/database.py), and request-user dependencies in [`dependencies.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/core/dependencies.py).
 
 ### Architectural strengths
 
@@ -194,17 +194,17 @@ Authentication is configured through environment-backed settings in [`config.py`
 
 | File | Purpose |
 |---|---|
-| [`README.md`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/README.md) | Short repository progress pointer |
-| [`docs/MoTaDuAn.MD`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/MoTaDuAn.MD) | Product/domain description, workspaces, roles, trash lifecycle, roadmap, and PostgreSQL search notes |
-| [`docs/README.md`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/README.md) | Minimal docs index |
-| [`backend/PROGRESS.MD`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/PROGRESS.MD) | Backend implementation status, tests, known dependency fallback, and next steps |
-| [`frontend/struct.md`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/struct.md) | Frontend structure notes |
-| [`frontend/AGENTS.md`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/AGENTS.md) | Frontend-specific agent/development guidance |
-| [`docs/sql/DB_ELibrary.sql`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/sql/DB_ELibrary.sql) | SQL schema reference |
-| [`docs/sql/AddModel.sql`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/docs/sql/AddModel.sql) | Additional model/schema SQL |
-| [`alembic/README`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/alembic/README) | Alembic directory note |
-| [`foundation-system-architecture.html`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/foundation-system-architecture.html) | Interactive system architecture diagram |
-| [`foundation-dataflow.html`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/foundation-dataflow.html) | Interactive data-flow diagram |
+| [`README.md`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/README.md) | Short repository progress pointer |
+| [`docs/MoTaDuAn.MD`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/docs/MoTaDuAn.MD) | Product/domain description, workspaces, roles, trash lifecycle, roadmap, and PostgreSQL search notes |
+| [`docs/README.md`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/docs/README.md) | Minimal docs index |
+| [`backend/PROGRESS.MD`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/PROGRESS.MD) | Backend implementation status, tests, known dependency fallback, and next steps |
+| [`frontend/struct.md`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/struct.md) | Frontend structure notes |
+| [`frontend/AGENTS.md`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/frontend/AGENTS.md) | Frontend-specific agent/development guidance |
+| [`docs/sql/DB_ELibrary.sql`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/docs/sql/DB_ELibrary.sql) | SQL schema reference |
+| [`docs/sql/AddModel.sql`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/docs/sql/AddModel.sql) | Additional model/schema SQL |
+| [`alembic/README`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/alembic/README) | Alembic directory note |
+| [`foundation-system-architecture.html`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/foundation-system-architecture.html) | Interactive system architecture diagram |
+| [`foundation-dataflow.html`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/foundation-dataflow.html) | Interactive data-flow diagram |
 
 The documentation is strong on intended product behavior and current backend progress, but weaker on setup reproducibility, deployment, API contracts, environment variables, and operational runbooks.
 
@@ -215,7 +215,7 @@ The documentation is strong on intended product behavior and current backend pro
 - [ ] Run the full application against a real PostgreSQL instance using the current Alembic migrations.
 - [ ] Add integration tests for auth, permissions, upload, document processing, search-vector updates, trash/restore, group membership, and download logging.
 - [ ] Complete and review all authorization checks, starting with the workspace-tag membership TODO.
-- [ ] Remove or tightly constrain security fallbacks in [`security.py`](/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/backend/app/core/security.py); pin and verify `python-jose`/bcrypt-compatible dependencies.
+- [ ] Remove or tightly constrain security fallbacks in [`security.py`](https://github.com/Nguyen06-CSE/Foundation-Project/blob/main/backend/app/core/security.py); pin and verify `python-jose`/bcrypt-compatible dependencies.
 - [ ] Confirm `.env` is excluded, document required variables in `.env.example`, and rotate any exposed credentials.
 - [ ] Define production storage behavior: shared object storage or durable volume, backup policy, file size/type limits, and cleanup guarantees.
 

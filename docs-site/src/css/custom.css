@@ -1,30 +1,446 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Digital Library Documentation Portal Design System
+ * Inspired by Vercel, Supabase, Stripe, and Linear.
  */
 
-/* You can override the default Infima variables here. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+/* ==========================================================================
+   1. GLOBAL DESIGN TOKENS & LIGHT THEME
+   ========================================================================== */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  /* Primary Indigo / Violet Palette */
+  --ifm-color-primary: #4f46e5;
+  --ifm-color-primary-dark: #4338ca;
+  --ifm-color-primary-darker: #3730a3;
+  --ifm-color-primary-darkest: #312e81;
+  --ifm-color-primary-light: #6366f1;
+  --ifm-color-primary-lighter: #818cf8;
+  --ifm-color-primary-lightest: #a5b4fc;
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --ifm-font-size-base: 15px;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 700;
+  --ifm-code-font-size: 88%;
+  --ifm-heading-letter-spacing: -0.015em;
+
+  /* Surfaces & Borders (Light) */
+  --portal-bg: #ffffff;
+  --portal-surface: #f8fafc;
+  --portal-surface-hover: #f1f5f9;
+  --portal-surface-card: #ffffff;
+  --portal-border: #e2e8f0;
+  --portal-border-subtle: #f1f5f9;
+  --portal-border-accent: rgba(79, 70, 229, 0.3);
+  --portal-active-pill: rgba(79, 70, 229, 0.08);
+  --portal-text-primary: #0f172a;
+  --portal-text-secondary: #475569;
+  --portal-text-muted: #64748b;
+  --portal-code-inline-bg: rgba(79, 70, 229, 0.06);
+  --portal-code-inline-border: rgba(79, 70, 229, 0.15);
+  --portal-zebra-bg: rgba(248, 250, 252, 0.7);
+  --portal-hover-bg: rgba(241, 245, 249, 0.6);
+  --portal-card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --portal-card-shadow-hover: 0 10px 25px -5px rgba(79, 70, 229, 0.1), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
+
+  /* Navbar */
+  --ifm-navbar-background-color: rgba(255, 255, 255, 0.82);
+  --ifm-navbar-height: 3.75rem;
+  --ifm-navbar-shadow: none;
+
+  /* Sidebar */
+  --ifm-sidebar-width: 290px;
+  --ifm-menu-color: #475569;
+  --ifm-menu-color-active: #4f46e5;
+  --ifm-menu-color-background-active: var(--portal-active-pill);
+
+  /* Layout Width */
+  --ifm-container-width: 1360px;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* ==========================================================================
+   2. DARK MODE (FIRST-CLASS DEEP SLATE / ZINC)
+   ========================================================================== */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  /* Indigo Accent for Dark */
+  --ifm-color-primary: #818cf8;
+  --ifm-color-primary-dark: #6366f1;
+  --ifm-color-primary-darker: #4f46e5;
+  --ifm-color-primary-darkest: #4338ca;
+  --ifm-color-primary-light: #a5b4fc;
+  --ifm-color-primary-lighter: #c7d2fe;
+  --ifm-color-primary-lightest: #e0e7ff;
+
+  /* Deep Backgrounds */
+  --ifm-background-color: #090a0f;
+  --ifm-background-surface-color: #11131a;
+
+  /* Portal Custom Tokens (Dark) */
+  --portal-bg: #090a0f;
+  --portal-surface: #11131a;
+  --portal-surface-hover: #161924;
+  --portal-surface-card: #0e1017;
+  --portal-border: #1e2230;
+  --portal-border-subtle: #161924;
+  --portal-border-accent: rgba(129, 140, 248, 0.35);
+  --portal-active-pill: rgba(129, 140, 248, 0.12);
+  --portal-text-primary: #f8fafc;
+  --portal-text-secondary: #94a3b8;
+  --portal-text-muted: #64748b;
+  --portal-code-inline-bg: rgba(129, 140, 248, 0.12);
+  --portal-code-inline-border: rgba(129, 140, 248, 0.22);
+  --portal-zebra-bg: rgba(17, 19, 26, 0.6);
+  --portal-hover-bg: rgba(22, 25, 36, 0.7);
+  --portal-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --portal-card-shadow-hover: 0 12px 30px -5px rgba(0, 0, 0, 0.6), 0 0 15px 1px rgba(129, 140, 248, 0.15);
+
+  /* Navbar */
+  --ifm-navbar-background-color: rgba(9, 10, 15, 0.82);
+
+  /* Sidebar */
+  --ifm-menu-color: #94a3b8;
+  --ifm-menu-color-active: #818cf8;
+  --ifm-menu-color-background-active: var(--portal-active-pill);
+
+  /* Code block background */
+  --prism-background-color: #0d0f17;
+}
+
+/* ==========================================================================
+   3. TYPOGRAPHY & GLOBAL STYLES
+   ========================================================================== */
+html, body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: var(--ifm-heading-letter-spacing);
+  font-weight: 700;
+  color: var(--portal-text-primary);
+}
+
+h1 {
+  font-size: 2.25rem;
+  line-height: 1.25;
+  margin-bottom: 1.25rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  line-height: 1.35;
+  margin-top: 2rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--portal-border-subtle);
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-top: 1.5rem;
+  margin-bottom: 0.65rem;
+}
+
+p, li {
+  color: var(--portal-text-secondary);
+  line-height: 1.72;
+}
+
+strong {
+  color: var(--portal-text-primary);
+  font-weight: 600;
+}
+
+/* Content Container reading width */
+.docMainContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.docItemContainer {
+  max-width: 900px;
+  padding: 0 1rem 3rem 1rem;
+}
+
+/* ==========================================================================
+   4. GLASSMORPHIC NAVBAR & BRANDING
+   ========================================================================== */
+.navbar {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--portal-border);
+  transition: all 0.25s ease;
+}
+
+.navbar__brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  color: var(--portal-text-primary);
+  margin-right: 1.5rem;
+}
+
+.navbar__brand:hover {
+  color: var(--ifm-color-primary);
+}
+
+.navbar__item {
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  transition: all 0.15s ease;
+  color: var(--portal-text-secondary);
+}
+
+.navbar__item:hover {
+  color: var(--portal-text-primary);
+  background: var(--portal-surface-hover);
+}
+
+.navbar__link--active {
+  color: var(--ifm-color-primary) !important;
+  background: var(--portal-active-pill);
+  font-weight: 600;
+}
+
+/* GitHub Icon Link */
+.header-github-link::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+  background: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+/* ==========================================================================
+   5. SLEEK LINEAR SIDEBAR
+   ========================================================================== */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--portal-border) !important;
+}
+
+.menu__list {
+  padding: 0.5rem;
+}
+
+.menu__list-item {
+  margin: 2px 0;
+}
+
+.menu__link {
+  font-size: 0.865rem;
+  line-height: 1.45;
+  padding: 0.42rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 450;
+  transition: all 0.15s ease;
+}
+
+.menu__link:hover {
+  background: var(--portal-surface-hover);
+  color: var(--portal-text-primary);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  background: var(--portal-active-pill);
+  color: var(--ifm-color-primary) !important;
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 var(--ifm-color-primary);
+}
+
+/* Category Headers */
+.menu__list-item-collapsible {
+  border-radius: 6px;
+}
+
+.menu__caret {
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.menu__caret:hover {
+  opacity: 1;
+}
+
+/* Thin Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--portal-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--portal-text-muted);
+}
+
+/* ==========================================================================
+   6. TABLES, CODE & ADMONITIONS
+   ========================================================================== */
+/* Markdown Tables */
+.theme-doc-markdown table {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--portal-border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  font-size: 0.885rem;
+}
+
+.theme-doc-markdown th {
+  background: var(--portal-surface);
+  color: var(--portal-text-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--portal-border);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.theme-doc-markdown td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--portal-border-subtle);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: var(--portal-text-secondary);
+}
+
+.theme-doc-markdown tr:last-child td {
+  border-bottom: none;
+}
+
+.theme-doc-markdown tr:nth-child(even) td {
+  background: var(--portal-zebra-bg);
+}
+
+.theme-doc-markdown tr:hover td {
+  background: var(--portal-hover-bg);
+}
+
+/* Inline Code */
+code {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.86em;
+  padding: 0.15rem 0.38rem;
+  border-radius: 5px;
+  background-color: var(--portal-code-inline-bg);
+  border: 1px solid var(--portal-code-inline-border);
+  color: var(--ifm-color-primary);
+}
+
+/* Admonitions (Callouts) */
+.alert {
+  border-radius: 10px;
+  border: 1px solid var(--portal-border);
+  background: var(--portal-surface);
+  box-shadow: none;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.alert a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.alert--info {
+  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(99, 102, 241, 0.06);
+}
+
+.alert--success {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.alert--warning {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.alert--danger {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+/* ==========================================================================
+   7. FOOTER POLISH
+   ========================================================================== */
+.footer {
+  border-top: 1px solid var(--portal-border);
+  background: var(--portal-surface);
+  padding: 3rem 0 2rem;
+}
+
+.footer__title {
+  color: var(--portal-text-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+}
+
+.footer__link-item {
+  color: var(--portal-text-muted);
+  font-size: 0.875rem;
+  line-height: 2;
+  transition: color 0.15s ease;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.footer__copyright {
+  color: var(--portal-text-muted);
+  font-size: 0.8rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--portal-border-subtle);
+  padding-top: 1.5rem;
+}
+
+/* ==========================================================================
+   8. TOC (RIGHT SIDEBAR)
+   ========================================================================== */
+.table-of-contents__link {
+  font-size: 0.82rem;
+  color: var(--portal-text-muted);
+  transition: all 0.15s ease;
+}
+
+.table-of-contents__link:hover {
+  color: var(--portal-text-primary);
+}
+
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary) !important;
+  font-weight: 600;
 }

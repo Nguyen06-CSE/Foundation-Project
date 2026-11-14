@@ -1,0 +1,569 @@
+/* Scoped Styles for DocsUI Modern Component Library */
+
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
+.heroContainer {
+  position: relative;
+  padding: 3.5rem 1.5rem 2.5rem;
+  margin: -1.5rem -1.5rem 2.5rem -1.5rem;
+  border-radius: 20px;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99, 102, 241, 0.14), transparent 75%),
+              linear-gradient(180deg, var(--portal-surface) 0%, transparent 100%);
+  border: 1px solid var(--portal-border);
+  text-align: center;
+  overflow: hidden;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background: var(--portal-active-pill);
+  border: 1px solid var(--portal-border-accent);
+  color: var(--ifm-color-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.25rem;
+}
+
+.heroBadgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--ifm-color-primary);
+  box-shadow: 0 0 8px var(--ifm-color-primary);
+}
+
+.heroTitle {
+  font-size: 2.75rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  color: var(--portal-text-primary);
+}
+
+.heroGradientText {
+  background: linear-gradient(135deg, #4f46e5 0%, #818cf8 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme='dark'] .heroGradientText {
+  background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0 auto 2rem;
+  color: var(--portal-text-secondary);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 10px;
+  background: var(--ifm-color-primary);
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btnPrimary:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.3rem;
+  border-radius: 10px;
+  background: var(--portal-surface-card);
+  color: var(--portal-text-primary) !important;
+  border: 1px solid var(--portal-border);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background: var(--portal-surface-hover);
+  border-color: var(--portal-border-accent);
+  transform: translateY(-1px);
+}
+
+.heroStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--portal-border-subtle);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.statNumber {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--portal-text-primary);
+}
+
+.statLabel {
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--portal-text-muted);
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+  .heroStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   2. CARD GRID & BENTO CARD
+   ========================================================================== */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.cardGridCol2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.cardGridCol4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 992px) {
+  .cardGrid, .cardGridCol4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .cardGrid, .cardGridCol2, .cardGridCol4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bentoCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--portal-surface-card);
+  border: 1px solid var(--portal-border);
+  border-radius: 14px;
+  padding: 1.35rem;
+  text-decoration: none !important;
+  color: inherit !important;
+  box-shadow: var(--portal-card-shadow);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.bentoCard:hover {
+  border-color: var(--portal-border-accent);
+  box-shadow: var(--portal-card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+}
+
+.cardIconBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--portal-active-pill);
+  color: var(--ifm-color-primary);
+  border: 1px solid var(--portal-border-accent);
+  font-size: 1.15rem;
+}
+
+.cardBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: var(--portal-surface);
+  color: var(--portal-text-muted);
+  border: 1px solid var(--portal-border);
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--portal-text-primary);
+  margin-bottom: 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cardDescription {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--portal-text-secondary);
+  flex-grow: 1;
+  margin-bottom: 1rem;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--portal-border-subtle);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+.arrowIcon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.bentoCard:hover .arrowIcon {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   3. ROLE ROADMAP TABS
+   ========================================================================== */
+.roleTabsContainer {
+  background: var(--portal-surface-card);
+  border: 1px solid var(--portal-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.5rem 0 2.5rem;
+  box-shadow: var(--portal-card-shadow);
+}
+
+.tabButtonsRow {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--portal-surface);
+  padding: 0.35rem;
+  border-radius: 12px;
+  border: 1px solid var(--portal-border);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.tabBtn {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--portal-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.tabBtn:hover {
+  color: var(--portal-text-primary);
+  background: var(--portal-surface-hover);
+}
+
+.tabBtnActive {
+  background: var(--portal-surface-card) !important;
+  color: var(--ifm-color-primary) !important;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--portal-border);
+}
+
+.roleSummaryBox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--portal-active-pill);
+  border: 1px solid var(--portal-border-accent);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.rolePersonaIcon {
+  font-size: 1.8rem;
+}
+
+.rolePersonaText h4 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--portal-text-primary);
+  margin: 0 0 0.2rem 0;
+}
+
+.rolePersonaText p {
+  font-size: 0.86rem;
+  color: var(--portal-text-secondary);
+  margin: 0;
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .stepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .stepsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stepCard {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-border);
+  border-radius: 10px;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition: all 0.2s ease;
+}
+
+.stepCard:hover {
+  border-color: var(--portal-border-accent);
+  transform: translateY(-2px);
+  background: var(--portal-surface-hover);
+}
+
+.stepNumber {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ifm-color-primary);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.stepTitle {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--portal-text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.stepDesc {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--portal-text-muted);
+}
+
+/* ==========================================================================
+   4. TECH BADGES & STATUS PILLS
+   ========================================================================== */
+.techBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0.15rem;
+}
+
+.techBadgeIndigo {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.techBadgeEmerald {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.techBadgeSky {
+  background: rgba(14, 165, 233, 0.1);
+  color: #0ea5e9;
+  border: 1px solid rgba(14, 165, 233, 0.25);
+}
+
+.techBadgeAmber {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.techBadgePurple {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.techBadgeSlate {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  border: 1px solid rgba(100, 116, 139, 0.25);
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.statusPillSuccess {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.statusPillSuccess .statusDot {
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.statusPillInfo {
+  background: rgba(99, 102, 241, 0.12);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+.statusPillInfo .statusDot {
+  background: #6366f1;
+  box-shadow: 0 0 6px #6366f1;
+}
+
+/* ==========================================================================
+   5. ARCHITECTURE EMBED VIEWER
+   ========================================================================== */
+.archEmbedContainer {
+  background: var(--portal-surface-card);
+  border: 1px solid var(--portal-border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 1.5rem 0 2rem;
+  box-shadow: var(--portal-card-shadow);
+}
+
+.archEmbedHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: var(--portal-surface);
+  border-bottom: 1px solid var(--portal-border);
+}
+
+.archEmbedTitle {
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--portal-text-primary);
+}
+
+.archEmbedActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.archActionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  background: var(--portal-surface-card);
+  border: 1px solid var(--portal-border);
+  color: var(--portal-text-primary) !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.archActionBtn:hover {
+  background: var(--portal-surface-hover);
+  border-color: var(--portal-border-accent);
+}
+
+.archEmbedFrame {
+  width: 100%;
+  height: 520px;
+  border: none;
+  background: #ffffff;
+}

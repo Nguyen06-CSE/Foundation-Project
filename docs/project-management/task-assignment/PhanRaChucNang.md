@@ -21,7 +21,7 @@
 
 ## 2. Tổng quan kiến trúc
 
-![sô đồ luồng dự án](references/system-architecture/architecture/foundation-system-architecture.visual-check.1440x900.dark.png)
+![sơ đồ luồng dự án](../../system-architecture/architecture/foundation-system-architecture.visual-check.1440x900.dark.png)
 
 ---
 

@@ -28,7 +28,22 @@ const config: Config = {
     },
   },
 
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        language: ['en'],
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: false,
+        docsRouteBasePath: '/',
+        searchResultLimits: 8,
+        searchResultContextMaxLength: 50,
+      },
+    ],
+  ],
 
   i18n: {
     defaultLocale: 'vi',
@@ -71,16 +86,44 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'mainSidebar',
+          sidebarId: 'guidesSidebar',
           position: 'left',
-          label: 'Tài Liệu',
+          label: 'Tổng Quan & Kiến Trúc',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'featuresSidebar',
+          position: 'left',
+          label: 'Đặc Tả Tính Năng',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'apiDataSidebar',
+          position: 'left',
+          label: 'API & CSDL',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'opsSidebar',
+          position: 'left',
+          label: 'Vận Hành & Kiểm Thử',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'pmSidebar',
+          position: 'left',
+          label: 'Quản Trị & Quy Chuẩn',
         },
         {
           href: 'https://github.com/Nguyen06-CSE/Foundation-Project',
           label: 'GitHub',
           position: 'right',
+          className: 'header-github-link',
         },
       ],
+    },
+    mermaid: {
+      theme: { light: 'neutral', dark: 'dark' },
     },
     footer: {
       style: 'dark',

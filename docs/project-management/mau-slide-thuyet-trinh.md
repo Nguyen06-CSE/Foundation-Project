@@ -22,7 +22,7 @@
 
 ---
 
-## 1. GIỚI THIỆU TỔNG QUAN & Ý TƯỞNG DỰ ÁN
+## 1. GIỚI THIỆU TỔNG QUAN & Ý TƯỞNG DỰ ÁN {#1-gioi-thieu-tong-quan--y-tuong-du-an}
 
 Hệ thống Thư viện số (Digital Library) được xây dựng nhằm giải quyết bài toán quản lý, lưu trữ, tìm kiếm và chia sẻ tài liệu học tập cho **Sinh viên, Giảng viên và Quản trị viên Khoa/Trường**.
 
@@ -34,7 +34,7 @@ Hệ thống Thư viện số (Digital Library) được xây dựng nhằm gi�
 
 ---
 
-## 2. KIẾN TRÚC HỆ THỐNG & CÔNG NGHỆ SỬ DỤNG
+## 2. KIẾN TRÚC HỆ THỐNG & CÔNG NGHỆ SỬ DỤNG {#2-kien-truc-he-thong--cong-nghe-su-dung}
 
 ```text
 React (Vite + TypeScript + TailwindCSS)
@@ -53,7 +53,7 @@ FastAPI RESTful Services
 
 ---
 
-## 3. THIẾT KẾ CƠ SỞ DỮ LIỆU POSTGRESQL NÂNG CAO
+## 3. THIẾT KẾ CƠ SỞ DỮ LIỆU POSTGRESQL NÂNG CAO {#3-thiet-ke-co-so-du-lieu-postgresql-nang-cao}
 
 Dự án tận dụng tối đa sức mạnh chuyên sâu của PostgreSQL để xử lý dữ liệu lớn:  
 
@@ -65,23 +65,23 @@ Dự án tận dụng tối đa sức mạnh chuyên sâu của PostgreSQL để
 
 ---
 
-## 4. BÁO CÁO CHI TIẾT CHỨC NĂNG & MINH HỌA GIAO DIỆN
+## 4. BÁO CÁO CHI TIẾT CHỨC NĂNG & MINH HỌA GIAO DIỆN {#4-bao-cao-chi-tiet-chuc-nang--minh-hoa-giao-dien}
 
-### 4.1. Xác thực & Quản lý Tài khoản
+### 4.1. Xác thực & Quản lý Tài khoản {#41-xac-thuc--quan-ly-tai-khoan}
 
 #### 🔑 Trang Đăng nhập & Đăng ký
 - **Chức năng:** Cho phép Sinh viên/Giảng viên đăng nhập bằng MSSV, Username hoặc Email. Hệ thống cấp JWT Access Token và tự động điều hướng.  
 - **Bảo vệ Route:** Tự động khôi phục phiên làm việc (Restore Session) khi ấn F5 thông qua endpoint `/auth/me`.  
-![Trang đăng nhập](images/giao-dien-dang-nhap.png)
+![Trang đăng nhập](../references/image/images-program/giao-dien-dang-nhap.png)
 #### ⚙️ Trang Cài đặt Tài khoản
 - **Chức năng:** Xem thông tin cá nhân, cập nhật họ tên, MSSV, thay đổi mật khẩu an toàn.  
-![Trang cài đặt](images/cai-dat(1).png)
-![Trang cài đặt](images/cai-dat(2).png)
-![Trang cài đặt](images/cai-dat(3).png)
+![Trang cài đặt](../references/image/images-program/cai-dat(1).png)
+![Trang cài đặt](../references/image/images-program/cai-dat(2).png)
+![Trang cài đặt](../references/image/images-program/cai-dat(3).png)
 ---
 
-### 4.2. Kho Tài liệu Cá nhân (Personal Space)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(1).png)
+### 4.2. Kho Tài liệu Cá nhân (Personal Space) {#42-kho-tai-lieu-ca-nhan-personal-space}
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(1).png)
 
 
 #### 📊 Bảng điều khiển (Personal Dashboard)
@@ -89,26 +89,26 @@ Dự án tận dụng tối đa sức mạnh chuyên sâu của PostgreSQL để
 
 #### 📁 Màn hình Quản lý Tài liệu
 - **Chức năng:** Hiển thị danh sách tài liệu dạng Lưới (Grid Card) hoặc Dòng (Row List). Tích hợp thanh lọc theo loại file (PDF, Word, PPTX, Ảnh...) và phân trang chuẩn.  
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(11).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(11).png)
 
 #### 📤 Modal Upload Tài liệu (Gộp nhiều ảnh thành PDF)
 - **Chức năng:** Kéo thả file upload. Khi sinh viên chụp nhiều ảnh slide bài giảng, Frontend (`jsPDF`) tự động gộp các ảnh thành 1 file PDF duy nhất trước khi gửi API. Kiểm tra SHA-256 chống upload trùng.  
 
 - **TÌM KIẾM:**
 ----
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(1).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(2).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(3).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(4).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(5).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(6).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(1).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(2).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(3).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(4).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(5).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(6).png)
 - **UPLOAD:**
 ----
 ----
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-UPLOAD(1).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-UPLOAD(2).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-UPLOAD(3).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-UPLOAD(4).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(1).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(2).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(3).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(4).png)
 
 
 #### 👁️ Màn hình Chi tiết Tài liệu & Xem trước (Document Detail)
@@ -116,79 +116,79 @@ Dự án tận dụng tối đa sức mạnh chuyên sâu của PostgreSQL để
   - Xem trực tiếp file PDF/Ảnh trên trình duyệt.  
   - Tab Nội dung OCR: Hiển thị toàn bộ văn bản được máy trích xuất từ file scan/ảnh.  
   - Ghi chú cá nhân, xem lịch sử phiên bản, chuyển đổi chế độ "Mở trong thẻ mới".  
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(2).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(3).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(4).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(5).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(6).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(7).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(8).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(9).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(10).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(11).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT(12).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(2).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(3).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(4).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(5).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(6).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(7).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(8).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(9).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(10).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(11).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(12).png)
 ---
 
-### 4.3. Quản lý Folder & Hệ thống Tag Linh hoạt
+### 4.3. Quản lý Folder & Hệ thống Tag Linh hoạt {#43-quan-ly-folder--he-thong-tag-linh-hoat}
 
 > **Lưu ý thiết kế:** Trong hệ thống, Folder đóng vai trò như kệ sách chứa danh sách các Tag. Khi tạo Folder, người dùng chọn các Tag muốn quản lý. Tài liệu mang Tag đó sẽ tự động thuộc về Folder.
 
 #### 🏷️ Tạo Folder & Gắn Tag
 - **Chức năng:** Tạo Folder mới, chọn màu đại diện, chọn từ danh sách Tag có sẵn hoặc khởi tạo Tag mới ngay lập tức. Hệ thống tự khởi tạo 4 Folder mặc định: Giáo trình, Bài tập, Tài liệu tham khảo, Đồ án tốt nghiệp.  
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-FOLDER(1).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-FOLDER(2).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-FOLDER(3).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-FOLDER(4).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(1).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(2).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(3).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(4).png)
 
 ---
 
-### 4.4. Tìm kiếm Toàn văn (Full-Text Search)
+### 4.4. Tìm kiếm Toàn văn (Full-Text Search) {#44-tim-kiem-toan-van-full-text-search}
 
 #### 🔍 Lọc & Tìm kiếm Nâng cao
 - **Chức năng:** Tìm kiếm tức thì theo từ khóa Tiếng Việt có dấu/không dấu. Bộ lọc đa tầng kết hợp: Loại tài liệu + Thẻ Tag + Khoảng thời gian.  
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(1).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(2).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(5).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(6).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(1).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(2).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(5).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(6).png)
 #### 🔎 Tìm kiếm Chuyên sâu trong Kho
 - **Chức năng:** Hệ thống tìm trong cả tiêu đề, mô tả và nội dung sâu bên trong file nhờ chỉ mục `tsvector` PostgreSQL.  
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(3).png)
-![Trang tài liệu tại cá nhân](images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(4).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(3).png)
+![Trang tài liệu tại cá nhân](../references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(4).png)
 ---
 
-### 4.5. Không gian Hợp tác Nhóm (Group Workspace)
+### 4.5. Không gian Hợp tác Nhóm (Group Workspace) {#45-khong-gian-hop-tac-nhom-group-workspace}
 
 #### 👥 Màn hình Quản lý Nhóm & Mời Thành viên
 - **Chức năng:** Tạo nhóm học tập, đặt phân quyền mặc định (Chỉ xem hoặc Toàn quyền). Mời hàng loạt thành viên qua chuỗi MSSV/Email.  
 - **Thẻ Tài liệu Nhóm:** Hiển thị rõ Thông tin Người tải lên (Avatar + Tên) ngay trên thẻ tài liệu.
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(1).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(2).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(3).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(4).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(5).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(6).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(7).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(8).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(9).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(10).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(11).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(12).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(13).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(14).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(15).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(16).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(17).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(18).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(19).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(20).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(21).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(22).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(23).png)
-![Trang tài liệu tại NHÓM](images/kho-luu-tru-nhom(24).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(1).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(2).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(3).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(4).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(5).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(6).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(7).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(8).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(9).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(10).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(11).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(12).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(13).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(14).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(15).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(16).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(17).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(18).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(19).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(20).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(21).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(22).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(23).png)
+![Trang tài liệu tại NHÓM](../references/image/images-program/kho-luu-tru-nhom(24).png)
 
 ---
 
-### 4.6. Thùng rác & Cơ chế Khôi phục An toàn
+### 4.6. Thùng rác & Cơ chế Khôi phục An toàn {#46-thung-rac--co-che-khoi-phuc-an-toan}
 
 #### 🗑️ Thùng rác (Trash Management)
 - **Soft Delete:** File bị xóa chuyển sang trạng thái `is_deleted = true`.  
@@ -197,6 +197,6 @@ Dự án tận dụng tối đa sức mạnh chuyên sâu của PostgreSQL để
 
 ---
 
-## 5. TÀI LIỆU LIÊN KẾT & LINK THAM CHIẾU
+## 5. TÀI LIỆU LIÊN KẾT & LINK THAM CHIẾU {#5-tai-lieu-lien-ket--link-tham-chieu}
 
 - **Thư mục tài nguyên CSDL trong dự án:** `docs/sql/DB_ELibrary.sql`

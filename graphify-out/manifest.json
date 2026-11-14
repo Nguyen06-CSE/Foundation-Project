@@ -2023,12 +2023,6 @@
     "ast_hash": "f55b019f7f1137b8d4c18e93a73e5e1a",
     "semantic_hash": ""
   },
-  "docs/README.md": {
-    "mtime": 1794629684.6522396,
-    "seen": 1794629780.967121,
-    "ast_hash": "6c97a534c7c6627f245774842789d5a0",
-    "semantic_hash": ""
-  },
   "docs/architecture/STORAGE_SYSTEM.md": {
     "mtime": 1793954030.4604416,
     "seen": 1794543497.1617768,
@@ -2240,9 +2234,9 @@
     "semantic_hash": ""
   },
   "docs/project-management/PROJECT_STATUS_REPORT.md": {
-    "mtime": 1791170670.4386804,
-    "seen": 1793850273.739962,
-    "ast_hash": "0a24cadd7e4f44c41aec0968f20d36f9",
+    "mtime": 1794631306.6698546,
+    "seen": 1794632021.45959,
+    "ast_hash": "5d038fc7ee8b2ae8e05d30b8aa244711",
     "semantic_hash": ""
   },
   "docs/project-management/backlog.md": {
@@ -2252,9 +2246,9 @@
     "semantic_hash": ""
   },
   "docs/project-management/mau-slide-thuyet-trinh.md": {
-    "mtime": 1791170670.4420507,
-    "seen": 1793850273.739965,
-    "ast_hash": "73998f0259340d74a8dd989cd95eb284",
+    "mtime": 1794631373.4361415,
+    "seen": 1794632021.4596171,
+    "ast_hash": "8f5bf43d7a66393c63615379b44200c3",
     "semantic_hash": ""
   },
   "docs/project-management/report/10-05-2026-Nguyen.md": {
@@ -3200,21 +3194,21 @@
     "semantic_hash": ""
   },
   "docs-site/docusaurus.config.ts": {
-    "mtime": 1794629702.148454,
-    "seen": 1794629780.956767,
-    "ast_hash": "92d80fe19f8aab2f12d4ec8d80d38d79",
+    "mtime": 1794631416.1052756,
+    "seen": 1794632021.449835,
+    "ast_hash": "d47f64f2278b66a1d7544b4b26ea4a90",
     "semantic_hash": ""
   },
   "docs-site/package.json": {
-    "mtime": 1793957272.137235,
-    "seen": 1794543497.154915,
-    "ast_hash": "5d22347c4e94c59b646f617ad8e24695",
+    "mtime": 1794631058.4535558,
+    "seen": 1794632021.449836,
+    "ast_hash": "60ac1d33c304a2cd488f978c8d7be81e",
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794629613.7588253,
-    "seen": 1794629659.667941,
-    "ast_hash": "0e664ef43dae8180affbb0fd4b6819cb",
+    "mtime": 1794631398.7211316,
+    "seen": 1794632021.449837,
+    "ast_hash": "0ffd9d4fb7a19f87eeebf3b684b9ae17",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3242,9 +3236,9 @@
     "semantic_hash": ""
   },
   "docs/project-management/task-assignment/PhanRaChucNang.md": {
-    "mtime": 1793969748.9311035,
-    "seen": 1794543497.16297,
-    "ast_hash": "611233054dce7c30641f25674ea46727",
+    "mtime": 1794631326.0990782,
+    "seen": 1794632021.459702,
+    "ast_hash": "c798f7cbe77699e8ff78b9b79243c5f8",
     "semantic_hash": ""
   },
   "docs-site/static/img/docusaurus-social-card.jpg": {
@@ -3781,10 +3775,562 @@
     "ast_hash": "215532cf7310a2c0cbeedc6e60d0b6e9",
     "semantic_hash": ""
   },
+  "docs-site/src/components/DocsUI/ArchitectureEmbed.tsx": {
+    "mtime": 1794631695.2264035,
+    "seen": 1794632021.4498382,
+    "ast_hash": "13359eac4cec42202201fbd034ef706e",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/BentoCard.tsx": {
+    "mtime": 1794631655.830477,
+    "seen": 1794632021.449839,
+    "ast_hash": "6db93491f52b3447e0ca6b117ccc7320",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/CardGrid.tsx": {
+    "mtime": 1794631648.4317522,
+    "seen": 1794632021.44984,
+    "ast_hash": "2c919b2f62a33871f1a57d03b2f91181",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/HeroSection.tsx": {
+    "mtime": 1794631703.0980022,
+    "seen": 1794632021.4498408,
+    "ast_hash": "c153d1c2bb938b2d281ee44f0b3a1aa5",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/RoleRoadmapTabs.tsx": {
+    "mtime": 1794631673.7438612,
+    "seen": 1794632021.449842,
+    "ast_hash": "5e23f04acb602068698fd3d462b792ba",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/StatusPill.tsx": {
+    "mtime": 1794631685.5839012,
+    "seen": 1794632021.449843,
+    "ast_hash": "302f8d289d373c596975612414286e2a",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/TechBadge.tsx": {
+    "mtime": 1794631681.0703652,
+    "seen": 1794632021.449844,
+    "ast_hash": "dc37c00e5d1d8c5f067cbbbd5d173c76",
+    "semantic_hash": ""
+  },
+  "docs-site/src/components/DocsUI/index.ts": {
+    "mtime": 1794631708.6996686,
+    "seen": 1794632021.449845,
+    "ast_hash": "d368487e475a34a1054b5fe8f1fa6939",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.visual-check.json": {
+    "mtime": 1794631128.4064069,
+    "seen": 1794632021.449845,
+    "ast_hash": "c02847630327904c3c9b6ca0c94522d7",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.visual-check.json": {
+    "mtime": 1794631128.3966272,
+    "seen": 1794632021.449846,
+    "ast_hash": "7d30a7f6db71f746084418aace34ba0d",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.html": {
+    "mtime": 1794631128.401713,
+    "seen": 1794632021.4572139,
+    "ast_hash": "c3e0b79db7ef2cf4412a93f7dabf7bfd",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.visual-check.html": {
+    "mtime": 1794631128.4060361,
+    "seen": 1794632021.457216,
+    "ast_hash": "85302eeb7351a1e9732ff53d8e4c1358",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.html": {
+    "mtime": 1794631128.3927426,
+    "seen": 1794632021.457217,
+    "ast_hash": "21b1f49101225018b4fdaa400fbf174b",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.visual-check.html": {
+    "mtime": 1794631128.396017,
+    "seen": 1794632021.457218,
+    "ast_hash": "65103f11590e0f5be9eef4ccc3a81183",
+    "semantic_hash": ""
+  },
+  "docs/README.mdx": {
+    "mtime": 1794631751.0083652,
+    "seen": 1794632021.457311,
+    "ast_hash": "05d9e10a602e3abf9a4328d714caef6f",
+    "semantic_hash": ""
+  },
+  "docs/feat/community-library/README.md": {
+    "mtime": 1794631868.1656382,
+    "seen": 1794632021.458264,
+    "ast_hash": "85dd253ae6d79998e1cef92e2336c531",
+    "semantic_hash": ""
+  },
+  "docs/feat/personal-dashboard/README.md": {
+    "mtime": 1794631856.6850116,
+    "seen": 1794632021.459241,
+    "ast_hash": "7441cd53626bc05fe5a9598f3bf06649",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.visual-check.1440x900.dark.png": {
+    "mtime": 1794631128.4022534,
+    "seen": 1794632021.4615,
+    "ast_hash": "6e22a06c271c8262ad2654261ffd25bc",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.visual-check.1440x900.light.png": {
+    "mtime": 1794631128.402904,
+    "seen": 1794632021.461501,
+    "ast_hash": "478513cfc6c7d329505bf8cc71b25e5c",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.visual-check.2048x1320.dark.png": {
+    "mtime": 1794631128.4043531,
+    "seen": 1794632021.4615018,
+    "ast_hash": "09d6e691269bd7390ecbfbc242784525",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-dataflow.visual-check.2048x1320.light.png": {
+    "mtime": 1794631128.4055758,
+    "seen": 1794632021.461503,
+    "ast_hash": "eee17bf4f3cf725b993bf2aed6f76b06",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.visual-check.1440x900.dark.png": {
+    "mtime": 1794631128.3936899,
+    "seen": 1794632021.461504,
+    "ast_hash": "efe218552f5b28929bef9a432f89f539",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.visual-check.1440x900.light.png": {
+    "mtime": 1794631128.3943834,
+    "seen": 1794632021.461505,
+    "ast_hash": "2b1645f91ac47ea797a0b70ccf0a4a8b",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.visual-check.2048x1320.dark.png": {
+    "mtime": 1794631128.3950415,
+    "seen": 1794632021.4615061,
+    "ast_hash": "2d43802c5d4082ead38459237e3b6b62",
+    "semantic_hash": ""
+  },
+  "docs-site/static/diagrams/foundation-system-architecture.visual-check.2048x1320.light.png": {
+    "mtime": 1794631128.3955345,
+    "seen": 1794632021.4615061,
+    "ast_hash": "a513e6c3d3015ccddc83ad201e86ba53",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/cai-dat(1).png": {
+    "mtime": 1794631263.072322,
+    "seen": 1794632021.4617631,
+    "ast_hash": "54a28c292128587f2d22851300a5d38a",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/cai-dat(2).png": {
+    "mtime": 1794631263.0806699,
+    "seen": 1794632021.461764,
+    "ast_hash": "9ee03d632687fd6ee8eedfb05aeb8dd8",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/cai-dat(3).png": {
+    "mtime": 1794631263.084217,
+    "seen": 1794632021.461765,
+    "ast_hash": "b517d07a8a746271c86336b11498d8ac",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/giao-dien-dang-nhap.png": {
+    "mtime": 1794631263.089363,
+    "seen": 1794632021.461766,
+    "ast_hash": "611492012020fb05237e5a96c03d1306",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(1).png": {
+    "mtime": 1794631263.1014228,
+    "seen": 1794632021.461767,
+    "ast_hash": "275a08b089375fc88d8f4e8a0f5d11a1",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(10).png": {
+    "mtime": 1794631263.0562809,
+    "seen": 1794632021.461771,
+    "ast_hash": "c70cb33e604fa314d36688bb530fc743",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(11).png": {
+    "mtime": 1794631263.0572243,
+    "seen": 1794632021.461772,
+    "ast_hash": "5149bdbe68506406a4c566446db7de5b",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(12).png": {
+    "mtime": 1794631263.0994911,
+    "seen": 1794632021.4617732,
+    "ast_hash": "fc240533520f03c8cd27497ecbdd8a00",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(13)-thung-rac.png": {
+    "mtime": 1794631263.069145,
+    "seen": 1794632021.461774,
+    "ast_hash": "9269ccc33c6ad24c4119a946dc7d3229",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(2).png": {
+    "mtime": 1794631263.0547369,
+    "seen": 1794632021.461775,
+    "ast_hash": "e006959e7626e716fdeec550921a897e",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(3).png": {
+    "mtime": 1794631263.0588071,
+    "seen": 1794632021.461775,
+    "ast_hash": "8061335a97abdb9fcf4cff4d26e4cfc8",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(4).png": {
+    "mtime": 1794631263.0625525,
+    "seen": 1794632021.4617758,
+    "ast_hash": "76a65029440ac7766aaabf6003ba833f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(5).png": {
+    "mtime": 1794631263.075261,
+    "seen": 1794632021.461777,
+    "ast_hash": "fe0aa02ebc22801aa4ec098a1ee2ffc0",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(6).png": {
+    "mtime": 1794631263.0775485,
+    "seen": 1794632021.461778,
+    "ast_hash": "60fd315444e5640556ccd8ec12b97e15",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(7).png": {
+    "mtime": 1794631263.0914483,
+    "seen": 1794632021.4617789,
+    "ast_hash": "655b408ecf05aa8ff96c340ab8c219fe",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(8).png": {
+    "mtime": 1794631263.0639431,
+    "seen": 1794632021.46178,
+    "ast_hash": "2dc2e9ebbf9f6f323bea220ceaf5b185",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT(9).png": {
+    "mtime": 1794631263.074462,
+    "seen": 1794632021.461781,
+    "ast_hash": "6a2d51911c98b06ba8f9008946224329",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(1).png": {
+    "mtime": 1794631263.085262,
+    "seen": 1794632021.461782,
+    "ast_hash": "eb0633fdf6b08424a20031c6812e40a3",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(2).png": {
+    "mtime": 1794631263.0654361,
+    "seen": 1794632021.461782,
+    "ast_hash": "0f55964aa8914894910a3850f1031643",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(3).png": {
+    "mtime": 1794631263.0713775,
+    "seen": 1794632021.461783,
+    "ast_hash": "7f7970db5bfc8d45e110e92b5a69467f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(4).png": {
+    "mtime": 1794631263.0494173,
+    "seen": 1794632021.4617841,
+    "ast_hash": "98097fc23c2fb6d542a9b4f107ef629c",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(5).png": {
+    "mtime": 1794631263.0603685,
+    "seen": 1794632021.461785,
+    "ast_hash": "81a45a26b7cd4b7716d4c5d3a965eb66",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(6).png": {
+    "mtime": 1794631263.0965395,
+    "seen": 1794632021.461785,
+    "ast_hash": "c6cb5c60d549c6036d11d5b60af03068",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-FOLDER(1).png": {
+    "mtime": 1794631263.0524993,
+    "seen": 1794632021.461786,
+    "ast_hash": "c902fb9020a42fdde285bc3db74aaa5a",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-FOLDER(2).png": {
+    "mtime": 1794631263.1096416,
+    "seen": 1794632021.461787,
+    "ast_hash": "1a30358a1fc6c005cdd277b24c01cd73",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-FOLDER(3).png": {
+    "mtime": 1794631263.0932004,
+    "seen": 1794632021.461788,
+    "ast_hash": "e367f406ec932cf9acbf2998c8b52f21",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-FOLDER(4).png": {
+    "mtime": 1794631263.0908096,
+    "seen": 1794632021.461789,
+    "ast_hash": "053f903c1dd4e98f5e2bd06ba153ecdf",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(1).png": {
+    "mtime": 1794631263.0735595,
+    "seen": 1794632021.4617898,
+    "ast_hash": "4e8bc1f02a12493d0a05f1715ac02749",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(2).png": {
+    "mtime": 1794631263.0821354,
+    "seen": 1794632021.4617898,
+    "ast_hash": "dcf58e0bb4aaec76fd4a7ac83613561f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(3).png": {
+    "mtime": 1794631263.0834882,
+    "seen": 1794632021.461798,
+    "ast_hash": "c1c03ee4102c901853b873e0a8f9f725",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(4).png": {
+    "mtime": 1794631263.0980382,
+    "seen": 1794632021.461799,
+    "ast_hash": "992d63772366eacdb4004768981bc8e4",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(5).png": {
+    "mtime": 1794631263.1065872,
+    "seen": 1794632021.4617999,
+    "ast_hash": "3f0033cd8cb922757a350bb13e6efdcf",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(6).png": {
+    "mtime": 1794631263.0483212,
+    "seen": 1794632021.461801,
+    "ast_hash": "b1e60226f908674a50e375979813c44d",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(7).png": {
+    "mtime": 1794631263.061092,
+    "seen": 1794632021.461801,
+    "ast_hash": "b8a1e7dedc93489154c42403f19d6a2e",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-LOC(8).png": {
+    "mtime": 1794631263.1001072,
+    "seen": 1794632021.461802,
+    "ast_hash": "0f99034ffc7f29ab73463b36c1ca440f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-TIMKIEM(1).png": {
+    "mtime": 1794631263.0510323,
+    "seen": 1794632021.461803,
+    "ast_hash": "e99a2be51592d81b19854badedeb8401",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-TIMKIEM(2).png": {
+    "mtime": 1794631263.107328,
+    "seen": 1794632021.461803,
+    "ast_hash": "0a1240a7e73e66a7461c6ff9a350f47b",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-UPLOAD(1).png": {
+    "mtime": 1794631263.0698607,
+    "seen": 1794632021.461804,
+    "ast_hash": "8dc20d4e8d715a3acd855ab891224ca3",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-UPLOAD(2).png": {
+    "mtime": 1794631263.0798936,
+    "seen": 1794632021.4618082,
+    "ast_hash": "2788ea1d255f0987fb966592bf052f31",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-UPLOAD(3).png": {
+    "mtime": 1794631263.0860343,
+    "seen": 1794632021.461809,
+    "ast_hash": "67a4f5d59f9b9ae5b8d29822a4279d13",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan-UPLOAD(4).png": {
+    "mtime": 1794631263.0952203,
+    "seen": 1794632021.461809,
+    "ast_hash": "53a256b3ad21062938d43575fba75f7f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-ca-nhan.png": {
+    "mtime": 1794631263.10273,
+    "seen": 1794632021.4618099,
+    "ast_hash": "778dc5ac3995623d627c599086b2ee01",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(1).png": {
+    "mtime": 1794631263.0517569,
+    "seen": 1794632021.4618108,
+    "ast_hash": "5d0d3c85673d816f574c46ee8f63042e",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(10).png": {
+    "mtime": 1794631263.0684953,
+    "seen": 1794632021.461812,
+    "ast_hash": "d5eaa1a66457ec68e456d1eba97f543e",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(11).png": {
+    "mtime": 1794631263.0662992,
+    "seen": 1794632021.461813,
+    "ast_hash": "6f3037e5f0927e1909ffa38ed9469a90",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(12).png": {
+    "mtime": 1794631263.086633,
+    "seen": 1794632021.461814,
+    "ast_hash": "44aec3c503e1b4e208eea3a678fc755d",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(13).png": {
+    "mtime": 1794631263.0790286,
+    "seen": 1794632021.461814,
+    "ast_hash": "f7c9a23549fc9466f0e560c4c62f3bea",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(14).png": {
+    "mtime": 1794631263.1080258,
+    "seen": 1794632021.461815,
+    "ast_hash": "3d875eda4262a04017aa22b48538ef86",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(15).png": {
+    "mtime": 1794631263.094599,
+    "seen": 1794632021.461816,
+    "ast_hash": "87504a58149624fa1ce9202f6f93363d",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(16).png": {
+    "mtime": 1794631263.0595202,
+    "seen": 1794632021.461816,
+    "ast_hash": "9b176cf26d3bd80e251ce919001bc82f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(17).png": {
+    "mtime": 1794631263.0502934,
+    "seen": 1794632021.461817,
+    "ast_hash": "1a703bb9070324cf7c10f96aceaab1e8",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(18).png": {
+    "mtime": 1794631263.1041265,
+    "seen": 1794632021.4618182,
+    "ast_hash": "404564ce132306d95b9bedce1e145161",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(19).png": {
+    "mtime": 1794631263.0987961,
+    "seen": 1794632021.461819,
+    "ast_hash": "15580d35a26b2cdadfe3c39b6c5f405d",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(2).png": {
+    "mtime": 1794631263.1089833,
+    "seen": 1794632021.461819,
+    "ast_hash": "3195956204f8bb73526730b857893ae4",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(20).png": {
+    "mtime": 1794631263.0580485,
+    "seen": 1794632021.46182,
+    "ast_hash": "fc930cf1855df270f649bf8b57d85c01",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(21).png": {
+    "mtime": 1794631263.053188,
+    "seen": 1794632021.4618208,
+    "ast_hash": "b232914fa71cfb8d2234e081930d30f7",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(22).png": {
+    "mtime": 1794631263.1020608,
+    "seen": 1794632021.4618208,
+    "ast_hash": "bd281fb02e923f78d6b66a684b2f1199",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(23).png": {
+    "mtime": 1794631263.1007242,
+    "seen": 1794632021.461822,
+    "ast_hash": "5cd192eaaf9c863d219b0f366ab98bfa",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(24).png": {
+    "mtime": 1794631263.092045,
+    "seen": 1794632021.461823,
+    "ast_hash": "e90bbb14ec660945c92edfd97c504717",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(3).png": {
+    "mtime": 1794631263.0939732,
+    "seen": 1794632021.461827,
+    "ast_hash": "6afd78aae1f0b1298dbad24273731591",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(4).png": {
+    "mtime": 1794631263.087263,
+    "seen": 1794632021.461828,
+    "ast_hash": "35d9bf03f12221a2e4795598a92d404f",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(5).png": {
+    "mtime": 1794631263.078343,
+    "seen": 1794632021.4618292,
+    "ast_hash": "db552fea8fd64859c53aa67dce06114e",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(6).png": {
+    "mtime": 1794631263.0678585,
+    "seen": 1794632021.4618292,
+    "ast_hash": "d168d0d5d74addcca431227484485c68",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(7).png": {
+    "mtime": 1794631263.0671682,
+    "seen": 1794632021.46183,
+    "ast_hash": "a54b088909268cded867641c14d25524",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(8).png": {
+    "mtime": 1794631263.0926468,
+    "seen": 1794632021.4618309,
+    "ast_hash": "9a8935218c8c17b1bb772fc0a0515a3e",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/kho-luu-tru-nhom(9).png": {
+    "mtime": 1794631263.0766723,
+    "seen": 1794632021.4618309,
+    "ast_hash": "7ff1f94f14740467fe63537679aedca6",
+    "semantic_hash": ""
+  },
+  "docs/project-management/images/tai-lieu-test.png": {
+    "mtime": 1794631263.1056273,
+    "seen": 1794632021.461832,
+    "ast_hash": "509e5ca08323412dfeb66c91dcfccd7a",
+    "semantic_hash": ""
+  },
   "docs-site/package-lock.json": {
-    "mtime": 1793957272.2376444,
-    "seen": 1794543497.166983,
-    "ast_hash": "8950374279a8eb18fd00526975c05614",
+    "mtime": 1794631058.5546577,
+    "seen": 1794632021.4649348,
+    "ast_hash": "a8ec698d8afe70d3c5ee66c710e2d037",
     "semantic_hash": ""
   },
   "frontend/digital-library/package-lock.json": {

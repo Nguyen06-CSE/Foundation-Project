@@ -1,0 +1,234 @@
+---
+id: README
+title: Cổng Thông Tin & Kiến Trúc Dự Án
+sidebar_position: 1
+slug: /
+hide_table_of_contents: false
+---
+
+import {
+  HeroSection,
+  BentoCard,
+  CardGrid,
+  RoleRoadmapTabs,
+  TechBadge,
+  StatusPill,
+  ArchitectureEmbed,
+} from '@site/src/components/DocsUI';
+
+<HeroSection
+  badgeText="Foundation Project • v2026 • 128 Endpoints"
+  title="Cổng Thông Tin & Kiến Trúc"
+  gradientTitle="Thư Viện Số Trực Tuyến"
+  subtitle="Nền tảng quản lý, lưu trữ và chia sẻ học liệu số phân tầng cho môi trường Đại học với kiến trúc FastAPI RESTful, CSDL PostgreSQL GIN Index, Hybrid Cloudflare R2 Storage và cơ chế chống trùng lặp SHA-256."
+  stats={[
+    { number: '10', label: 'Phân Hệ Nghiệp Vụ' },
+    { number: '128', label: 'RESTful Endpoints' },
+    { number: '28', label: 'Bảng CSDL PostgreSQL' },
+    { number: '5', label: 'Quyết Định Kiến Trúc (ADR)' },
+  ]}
+/>
+
+---
+
+## 🧭 1. Lộ Trình Đọc Tài Liệu Theo Vai Trò (Persona Roadmap)
+
+Để giúp các bên liên quan tiếp cận tài liệu nhanh chóng và đúng trọng tâm, hãy chọn vai trò của bạn dưới đây để nhận lộ trình 4 bước tối ưu nhất:
+
+<RoleRoadmapTabs />
+
+---
+
+## 🏛️ 2. Sơ Đồ Kiến Trúc Hệ Thống & Luồng Dữ Liệu Tương Tác
+
+Bản vẽ kiến trúc toàn diện mô phỏng mô hình Client - Server, ranh giới tin cậy, quy trình băm **SHA-256 Deduplication**, cơ chế lưu trữ **Hybrid Cloudflare R2 / Local Storage** và bộ xử lý nền **BackgroundTasks**.
+
+<ArchitectureEmbed initialDiagram="architecture" />
+
+:::tip Khởi Chạy Local Nhanh 100% Không Cần Internet
+Toàn bộ mã nguồn Backend FastAPI, CSDL PostgreSQL và Frontend React được thiết kế theo chuẩn **Offline-First**. Bạn có thể thiết lập và khởi chạy toàn bộ hệ thống trên máy cá nhân trong vòng **5 phút** bằng cách làm theo hướng dẫn tại [Khởi Chạy Localhost](/LOCAL_DEVELOPMENT_GUIDE).
+:::
+
+---
+
+## ⚡ 3. Kiến Trúc Cốt Lõi & Kỹ Thuật Hệ Thống (Engineering Highlights)
+
+Khám phá 3 trụ cột kỹ thuật nền tảng tạo nên sức mạnh và độ tin cậy của nền tảng Thư viện số:
+
+<CardGrid cols={3}>
+  <BentoCard
+    title="Tổng Quan & Nghiệp Vụ"
+    badge="RBAC 5 Roles"
+    description="Khảo sát mục tiêu kinh doanh (BRD), yêu cầu chức năng (FRD), phi chức năng (NFR), ma trận phân quyền 5 cấp và 6 luồng Use Cases cốt lõi."
+    href="/overview"
+    actionText="Xem tổng quan dự án"
+    icon="📋"
+  />
+  <BentoCard
+    title="Kiến Trúc Hệ Thống & 5 ADRs"
+    badge="Hybrid R2 & C4"
+    description="Mô hình kiến trúc C4, cơ chế lưu trữ Hybrid Cloudflare R2 kết hợp Localhost, thuật toán chống trùng lặp SHA-256 và 5 quyết định kiến trúc then chốt."
+    href="/system-architecture"
+    actionText="Khám phá sơ đồ kiến trúc"
+    icon="🏛️"
+  />
+  <BentoCard
+    title="Hệ Thống API & CSDL"
+    badge="128 REST Endpoints"
+    description="128 endpoints RESTful với xác thực JWT Bearer, từ điển dữ liệu 28 bảng PostgreSQL, tối ưu tìm kiếm GIN Index và chuỗi 7 migration Alembic."
+    href="/api"
+    actionText="Tra cứu API & CSDL"
+    icon="⚡"
+  />
+</CardGrid>
+
+---
+
+## ✨ 4. Bản Đồ 10 Phân Hệ Tính Năng Nghiệp Vụ (`feat/`)
+
+Toàn bộ nghiệp vụ của nền tảng được module hóa thành **10 phân hệ độc lập**, có đầy đủ đặc tả API, Schema CSDL, Quy tắc nghiệp vụ và Minh họa giao diện:
+
+<CardGrid cols={2}>
+  <BentoCard
+    title="1. Personal Dashboard & Kho Cá Nhân"
+    badge="Core Storage"
+    description="Quản lý tài liệu cá nhân, cây thư mục đa cấp (Folder = Kệ sách Tag), gắn nhãn màu sắc và thùng rác lưu trữ 30 ngày có cơ chế khôi phục an toàn."
+    href="/feat/personal-dashboard"
+    icon="📂"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="2. Community Library & Môn Học"
+    badge="Open Education"
+    description="Thư viện học liệu mở phân tầng theo Khoa, Ngành và Học phần. Cơ chế Fork / Copy-on-Share tài liệu về kho cá nhân hoàn toàn độc lập."
+    href="/feat/community-library"
+    icon="🏫"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="3. Document Sharing & Phân Quyền Link"
+    badge="Security Sharing"
+    description="Chia sẻ tài liệu qua liên kết bảo mật có mật khẩu bảo vệ, giới hạn thời gian hết hạn và cấu hình quyền xem / tải xuống linh hoạt."
+    href="/feat/document-sharing"
+    icon="🔗"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="4. Document Query & Full-Text Search"
+    badge="PostgreSQL GIN"
+    description="Tìm kiếm toàn văn tiếng Việt không dấu (unaccent), tìm kiếm mờ Trigram (pg_trgm) trên cột tsvector tự động cập nhật qua PostgreSQL Trigger."
+    href="/feat/document-query-and-performance"
+    icon="🔍"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="5. Document View Modes (Grid / List / Detail)"
+    badge="UI Experience"
+    description="Chuyển đổi 3 chế độ xem: Lưới thẻ (Grid), Danh sách thu gọn (List) và Khung chi tiết (Detail) có hộp xem trước văn bản và trích xuất OCR."
+    href="/feat/document-view-modes"
+    icon="🖥️"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="6. Markdown Viewer & Publisher"
+    badge="Web Native"
+    description="Trình đọc văn bản Markdown phong phú với công thức toán học KaTeX, Highlight code cú pháp, sanitize DOM chống XSS và tính năng export HTML."
+    href="/feat/markdown-view"
+    icon="📝"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="7. Document Bundle & Trọn Bộ Học Liệu"
+    badge="Batch Pack"
+    description="Đóng gói trọn bộ giáo trình, slide bài giảng và đề thi thành một Bundle duy nhất. Cho phép người học tải về toàn bộ dưới dạng file nén ZIP một chạm."
+    href="/feat/bundle"
+    icon="📦"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="8. Preview & Quản Lý Cover/Thumbnails"
+    badge="Multi-format OCR"
+    description="Xem trước trực quan PDF, DOCX, Code; tự động gộp nhiều ảnh chụp slide thành file PDF qua jsPDF và chạy OCR Tesseract bóc tách chữ."
+    href="/feat/document-preview-and-thumbnails"
+    icon="🖼️"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="9. Activity Tracking & Điểm Xu Hướng"
+    badge="Trending Score"
+    description="Hệ thống telemetry ghi nhận lượt xem, tải xuống, đánh giá sao. Thuật toán suy giảm thời gian (Exponential Decay) tính điểm Trending tài liệu hot."
+    href="/feat/activity-tracking"
+    icon="📊"
+    actionText="Xem chi tiết phân hệ"
+  />
+  <BentoCard
+    title="10. System Enhancements 2026"
+    badge="Productivity"
+    description="Thanh tác vụ nổi hàng loạt (Bulk Action Bar), nhãn gắn linh hoạt cấp Workspace, trung tâm thông báo thời gian thực và quản lý tài khoản người dùng."
+    href="/feat/system-enhancements-2026"
+    icon="🚀"
+    actionText="Xem chi tiết phân hệ"
+  />
+</CardGrid>
+
+---
+
+## 🛠️ 5. Vận Hành, Bảo Mật & Quản Trị Dự Án (Ops & Governance)
+
+Đảm bảo hệ thống vận hành ổn định, sẵn sàng mở rộng và tuân thủ các tiêu chuẩn kỹ thuật nghiêm ngặt:
+
+<CardGrid cols={4}>
+  <BentoCard
+    title="Triển Khai & R2 Storage"
+    badge="DevOps"
+    description="Kiến trúc Hybrid Storage, cấu hình Cloudflare R2, quản lý biến môi trường và quy trình CI/CD Release."
+    href="/deployment"
+    icon="☁️"
+    actionText="Xem triển khai"
+  />
+  <BentoCard
+    title="Bảo Mật OWASP Top 10"
+    badge="Security"
+    description="Kiến trúc phòng thủ đa tầng, cơ chế xác thực JWT, bảo vệ khóa bí mật và phòng chống tấn công injection/XSS."
+    href="/security"
+    icon="🛡️"
+    actionText="Xem bảo mật"
+  />
+  <BentoCard
+    title="Kiểm Thử & Đảm Bảo QA"
+    badge="Testing"
+    description="Chiến lược kiểm thử đa tầng, bộ Test Cases ánh xạ Use Cases, hướng dẫn chạy Pytest và kiểm toán chất lượng."
+    href="/testing"
+    icon="🧪"
+    actionText="Xem kiểm thử"
+  />
+  <BentoCard
+    title="Lộ Trình & Quản Trị Dự Án"
+    badge="Roadmap"
+    description="Kế hoạch phát hành dài hạn, danh mục tính năng Backlog, báo cáo nợ kỹ thuật và slide bảo vệ đồ án."
+    href="/project-management/roadmap"
+    icon="📋"
+    actionText="Xem quản trị"
+  />
+</CardGrid>
+
+---
+
+## 📚 6. Bảng Tra Cứu Toàn Bộ Tài Liệu Dự Án (Single Source of Truth)
+
+| Phân hệ / Nhóm tài liệu | Nội dung trọng tâm | Điểm bắt đầu khuyến nghị |
+|---|---|---|
+| **Tổng Quan Dự Án** | Giới thiệu, phạm vi in/out-scope, tính năng chính, phân quyền 5 vai trò và thuật ngữ | [`/overview`](/overview) |
+| **Yêu Cầu & Nghiệp Vụ** | Yêu cầu nghiệp vụ (BRD), chức năng (FRD), phi chức năng (NFR) và 6 luồng Use Cases | [`/requirements`](/requirements) |
+| **Kiến Trúc Hệ Thống** | Sơ đồ C4, Tech Stack, kiến trúc Backend/Frontend/DB/Storage/Security và 5 ADRs | [`/system-architecture`](/system-architecture) |
+| **Chuyên Đề Lưu Trữ (11 Chương)** | Chuyên đề lưu trữ chuyên sâu, SHA-256 Deduplication, Cloudflare R2 và vòng đời file | [`/architecture/STORAGE_SYSTEM`](/architecture/STORAGE_SYSTEM) |
+| **Hệ Thống API (128 Endpoints)** | Danh mục API đầy đủ, quy ước RESTful, xác thực JWT, cấu trúc mã lỗi và OpenAPI | [`/api`](/api) |
+| **Cơ Sở Dữ Liệu (28 Bảng)** | Sơ đồ ERD quan hệ, từ điển dữ liệu 28 bảng, cấu hình GIN Index và chuỗi migration | [`/data`](/data) |
+| **10 Phân Hệ Tính Năng** | Đặc tả kỹ thuật chi tiết 10 module: Kho cá nhân, Thư viện, Sharing, Bundle, View Modes... | [`/feat`](/feat) |
+| **Hướng Dẫn Phát Triển** | Yêu cầu tiên quyết, biến môi trường, setup CSDL, workflow phát triển và troubleshooting | [`/development`](/development) |
+| **Triển Khai & Vận Hành** | Triển khai R2 CDN, cấu hình môi trường Production, quy trình phát hành và rollback | [`/deployment`](/deployment) |
+| **Bảo Mật & An Toàn Thông Tin** | Phòng vệ OWASP, ma trận RBAC, quản lý secret `.env` và chính sách báo cáo lỗ hổng | [`/security`](/security) |
+| **Kiểm Thử & Đảm Bảo Chất Lượng** | Mô hình tháp test, danh mục test cases chi tiết, cách chạy test và đánh giá khoảng trống | [`/testing`](/testing) |
+| **Quy Chuẩn & Biểu Mẫu** | Quy chuẩn viết tài liệu kỹ thuật, biểu mẫu Feature, biểu mẫu ADR và Test Case mẫu | [`/DOCUMENTATION_GUIDE`](/DOCUMENTATION_GUIDE) |
+| **Quản Lý Dự Án & Tiến Độ** | Mô tả 5 không gian, phân rã công việc, báo cáo hiện trạng, lộ trình roadmap và backlog | [`/project-management/roadmap`](/project-management/roadmap) |
+| **Khởi Chạy Local 5 Phút** | Hướng dẫn cài đặt nhanh 100% offline không phụ thuộc internet | [`/LOCAL_DEVELOPMENT_GUIDE`](/LOCAL_DEVELOPMENT_GUIDE) |
