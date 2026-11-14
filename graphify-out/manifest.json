@@ -2018,15 +2018,15 @@
     "semantic_hash": ""
   },
   "docs/LOCAL_DEVELOPMENT_GUIDE.md": {
-    "mtime": 1793953978.951534,
-    "seen": 1794543497.161775,
-    "ast_hash": "1ec6d146905e92d58027c6dd0e9af040",
+    "mtime": 1794628330.8322246,
+    "seen": 1794628397.736327,
+    "ast_hash": "f55b019f7f1137b8d4c18e93a73e5e1a",
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1794628153.232508,
-    "seen": 1794628192.94626,
-    "ast_hash": "4300d7568c7e258989e5bfa8cd5b65b9",
+    "mtime": 1794628361.5442514,
+    "seen": 1794628397.736328,
+    "ast_hash": "2a741bc70a2fe658903e926711935a72",
     "semantic_hash": ""
   },
   "docs/architecture/STORAGE_SYSTEM.md": {
@@ -3212,9 +3212,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794628135.4200406,
-    "seen": 1794628192.93908,
-    "ast_hash": "c3176b9146d1cea562ed25c8202c2b43",
+    "mtime": 1794628341.3042376,
+    "seen": 1794628397.72872,
+    "ast_hash": "77f1e802d83e032f91d387c54bf444d2",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3554,9 +3554,45 @@
     "semantic_hash": ""
   },
   "plan-docs.md": {
-    "mtime": 1794628185.1821454,
-    "seen": 1794628192.948698,
-    "ast_hash": "6dd547f89882816ce021cd95b7d0307d",
+    "mtime": 1794628387.0205772,
+    "seen": 1794628397.739667,
+    "ast_hash": "aa4a66ba739617abdcd023c55c38e819",
+    "semantic_hash": ""
+  },
+  "docs/development/DATABASE_SETUP.md": {
+    "mtime": 1794628288.095625,
+    "seen": 1794628397.736476,
+    "ast_hash": "c7c814c17d8ceda88176caa3cae30318",
+    "semantic_hash": ""
+  },
+  "docs/development/DEVELOPMENT_WORKFLOW.md": {
+    "mtime": 1794628302.3894098,
+    "seen": 1794628397.736477,
+    "ast_hash": "b90bf59a095c54c89f65fba54c17427f",
+    "semantic_hash": ""
+  },
+  "docs/development/ENVIRONMENT_VARIABLES.md": {
+    "mtime": 1794628272.1211603,
+    "seen": 1794628397.7364779,
+    "ast_hash": "f3cf4008a94688b3640c9a4ffe5ac46a",
+    "semantic_hash": ""
+  },
+  "docs/development/PREREQUISITES.md": {
+    "mtime": 1794628256.4509583,
+    "seen": 1794628397.736479,
+    "ast_hash": "d9bb1a136e69cf6ca0fb9065a9e17a44",
+    "semantic_hash": ""
+  },
+  "docs/development/README.md": {
+    "mtime": 1794628242.9602985,
+    "seen": 1794628397.73648,
+    "ast_hash": "18dc52fbb9f04513e3f2fd965b97cb90",
+    "semantic_hash": ""
+  },
+  "docs/development/TROUBLESHOOTING.md": {
+    "mtime": 1794628319.4967725,
+    "seen": 1794628397.7364821,
+    "ast_hash": "25cf2deb39001bb25de7c8638356039c",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {

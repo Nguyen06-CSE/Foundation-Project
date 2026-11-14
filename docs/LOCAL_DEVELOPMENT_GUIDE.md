@@ -8,6 +8,13 @@ sidebar_position: 2
 
 > **Mục đích tài liệu:**
 > Tài liệu này dành cho thành viên nhóm phát triển, giảng viên chấm đồ án, hoặc bất kỳ ai khi clone repository này về máy tính cá nhân có thể nhanh chóng thiết lập, chuyển đổi toàn bộ hệ thống từ môi trường Cloud (Cloudflare R2, Neon DB) về **Môi trường Cục bộ hoàn toàn (100% Localhost / Offline)** để kiểm thử, phát triển và chấm bài một cách thuận tiện, không phụ thuộc vào kết nối mạng bên ngoài hay tài khoản đám mây.
+> 
+> 💡 *Bộ tài liệu hướng dẫn phát triển đầy đủ theo từng chuyên đề được lưu trữ tại phân hệ [Hướng Dẫn Phát Triển (docs/development/)](./development/README.md):*
+> - [Yêu Cầu Tiên Quyết (PREREQUISITES.md)](./development/PREREQUISITES.md)
+> - [Chuẩn Hóa Biến Môi Trường (ENVIRONMENT_VARIABLES.md)](./development/ENVIRONMENT_VARIABLES.md)
+> - [Thiết Lập Cơ Sở Dữ Liệu (DATABASE_SETUP.md)](./development/DATABASE_SETUP.md)
+> - [Quy Trình Phát Triển (DEVELOPMENT_WORKFLOW.md)](./development/DEVELOPMENT_WORKFLOW.md)
+> - [Khắc Phục Sự Cố Local (TROUBLESHOOTING.md)](./development/TROUBLESHOOTING.md)
 
 ---
 

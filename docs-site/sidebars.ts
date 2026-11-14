@@ -39,10 +39,20 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    // ── HƯỚNG DẪN PHÁT TRIỂN ───────────────────────────────────────
     {
-      type: 'doc',
-      id: 'LOCAL_DEVELOPMENT_GUIDE',
+      type: 'category',
       label: '🛠️ Hướng Dẫn Phát Triển',
+      collapsed: false,
+      items: [
+        'development/README',
+        'development/PREREQUISITES',
+        'development/ENVIRONMENT_VARIABLES',
+        'development/DATABASE_SETUP',
+        'development/DEVELOPMENT_WORKFLOW',
+        'development/TROUBLESHOOTING',
+        'LOCAL_DEVELOPMENT_GUIDE',
+      ],
     },
     {
       type: 'doc',

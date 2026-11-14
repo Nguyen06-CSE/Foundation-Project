@@ -22,6 +22,7 @@ Nếu bạn là người mới tiếp cận dự án, hãy tham khảo các tài
 * 🛡️ **[Vai Trò & Ma Trận Phân Quyền (User Roles & RBAC)](./overview/USER_ROLES_AND_PERMISSIONS.md):** Ma trận kiểm soát truy cập giữa Sinh viên, Giảng viên, Ban cán sự và Quản trị viên.
 * 📖 **[Từ Điển Thuật Ngữ (Glossary)](./overview/GLOSSARY.md):** Thống nhất các khái niệm: Fork/Clone, SHA-256 Deduplication, Trending Score, Soft Delete,...
 * 📋 **[Yêu Cầu & Nghiệp Vụ Cấp Sản Phẩm (Requirements)](./requirements/README.md):** Khảo sát mục tiêu kinh doanh (BRD), yêu cầu chức năng (FRD), phi chức năng (NFR), quy tắc nghiệp vụ dùng chung và 6 luồng Use Cases.
+* 🛠️ **[Hướng Dẫn Thiết Lập & Phát Triển (Development Guide)](./development/README.md):** Hướng dẫn 5 bước khởi chạy nhanh, yêu cầu tiên quyết, chuẩn hóa biến môi trường, setup CSDL và workflow chuẩn.
 
 ---
 
@@ -56,8 +57,23 @@ docs/
 │   └── system-enhancements-2026/   # To-do, Notifications, Thao tác hàng loạt & Nhãn
 ├── architecture/                   # 🏗️ Kiến trúc chuyên sâu & Lưu trữ
 │   └── STORAGE_SYSTEM.md           # Chuyên đề 11 chương về Lưu trữ, SHA-256 & Vòng đời file
-├── system-architecture/            # 🏛️ Sơ đồ kiến trúc & luồng dữ liệu
-│   └── index.md                    # Sơ đồ tổng thể & sequence diagrams
+├── system-architecture/            # 🏛️ Sơ đồ kiến trúc & luồng dữ liệu (Giai đoạn 3)
+│   ├── README.md                   # Tổng quan kiến trúc & sơ đồ khối
+│   ├── SYSTEM_OVERVIEW.md          # Mô hình kiến trúc C4 (Context, Container, Component)
+│   ├── TECHNOLOGY_STACK.md         # Ngăn xếp công nghệ chuẩn hóa
+│   ├── FRONTEND_ARCHITECTURE.md    # Kiến trúc giao diện React 19 & Viewers
+│   ├── BACKEND_ARCHITECTURE.md     # Kiến trúc máy chủ FastAPI & Services
+│   ├── DATABASE_ARCHITECTURE.md    # Kiến trúc CSDL PostgreSQL & 20 bảng
+│   ├── STORAGE_ARCHITECTURE.md     # Kiến trúc lưu trữ Hybrid R2 / Local
+│   ├── SECURITY_ARCHITECTURE.md    # Kiến trúc bảo mật & ranh giới tin cậy
+│   └── adr/                        # 5 Bản ghi quyết định kiến trúc then chốt (ADRs)
+├── development/                    # 🛠️ Hướng dẫn phát triển & cài đặt (Giai đoạn 4)
+│   ├── README.md                   # Hướng dẫn khởi động nhanh 5 bước
+│   ├── PREREQUISITES.md            # Yêu cầu tiên quyết & công cụ nền tảng
+│   ├── ENVIRONMENT_VARIABLES.md    # Chuẩn hóa biến môi trường Backend & Frontend
+│   ├── DATABASE_SETUP.md           # Thiết lập CSDL, migrations Alembic & seed data
+│   ├── DEVELOPMENT_WORKFLOW.md     # Quy trình làm việc, linter oxlint & pytest
+│   └── TROUBLESHOOTING.md          # Cẩm nang khắc phục lỗi cục bộ (Local)
 ├── deployment/                     # 🚀 Hướng dẫn triển khai & vận hành
 │   ├── README.md                   # Kiến trúc triển khai Hybrid Storage
 │   ├── ENV_VARIABLES.md            # Danh mục biến môi trường Backend & Frontend

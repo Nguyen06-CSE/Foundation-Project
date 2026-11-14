@@ -22,21 +22,8 @@ Kế hoạch này chia công việc thành các giai đoạn nhỏ để bạn l
 ## [x] Giai đoạn 3 — Kiến trúc hệ thống
 - *Trạng thái:* `[x] DONE` — Đã tạo `docs/system-architecture/` (README, SYSTEM_OVERVIEW, TECHNOLOGY_STACK, FRONTEND_ARCHITECTURE, BACKEND_ARCHITECTURE, DATABASE_ARCHITECTURE, STORAGE_ARCHITECTURE, SECURITY_ARCHITECTURE) và 5 ADRs trong `adr/`. Docusaurus build thành công.
 
-## [ ] Giai đoạn 4 — Hướng dẫn phát triển
-
-**Mục tiêu:** Hướng dẫn developer thiết lập và chạy dự án.
-
-**Tài liệu:**
-
-- `docs/development/README.md`
-- `PREREQUISITES.md`
-- Chuẩn hóa `LOCAL_DEVELOPMENT_GUIDE.md` hiện có nếu cần.
-- `ENVIRONMENT_VARIABLES.md` — một nguồn chuẩn cho danh sách và ý nghĩa biến môi trường.
-- `DATABASE_SETUP.md`
-- `DEVELOPMENT_WORKFLOW.md`
-- `TROUBLESHOOTING.md` cho lỗi local.
-
-**Tiêu chí hoàn thành:** Hướng dẫn có thể làm theo, không chứa giá trị bí mật hoặc bước lỗi thời; lỗi local được phân biệt với lỗi production.
+## [x] Giai đoạn 4 — Hướng dẫn phát triển
+- *Trạng thái:* `[x] DONE` — Đã tạo `docs/development/` (README, PREREQUISITES, ENVIRONMENT_VARIABLES, DATABASE_SETUP, DEVELOPMENT_WORKFLOW, TROUBLESHOOTING), chuẩn hóa `LOCAL_DEVELOPMENT_GUIDE.md`, cập nhật `sidebars.ts`. Docusaurus build thành công.
 
 ## [ ] Giai đoạn 5 — Deployment và vận hành
 
