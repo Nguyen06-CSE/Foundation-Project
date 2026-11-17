@@ -1,6 +1,6 @@
 // digital-library/src/components/shared/Sidebar.tsx
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { type ElementType, useEffect, useRef, useState } from "react";
 import {
@@ -63,15 +63,18 @@ export interface SidebarProps {
 }
 
 export function Sidebar({ onNavigate }: SidebarProps) {
+  const navigate = useNavigate();
   const [width, setWidth] = useState(MAX_WIDTH);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isAdmin = isAdminRole(user?.role);
 
   const { data: invitations = [] } = useQuery({
     queryKey: ["my-invitations"],
     queryFn: groupService.getMyInvitations,
+    enabled: Boolean(user) && isAuthenticated,
     refetchInterval: 30000,
     retry: false,
   });
@@ -80,6 +83,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const { data: pendingShares = [] } = useQuery({
     queryKey: ["shares-pending"],
     queryFn: shareService.getPending,
+    enabled: Boolean(user) && isAuthenticated,
     refetchInterval: 30000,
     retry: false,
   });
@@ -88,7 +92,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const { data: pendingSubData } = useQuery({
     queryKey: ["library-admin-submissions", "pending-count"],
     queryFn: () => libraryService.getAdminSubmissions({ status: "pending", page: 1, page_size: 1 }),
-    enabled: isAdmin,
+    enabled: Boolean(user) && isAuthenticated && isAdmin,
     refetchInterval: 30000,
     retry: false,
   });
@@ -231,12 +235,21 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             ? pendingShareCount
             : 0;
 
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      onNavigate?.();
+      if (!isAuthenticated && item.to !== "/library") {
+        e.preventDefault();
+        sessionStorage.setItem("redirect_after_login", item.to);
+        navigate("/login");
+      }
+    };
+
     return (
       <NavLink
         key={item.to}
         to={item.to}
         end={item.to === "/personal" || item.to === "/library"}
-        onClick={onNavigate}
+        onClick={handleClick}
         title={isCollapsed ? item.label : undefined}
         className={({ isActive }) =>
           cn(

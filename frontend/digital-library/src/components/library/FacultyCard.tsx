@@ -1,104 +1,95 @@
 // frontend/digital-library/src/components/library/FacultyCard.tsx
 
-import { GraduationCap, ArrowRight } from "lucide-react";
-import { Card } from "@/components/ui/Card";
-import type { Faculty } from "@/types/library";
+import { GraduationCap, BookOpen, Layers, ArrowRight } from "lucide-react";
 
-const CARD_COLORS = [
-  { bg: "#2F6B3C12", text: "#2F6B3C", hoverBorder: "hover:border-primary-500" }, // primary
-  { bg: "#2563EB12", text: "#2563EB", hoverBorder: "hover:border-blue-500" },    // blue
-  { bg: "#D9770612", text: "#D97706", hoverBorder: "hover:border-amber-500" },   // orange/amber
-  { bg: "#7C3AED12", text: "#7C3AED", hoverBorder: "hover:border-purple-500" },  // purple
-  { bg: "#0891B212", text: "#0891B2", hoverBorder: "hover:border-cyan-500" },    // cyan
-  { bg: "#E11D4812", text: "#E11D48", hoverBorder: "hover:border-rose-500" },    // rose
-];
+interface Faculty {
+  id: string | number;
+  name: string;
+  code: string;
+  description?: string;
+  subject_count?: number;
+  document_count?: number;
+}
 
-export interface FacultyCardProps {
+interface FacultyCardProps {
   faculty: Faculty;
   index?: number;
+  totalLibraryDocs?: number;
   onClick: () => void;
 }
 
-export function FacultyCard({ faculty, index = 0, onClick }: FacultyCardProps) {
-  const colorTheme = CARD_COLORS[index % CARD_COLORS.length];
+export function FacultyCard({
+  faculty,
+  totalLibraryDocs = 0,
+  onClick,
+}: FacultyCardProps) {
+  const subjectCount = faculty.subject_count || 0;
+  const docCount = faculty.document_count || 0;
+
+  const docPercentage =
+    totalLibraryDocs > 0 ? Math.round((docCount / totalLibraryDocs) * 100) : 0;
 
   return (
-    <Card
-      className={`
-        group
-        relative
-        flex
-        min-h-[120px]
-        cursor-pointer
-        flex-col
-        justify-between
-        rounded-xl
-        border
-        border-gray-200/90
-        bg-white
-        p-5
-        shadow-sm
-        transition-all
-        duration-200
-        hover:-translate-y-1
-        hover:shadow-md
-        ${colorTheme.hoverBorder}
-      `}
+    <div
       onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onClick();
-        }
-      }}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-500/60 hover:shadow-md cursor-pointer min-h-[200px]"
     >
-      <div className="flex items-start gap-4">
-        {/* Icon tile */}
-        <div
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105"
-          style={{
-            backgroundColor: colorTheme.bg,
-            color: colorTheme.text,
-          }}
-        >
-          <GraduationCap className="h-6 w-6" />
+      {/* Chữ Watermark Mã Khoa in chìm cực nhẹ ở góc phải */}
+      <span className="pointer-events-none absolute right-3 top-2 select-none text-5xl font-black tracking-tighter text-gray-900/[0.025] group-hover:text-primary-900/[0.04] transition-colors">
+        {faculty.code}
+      </span>
+
+      {/* Phần Đầu Card: Icon + Mã Khoa + Tên Khoa + Mô tả */}
+      <div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-600 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-200">
+            <GraduationCap className="h-5 w-5" />
+          </div>
+
+          <span className="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-1 text-xs font-semibold tracking-wide text-gray-600 group-hover:bg-primary-50 group-hover:text-primary-700 transition-colors uppercase">
+            {faculty.code}
+          </span>
         </div>
 
-        {/* Info */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span
-              className="rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase"
-              style={{
-                backgroundColor: colorTheme.bg,
-                color: colorTheme.text,
-              }}
-            >
-              {faculty.code}
+        <h3 className="mt-4 text-base sm:text-lg font-bold text-gray-900 group-hover:text-primary-700 transition-colors line-clamp-1">
+          {faculty.name}
+        </h3>
+
+        <p className="mt-1.5 text-xs sm:text-sm text-gray-500 line-clamp-2 leading-relaxed">
+          {faculty.description ||
+            `Tổng hợp giáo trình, bài giảng, đề cương và đề thi các học phần thuộc ${faculty.name}.`}
+        </p>
+      </div>
+
+      {/* Phần Cuối Card: Thống kê + Thanh tiến độ đơn sắc nhẹ nhàng */}
+      <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col gap-2.5">
+        <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600">
+          <div className="flex items-center gap-4">
+            <span className="inline-flex items-center gap-1.5">
+              <Layers className="h-4 w-4 text-gray-400" />
+              <strong className="font-semibold text-gray-800">{subjectCount}</strong> môn học
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <BookOpen className="h-4 w-4 text-gray-400" />
+              <strong className="font-semibold text-gray-800">{docCount}</strong> tài liệu
             </span>
           </div>
-          <h3
-            className="mt-1.5 text-base font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 leading-snug"
-            title={faculty.name}
-          >
-            {faculty.name}
-          </h3>
-        </div>
-      </div>
 
-      {/* Footer stats */}
-      <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500 font-medium">
-        <span>
-          {faculty.subject_count} môn học · {faculty.document_count} tài liệu
-        </span>
-        <div className="flex items-center text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity font-semibold">
-          <span className="text-xs mr-1">Khám phá</span>
-          <ArrowRight className="h-3.5 w-3.5" />
+          <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-400 group-hover:text-primary-600 group-hover:translate-x-0.5 transition-all">
+            Xem khoa
+            <ArrowRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
+
+        {/* Thanh tiến độ màu xám nhạt, chỉ chuyển xanh lá dịu khi hover */}
+        <div className="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full bg-gray-300 group-hover:bg-primary-500 transition-colors duration-300"
+            style={{ width: `${Math.max(docPercentage, docCount > 0 ? 10 : 0)}%` }}
+          />
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
