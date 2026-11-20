@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-feat/document-view-modes/PERSISTENCE" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Lưu Bền &amp; Đồng Bộ Chế Độ Hiển Thị (View Mode Persistence) | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/feat/document-view-modes/PERSISTENCE"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Lưu Bền &amp; Đồng Bộ Chế Độ Hiển Thị (View Mode Persistence) | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Tài liệu này mô tả cơ chế lưu lựa chọn Grid / List / Detail vào localStorage, cách đồng bộ lựa chọn giữa các màn hình tài liệu, lý do chọn phương án này và bằng chứng kiểm thử trên ứng dụng thực tế."><meta data-rh="true" property="og:description" content="Tài liệu này mô tả cơ chế lưu lựa chọn Grid / List / Detail vào localStorage, cách đồng bộ lựa chọn giữa các màn hình tài liệu, lý do chọn phương án này và bằng chứng kiểm thử trên ứng dụng thực tế."><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/feat/document-view-modes/PERSISTENCE"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/feat/document-view-modes/PERSISTENCE" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/feat/document-view-modes/PERSISTENCE" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"💾 Lưu chế độ hiển thị","item":"https://Nguyen06-CSE.github.io/Foundation-Project/feat/document-view-modes/PERSISTENCE"}]}</script><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.49d92d05.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.a1b6bdd4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Foundation-Project/feat">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/api">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/development">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/project-management/MoTaDuAn">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Thanh điều hướng tài liệu" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Foundation-Project/feat"><span class="linkLabel_WmDU">📑 Danh mục Tính năng</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/Foundation-Project/feat/personal-dashboard"><span class="categoryLinkLabel_W154">1. Personal Dashboard &amp; Kho Cá Nhân</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/personal-dashboard"><span class="linkLabel_WmDU">Tổng quan Dashboard</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/personal-dashboard/PERSONAL_DASHBOARD"><span class="linkLabel_WmDU">Tài liệu Kỹ thuật: Thiết kế &amp; Triển khai Personal Dashboard (/personal)</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/community-library"><span class="categoryLinkLabel_W154">2. Community Library &amp; Kho Môn Học</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/document-sharing"><span class="categoryLinkLabel_W154">3. Document Sharing &amp; Phân Quyền Link</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/document-query-and-performance"><span class="categoryLinkLabel_W154">4. Document Query &amp; Tối Ưu Truy Vấn</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/Foundation-Project/feat/document-view-modes"><span class="categoryLinkLabel_W154">5. Document View Modes (Grid/List/Detail)</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/document-view-modes"><span class="linkLabel_WmDU">Đặc Tả Tính Năng: Chế Độ Hiển Thị Tài Liệu Đa Phong Cách (Document Multi-View Modes)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/Foundation-Project/feat/document-view-modes/PERSISTENCE"><span class="linkLabel_WmDU">💾 Lưu chế độ hiển thị</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/document-view-modes/BUSINESS_RULES"><span class="linkLabel_WmDU">Quy Tắc Nghiệp Vụ &amp; Hành Vi Giao Diện (Business &amp; UI Rules)</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/document-view-modes/FRONTEND"><span class="linkLabel_WmDU">Kiến Trúc Giao Diện &amp; Thành Phần: Document Multi-View Modes</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Foundation-Project/feat/document-view-modes/REUSE_AND_INTEGRATION"><span class="linkLabel_WmDU">Hướng Dẫn Tái Sử Dụng &amp; Tích Hợp (Reuse &amp; Integration Guide)</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/markdown-view"><span class="categoryLinkLabel_W154">6. Markdown View &amp; Publisher</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/bundle"><span class="categoryLinkLabel_W154">7. Document Bundle &amp; Trọn Bộ Học Liệu</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/document-preview-and-thumbnails"><span class="categoryLinkLabel_W154">8. Preview &amp; Quản Lý Cover/Thumbnail</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/activity-tracking"><span class="categoryLinkLabel_W154">9. Activity Tracking &amp; Điểm Xu Hướng</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Foundation-Project/feat/system-enhancements-2026"><span class="categoryLinkLabel_W154">10. System Enhancements 2026</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Liên kết điều hướng"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Trang chủ" class="breadcrumbs__link" href="/Foundation-Project/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">5. Document View Modes (Grid/List/Detail)</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">💾 Lưu chế độ hiển thị</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>Lưu Bền &amp; Đồng Bộ Chế Độ Hiển Thị (View Mode Persistence)</h1></header>
+<p>Tài liệu này mô tả cơ chế lưu lựa chọn <strong>Grid / List / Detail</strong> vào <code>localStorage</code>, cách đồng bộ lựa chọn giữa các màn hình tài liệu, lý do chọn phương án này và bằng chứng kiểm thử trên ứng dụng thực tế.</p>
+<blockquote>
+<p>[!IMPORTANT] Trạng thái: <code>Implemented</code>
+Phạm vi áp dụng: Kho tài liệu cá nhân, Tài liệu đã nhận và Kho học liệu theo môn.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-vấn-đề-trước-khi-sửa">1. Vấn Đề Trước Khi Sửa<a href="#1-vấn-đề-trước-khi-sửa" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Vấn Đề Trước Khi Sửa" title="Đường dẫn trực tiếp đến 1. Vấn Đề Trước Khi Sửa" translate="no">​</a></h2>
+<p><code>PersonalDocumentsSection</code> và <code>LibrarySubject</code> từng giữ <code>viewMode</code> bằng <code>useState</code> cục bộ:</p>
+<div class="language-tsx codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tsx codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">viewMode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> setViewMode</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token generic-function function" style="color:#d73a49">useState</span><span class="token generic-function generic class-name operator" style="color:#393A34">&lt;</span><span class="token generic-function generic class-name">ViewMode</span><span class="token generic-function generic class-name operator" style="color:#393A34">&gt;</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;detail&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<p>Vì state nằm trong component, khi React Router unmount trang để chuyển sang màn hình khác rồi quay lại, component được mount lại và state trở về giá trị khởi tạo:</p>
+<ol>
+<li class="">Người dùng chọn <strong>Grid</strong> ở <code>/personal/documents</code>.</li>
+<li class="">Chuyển sang <code>/personal/trash</code>.</li>
+<li class="">Quay lại <code>/personal/documents</code>.</li>
+<li class=""><code>PersonalDocumentsSection</code> bị mount lại → <code>viewMode</code> về <code>&quot;detail&quot;</code>.</li>
+</ol>
+<p>Lỗi tương tự xảy ra khi chuyển tab nội bộ của <code>SharedWithMe</code> (tab &quot;Đã nhận&quot; unmount <code>PersonalDocumentsSection</code>), hoặc khi quay lại <code>/library/subject/:subjectId</code> sau khi rời trang.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-phạm-vi-áp-dụng">2. Phạm Vi Áp Dụng<a href="#2-phạm-vi-áp-dụng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Phạm Vi Áp Dụng" title="Đường dẫn trực tiếp đến 2. Phạm Vi Áp Dụng" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Màn hình</th><th style="text-align:left">Route</th><th style="text-align:left">Component sử dụng hook</th><th style="text-align:left">Default khi chưa có lựa chọn</th></tr></thead><tbody><tr><td style="text-align:left">Kho tài liệu cá nhân</td><td style="text-align:left"><code>/personal/documents</code></td><td style="text-align:left"><code>PersonalDocumentsSection</code></td><td style="text-align:left"><code>detail</code></td></tr><tr><td style="text-align:left">Tài liệu đã nhận</td><td style="text-align:left"><code>/personal/shared</code></td><td style="text-align:left"><code>PersonalDocumentsSection</code> (tab Đã nhận)</td><td style="text-align:left"><code>detail</code></td></tr><tr><td style="text-align:left">Kho học liệu theo môn</td><td style="text-align:left"><code>/library/subject/:subjectId</code></td><td style="text-align:left"><code>LibrarySubject</code></td><td style="text-align:left"><code>grid</code></td></tr></tbody></table>
+<p>Ba màn hình dùng <strong>cùng một key localStorage</strong>, nên lựa chọn được đồng bộ với nhau. Mỗi màn hình vẫn giữ default cũ khi người dùng chưa từng chọn, tránh thay đổi trải nghiệm mặc định hiện tại.</p>
+<blockquote>
+<p>[!NOTE] Ngoài phạm vi
+<code>GroupDocumentsSection</code>, <code>BundleDetailPage</code> và các danh sách khác vẫn đang dùng state cục bộ. Có thể tích hợp cùng hook sau nếu muốn đồng bộ toàn hệ thống.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-kiến-trúc-giải-pháp">3. Kiến Trúc Giải Pháp<a href="#3-kiến-trúc-giải-pháp" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Kiến Trúc Giải Pháp" title="Đường dẫn trực tiếp đến 3. Kiến Trúc Giải Pháp" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="31-sơ-đồ-luồng-ghi--đồng-bộ">3.1. Sơ đồ luồng ghi &amp; đồng bộ<a href="#31-sơ-đồ-luồng-ghi--đồng-bộ" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.1. Sơ đồ luồng ghi &amp; đồng bộ" title="Đường dẫn trực tiếp đến 3.1. Sơ đồ luồng ghi &amp; đồng bộ" translate="no">​</a></h3>
+<!-- -->
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="32-sơ-đồ-đọc-khi-mount">3.2. Sơ đồ đọc khi mount<a href="#32-sơ-đồ-đọc-khi-mount" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.2. Sơ đồ đọc khi mount" title="Đường dẫn trực tiếp đến 3.2. Sơ đồ đọc khi mount" translate="no">​</a></h3>
+<!-- -->
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="33-key--event-dùng-chung">3.3. Key &amp; event dùng chung<a href="#33-key--event-dùng-chung" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.3. Key &amp; event dùng chung" title="Đường dẫn trực tiếp đến 3.3. Key &amp; event dùng chung" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Thành phần</th><th style="text-align:left">Giá trị</th></tr></thead><tbody><tr><td style="text-align:left">localStorage key</td><td style="text-align:left"><code>digital-library:documents-view-mode</code></td></tr><tr><td style="text-align:left">Custom event (cùng tab)</td><td style="text-align:left"><code>digital-library:documents-view-mode-change</code></td></tr><tr><td style="text-align:left">Giá trị hợp lệ</td><td style="text-align:left"><code>grid</code> | <code>list</code> | <code>detail</code></td></tr><tr><td style="text-align:left">Default toàn cục</td><td style="text-align:left"><code>detail</code></td></tr><tr><td style="text-align:left">Default riêng từng màn hình</td><td style="text-align:left">personal/shared: <code>detail</code>, library subject: <code>grid</code></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-triển-khai-mã-nguồn">4. Triển Khai Mã Nguồn<a href="#4-triển-khai-mã-nguồn" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Triển Khai Mã Nguồn" title="Đường dẫn trực tiếp đến 4. Triển Khai Mã Nguồn" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="41-lớp-lưu-trữ-thuần-srcutilsviewmodestoragets">4.1. Lớp lưu trữ thuần (<code>src/utils/viewModeStorage.ts</code>)<a href="#41-lớp-lưu-trữ-thuần-srcutilsviewmodestoragets" class="hash-link" aria-label="Đường dẫn trực tiếp đến 41-lớp-lưu-trữ-thuần-srcutilsviewmodestoragets" title="Đường dẫn trực tiếp đến 41-lớp-lưu-trữ-thuần-srcutilsviewmodestoragets" translate="no">​</a></h3>
+<p>Tách logic đọc/ghi/validate ra khỏi React để có thể unit test bằng Node mà không cần DOM:</p>
+<div class="language-ts codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-ts codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">type</span><span class="token plain"> </span><span class="token class-name maybe-class-name">ViewMode</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;grid&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;list&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;detail&quot;</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> </span><span class="token constant" style="color:#36acaa">VIEW_MODE_STORAGE_KEY</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token string" style="color:#e3116c">&quot;digital-library:documents-view-mode&quot;</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">function</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">isViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">value</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">unknown</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> value </span><span class="token keyword" style="color:#00009f">is</span><span class="token plain"> </span><span class="token maybe-class-name">ViewMode</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword control-flow" style="color:#00009f">return</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">typeof</span><span class="token plain"> value </span><span class="token operator" style="color:#393A34">===</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;string&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">&amp;&amp;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;grid&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;list&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;detail&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token keyword module" style="color:#00009f">as</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">readonly</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token method function property-access" style="color:#d73a49">includes</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">value</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">function</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">readStoredViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">storage</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token maybe-class-name">ViewMode</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword control-flow" style="color:#00009f">try</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> value </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> storage</span><span class="token operator" style="color:#393A34">?.</span><span class="token method function property-access" style="color:#d73a49">getItem</span><span class="token punctuation" style="color:#393A34">(</span><span class="token constant" style="color:#36acaa">VIEW_MODE_STORAGE_KEY</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">??</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword control-flow" style="color:#00009f">return</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">isViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">value</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">?</span><span class="token plain"> value </span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"> </span><span class="token keyword control-flow" style="color:#00009f">catch</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword control-flow" style="color:#00009f">return</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">function</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">writeStoredViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">storage</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> mode</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">boolean</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword control-flow" style="color:#00009f">try</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    storage</span><span class="token operator" style="color:#393A34">?.</span><span class="token method function property-access" style="color:#d73a49">setItem</span><span class="token punctuation" style="color:#393A34">(</span><span class="token constant" style="color:#36acaa">VIEW_MODE_STORAGE_KEY</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> mode</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword control-flow" style="color:#00009f">return</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">true</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"> </span><span class="token keyword control-flow" style="color:#00009f">catch</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword control-flow" style="color:#00009f">return</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">false</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></div></code></pre></div></div>
+<p>Điểm quan trọng:</p>
+<ul>
+<li class="">Giá trị sai định dạng (<code>&quot;GRID&quot;</code>, <code>&quot;table&quot;</code>, dữ liệu cũ) trả về <code>null</code> để dùng default, không làm crash UI.</li>
+<li class=""><code>try/catch</code> xử lý trường hợp Safari private mode hoặc trình duyệt chặn storage.</li>
+<li class="">Hàm nhận storage qua tham số nên test được bằng object giả, không phụ thuộc <code>window</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="42-hook-react-srchooksusepersistedviewmodets">4.2. Hook React (<code>src/hooks/usePersistedViewMode.ts</code>)<a href="#42-hook-react-srchooksusepersistedviewmodets" class="hash-link" aria-label="Đường dẫn trực tiếp đến 42-hook-react-srchooksusepersistedviewmodets" title="Đường dẫn trực tiếp đến 42-hook-react-srchooksusepersistedviewmodets" translate="no">​</a></h3>
+<div class="language-tsx codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tsx codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">viewMode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> setViewMode</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">usePersistedViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;detail&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<p>Cách hoạt động:</p>
+<ol>
+<li class="">Khởi tạo state bằng <code>readStoredViewMode(window.localStorage) ?? defaultMode</code>.</li>
+<li class="">Khi người dùng chọn:
+<ul>
+<li class="">Cập nhật state ngay để UI phản hồi tức thì.</li>
+<li class="">Ghi vào <code>localStorage</code>.</li>
+<li class="">Phát <code>CustomEvent</code> để các component đang mount trong cùng tab đồng bộ.</li>
+</ul>
+</li>
+<li class="">Lắng nghe:
+<ul>
+<li class=""><code>storage</code> event của trình duyệt → đồng bộ tab khác.</li>
+<li class="">Custom event → đồng bộ component khác trong cùng tab.</li>
+</ul>
+</li>
+<li class="">Nếu storage bị chặn, custom event vẫn giữ đồng bộ tạm thời trong RAM của tab hiện tại.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="43-tích-hợp-vào-3-màn-hình">4.3. Tích hợp vào 3 màn hình<a href="#43-tích-hợp-vào-3-màn-hình" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.3. Tích hợp vào 3 màn hình" title="Đường dẫn trực tiếp đến 4.3. Tích hợp vào 3 màn hình" translate="no">​</a></h3>
+<p><strong>Kho tài liệu / Tài liệu đã nhận:</strong></p>
+<div class="language-tsx codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tsx codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// PersonalDocumentsSection.tsx</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">viewMode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> setViewMode</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">usePersistedViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;detail&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token tag punctuation" style="color:#393A34">&lt;</span><span class="token tag class-name" style="color:#00009f">ViewToggle</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">viewMode</span><span class="token tag script language-javascript script-punctuation punctuation" style="color:#393A34">=</span><span class="token tag script language-javascript punctuation" style="color:#393A34">{</span><span class="token tag script language-javascript" style="color:#00009f">viewMode</span><span class="token tag script language-javascript punctuation" style="color:#393A34">}</span><span class="token tag" style="color:#00009f"> </span><span class="token tag attr-name" style="color:#00a4db">onViewModeChange</span><span class="token tag script language-javascript script-punctuation punctuation" style="color:#393A34">=</span><span class="token tag script language-javascript punctuation" style="color:#393A34">{</span><span class="token tag script language-javascript" style="color:#00009f">setViewMode</span><span class="token tag script language-javascript punctuation" style="color:#393A34">}</span><span class="token tag" style="color:#00009f"> </span><span class="token tag punctuation" style="color:#393A34">/&gt;</span><br></div></code></pre></div></div>
+<p><strong>Kho học liệu theo môn:</strong></p>
+<div class="language-tsx codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tsx codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// LibrarySubject.tsx</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">viewMode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> setViewMode</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">usePersistedViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;grid&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<p><strong>ViewToggle vẫn giữ API cũ:</strong> <code>ViewMode</code> được chuyển sang <code>src/utils/viewModeStorage.ts</code> và re-export từ <code>ViewToggle.tsx</code>, nên các component đang import <code>type ViewMode</code> từ <code>ViewToggle</code> không cần sửa.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-vì-sao-chọn-localstorage">5. Vì Sao Chọn <code>localStorage</code>?<a href="#5-vì-sao-chọn-localstorage" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5-vì-sao-chọn-localstorage" title="Đường dẫn trực tiếp đến 5-vì-sao-chọn-localstorage" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="51-yêu-cầu-thực-tế">5.1. Yêu cầu thực tế<a href="#51-yêu-cầu-thực-tế" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.1. Yêu cầu thực tế" title="Đường dẫn trực tiếp đến 5.1. Yêu cầu thực tế" translate="no">​</a></h3>
+<ul>
+<li class="">Chỉ có <strong>3 giá trị enum</strong>, không phải dữ liệu nghiệp vụ.</li>
+<li class="">Là <strong>UI preference theo thiết bị/trình duyệt</strong>, không cần đồng bộ giữa các máy.</li>
+<li class="">Phải sống qua <strong>unmount/remount do chuyển route</strong>, <strong>F5</strong>, <strong>đăng nhập/đăng xuất</strong>.</li>
+<li class="">Không cần API, không cần database, không cần thêm dependency.</li>
+<li class="">Không được làm thay đổi default hiện tại của từng màn hình.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="52-so-sánh-phương-án">5.2. So sánh phương án<a href="#52-so-sánh-phương-án" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.2. So sánh phương án" title="Đường dẫn trực tiếp đến 5.2. So sánh phương án" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Phương án</th><th style="text-align:center">Sống qua chuyển route</th><th style="text-align:center">Sống qua F5</th><th style="text-align:center">Sống qua login/logout</th><th style="text-align:left">Chi phí</th><th style="text-align:left">Kết luận</th></tr></thead><tbody><tr><td style="text-align:left"><code>useState</code> cục bộ</td><td style="text-align:center">❌</td><td style="text-align:center">❌</td><td style="text-align:center">❌</td><td style="text-align:left">0</td><td style="text-align:left">Không đáp ứng yêu cầu</td></tr><tr><td style="text-align:left">React Query cache</td><td style="text-align:center">✅ (trong <code>gcTime</code>)</td><td style="text-align:center">❌</td><td style="text-align:center">❌ (<code>queryClient.clear()</code>)</td><td style="text-align:left">~1.1 KB/entry</td><td style="text-align:left">Sai ngữ nghĩa, dễ mất dữ liệu</td></tr><tr><td style="text-align:left">Zustand không persist</td><td style="text-align:center">✅</td><td style="text-align:center">❌</td><td style="text-align:center">❌</td><td style="text-align:left">Vài chục byte</td><td style="text-align:left">Chỉ phù hợp nếu muốn reset khi F5</td></tr><tr><td style="text-align:left">URL query param</td><td style="text-align:center">Một phần</td><td style="text-align:center">✅ nếu giữ URL</td><td style="text-align:center">✅</td><td style="text-align:left">0</td><td style="text-align:left">Mất khi điều hướng bằng sidebar</td></tr><tr><td style="text-align:left">React Context ở layout</td><td style="text-align:center">✅</td><td style="text-align:center">❌</td><td style="text-align:center">❌</td><td style="text-align:left">Thấp</td><td style="text-align:left">Không sống qua F5, coupling layout</td></tr><tr><td style="text-align:left"><strong><code>localStorage</code></strong></td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:left"><strong>78 B payload</strong></td><td style="text-align:left"><strong>Phù hợp nhất</strong></td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="53-đối-chiếu-với-react-query">5.3. Đối chiếu với React Query<a href="#53-đối-chiếu-với-react-query" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.3. Đối chiếu với React Query" title="Đường dẫn trực tiếp đến 5.3. Đối chiếu với React Query" translate="no">​</a></h3>
+<p>Benchmark thực tế (Node 26, <code>--expose-gc</code>, 10.000 entry):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Chỉ số</th><th style="text-align:right"><code>localStorage</code></th><th style="text-align:right">React Query cache</th></tr></thead><tbody><tr><td style="text-align:left">Payload lưu</td><td style="text-align:right">78 B (UTF-16)</td><td style="text-align:right">674 B JSON</td></tr><tr><td style="text-align:left">RAM thực tế / entry</td><td style="text-align:right">Không nằm trong JS heap app</td><td style="text-align:right">~1.1 KB (gcTime 10 phút)</td></tr><tr><td style="text-align:left">Sống qua F5</td><td style="text-align:right">✅</td><td style="text-align:right">❌</td></tr><tr><td style="text-align:left">Sống qua <code>queryClient.clear()</code></td><td style="text-align:right">✅</td><td style="text-align:right">❌</td></tr><tr><td style="text-align:left">Tự xóa sau <code>gcTime</code></td><td style="text-align:right">Không</td><td style="text-align:right">✅ (10 phút)</td></tr><tr><td style="text-align:left">Đúng ngữ nghĩa UI state</td><td style="text-align:right">✅</td><td style="text-align:right">❌</td></tr></tbody></table>
+<p>React Query <strong>không yếu về bộ nhớ</strong> — một key chỉ tốn khoảng 1.1 KB. Vấn đề là lifecycle:</p>
+<ul>
+<li class=""><code>App.tsx</code> đặt <code>gcTime: 10 * 60 * 1000</code>, nên entry không observer sẽ bị xóa sau 10 phút.</li>
+<li class=""><code>LoginPage.tsx</code> và <code>Header.tsx</code> gọi <code>queryClient.clear()</code> khi login/logout.</li>
+<li class="">React Query sinh ra cho server state, không phải preference UI.</li>
+</ul>
+<p>Vì vậy <code>localStorage</code> tối ưu hơn cho bài toán này: đúng ngữ nghĩa, bền vững, không phụ thuộc vòng đời cache, và gần như không tốn tài nguyên.</p>
+<blockquote>
+<p>[!TIP] Khi nào không dùng <code>localStorage</code>?
+Nếu sau này cần đồng bộ lựa chọn giữa nhiều thiết bị hoặc lưu theo tài khoản, hãy chuyển sang bảng <code>user_preferences</code> ở backend. <code>localStorage</code> chỉ là lựa chọn tối ưu cho preference theo thiết bị hiện tại.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-kiểm-thử--bằng-chứng">6. Kiểm Thử &amp; Bằng Chứng<a href="#6-kiểm-thử--bằng-chứng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6. Kiểm Thử &amp; Bằng Chứng" title="Đường dẫn trực tiếp đến 6. Kiểm Thử &amp; Bằng Chứng" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="61-unit-test-lớp-lưu-trữ">6.1. Unit test lớp lưu trữ<a href="#61-unit-test-lớp-lưu-trữ" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6.1. Unit test lớp lưu trữ" title="Đường dẫn trực tiếp đến 6.1. Unit test lớp lưu trữ" translate="no">​</a></h3>
+<p>File: <code>frontend/digital-library/scripts/view-mode-storage.test.mjs</code></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token builtin class-name">cd</span><span class="token plain"> frontend/digital-library</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token function" style="color:#d73a49">node</span><span class="token plain"> </span><span class="token parameter variable" style="color:#36acaa">--test</span><span class="token plain"> scripts/view-mode-storage.test.mjs</span><br></div></code></pre></div></div>
+<p>Kết quả thực tế: <strong>9/9 test PASS</strong>, bao gồm:</p>
+<ul>
+<li class="">Key dùng chung đúng giá trị.</li>
+<li class="">Chỉ chấp nhận <code>grid</code>, <code>list</code>, <code>detail</code>.</li>
+<li class="">Đọc/ghi đúng key/value.</li>
+<li class="">Giá trị hỏng fallback <code>null</code>.</li>
+<li class="">Storage bị chặn khi đọc/ghi không làm crash.</li>
+<li class="">Không truyền storage vẫn an toàn.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="62-benchmark-tài-nguyên">6.2. Benchmark tài nguyên<a href="#62-benchmark-tài-nguyên" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6.2. Benchmark tài nguyên" title="Đường dẫn trực tiếp đến 6.2. Benchmark tài nguyên" translate="no">​</a></h3>
+<p>File: <code>frontend/digital-library/scripts/benchmark-view-mode-storage.mjs</code></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token builtin class-name">cd</span><span class="token plain"> frontend/digital-library</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token function" style="color:#d73a49">node</span><span class="token plain"> --expose-gc scripts/benchmark-view-mode-storage.mjs</span><br></div></code></pre></div></div>
+<p>Kết quả rút gọn:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">localStorage key + value: 39 ký tự</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">UTF-16 (Web Storage thực tế): 78 B</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Tỷ lệ dùng quota 5 MiB: 1.49e-3 %</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Module-level object:        ~40 B/entry</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">React Query (Infinity):     ~869 B/entry</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">React Query (10 phút):      ~1.1 KB/entry</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">PASS  React Query giữ được giá trị khi đọc lại</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">PASS  queryClient.clear() xóa mất giá trị</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">PASS  gcTime hết hạn thì React Query tự xóa entry</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">PASS  localStorage payload không vượt quá 100 B</span><br></div></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="63-kiểm-thử-e2e-trên-ứng-dụng-thực-tế">6.3. Kiểm thử E2E trên ứng dụng thực tế<a href="#63-kiểm-thử-e2e-trên-ứng-dụng-thực-tế" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6.3. Kiểm thử E2E trên ứng dụng thực tế" title="Đường dẫn trực tiếp đến 6.3. Kiểm thử E2E trên ứng dụng thực tế" translate="no">​</a></h3>
+<p>Môi trường: Vite <code>http://localhost:5173</code>, backend <code>http://localhost:8000</code>, tài khoản seed.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Bước kiểm thử</th><th style="text-align:left">Kết quả mong đợi</th><th style="text-align:left">Kết quả thực tế</th></tr></thead><tbody><tr><td style="text-align:left"><code>/personal/documents</code> → chọn Grid</td><td style="text-align:left">localStorage = <code>grid</code>, nút Grid <code>aria-pressed=&quot;true&quot;</code></td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Chuyển <code>/personal/trash</code> rồi quay lại <code>/personal/documents</code></td><td style="text-align:left">Vẫn Grid</td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Nhấn F5 trên <code>/personal/documents</code></td><td style="text-align:left">Vẫn Grid</td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Mở <code>/personal/shared</code> (tab Đã nhận)</td><td style="text-align:left">Vẫn Grid</td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Mở <code>/library/subject/1</code></td><td style="text-align:left">Vẫn Grid</td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Tại library subject chọn List</td><td style="text-align:left">localStorage = <code>list</code></td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Quay lại <code>/personal/documents</code></td><td style="text-align:left">Chuyển sang List</td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Mở 2 tab, đổi Detail ở tab A</td><td style="text-align:left">Tab B tự cập nhật Detail qua <code>storage</code> event</td><td style="text-align:left">✅</td></tr><tr><td style="text-align:left">Xóa key localStorage</td><td style="text-align:left">Personal về <code>detail</code>, library subject về <code>grid</code></td><td style="text-align:left">✅</td></tr></tbody></table>
+<p>Kết quả trên chứng minh:</p>
+<ul>
+<li class="">Lựa chọn được giữ qua điều hướng và reload dữ liệu route.</li>
+<li class="">Ba màn hình đồng bộ hai chiều.</li>
+<li class="">Đồng bộ cả giữa các tab đang mở.</li>
+<li class="">Default riêng của từng màn hình vẫn đúng khi chưa có lựa chọn.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="64-kiểm-tra-build--lint">6.4. Kiểm tra build &amp; lint<a href="#64-kiểm-tra-build--lint" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6.4. Kiểm tra build &amp; lint" title="Đường dẫn trực tiếp đến 6.4. Kiểm tra build &amp; lint" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token builtin class-name">cd</span><span class="token plain"> frontend/digital-library</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token function" style="color:#d73a49">npm</span><span class="token plain"> run build   </span><span class="token comment" style="color:#999988;font-style:italic"># PASS</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token function" style="color:#d73a49">npm</span><span class="token plain"> run lint    </span><span class="token comment" style="color:#999988;font-style:italic"># Không phát sinh cảnh báo mới từ các file thay đổi</span><br></div></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-edge-cases--giới-hạn">7. Edge Cases &amp; Giới Hạn<a href="#7-edge-cases--giới-hạn" class="hash-link" aria-label="Đường dẫn trực tiếp đến 7. Edge Cases &amp; Giới Hạn" title="Đường dẫn trực tiếp đến 7. Edge Cases &amp; Giới Hạn" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Tình huống</th><th style="text-align:left">Hành vi</th></tr></thead><tbody><tr><td style="text-align:left">Chưa có key</td><td style="text-align:left">Dùng default của từng màn hình (<code>detail</code> hoặc <code>grid</code>)</td></tr><tr><td style="text-align:left">Giá trị sai định dạng</td><td style="text-align:left">Fallback default, không crash</td></tr><tr><td style="text-align:left">Safari private mode / storage bị chặn</td><td style="text-align:left">Vẫn đổi được trong tab hiện tại nhờ state + custom event; reload sẽ mất</td></tr><tr><td style="text-align:left">Xóa site data / incognito</td><td style="text-align:left">Về default</td></tr><tr><td style="text-align:left">Đổi port dev (<code>5173</code> → <code>5174</code>)</td><td style="text-align:left">Origin khác → không dùng chung preference</td></tr><tr><td style="text-align:left">Nhiều tài khoản cùng trình duyệt</td><td style="text-align:left">Dùng chung preference vì key không chứa user ID</td></tr><tr><td style="text-align:left">Đồng bộ giữa thiết bị</td><td style="text-align:left">Không hỗ trợ; cần backend user preferences</td></tr><tr><td style="text-align:left">Library subject chọn <code>detail</code></td><td style="text-align:left">Trang hiện chỉ có layout Grid/List; <code>detail</code> render theo nhánh List. Đây là giới hạn UI hiện tại, không phải lỗi lưu trữ</td></tr><tr><td style="text-align:left">Tab khác đang mở</td><td style="text-align:left">Đồng bộ qua <code>storage</code> event; nếu trình duyệt không phát event, lần mount sau vẫn đọc đúng</td></tr></tbody></table>
+<blockquote>
+<p>[!CAUTION] Không lưu dữ liệu nhạy cảm
+<code>localStorage</code> đọc được bằng JavaScript cùng origin. Chỉ dùng cho preference UI như <code>viewMode</code>; không dùng cho token, mật khẩu hoặc dữ liệu cá nhân nhạy cảm.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-hướng-dẫn-mở-rộng">8. Hướng Dẫn Mở Rộng<a href="#8-hướng-dẫn-mở-rộng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 8. Hướng Dẫn Mở Rộng" title="Đường dẫn trực tiếp đến 8. Hướng Dẫn Mở Rộng" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="thêm-màn-hình-mới">Thêm màn hình mới<a href="#thêm-màn-hình-mới" class="hash-link" aria-label="Đường dẫn trực tiếp đến Thêm màn hình mới" title="Đường dẫn trực tiếp đến Thêm màn hình mới" translate="no">​</a></h3>
+<div class="language-tsx codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-tsx codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> </span><span class="token imports punctuation" style="color:#393A34">{</span><span class="token imports"> usePersistedViewMode </span><span class="token imports punctuation" style="color:#393A34">}</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;@/hooks/usePersistedViewMode&quot;</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">const</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">viewMode</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> setViewMode</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">usePersistedViewMode</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;detail&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<p>Chỉ cần dùng hook và truyền default phù hợp; màn hình mới sẽ tự đồng bộ với 3 màn hình hiện có.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="thêm-chế-độ-mới">Thêm chế độ mới<a href="#thêm-chế-độ-mới" class="hash-link" aria-label="Đường dẫn trực tiếp đến Thêm chế độ mới" title="Đường dẫn trực tiếp đến Thêm chế độ mới" translate="no">​</a></h3>
+<ol>
+<li class="">Cập nhật <code>ViewMode</code>, <code>VIEW_MODES</code> trong <code>src/utils/viewModeStorage.ts</code>.</li>
+<li class="">Thêm option icon/label trong <code>ViewToggle.tsx</code>.</li>
+<li class="">Cập nhật logic render ở từng màn hình.</li>
+<li class="">Bổ sung test case trong <code>scripts/view-mode-storage.test.mjs</code>.</li>
+<li class="">Cập nhật tài liệu này.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="đổi-key">Đổi key<a href="#đổi-key" class="hash-link" aria-label="Đường dẫn trực tiếp đến Đổi key" title="Đường dẫn trực tiếp đến Đổi key" translate="no">​</a></h3>
+<p>Không nên đổi <code>digital-library:documents-view-mode</code> tùy tiện: toàn bộ người dùng sẽ mất preference đã lưu. Nếu buộc phải đổi, cần viết migration đọc key cũ và ghi sang key mới.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-tài-liệu--mã-nguồn-liên-quan">9. Tài Liệu &amp; Mã Nguồn Liên Quan<a href="#9-tài-liệu--mã-nguồn-liên-quan" class="hash-link" aria-label="Đường dẫn trực tiếp đến 9. Tài Liệu &amp; Mã Nguồn Liên Quan" title="Đường dẫn trực tiếp đến 9. Tài Liệu &amp; Mã Nguồn Liên Quan" translate="no">​</a></h2>
+<ul>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/components/shared/feedback/ViewToggle.tsx" target="_blank" rel="noopener noreferrer" class=""><code>ViewToggle.tsx</code></a> — UI chuyển đổi 3 chế độ.</li>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/utils/viewModeStorage.ts" target="_blank" rel="noopener noreferrer" class=""><code>viewModeStorage.ts</code></a> — validate, đọc, ghi localStorage.</li>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/hooks/usePersistedViewMode.ts" target="_blank" rel="noopener noreferrer" class=""><code>usePersistedViewMode.ts</code></a> — hook React + đồng bộ sự kiện.</li>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/pages/personal/components/PersonalDocumentsSection.tsx" target="_blank" rel="noopener noreferrer" class=""><code>PersonalDocumentsSection.tsx</code></a> — Kho tài liệu &amp; Tài liệu đã nhận.</li>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/src/pages/library/LibrarySubject.tsx" target="_blank" rel="noopener noreferrer" class=""><code>LibrarySubject.tsx</code></a> — Kho học liệu theo môn.</li>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/scripts/view-mode-storage.test.mjs" target="_blank" rel="noopener noreferrer" class=""><code>view-mode-storage.test.mjs</code></a> — unit test.</li>
+<li class=""><a href="file:///Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project/frontend/digital-library/scripts/benchmark-view-mode-storage.mjs" target="_blank" rel="noopener noreferrer" class=""><code>benchmark-view-mode-storage.mjs</code></a> — benchmark tài nguyên.</li>
+<li class=""><a class="" href="/Foundation-Project/feat/document-view-modes"><code>README.md</code></a> — đặc tả chung về 3 chế độ hiển thị.</li>
+<li class=""><a class="" href="/Foundation-Project/feat/document-view-modes/FRONTEND"><code>FRONTEND.md</code></a> — kiến trúc component và state management.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/feat/document-view-modes/PERSISTENCE.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-20T05:30:08.000Z" itemprop="dateModified">20 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"><a class="pagination-nav__link pagination-nav__link--prev" href="/Foundation-Project/feat/document-view-modes"><div class="pagination-nav__sublabel">Trước</div><div class="pagination-nav__label">Đặc Tả Tính Năng: Chế Độ Hiển Thị Tài Liệu Đa Phong Cách (Document Multi-View Modes)</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Foundation-Project/feat/document-view-modes/BUSINESS_RULES"><div class="pagination-nav__sublabel">Kế tiếp</div><div class="pagination-nav__label">Quy Tắc Nghiệp Vụ &amp; Hành Vi Giao Diện (Business &amp; UI Rules)</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-vấn-đề-trước-khi-sửa" class="table-of-contents__link toc-highlight">1. Vấn Đề Trước Khi Sửa</a></li><li><a href="#2-phạm-vi-áp-dụng" class="table-of-contents__link toc-highlight">2. Phạm Vi Áp Dụng</a></li><li><a href="#3-kiến-trúc-giải-pháp" class="table-of-contents__link toc-highlight">3. Kiến Trúc Giải Pháp</a><ul><li><a href="#31-sơ-đồ-luồng-ghi--đồng-bộ" class="table-of-contents__link toc-highlight">3.1. Sơ đồ luồng ghi &amp; đồng bộ</a></li><li><a href="#32-sơ-đồ-đọc-khi-mount" class="table-of-contents__link toc-highlight">3.2. Sơ đồ đọc khi mount</a></li><li><a href="#33-key--event-dùng-chung" class="table-of-contents__link toc-highlight">3.3. Key &amp; event dùng chung</a></li></ul></li><li><a href="#4-triển-khai-mã-nguồn" class="table-of-contents__link toc-highlight">4. Triển Khai Mã Nguồn</a><ul><li><a href="#41-lớp-lưu-trữ-thuần-srcutilsviewmodestoragets" class="table-of-contents__link toc-highlight">4.1. Lớp lưu trữ thuần (<code>src/utils/viewModeStorage.ts</code>)</a></li><li><a href="#42-hook-react-srchooksusepersistedviewmodets" class="table-of-contents__link toc-highlight">4.2. Hook React (<code>src/hooks/usePersistedViewMode.ts</code>)</a></li><li><a href="#43-tích-hợp-vào-3-màn-hình" class="table-of-contents__link toc-highlight">4.3. Tích hợp vào 3 màn hình</a></li></ul></li><li><a href="#5-vì-sao-chọn-localstorage" class="table-of-contents__link toc-highlight">5. Vì Sao Chọn <code>localStorage</code>?</a><ul><li><a href="#51-yêu-cầu-thực-tế" class="table-of-contents__link toc-highlight">5.1. Yêu cầu thực tế</a></li><li><a href="#52-so-sánh-phương-án" class="table-of-contents__link toc-highlight">5.2. So sánh phương án</a></li><li><a href="#53-đối-chiếu-với-react-query" class="table-of-contents__link toc-highlight">5.3. Đối chiếu với React Query</a></li></ul></li><li><a href="#6-kiểm-thử--bằng-chứng" class="table-of-contents__link toc-highlight">6. Kiểm Thử &amp; Bằng Chứng</a><ul><li><a href="#61-unit-test-lớp-lưu-trữ" class="table-of-contents__link toc-highlight">6.1. Unit test lớp lưu trữ</a></li><li><a href="#62-benchmark-tài-nguyên" class="table-of-contents__link toc-highlight">6.2. Benchmark tài nguyên</a></li><li><a href="#63-kiểm-thử-e2e-trên-ứng-dụng-thực-tế" class="table-of-contents__link toc-highlight">6.3. Kiểm thử E2E trên ứng dụng thực tế</a></li><li><a href="#64-kiểm-tra-build--lint" class="table-of-contents__link toc-highlight">6.4. Kiểm tra build &amp; lint</a></li></ul></li><li><a href="#7-edge-cases--giới-hạn" class="table-of-contents__link toc-highlight">7. Edge Cases &amp; Giới Hạn</a></li><li><a href="#8-hướng-dẫn-mở-rộng" class="table-of-contents__link toc-highlight">8. Hướng Dẫn Mở Rộng</a><ul><li><a href="#thêm-màn-hình-mới" class="table-of-contents__link toc-highlight">Thêm màn hình mới</a></li><li><a href="#thêm-chế-độ-mới" class="table-of-contents__link toc-highlight">Thêm chế độ mới</a></li><li><a href="#đổi-key" class="table-of-contents__link toc-highlight">Đổi key</a></li></ul></li><li><a href="#9-tài-liệu--mã-nguồn-liên-quan" class="table-of-contents__link toc-highlight">9. Tài Liệu &amp; Mã Nguồn Liên Quan</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/system-architecture">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/data">Cơ Sở Dữ Liệu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/deployment">Triển Khai &amp; Vận Hành</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Bảo Mật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/testing">Kiểm Thử &amp; Test Cases</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/security">An Ninh &amp; Quyền Riêng Tư</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/DOCUMENTATION_GUIDE">Quy Chuẩn Viết Docs</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/feat">Đặc Tả Tính Năng</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/project-management/roadmap">Lộ Trình Phát Triển</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/project-management/backlog">Kế Hoạch Backlog</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
