@@ -17,7 +17,8 @@ import {
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { StarRating } from "@/components/shared/feedback/StarRating";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
-import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
+import { ViewToggle } from "@/components/shared/feedback/ViewToggle";
+import { usePersistedViewMode } from "@/hooks/usePersistedViewMode";
 import { CardSkeleton } from "@/components/shared/feedback/CardSkeleton";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -57,7 +58,7 @@ export function LibrarySubject() {
   const [activeTab, setActiveTab] = useState("Tất cả");
   const [selectedYear, setSelectedYear] = useState("Tất cả");
   const [sortBy, setSortBy] = useState<"newest" | "popular" | "rating">("newest");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = usePersistedViewMode("grid");
   const [page, setPage] = useState(1);
   const [actionSuccessMessage, setActionSuccessMessage] = useState<string | null>(null);
 

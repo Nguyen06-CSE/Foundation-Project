@@ -2,9 +2,10 @@
 
 import { LayoutGrid, List, AlignLeft } from 'lucide-react'
 import { cn } from '@/utils/cn'
+import type { ViewMode } from '@/utils/viewModeStorage'
 
 // 1. Mở rộng thêm 'detail'
-export type ViewMode = 'grid' | 'list' | 'detail'
+export type { ViewMode } from '@/utils/viewModeStorage'
 
 // 2. Đổi tên prop cho khớp với chỗ dùng
 interface ViewToggleProps {

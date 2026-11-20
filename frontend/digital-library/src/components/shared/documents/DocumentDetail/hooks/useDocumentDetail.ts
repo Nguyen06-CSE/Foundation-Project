@@ -1,7 +1,7 @@
 // src/components/shared/documents/DocumentDetail/hooks/useDocumentDetail.ts
 
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documentService } from "@/services/documentService";
 import { tagService } from "@/services/tagService";
@@ -10,6 +10,14 @@ import type {
   TabKey,
   TagType,
 } from "../DocumentDetail.types";
+
+const VALID_TABS: readonly TabKey[] = [
+  "detail",
+  "content",
+  "description",
+  "note",
+  "activity",
+];
 
 /**
  * useDocumentDetail - Custom Hook quản lý toàn bộ logic nghiệp vụ cho màn hình chi tiết tài liệu
@@ -42,6 +50,7 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
 
   const params = useParams<{ id?: string; docId?: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
 
   const id =
@@ -49,7 +58,21 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
     (params.docId ? Number(params.docId) : params.id ? Number(params.id) : 0);
 
   // --- STATE GIAO DIỆN ---
-  const [activeTab, setActiveTab] = useState<TabKey>("detail");
+  const rawTabParam = searchParams.get("tab");
+  const validTabParam: TabKey | null =
+    rawTabParam && (VALID_TABS as readonly string[]).includes(rawTabParam)
+      ? (rawTabParam as TabKey)
+      : null;
+  const [activeTab, setActiveTab] = useState<TabKey>(validTabParam ?? "detail");
+  const [prevTabParam, setPrevTabParam] = useState<TabKey | null>(validTabParam);
+
+  // Đồng bộ activeTab trực tiếp khi URL ?tab= thay đổi (tránh flash & setState trong useEffect)
+  if (validTabParam !== prevTabParam) {
+    setPrevTabParam(validTabParam);
+    if (validTabParam) {
+      setActiveTab(validTabParam);
+    }
+  }
   const [isRenaming, setIsRenaming] = useState(false);
   const [tempTitle, setTempTitle] = useState("");
 

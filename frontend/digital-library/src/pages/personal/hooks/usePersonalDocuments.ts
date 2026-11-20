@@ -35,10 +35,12 @@ export function usePersonalDocuments(
     initialSort: "trending",
   });
 
+  const { setSelectedFolderId } = filters;
+
   // Đồng bộ selectedFolderId từ props/URL
   useEffect(() => {
-    filters.setSelectedFolderId(selectedFolderId);
-  }, [selectedFolderId]);
+    setSelectedFolderId(selectedFolderId);
+  }, [selectedFolderId, setSelectedFolderId]);
 
   // Bộ lọc phụ client (Q3: Chia sẻ, truy cập gần đây)
   const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);

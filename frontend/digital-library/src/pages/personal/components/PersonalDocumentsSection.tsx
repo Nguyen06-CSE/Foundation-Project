@@ -15,7 +15,8 @@ import {
 import { DocumentBulkActionBar } from "@/components/shared/documents/DocumentBulkActionBar";
 import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
 import { ContributeModal } from "@/components/shared/modals/ContributeModal";
-import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
+import { ViewToggle } from "@/components/shared/feedback/ViewToggle";
+import { usePersistedViewMode } from "@/hooks/usePersistedViewMode";
 import EmptyState from "@/components/shared/feedback/EmptyState";
 import { cn } from "@/utils/cn";
 import { documentService } from "@/services/documentService";
@@ -142,7 +143,8 @@ export function PersonalDocumentsSection({
   isError = false,
 }: PersonalDocumentsSectionProps) {
   const queryClient = useQueryClient();
-  const [viewMode, setViewMode] = useState<ViewMode>("detail");
+  // Dùng chung preference với Tài liệu đã nhận và Kho học liệu theo môn.
+  const [viewMode, setViewMode] = usePersistedViewMode("detail");
 
   // Multi-select state
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

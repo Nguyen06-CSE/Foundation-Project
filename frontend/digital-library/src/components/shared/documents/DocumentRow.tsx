@@ -19,7 +19,10 @@ export interface DocumentRowProps {
 
 export function DocumentRow({ document, onAction }: DocumentRowProps) {
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors px-2 -mx-2 rounded-lg group">
+    <div
+      id={`doc-${document.id}`}
+      className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors px-2 -mx-2 rounded-lg group"
+    >
       {/* Icon */}
       <FileIcon type={document.type} />
 

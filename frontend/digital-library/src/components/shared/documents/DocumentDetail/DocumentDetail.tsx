@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/utils/cn";
@@ -24,6 +24,8 @@ import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
 
 export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const highlightQuery = searchParams.get("q") ?? undefined;
   const {
     doc,
     isLoading,
@@ -252,7 +254,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               />
             )}
             {activeTab === "content" && (
-              <TabContent content={doc.content || ""} />
+              <TabContent content={doc.content || ""} highlightQuery={highlightQuery} />
             )}
             {activeTab === "description" && (
               <TabDescription

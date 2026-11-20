@@ -219,4 +219,5 @@ Kiến trúc hiển thị 3 phong cách được thiết kế theo chuẩn modul
 Để tìm hiểu sâu hơn về từng khía cạnh kỹ thuật, bạn có thể tham khảo các tài liệu chuyên đề:
 - [`FRONTEND.md`](./FRONTEND.md) — Kiến trúc Component chi tiết, Props Interface, hệ màu định dạng MIME và quản lý State.
 - [`REUSE_AND_INTEGRATION.md`](./REUSE_AND_INTEGRATION.md) — Hướng dẫn chi tiết cách các trang tích hợp và tái sử dụng bộ components này.
+- [`PERSISTENCE.md`](./PERSISTENCE.md) — Cơ chế lưu bền & đồng bộ lựa chọn Grid/List/Detail bằng localStorage, benchmark và kiểm thử E2E.
 - [`BUSINESS_RULES.md`](./BUSINESS_RULES.md) — Các quy tắc nghiệp vụ về OCR text, Heat scoring, Fallback thumbnail và Multi-select.

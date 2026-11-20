@@ -1,22 +1,46 @@
 import { useState, useEffect, useRef } from "react";
-import { Search, ArrowRight, FileText } from "lucide-react";
+import { Search, ArrowRight, FileText, Folder, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchService } from "@/services/searchService";
+import type { SearchItemType, SearchResultItem } from "@/types/search";
 import { useDebounce } from "@/hooks/useDebounce";
+
+function renderItemBadge(type: SearchItemType) {
+  if (type === "workspace" || type === "group") {
+    return (
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+        <Users className="h-4 w-4 text-emerald-600" />
+      </div>
+    );
+  }
+  if (type === "personal_folder" || type === "group_folder" || type === "folder") {
+    return (
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50">
+        <Folder className="h-4 w-4 text-amber-600" />
+      </div>
+    );
+  }
+  return (
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50">
+      <FileText className="h-4 w-4 text-primary-600" />
+    </div>
+  );
+}
 
 export function SearchBar() {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
+  const trimmedQuery = debouncedQuery.trim();
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { data, isFetching } = useQuery({
-    queryKey: ["quick-search", debouncedQuery],
-    queryFn: () => searchService.quickSearch(debouncedQuery),
-    enabled: debouncedQuery.trim().length > 0,
+    queryKey: ["quick-search", trimmedQuery],
+    queryFn: () => searchService.quickSearch(trimmedQuery),
+    enabled: trimmedQuery.length > 0,
   });
 
   // Xử lý phím tắt Ctrl+K
@@ -81,18 +105,16 @@ export function SearchBar() {
           ) : suggestions.length > 0 ? (
             <>
               <div className="max-h-80 overflow-y-auto py-2">
-                {suggestions.map((item: any) => (
+                {suggestions.map((item: SearchResultItem) => (
                   <div
-                    key={item.id}
+                    key={`${item.type}-${item.id}`}
                     onClick={() => handleSelect(item.url)}
                     className="flex cursor-pointer items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                   >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
-                      <FileText className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{item.title}</p>
-                      <p className="text-xs text-gray-500">{item.subtitle}</p>
+                    {renderItemBadge(item.type)}
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900">{item.title}</p>
+                      <p className="truncate text-xs text-gray-500">{item.subtitle}</p>
                     </div>
                   </div>
                 ))}

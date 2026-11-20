@@ -306,6 +306,7 @@ export function DocumentListView({
           return (
             <div key={doc.id} className="flex flex-col">
               <div
+                id={`doc-${doc.id}`}
                 onClick={(e) => {
                   if (isBundle && onToggleBundle) {
                     handleToggleBundle(e, doc.id);
@@ -314,7 +315,7 @@ export function DocumentListView({
                   }
                 }}
                 className={cn(
-                  "group grid grid-cols-12 gap-3 px-4 py-3 items-center transition-all cursor-pointer",
+                  "group grid grid-cols-12 gap-3 px-4 py-3 items-center transition-all cursor-pointer rounded-lg",
                   heat.level > 0
                     ? `${heat.cardBg} ${heat.hoverBg}`
                     : isBundle
@@ -549,6 +550,7 @@ export function DocumentListView({
                       return (
                         <div
                           key={childDoc.id}
+                          id={`doc-${childDoc.id}`}
                           onClick={() => handleRowClick(childDoc)}
                           className="group grid grid-cols-12 gap-3 px-3 py-2 items-center hover:bg-white rounded-lg transition-colors cursor-pointer mr-2"
                         >

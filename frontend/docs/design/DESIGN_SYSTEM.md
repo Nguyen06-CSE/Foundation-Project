@@ -186,6 +186,7 @@ AuthLayout (`shadow-primary-900/10`), InviteModal (`border-primary-200`), GroupS
   hover = `bg-gray-100` (thực tế một số chỗ ghi `hover:bg-primary-400` — token không tồn tại).
 - Badge đỏ dạng số ở mục có lời mời; mỗi item có `title` tooltip khi collapsed.
 - Nút thu gọn sidebar (`ChevronLeft/ChevronRight`) ở khu vực section 3.
+- Width khi mở: `w-[260px]` (`MainLayout.tsx:34`).
 
 ---
 
@@ -201,10 +202,6 @@ AuthLayout (`shadow-primary-900/10`), InviteModal (`border-primary-200`), GroupS
 | **Avatar** | `Avatar.tsx` | `name`, `src?`, `size: sm \| default \| lg` | `rounded-full bg-primary-100 text-primary-700 font-medium`, initials; cao `h-8` / `h-10` / `h-12` |
 | **Dropdown** | `Dropdown.tsx` | `trigger`, `items[{icon,label,onClick,danger?}]` | panel `min-w-[208px] rounded-lg border-gray-100 bg-white shadow-lg py-1`; item `px-4 py-2 text-sm hover:bg-gray-50`; danger `text-red-600 hover:bg-red-50`, separator `border-t` |
 | **ProgressBar** | `ProgressBar.tsx` | `value` 0–100, `color?` | track `h-1.5 rounded-full bg-gray-100`, fill `bg-primary-500 transition-all duration-300` |
-
-> **Lưu ý tồn tại:** tồn tại file shadcn mồ côi `digital-library/@/components/ui/button.tsx`
-> (dùng `@base-ui/react` + CSS vars không tồn tại) — **không được import ở đâu**, không phải
-> Button của dự án.
 
 ---
 
@@ -430,8 +427,7 @@ Bọc: `ProtectedRoute` → `MainLayout`. Faculty/School có thêm `ProtectedRou
     export default/named theo pattern hiện có; className động dùng `cn()`.
 13. **Tailwind v4**: theme khai báo trong `src/index.css` `@theme` — file
     `tailwind.config.ts` không phải nguồn chủ đạo; nếu thêm token hãy thêm vào `@theme`.
-14. **Không import** các artifact mồ côi: `@/components/ui/button.tsx` (shadcn/base-ui),
-    `App.css`, `components.json`.
+14. **Không import** artifact/asset nằm ngoài `src/` (ví dụ `App.css`, `components.json`).
 
 ---
 
@@ -494,6 +490,9 @@ Bọc: `ProtectedRoute` → `MainLayout`. Faculty/School có thêm `ProtectedRou
 **Quy tắc khi xung đột:** code > tài liệu này > ảnh design-reference.
 Tài liệu này chỉ được cập nhật theo code, không được biến thành yêu cầu thiết kế mới.
 
+Bản trích xuất Figma `design-from-figma.md` đã được gộp vào đây (chi tiết bổ sung:
+sidebar `w-[260px]`); không duy trì bản sao riêng.
+
 ---
 
-*Cập nhật lần cuối: 22/09/2026 — tổng hợp từ source code hiện tại, DOCUMENTATION ONLY.*
+*Cập nhật lần cuối: 17/11/2026 — tổng hợp từ source code hiện tại, DOCUMENTATION ONLY.*

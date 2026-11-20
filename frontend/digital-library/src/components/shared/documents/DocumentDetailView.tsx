@@ -118,6 +118,7 @@ export function DocumentDetailView({
         return (
           <div
             key={doc.id}
+            id={`doc-${doc.id}`}
             onClick={() => handleRowClick(doc)}
             className={cn(
               "group relative flex flex-col sm:flex-row items-start gap-5 p-4 sm:p-5 rounded-xl border transition-all cursor-pointer shadow-sm hover:shadow-md",

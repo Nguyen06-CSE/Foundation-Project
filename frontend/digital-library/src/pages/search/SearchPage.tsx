@@ -1,25 +1,27 @@
 // frontend/digital-library/src/pages/search/SearchPage.tsx
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Search, FileText, ChevronLeft, ChevronRight, Folder, Users } from "lucide-react";
 import { searchService } from "@/services/searchService";
+import type { SearchResultItem } from "@/types/search";
 import { Button } from "@/components/ui/Button";
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   const navigate = useNavigate();
-  
-  // State quản lý trang hiện tại
+
+  // State quản lý trang hiện tại (đồng bộ trực tiếp khi render để tránh bắn request thừa với page cũ)
   const [page, setPage] = useState(1);
+  const [prevQuery, setPrevQuery] = useState(query);
   const pageSize = 20;
 
-  // Reset về trang 1 nếu từ khóa tìm kiếm (query) thay đổi trên URL
-  useEffect(() => {
+  if (query !== prevQuery) {
+    setPrevQuery(query);
     setPage(1);
-  }, [query]);
+  }
 
   // Fetch dữ liệu Full-Text Search
   const { data, isFetching, isError } = useQuery({
@@ -132,7 +134,7 @@ export function SearchPage() {
             {/* Danh sách Items */}
             {items.length > 0 && (
               <div className="space-y-3">
-                {items.map((item: any) => (
+                {items.map((item: SearchResultItem) => (
                   <div
                     key={`${item.type}-${item.id}`}
                     onClick={() => navigate(item.url)}
@@ -149,8 +151,12 @@ export function SearchPage() {
                         <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 font-medium">
                           {item.subtitle}
                         </span>
-                        {/* Nếu bạn có thêm field 'snippet' trích xuất từ văn bản, có thể hiển thị ở đây */}
                       </div>
+                      {item.snippet && (
+                        <p className="mt-2 text-xs text-gray-600 leading-relaxed bg-gray-50/80 px-2 py-1.5 rounded-md border border-gray-100 line-clamp-2">
+                          {item.snippet}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}

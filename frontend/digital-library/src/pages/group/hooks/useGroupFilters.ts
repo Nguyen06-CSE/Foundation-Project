@@ -9,18 +9,20 @@ export function useGroupFilters(folders: Folder[] | any[] = []) {
   const [selectedUploaderId, setSelectedUploaderId] = useState<number | null>(null);
   const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
 
-  // Tự động bỏ chọn folder nếu folder đó bị xóa khỏi danh sách
+  const { activeTab: _docTab, setActiveTab: _setDocTab, ...restFilters } = filters;
+  const { selectedFolderId, setSelectedFolderId } = filters;
+
+  // Tự động bỏ chọn folder nếu folder đó bị xóa khỏi danh sách (chỉ kiểm tra khi danh sách folders đã tải xong)
   useEffect(() => {
     if (
-      filters.selectedFolderId !== null &&
+      selectedFolderId !== null &&
       folders &&
-      !folders.some((f: any) => f.id === filters.selectedFolderId)
+      folders.length > 0 &&
+      !folders.some((f: any) => f.id === selectedFolderId)
     ) {
-      filters.setSelectedFolderId(null);
+      setSelectedFolderId(null);
     }
-  }, [folders, filters.selectedFolderId, filters.setSelectedFolderId]);
-
-  const { activeTab: _docTab, setActiveTab: _setDocTab, ...restFilters } = filters;
+  }, [folders, selectedFolderId, setSelectedFolderId]);
 
   return {
     ...restFilters,
