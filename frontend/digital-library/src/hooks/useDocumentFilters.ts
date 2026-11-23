@@ -58,6 +58,7 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(options.initialFolderId ?? null);
   const [selectedSort, setSelectedSort] = useState<string>(options.initialSort || "trending");
   const [selectedUploadTime, setSelectedUploadTime] = useState<string | null>(null);
+  const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
 
   const handleSelectFolder = useCallback((id: number | null) => {
     setSelectedFolderId((prev) => (prev === id ? null : id));
@@ -71,6 +72,7 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
     setSelectedFolderId(null);
     setSelectedSort("trending");
     setSelectedUploadTime(null);
+    setSelectedAccessTime(null);
   }, []);
 
   // Đối tượng query parameters ổn định cho queryKey và queryFn
@@ -84,6 +86,7 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
     if (selectedFileType) params.file_type = selectedFileType;
     if (selectedFolderId !== null) params.folder_id = selectedFolderId;
     if (selectedUploadTime) params.uploaded_within = selectedUploadTime;
+    if (selectedAccessTime) params.accessed_within = selectedAccessTime;
     if (selectedSort) params.sort = selectedSort;
 
     return params;
@@ -94,6 +97,7 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
     selectedFileType,
     selectedFolderId,
     selectedUploadTime,
+    selectedAccessTime,
     selectedSort,
   ]);
 
@@ -133,6 +137,10 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
     setUploadedWithin: setSelectedUploadTime,
     selectedUploadTime,
     setSelectedUploadTime,
+    accessWithin: selectedAccessTime,
+    setAccessWithin: setSelectedAccessTime,
+    selectedAccessTime,
+    setSelectedAccessTime,
 
     // Utilities
     resetFilters,

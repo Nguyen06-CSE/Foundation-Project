@@ -42,8 +42,7 @@ export function usePersonalDocuments(
     setSelectedFolderId(selectedFolderId);
   }, [selectedFolderId, setSelectedFolderId]);
 
-  // Bộ lọc phụ client (Q3: Chia sẻ, truy cập gần đây)
-  const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
+  // Bộ lọc phụ client (Q3: Chia sẻ)
   const [selectedShareFilter, setSelectedShareFilter] = useState<string | null>(null);
 
   // --- 2. STATES GIAO DIỆN & MODAL ---
@@ -330,12 +329,12 @@ export function usePersonalDocuments(
     setSelectedFileType: filters.setSelectedFileType,
     selectedUploadTime: filters.selectedUploadTime,
     setSelectedUploadTime: filters.setSelectedUploadTime,
+    selectedAccessTime: filters.selectedAccessTime,
+    setSelectedAccessTime: filters.setSelectedAccessTime,
     selectedSort: filters.selectedSort,
     setSelectedSort: filters.setSelectedSort,
 
     // Extra Filters
-    selectedAccessTime,
-    setSelectedAccessTime,
     selectedShareFilter,
     setSelectedShareFilter,
 

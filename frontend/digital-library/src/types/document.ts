@@ -78,6 +78,7 @@ export interface DocumentQueryParams {
   category?: string;
   file_type?: string;
   uploaded_within?: string;
+  accessed_within?: string;
   sort?: string;
   page?: number;
   page_size?: number;

@@ -7,7 +7,6 @@ import type { Folder } from "@/types/document";
 export function useGroupFilters(folders: Folder[] | any[] = []) {
   const filters = useDocumentFilters({ initialSort: "trending" });
   const [selectedUploaderId, setSelectedUploaderId] = useState<number | null>(null);
-  const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
 
   const { activeTab: _docTab, setActiveTab: _setDocTab, ...restFilters } = filters;
   const { selectedFolderId, setSelectedFolderId } = filters;
@@ -30,7 +29,5 @@ export function useGroupFilters(folders: Folder[] | any[] = []) {
     setActiveDocumentTab: filters.setActiveTab,
     selectedUploaderId,
     setSelectedUploaderId,
-    selectedAccessTime,
-    setSelectedAccessTime,
   };
 }

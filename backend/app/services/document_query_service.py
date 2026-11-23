@@ -1,6 +1,6 @@
 # backend/app/services/document_query_service.py
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Optional, List, Dict, Any, Tuple
 from sqlalchemy import select, func, or_, and_
 from sqlalchemy.orm import selectinload
@@ -25,6 +25,27 @@ CODE_EXTENSIONS = [
     "md", "mdx", "rst", "tex"
 ]
 
+
+def _resolve_within_start(within: Optional[str], now: datetime) -> Optional[datetime]:
+    """Chuyển giá trị today/7 ngày/30 ngày/năm nay thành mốc thời gian có timezone."""
+    if not within:
+        return None
+
+    value = within.strip().lower()
+    tz = now.tzinfo
+    start_of_today = datetime(now.year, now.month, now.day, tzinfo=tz)
+
+    if value == "today":
+        return start_of_today
+    if value == "last_7_days":
+        return start_of_today - timedelta(days=7)
+    if value == "last_30_days":
+        return start_of_today - timedelta(days=30)
+    if value == "this_year":
+        return datetime(now.year, 1, 1, tzinfo=tz)
+    return None
+
+
 class DocumentQueryService:
     """
     Dịch vụ truy vấn và lọc tài liệu phía máy chủ (Server-side Filtering & Pagination).
@@ -33,7 +54,7 @@ class DocumentQueryService:
     - Phân trang offset ổn định kèm 'has_more' (không chạy count(*) lặp lại không cần thiết)
     - Bộ lọc thư mục theo tag
     - Bộ lọc danh mục (tab: pdf, image, document, code, other)
-    - Bộ lọc thời gian tải lên
+    - Bộ lọc thời gian tải lên và thời gian mở gần đây (từ activity log)
     """
 
     @classmethod
@@ -50,6 +71,7 @@ class DocumentQueryService:
         category: Optional[str] = None,
         file_type: Optional[str] = None,
         uploaded_within: Optional[str] = None,
+        accessed_within: Optional[str] = None,
         sort: str = "trending",
         page: int = 1,
         page_size: int = 20,
@@ -209,19 +231,23 @@ class DocumentQueryService:
                 ]
                 query = query.where(~or_(*known_conditions))
 
-        # 7. Bộ lọc Thời gian tải lên `uploaded_within`
-        if uploaded_within:
-            uw = uploaded_within.strip().lower()
-            now = datetime.now()
-            start_of_today = datetime(now.year, now.month, now.day)
-            if uw == "today":
-                query = query.where(Document.created_at >= start_of_today)
-            elif uw == "last_7_days":
-                query = query.where(Document.created_at >= start_of_today - timedelta(days=7))
-            elif uw == "last_30_days":
-                query = query.where(Document.created_at >= start_of_today - timedelta(days=30))
-            elif uw == "this_year":
-                query = query.where(Document.created_at >= datetime(now.year, 1, 1))
+        # 7. Bộ lọc Thời gian tải lên `uploaded_within` và lần mở gần đây `accessed_within`
+        now = datetime.now(UTC)
+
+        uploaded_start = _resolve_within_start(uploaded_within, now)
+        if uploaded_start is not None:
+            query = query.where(Document.created_at >= uploaded_start)
+
+        accessed_start = _resolve_within_start(accessed_within, now)
+        if accessed_start is not None:
+            # Chỉ giữ lại tài liệu có ít nhất 1 lần mở của chính user này trong khung thời gian.
+            # Dùng chung log với phần /stats (DownloadLog), tính cả action legacy "view".
+            opened_doc_ids = select(DownloadLog.document_id).where(
+                DownloadLog.user_id == current_user_id,
+                DownloadLog.action.in_([ActivityAction.VIEWED, "view"]),
+                DownloadLog.created_at >= accessed_start,
+            )
+            query = query.where(Document.id.in_(opened_doc_ids))
 
         # 8. Tính total chỉ ở trang 1 (tránh count(*) đắt đỏ ở các trang sau)
         total = 0
