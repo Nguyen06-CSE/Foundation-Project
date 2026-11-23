@@ -65,7 +65,7 @@ Xảy ra khi Pydantic phát hiện dữ liệu từ Request Body, Query Params h
 | **`409 Conflict`** | Xung đột dữ liệu | Trùng lặp `username`, `email` khi đăng ký, hoặc trùng tên tag trong cùng một workspace. |
 | **`413 Payload Too Large`** | Tệp tin quá lớn | Dung lượng file tải lên vượt quá giới hạn cấu hình (ví dụ: tối đa 50MB cho tệp tài liệu PDF/Word). |
 | **`422 Unprocessable Entity`** | Sai định dạng Schema | Dữ liệu Pydantic validation thất bại (email sai định dạng, thiếu trường bắt buộc). |
-| **`500 Internal Server Error`** | Lỗi máy chủ nội bộ | Lỗi kết nối cơ sở dữ liệu PostgreSQL, lỗi SDK lưu trữ Cloudflare R2 hoặc ngoại lệ chưa được xử lý. |
+| **`500 Internal Server Error`** | Lỗi máy chủ nội bộ | Lỗi kết nối cơ sở dữ liệu PostgreSQL, lỗi I/O hệ thống tập tin cục bộ hoặc ngoại lệ chưa được xử lý. |
 
 ---
 

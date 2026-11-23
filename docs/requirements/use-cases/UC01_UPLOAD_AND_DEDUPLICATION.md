@@ -34,7 +34,7 @@ sequenceDiagram
     participant Svc as Document Service
     participant Hash as Hashing Engine (SHA-256)
     participant DB as PostgreSQL Database
-    participant Storage as Cloudflare R2 / Local Filesystem
+    participant Storage as Local Filesystem (storage/)
     participant BG as Background Worker (OCR & Thumbnails)
 
     User->>API: Gửi Request Upload (Multipart FormData + File)
@@ -48,7 +48,7 @@ sequenceDiagram
         Svc-->>API: Kích hoạt cảnh báo trùng lặp (Duplicate Warning)
         API-->>User: 409 Conflict hoặc Thông báo file đã tồn tại
     else File chưa từng tồn tại trong kho này
-        Svc->>Storage: Ghi luồng file vật lý xuống Cloudflare R2 / Local Storage
+        Svc->>Storage: Ghi luồng file vật lý xuống Local Storage (storage/)
         Storage-->>Svc: Trả về URL lưu trữ an toàn (file_path)
         Svc->>DB: INSERT bản ghi mới vào bảng `documents`
         DB-->>Svc: Xác nhận commit giao tác thành công

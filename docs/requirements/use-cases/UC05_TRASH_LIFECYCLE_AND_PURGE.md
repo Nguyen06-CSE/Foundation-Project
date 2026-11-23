@@ -59,7 +59,7 @@ sequenceDiagram
     participant Cron as APScheduler (Tác Vụ Nền Hàng Đêm)
     participant Svc as Trash Service
     participant DB as PostgreSQL Database
-    participant Storage as Cloudflare R2 / Local Filesystem
+    participant Storage as Local Filesystem (storage/)
 
     Note over Cron: Kích hoạt định kỳ vào 02:00 AM hàng ngày
     Cron->>Svc: Kích hoạt hàm `cleanup_old_trash_records()`

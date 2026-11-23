@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Tài liệu này đặc tả chi tiết cơ chế bảo mật, vòng đời JSON Web Token (JWT) và kiến trúc kiểm soát truy cập dựa trên vai trò (Role-Based Access Control - RBAC) áp dụng cho mọi giao dịch API trong Foundation Project.
 
-> Xem thêm chi tiết tại [Kiến Trúc An Ninh Bảo Mật](../system-architecture/SECURITY_ARCHITECTURE.md).
+> Xem thêm chi tiết tại [Kiến Trúc An Ninh Bảo Mật](../03-kien-truc/bao-mat-va-phan-quyen.md).
 
 ---
 

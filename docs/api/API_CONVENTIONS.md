@@ -98,8 +98,7 @@ Backend kích hoạt `CORSMiddleware` với chính sách:
   - `http://localhost:5173`, `http://localhost:5174` (Vite dev server)
   - `http://localhost:3000` (Next.js / CRA dev server)
   - `http://127.0.0.1:5173`, `http://127.0.0.1:5174`
-  - `https://foundation-project-murex.vercel.app` (Production Web client)
-  - `https://macbook-pro-2.taile4a1e8.ts.net` (Tailscale funnel)
+    - `https://macbook-pro-2.taile4a1e8.ts.net` (Tailscale funnel)
 - **Allowed Methods**: Tất cả (`*`)
 - **Allowed Headers**: Tất cả (`*`)
 - **Credentials**: `allow_credentials=True` (cho phép gửi Cookie và Authorization header)

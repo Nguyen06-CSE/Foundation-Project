@@ -28,7 +28,7 @@ flowchart LR
     UI["Frontend Client (React 19)"] <--> API["FastAPI Endpoints"]
     API <--> Logic["Business Logic & RBAC"]
     Logic <--> DB["PostgreSQL Database"]
-    Logic <--> Storage["Cloudflare R2 Storage"]
+    Logic <--> Storage["Local Filesystem (storage/)"]
 ```
 
 ---

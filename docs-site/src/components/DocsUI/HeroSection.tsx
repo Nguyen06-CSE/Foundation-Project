@@ -17,15 +17,15 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  badgeText = 'Foundation Project • v2026 • 128 Endpoints',
+  badgeText = 'Foundation Project • Localhost-First • 26 Bảng CSDL',
   title = 'Cổng Thông Tin & Kiến Trúc',
   gradientTitle = 'Thư Viện Số Trực Tuyến',
-  subtitle = 'Nền tảng quản lý, lưu trữ và chia sẻ học liệu số phân tầng cho Đại học với kiến trúc FastAPI, PostgreSQL GIN Index, Hybrid Cloudflare R2 Storage và cơ chế chống trùng lặp SHA-256.',
+  subtitle = 'Nền tảng quản lý, lưu trữ và chia sẻ học liệu số phân tầng cho môi trường Đại học với kiến trúc FastAPI RESTful, CSDL PostgreSQL GIN Index, Lưu trữ cục bộ Local Filesystem và cơ chế khử trùng lặp SHA-256.',
   stats = [
-    { number: '10', label: 'Phân Hệ Nghiệp Vụ' },
-    { number: '128', label: 'RESTful Endpoints' },
-    { number: '28', label: 'Bảng CSDL PostgreSQL' },
-    { number: '5', label: 'Quyết Định Kiến Trúc (ADR)' },
+    { number: '3', label: 'Kho Lưu Trữ Cốt Lõi' },
+    { number: '7', label: 'Phân Hệ Nghiệp Vụ' },
+    { number: '26', label: 'Bảng Dữ Liệu PostgreSQL' },
+    { number: '7', label: 'Bản Migration Tuyến Tính' },
   ],
 }) => {
   return (
@@ -43,15 +43,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <p className={styles.heroSubtitle}>{subtitle}</p>
 
       <div className={styles.heroActions}>
-        <Link to="/LOCAL_DEVELOPMENT_GUIDE" className={styles.btnPrimary}>
+        <Link to="/huong-dan-local/khoi-chay-he-thong" className={styles.btnPrimary}>
           <Rocket size={16} />
           <span>Khởi chạy Local 5 phút</span>
         </Link>
-        <Link to="/system-architecture" className={styles.btnSecondary}>
+        <Link to="/kien-truc/tong-quan-kien-truc" className={styles.btnSecondary}>
           <Layers size={16} />
           <span>Khám phá Kiến trúc Hệ thống</span>
         </Link>
-        <Link to="/api" className={styles.btnSecondary}>
+        <Link to="/api/API_CATALOG" className={styles.btnSecondary}>
           <Zap size={16} />
           <span>Tra cứu 128 API Endpoints</span>
         </Link>

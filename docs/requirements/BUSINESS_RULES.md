@@ -61,7 +61,7 @@ Tài liệu này định nghĩa các **quy tắc nghiệp vụ bất biến (Bus
   2. Trong vòng 30 ngày kể từ `deleted_at`:
      * Người dùng có quyền **Khôi phục (Restore)** tài liệu về nguyên trạng vị trí cũ.
      * Người dùng có quyền chủ động bấm **Xóa vĩnh viễn (Hard Purge)** để giải phóng dung lượng ngay lập tức.
-  3. **Tự động quét dọn:** Sau 30 ngày nằm trong thùng rác, job định kỳ hàng đêm của hệ thống sẽ tự động thực hiện Hard Purge (xóa bản ghi CSDL và xóa file vật lý trên Cloudflare R2 / Local Filesystem) mà không cần xác nhận lại.
+  3. **Tự động quét dọn:** Sau 30 ngày nằm trong thùng rác, job định kỳ hàng đêm của hệ thống sẽ tự động thực hiện Hard Purge (xóa bản ghi CSDL và xóa file vật lý trên Local Filesystem (storage/)) mà không cần xác nhận lại.
 
 ---
 

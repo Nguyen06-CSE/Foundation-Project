@@ -16,7 +16,7 @@ Tài liệu này xác định các tiêu chuẩn chất lượng kỹ thuật, c
 |---|---|:---:|:---:|
 | **NFR-PERF-01** | **Thời gian phản hồi tìm kiếm FTS** | < **200 ms** với kho 50.000 tài liệu | `[Implemented]` qua PostgreSQL `tsvector` index |
 | **NFR-PERF-02** | **Thời gian tính Checksum SHA-256** | < **500 ms** cho tệp tin dung lượng 20MB | `[Implemented]` đọc đệm RAM chunked 64KB |
-| **NFR-PERF-03** | **Tốc độ nạp tài liệu xem trước (CDN)** | < **100 ms** (Toàn cầu) / < **5 ms** (Localhost) | `[Implemented]` qua Cloudflare R2 Public Edge |
+| **NFR-PERF-03** | **Tốc độ nạp tài liệu xem trước (CDN)** | < **100 ms** (Toàn cầu) / < **5 ms** (Localhost) | `[Implemented]` qua Local Storage NVMe/SSD (< 5ms) |
 | **NFR-PERF-04** | **Thời gian khởi tạo trang Client** | First Contentful Paint (FCP) < **1.2 giây** | `[Implemented]` qua Vite bundle + React 19 code-splitting |
 | **NFR-PERF-05** | **Dung lượng bộ nhớ tiêu thụ khi tải file** | Không chiếm dụng quá **2x kích thước file** trong RAM | `[Implemented]` giải phóng buffer ngay sau khi tính hash |
 
@@ -79,7 +79,7 @@ graph TD
 
 ### NFR-AVAIL-02: Tính Toàn Vẹn Giao Tác & Cơ Chế Bù Trừ (Compensating Actions)
 * **Trạng thái:** `[Confirmed]` | **Mã nguồn:** `[Implemented]`
-* **Yêu cầu:** Đảm bảo tính nhất quán giữa cơ sở dữ liệu quan hệ PostgreSQL và hệ thống tệp lưu trữ vật lý (Filesystem / Cloudflare R2):
+* **Yêu cầu:** Đảm bảo tính nhất quán giữa cơ sở dữ liệu quan hệ PostgreSQL và hệ thống tệp lưu trữ vật lý trên Local Filesystem (storage/):
   * Nếu ghi file vật lý thành công nhưng câu lệnh `INSERT document` vào CSDL bị rollback do lỗi, hệ thống phải tự động xóa bỏ file rác vừa ghi trên Storage.
   * Nếu ghi file thất bại, giao tác CSDL tự động hủy bỏ, không sinh ra bản ghi "ma" trỏ tới file không tồn tại.
 
@@ -93,7 +93,7 @@ graph TD
 
 ### NFR-SCALE-02: Zero Egress Cost Scalability
 * **Trạng thái:** `[Confirmed]` | **Mã nguồn:** `[Implemented]`
-* **Yêu cầu:** Trực tiếp phân phối tài liệu từ Cloudflare R2 Public Bucket tới trình duyệt Client. Backend không phải làm nhiệm vụ proxy streaming file cho hàng ngàn người dùng cùng lúc, giúp tiết kiệm 95% CPU/Băng thông của máy chủ ứng dụng.
+* **Yêu cầu:** Phân phối tài liệu từ thư mục cục bộ `storage/` qua FastAPI StaticFiles hoặc streaming response, tối ưu hóa I/O bất đồng bộ.
 
 ---
 

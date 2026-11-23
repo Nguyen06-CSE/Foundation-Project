@@ -42,7 +42,7 @@ graph TD
 * **Mức độ ưu tiên:** Khẩn cấp (P0)
 * **Trạng thái:** `[Confirmed]` | **Mã nguồn:** `[Implemented]`
 * **Mô tả:** Hệ thống không được tạo ra gánh nặng chi phí băng thông đột biến khi hàng ngàn sinh viên cùng tải tài liệu trong mùa thi cử:
-  1. Tận dụng chính sách **0đ phí truyền dữ liệu ra ngoài (Zero Egress Fees)** của Cloudflare R2.
+  1. Tối ưu hóa chi phí với kiến trúc lưu trữ Cục bộ 100% (Local Filesystem), chi phí hạ tầng 0 VNĐ.
   2. Áp dụng thuật toán kiểm tra mã băm SHA-256 (Deduplication) để ngăn chặn việc tải lên nhiều bản sao của cùng một file tài liệu dung lượng lớn.
 * **Giá trị mang lại:** Tiết kiệm 100% chi phí egress mạng so với các giải pháp AWS S3 hoặc Google Cloud truyền thống.
 
@@ -73,7 +73,7 @@ graph TD
 * **Mức độ ưu tiên:** Cao (P1)
 * **Trạng thái:** `[Confirmed]` | **Mã nguồn:** `[Implemented]`
 * **Mô tả:** Hệ thống phải vận hành mượt mà ở cả hai môi trường:
-  * **Production:** Chạy trên Cloud với Cloudflare R2 + PostgreSQL Serverless.
+  * **Vận hành:** Chạy 100% Cục bộ trên máy tính cá nhân hoặc máy chủ nội bộ với PostgreSQL Local.
   * **Development / Offline:** Chạy hoàn toàn trên máy tính cá nhân bằng Local Filesystem + Local Postgres mà không cần bất kỳ kết nối mạng nào ra ngoài Internet.
 * **Giá trị mang lại:** Giảng viên và sinh viên có thể dễ dàng kiểm thử, demo đồ án và bảo vệ tốt nghiệp ở phòng hội đồng không có mạng mà không lo gián đoạn.
 
@@ -102,7 +102,7 @@ graph TD
 | Chỉ số KPI | Mục tiêu nghiệp vụ kỳ vọng | Hiện trạng đo lường thực tế |
 |---|:---:|:---:|
 | **Thời gian tìm thấy tài liệu** | < 10 giây | Đạt ~ 1-2 giây nhờ PostgreSQL Full-Text Search |
-| **Chi phí truyền tải dữ liệu (Egress)** | 0 VNĐ | Đạt 0 VNĐ nhờ Cloudflare R2 |
+| **Chi phí truyền tải dữ liệu (Egress)** | 0 VNĐ | Đạt 0 VNĐ nhờ hệ thống lưu trữ Cục bộ |
 | **Tỷ lệ trùng lặp dữ liệu trên đĩa** | < 5% | Đạt yêu cầu nhờ SHA-256 Checksum Verification |
 | **Thời gian xét duyệt học liệu** | < 48 giờ làm việc | Đã có Dashboard xét duyệt riêng cho Quản trị viên Khoa |
 | **Độ trễ xem trước tài liệu tại Client** | < 1 giây | Đạt yêu cầu nhờ render DOCX/PDF/Code trực tiếp tại Client |
