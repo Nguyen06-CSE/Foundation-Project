@@ -4,8 +4,8 @@ import api from '@/services/api'
 import type { PaginatedDocuments, Document, DocumentQueryParams } from '@/types/document'
 
 export const createDocumentService = (getBaseUrl: (groupId?: number | string) => string) => ({
-  getAll: (params?: DocumentQueryParams, groupId?: number | string) =>
-    api.get<PaginatedDocuments>(`${getBaseUrl(groupId)}/`, { params })
+  getAll: (params?: DocumentQueryParams, groupId?: number | string, signal?: AbortSignal) =>
+    api.get<PaginatedDocuments>(`${getBaseUrl(groupId)}/`, { params, signal })
       .then(r => r.data),
 
   getFileTypes: async (groupId?: number | string): Promise<string[]> => {

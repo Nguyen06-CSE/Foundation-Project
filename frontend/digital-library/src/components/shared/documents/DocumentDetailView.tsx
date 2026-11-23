@@ -52,7 +52,7 @@ export function DocumentDetailView({
     }
   }
 
-  if (isLoading) {
+  if (isLoading && documents.length === 0) {
     return (
       <div className="flex flex-col gap-4">
         {Array.from({ length: 4 }).map((_, i) => (

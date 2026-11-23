@@ -26,6 +26,7 @@ export function DocumentsTab({
   selectedFolderId = null,
   onSelectFolder,
   isLoading,
+  isFetching,
   permission,
   isOwner,
   groupId,
@@ -199,6 +200,7 @@ export function DocumentsTab({
         selectedFolderId={selectedFolderId}
         onSelectFolder={onSelectFolder}
         isLoading={isLoading}
+        isFetching={isFetching}
         permission={permission}
         isOwner={isOwner}
         groupId={groupId}

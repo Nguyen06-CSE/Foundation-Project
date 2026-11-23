@@ -76,7 +76,7 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
   }, []);
 
   // Đối tượng query parameters ổn định cho queryKey và queryFn
-  const queryParams: DocumentQueryParams = useMemo(() => {
+  const rawQueryParams: DocumentQueryParams = useMemo(() => {
     const params: DocumentQueryParams = {};
 
     const trimmedQ = debouncedSearchQuery.trim();
@@ -100,6 +100,9 @@ export function useDocumentFilters(options: UseDocumentFiltersOptions = {}) {
     selectedAccessTime,
     selectedSort,
   ]);
+
+  // Debounce mọi filter (dropdown/tab) để tránh spam request khi bấm liên tiếp.
+  const queryParams = useDebounce(rawQueryParams, 150);
 
   return {
     // Search

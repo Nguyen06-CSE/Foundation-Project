@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, FileBox, CheckSquare } from "lucide-react";
+import { ArrowLeft, FileBox, CheckSquare, Loader2 } from "lucide-react";
+import { cn } from "@/utils/cn";
 import EmptyState from "@/components/shared/feedback/EmptyState";
 import { ViewToggle, type ViewMode } from "@/components/shared/feedback/ViewToggle";
 import {
@@ -25,6 +26,7 @@ export interface GroupDocumentsSectionProps {
   selectedFolderId?: number | null;
   onSelectFolder?: (id: number | null) => void;
   isLoading?: boolean;
+  isFetching?: boolean;
   permission?: PermissionLevel | "owner" | "full" | "view";
   isOwner?: boolean;
   groupId: number;
@@ -68,6 +70,7 @@ export function GroupDocumentsSection({
   selectedFolderId = null,
   onSelectFolder,
   isLoading = false,
+  isFetching = false,
   permission = "view",
   isOwner = false,
   groupId,
@@ -314,11 +317,19 @@ export function GroupDocumentsSection({
           )}
         </div>
 
-        {/* View Mode Toggle */}
-        <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+        <div className="flex items-center gap-3">
+          {isFetching && (
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-primary-500" />
+              Đang cập nhật...
+            </span>
+          )}
+          {/* View Mode Toggle */}
+          <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+        </div>
       </div>
 
-      {isLoading ? (
+      {isLoading && documents.length === 0 ? (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
@@ -329,60 +340,62 @@ export function GroupDocumentsSection({
         </div>
       ) : documents.length > 0 ? (
         <>
-          {/* GRID VIEW */}
-          {viewMode === "grid" && (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {documents.map((doc: any) => (
-                <LocalGroupDocumentCard
-                  key={doc.id}
-                  document={doc}
-                  permission={effectivePermission}
-                  groupId={groupId}
-                  onSave={onSave || (async () => {})}
-                  onDelete={onDelete || (async () => {})}
-                  onRename={onRename}
-                  onShare={(docId, title) => setSharingDocs({ ids: [docId], title })}
-                  isSelected={selectedIds.includes(Number(doc.id))}
-                  onToggleSelect={toggleSelectDoc}
-                />
-              ))}
-            </div>
-          )}
+          <div className={cn(isFetching && "opacity-60 pointer-events-none")}>
+            {/* GRID VIEW */}
+            {viewMode === "grid" && (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {documents.map((doc: any) => (
+                  <LocalGroupDocumentCard
+                    key={doc.id}
+                    document={doc}
+                    permission={effectivePermission}
+                    groupId={groupId}
+                    onSave={onSave || (async () => {})}
+                    onDelete={onDelete || (async () => {})}
+                    onRename={onRename}
+                    onShare={(docId, title) => setSharingDocs({ ids: [docId], title })}
+                    isSelected={selectedIds.includes(Number(doc.id))}
+                    onToggleSelect={toggleSelectDoc}
+                  />
+                ))}
+              </div>
+            )}
 
-          {/* LIST VIEW */}
-          {viewMode === "list" && (
-            <DocumentListView
-              documents={listItems}
-              isLoading={isLoading}
-              showOwner={true}
-              workspaceType="group"
-              permission={effectivePermission}
-              navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
-              onAction={handleListAction}
-              onToggleBundle={handleToggleBundle}
-              selectedIds={selectedIds}
-              onToggleSelect={toggleSelectDoc}
-            />
-          )}
+            {/* LIST VIEW */}
+            {viewMode === "list" && (
+              <DocumentListView
+                documents={listItems}
+                isLoading={isLoading}
+                showOwner={true}
+                workspaceType="group"
+                permission={effectivePermission}
+                navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
+                onAction={handleListAction}
+                onToggleBundle={handleToggleBundle}
+                selectedIds={selectedIds}
+                onToggleSelect={toggleSelectDoc}
+              />
+            )}
 
-          {/* DETAIL VIEW */}
-          {viewMode === "detail" && (
-            <DocumentDetailView
-              documents={listItems}
-              isLoading={isLoading}
-              showOwner={true}
-              workspaceType="group"
-              permission={effectivePermission}
-              navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
-              onAction={handleListAction}
-              selectedIds={selectedIds}
-              onToggleSelect={toggleSelectDoc}
-            />
-          )}
+            {/* DETAIL VIEW */}
+            {viewMode === "detail" && (
+              <DocumentDetailView
+                documents={listItems}
+                isLoading={isLoading}
+                showOwner={true}
+                workspaceType="group"
+                permission={effectivePermission}
+                navigationPath={(id) => `/groups/${groupId}/documents/${id}`}
+                onAction={handleListAction}
+                selectedIds={selectedIds}
+                onToggleSelect={toggleSelectDoc}
+              />
+            )}
+          </div>
 
           {/* Infinite Scroll Sentinel */}
           <InfiniteScrollSentinel
-            hasNextPage={hasNextPage}
+            hasNextPage={!isFetching && hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
             isError={isError}

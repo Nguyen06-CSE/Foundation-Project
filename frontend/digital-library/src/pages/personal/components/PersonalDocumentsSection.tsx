@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { FileX, LayoutGrid, CheckSquare } from "lucide-react";
+import { FileX, LayoutGrid, CheckSquare, Loader2 } from "lucide-react";
 import { DocumentCard } from "@/components/shared/documents/DocumentCard";
 import { BundleExpandedFrame } from "./BundleExpandedFrame";
 import { type DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
@@ -317,6 +317,12 @@ export function PersonalDocumentsSection({
               {isExpandedMode ? "Thu gọn bundle" : "Xem nội dung bundle"}
             </button>
           )}
+          {isFetching && (
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-primary-500" />
+              Đang cập nhật...
+            </span>
+          )}
           <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
         </div>
       </div>
@@ -329,7 +335,7 @@ export function PersonalDocumentsSection({
             isFetching && "opacity-60 pointer-events-none"
           )}
         >
-          {docsLoading ? (
+          {docsLoading && filteredDocCards.length === 0 ? (
             Array.from({ length: 10 }).map((_, index) => (
               <CardSkeleton key={index} variant="document" />
             ))
@@ -479,7 +485,7 @@ export function PersonalDocumentsSection({
 
       {/* Infinite Scroll Sentinel */}
       <InfiniteScrollSentinel
-        hasNextPage={hasNextPage}
+        hasNextPage={!isFetching && hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
         isError={isError}

@@ -169,7 +169,7 @@ export function DocumentListView({
     }
   };
 
-  if (isLoading) {
+  if (isLoading && documents.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-xs divide-y divide-gray-100">
         {Array.from({ length: 6 }).map((_, i) => (

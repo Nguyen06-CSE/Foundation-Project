@@ -11,6 +11,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { groupService } from "@/services/groupService";
 import { groupDocumentService } from "@/services/documentService";
 import type { Document, DocumentQueryParams, PaginatedDocuments } from "@/types/document";
+import { matchesLoadedFilters } from "@/utils/matchesLoadedFilters";
 
 export function useGroupDocuments(
   groupId: number,
@@ -36,16 +37,18 @@ export function useGroupDocuments(
     refetch,
   } = useInfiniteQuery({
     queryKey: ["documents", `group:${groupId}`, user?.id, queryParams],
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam = 1, signal }) =>
       groupService.getDocuments(groupId, {
         ...queryParams,
         page: pageParam as number,
         page_size: 20,
-      }),
+      }, signal),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.has_more ? lastPage.page + 1 : undefined,
-    staleTime: 15 * 1000, // 15s cho nhóm
+    // Giữ danh sách của filter trước trong lúc chờ filter mới -> không render skeleton.
+    placeholderData: (prev) => prev,
+    staleTime: 30 * 1000, // 30s cho nhóm
     enabled: hasWorkspace && !isNaN(groupId) && groupId > 0 && Boolean(user?.id),
   });
 
@@ -62,8 +65,9 @@ export function useGroupDocuments(
         }
       }
     }
-    return result;
-  }, [infiniteData]);
+    // Ẩn tạm item chắc chắn không khớp filter mới; server vẫn trả về danh sách đúng.
+    return isFetching ? result.filter((doc) => matchesLoadedFilters(doc, queryParams)) : result;
+  }, [infiniteData, isFetching, queryParams]);
 
   const total = infiniteData?.pages[0]?.total ?? 0;
 

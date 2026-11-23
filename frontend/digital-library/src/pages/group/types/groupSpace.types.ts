@@ -79,6 +79,7 @@ export interface DocumentsTabProps {
   selectedFolderId?: number | null; 
   onSelectFolder?: (id: number | null) => void;  
   isLoading: boolean;
+  isFetching?: boolean;
   permission: PermissionLevel;
   isOwner: boolean;
   groupId: number;

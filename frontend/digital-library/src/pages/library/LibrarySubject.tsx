@@ -13,7 +13,9 @@ import {
   Calendar,
   Layers,
   ArrowUpDown,
+  Loader2,
 } from "lucide-react";
+import { cn } from "@/utils/cn";
 import { PublicLayout } from "@/components/library/PublicLayout";
 import { StarRating } from "@/components/shared/feedback/StarRating";
 import { FileIcon } from "@/components/shared/documents/FileIcon";
@@ -63,7 +65,7 @@ export function LibrarySubject() {
   const [actionSuccessMessage, setActionSuccessMessage] = useState<string | null>(null);
 
   // Query documents
-  const { data: docData, isLoading } = useQuery({
+  const { data: docData, isLoading, isFetching, isPlaceholderData } = useQuery({
     queryKey: ["library-subject-documents", sId, page, sortBy, activeTab, selectedYear],
     queryFn: () =>
       libraryService.getDocuments(sId, {
@@ -73,9 +75,14 @@ export function LibrarySubject() {
         doc_type: activeTab,
         academic_year: selectedYear,
       }),
-    staleTime: 20 * 1000, // 20s cho kho học liệu chung
+    // Giữ danh sách cũ khi đổi tab/năm học/sắp xếp để tránh khung trắng.
+    placeholderData: (prev) => prev,
+    staleTime: 30 * 1000, // 30s cho kho học liệu chung
     enabled: Boolean(sId),
   });
+
+  const isRefreshing = isFetching && isPlaceholderData;
+  const hasDocuments = (docData?.items || []).length > 0;
 
   // Save to personal mutation
   const saveMutation = useMutation({
@@ -273,21 +280,27 @@ export function LibrarySubject() {
             </div>
 
             {/* ViewToggle */}
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center gap-3">
+              {isRefreshing && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-primary-500" />
+                  Đang cập nhật...
+                </span>
+              )}
               <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
             </div>
           </div>
         </div>
 
         {/* Documents Grid / List */}
-        <section className="flex flex-col gap-4">
-          {isLoading ? (
+        <section className={cn("flex flex-col gap-4", isRefreshing && "opacity-60 pointer-events-none")}>
+          {isLoading && !hasDocuments ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {Array.from({ length: 8 }).map((_, i) => (
                 <CardSkeleton key={i} variant="document" />
               ))}
             </div>
-          ) : (docData?.items || []).length > 0 ? (
+          ) : hasDocuments ? (
             viewMode === "grid" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {docData?.items.map((doc) => (

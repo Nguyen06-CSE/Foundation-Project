@@ -69,6 +69,7 @@ export default function GroupSpace() {
     workspaceLoading,
     workspaceError,
     docsLoading,
+    isFetching,
     foldersLoading,
     documents,
     folders,
@@ -230,6 +231,7 @@ export default function GroupSpace() {
           selectedFolderId={selectedFolderId}
           onSelectFolder={handleSelectFolder}
           isLoading={docsLoading || foldersLoading}
+          isFetching={isFetching}
           permission={permission}
           isOwner={isOwner}
           groupId={groupId}

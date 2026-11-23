@@ -24,6 +24,8 @@ Mỗi tài liệu phân hệ tuân thủ cấu trúc chuẩn mực gồm 6 phầ
 | **06** | [**Chia Sẻ & Liên Kết Tài Liệu**](./06-chia-se-va-lien-ket-tai-lieu.md) | Chia sẻ liên kết nội bộ/công khai có hạn sử dụng, chống trùng lặp bằng Partial Index, sao chép/forking tài liệu |
 | **07** | [**Nhật Ký Hoạt Động & Thống Kê**](./07-nhat-ky-hoat-dong-va-thong-ke.md) | Ghi nhận nhật ký tương tác ActivityAction, nhật ký tải xuống, thống kê truy cập và thuật toán tính điểm xu hướng |
 
+> 🔧 **Tài liệu kỹ thuật bổ sung**: [Tối ưu lọc tài liệu & trạng thái loading](./08-toi-uu-loc-tai-lieu-va-loading.md) — stale-while-revalidate, lọc optimistic, debounce/hủy request và index `download_logs`.
+
 ---
 
 ## 📋 Biểu Mẫu Chuẩn Hóa

@@ -35,8 +35,8 @@ export const groupService = {
 
   dissolve: (id: number) => api.delete(`/groups/${id}`),
 
-  getDocuments: (id: number, params?: DocumentQueryParams) =>
-    api.get<PaginatedDocuments>(`/groups/${id}/documents/`, { params }).then((r) => r.data),
+  getDocuments: (id: number, params?: DocumentQueryParams, signal?: AbortSignal) =>
+    api.get<PaginatedDocuments>(`/groups/${id}/documents/`, { params, signal }).then((r) => r.data),
 
   uploadDocument: (id: number, formData: FormData) =>
     api.post<Document>(`/groups/${id}/documents/upload`, formData, {
