@@ -26,7 +26,7 @@ stateDiagram-v2
     SoftDeleted --> Active: Người dùng bấm "Khôi phục" (Trong vòng 30 ngày)
     SoftDeleted --> Purged: Người dùng bấm "Xóa vĩnh viễn" thủ công
     SoftDeleted --> Purged: Quá hạn 30 ngày (APScheduler tự động dọn)
-    Purged --> [*]: Bản ghi DB & File vật lý bị xóa hoàn toàn
+    Purged --> [*]: Bản ghi DB bị xóa; file chỉ xóa khi không còn tham chiếu
 ```
 
 ---
@@ -61,13 +61,13 @@ sequenceDiagram
     participant DB as PostgreSQL Database
     participant Storage as Local Filesystem (storage/)
 
-    Note over Cron: Kích hoạt định kỳ vào 02:00 AM hàng ngày
-    Cron->>Svc: Kích hoạt hàm `cleanup_old_trash_records()`
+    Note over Cron: APScheduler kích hoạt theo lịch hệ thống
+    Cron->>Svc: Kích hoạt hàm `cleanup_deleted_documents()`
     Svc->>DB: Truy vấn danh sách tài liệu có `is_deleted = True` AND `deleted_at < now() - INTERVAL '30 days'`
     DB-->>Svc: Trả về danh sách tệp quá hạn lưu trữ
     
     loop Xử lý từng tài liệu quá hạn
-        Svc->>Storage: Gửi lệnh xóa file vật lý (file_path & thumbnail_path)
+        Svc->>Storage: Kiểm tra reference count của file_path, thumbnail_path, markdown_path
         Storage-->>Svc: Xác nhận đã xóa file trên đĩa / R2
         Svc->>DB: DELETE FROM documents WHERE id = :id (Hard Delete)
     end
@@ -79,5 +79,5 @@ sequenceDiagram
 ---
 
 ## 4. Các Biện Pháp An Toàn Khi Xóa Vĩnh Viễn
-1. **Cảnh báo nguy hiểm cấp 2:** Khi người dùng chủ động bấm "Xóa vĩnh viễn" thủ công trong thùng rác, giao diện bật hộp thoại xác nhận màu đỏ cảnh báo hành động này không thể hoàn tác.
-2. **Bảo toàn dữ liệu dùng chung:** Nếu file vật lý đang được một người dùng khác tái sử dụng trong hệ thống (nhờ cơ chế Deduplication), hệ thống chỉ xóa bản ghi tham chiếu của người dùng đó chứ không xóa file vật lý gốc trên Storage.
+1. **Bảo toàn dữ liệu dùng chung:** Trước khi xóa `file_path`, `thumbnail_path` hoặc `markdown_path`, helper `remove_file_if_unreferenced` đếm các bản ghi còn tham chiếu. File vật lý chỉ bị xóa khi không còn bản ghi nào tham chiếu.
+2. **Rủi ro giao dịch:** Source xóa Storage trước khi commit xóa DB. Nếu commit thất bại, có thể còn bản ghi trỏ tới file đã bị xóa.

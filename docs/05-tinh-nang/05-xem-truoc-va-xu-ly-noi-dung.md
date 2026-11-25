@@ -39,7 +39,7 @@ Giúp người dùng đọc nhanh nội dung tài liệu ngay trên trình duy�
 ## 4. Mô Hình Dữ Liệu Liên Quan
 - `documents.thumbnail_path`: Đường dẫn ảnh thu nhỏ trang bìa.
 - `documents.markdown_path`: Đường dẫn tệp Markdown lưu kèm.
-- `processing_jobs`: Bảng theo dõi tiến độ các tác vụ xử lý tệp chạy nền (`pending`, `processing`, `completed`, `failed`).
+- Xử lý upload hiện dùng FastAPI `BackgroundTasks`; bảng `processing_jobs` là cấu trúc legacy/deprecated và không phải nguồn trạng thái chính của pipeline hiện tại.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 1. Bối cảnh và Mục tiêu
 
-Hệ thống Thư viện số hiện tại đã hoàn thiện bước **số hóa, phân đoạn (chunking) và vector hóa (embedding)** nội dung tài liệu vào cơ sở dữ liệu chuyên biệt. Từ nền tảng dữ liệu vector này, hệ thống đã sẵn sàng cho hai tính năng cốt lõi:
+Đây là tài liệu định hướng cho giai đoạn triển khai AI tiếp theo. Theo source hiện tại, hệ thống **chưa triển khai** pipeline phân đoạn (chunking), vector hóa (embedding), bảng vector hoặc worker RAG. Các nội dung dưới đây là kiến trúc đề xuất, không phải mô tả chức năng đang vận hành.
 1. Tìm kiếm ngữ nghĩa theo nội dung tài liệu (Semantic Search).
 2. Gợi ý các tài liệu liên quan (Document Recommendation).
 
@@ -39,7 +39,7 @@ Hiện nay có hai hướng tiếp cận chính để xây dựng tính năng H�
 
 ## 4. Quyết định Lựa chọn cho Giai đoạn Hiện tại
 
-Dựa trên bảng phân tích trên và điều kiện thực tế của dự án, **Phương án 1 (Kiến trúc dựa trên Vector DB sẵn có)** được lựa chọn là giải pháp triển khai chính thức trong giai đoạn hiện tại vì 4 lý do cốt lõi:
+Dựa trên bảng phân tích trên và điều kiện thực tế của dự án, **Phương án 1 (Kiến trúc dựa trên Vector DB)** được chọn làm hướng triển khai dự kiến cho giai đoạn tiếp theo vì 4 lý do cốt lõi:
 
 1. **Phù hợp với năng lực hạ tầng máy chủ hiện tại:** Cấu hình máy chủ hiện tại chưa đủ đáp ứng việc lưu trữ đệm (caching) toàn bộ nội dung của nhiều tài liệu dài cùng lúc cho lượng lớn người dùng truy cập đồng thời. Phương án 1 giúp hệ thống vận hành mượt mà, nhẹ nhàng mà không gây nghẽn cổ chai về RAM/CPU.
 2. **Tối ưu hóa tính tự chủ và bảo mật:** Việc tự quản lý quy trình phân đoạn, lưu trữ vector và thuật toán truy xuất giúp hệ thống làm chủ hoàn toàn công nghệ lõi, giảm thiểu sự phụ thuộc vào các dịch vụ bên ngoài.
@@ -80,6 +80,8 @@ Việc lựa chọn Phương án 1 ở hiện tại không đóng lại khả n�
 
 ---
 
-## 6. Kết luận
+## 6. Trạng thái và kết luận
+
+Các quyết định trong tài liệu này chưa đồng nghĩa với việc tính năng đã được triển khai. Khi bắt đầu thực hiện, cần bổ sung đặc tả schema, worker, embedding API, retry/idempotency và endpoint Q&A/tóm tắt.
 
 Lựa chọn **Phương án 1** ở thời điểm hiện tại là bước đi thực tế, an toàn và tối ưu nhất về mặt kỹ thuật lẫn chi phí. Kiến trúc này đảm bảo hệ thống thư viện số vận hành ổn định trên cấu hình máy chủ hiện có, giữ vững tính tự chủ công nghệ, đồng thời hoàn toàn sẵn sàng để tích hợp linh hoạt với các API AI thế hệ mới theo mô hình Hybrid trong tương lai.

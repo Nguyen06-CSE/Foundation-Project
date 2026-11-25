@@ -17,6 +17,7 @@ Phân hệ tài liệu này mô tả chi tiết toàn bộ thiết kế kiến t
 | [**Kiến Trúc Tổng Thể & Mô Hình C4**](./tong-quan-kien-truc.md) | Phân tầng kiến trúc, mô hình C4 và phân tích đánh đổi giữa Monolith tách rời SPA so với Microservices |
 | [**Kiến Trúc Backend FastAPI**](./backend-fastapi.md) | Vận hành bất đồng bộ (Async I/O), mô hình Router-Service-Model và vòng đời `AsyncSession` |
 | [**Kiến Trúc Frontend React**](./frontend-react.md) | Thiết kế Single Page Application (SPA), cơ chế phân rã component, quản lý trạng thái và lưu trữ View Mode |
+| [**Đặc Tả Quy Trình Hoạt Động Hệ Thống**](./quy-trinh-hoat-dong-he-thong.md) | Luồng upload, deduplication, xử lý nền, thumbnail, Markdown, FTS, thùng rác và trạng thái AI |
 | [**Hệ Thống Lưu Trữ Tập Tin Cục Bộ**](./he-thong-luu-tru-tap-tin.md) | Kiến trúc lưu trữ đĩa cứng cục bộ, giải thuật băm SHA-256 khử trùng lặp và phân tích so sánh với S3 |
 | [**Kiến Trúc Bảo Mật & Phân Quyền**](./bao-mat-va-phan-quyen.md) | Xác thực JSON Web Token, băm mật khẩu `bcrypt`, mô hình phân quyền hai lớp (RBAC + Object-Level) |
 | [**Biên Bản Quyết Định Kiến Trúc (ADR)**](./quyet-dinh-kien-truc/ADR-001-LOCAL-STORAGE-ARCHITECTURE.md) | 5 quyết định kiến trúc trọng yếu: Lưu trữ cục bộ, Nhân bản tài liệu, PostgreSQL FTS, Xem trước Client-side, SHA-256 |

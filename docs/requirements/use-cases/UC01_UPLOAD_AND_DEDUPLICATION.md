@@ -19,8 +19,7 @@ sidebar_position: 2
 
 ## 2. Tiền Điều Kiện & Ràng Buộc
 1. Người dùng đã xác thực thành công và sở hữu JWT Access Token hợp lệ.
-2. Tệp tin tải lên có dung lượng không vượt quá **50 MB**.
-3. Định dạng tệp tin nằm trong danh mục MIME Whitelist hợp lệ (PDF, DOCX, XLSX, PPTX, TXT, Code, Markdown).
+2. Định dạng tệp tin được backend tiếp nhận và phân loại theo loại nội dung.
 
 ---
 
@@ -35,24 +34,31 @@ sequenceDiagram
     participant Hash as Hashing Engine (SHA-256)
     participant DB as PostgreSQL Database
     participant Storage as Local Filesystem (storage/)
-    participant BG as Background Worker (OCR & Thumbnails)
+    participant BG as FastAPI BackgroundTasks (OCR & Thumbnails)
 
     User->>API: Gửi Request Upload (Multipart FormData + File)
-    API->>Svc: Tiếp nhận luồng nhị phân vào bộ nhớ RAM tạm
-    Svc->>Hash: Đọc từng chunk 64KB & tính toán SHA-256 Digest
+    API->>Svc: Tiếp nhận tệp và đọc nội dung
+    Svc->>Hash: Tính toán SHA-256 Digest
     Hash-->>Svc: Trả về chuỗi mã băm 64 ký tự hex
 
-    Svc->>DB: Truy vấn kiểm tra SHA-256 trong cùng workspace_context
-    alt Phát hiện file trùng lặp trong cùng kho
-        DB-->>Svc: Trả về bản ghi tài liệu đã tồn tại
-        Svc-->>API: Kích hoạt cảnh báo trùng lặp (Duplicate Warning)
-        API-->>User: 409 Conflict hoặc Thông báo file đã tồn tại
-    else File chưa từng tồn tại trong kho này
-        Svc->>Storage: Ghi luồng file vật lý xuống Local Storage (storage/)
+    Svc->>DB: Kiểm tra checksum trong kho hiện tại
+    alt Có bản ghi active cùng checksum
+        DB-->>Svc: Trả bản ghi trùng
+        API-->>User: 409 DUPLICATE
+    else Có bản ghi trong thùng rác cùng checksum
+        DB-->>Svc: Trả bản ghi trong thùng rác
+        API-->>User: 409 IN_TRASH
+    else Chưa có bản ghi trùng trong kho hiện tại
+        Svc->>DB: Tìm checksum trên toàn bảng để tái sử dụng Storage
+        alt Có file vật lý cùng checksum
+            DB-->>Svc: Trả file_path và artifact hiện có
+        else Chưa có file vật lý
+            Svc->>Storage: Ghi tệp vật lý mới
+        end
         Storage-->>Svc: Trả về URL lưu trữ an toàn (file_path)
         Svc->>DB: INSERT bản ghi mới vào bảng `documents`
         DB-->>Svc: Xác nhận commit giao tác thành công
-        Svc->>BG: Đẩy tác vụ chạy nền (Trích xuất Text FTS, OCR, Sinh ảnh bìa)
+        Svc->>BG: Đẩy BackgroundTasks (Text, OCR, Thumbnail, Markdown)
         Svc-->>API: Trả về đối tượng DocumentOut
         API-->>User: 201 Created (Kèm metadata tài liệu)
     end
@@ -62,19 +68,15 @@ sequenceDiagram
 
 ## 4. Các Luồng Ngoại Lệ (Alternative / Exception Flows)
 
-### 4.1. Ngoại lệ 1: File vượt quá kích thước cho phép (> 50MB)
-* **Thời điểm phát hiện:** Ngay tại tầng Client hoặc khi đọc content-length ở Header Backend.
-* **Xử lý:** Hủy bỏ kết nối ngay lập tức mà không nạp toàn bộ file vào RAM đệm, trả về mã lỗi HTTP `413 Payload Too Large` kèm thông báo: *"Dung lượng file vượt quá giới hạn tối đa 50MB"*.
-
-### 4.2. Ngoại lệ 2: Định dạng tệp không hợp lệ
+### 4.1. Ngoại lệ: Định dạng tệp không hợp lệ
 * **Xử lý:** Backend kiểm tra phần mở rộng và MIME type nhị phân. Nếu là các file thực thi nguy hiểm (`.exe`, `.sh`, `.bat`, `.dll`), hệ thống trả về mã lỗi HTTP `415 Unsupported Media Type`.
 
-### 4.3. Ngoại lệ 3: Ghi file Storage thành công nhưng lỗi cơ sở dữ liệu (Rollback)
-* **Xử lý:** Nếu lệnh `INSERT INTO documents` thất bại do mất kết nối Database, khối `try...except` của Service lập tức kích hoạt hành động bù trừ (Compensating Action) xóa ngay file vật lý vừa ghi trên Storage để tránh tạo file rác mồ côi.
+### 4.2. Ngoại lệ: Race condition khi upload đồng thời
+* **Trạng thái:** Source hiện chưa có khóa giao dịch hoặc unique constraint đủ rõ để bảo vệ hoàn toàn trường hợp hai upload cùng checksum xảy ra đồng thời.
 
 ---
 
 ## 5. Hậu Điều Kiện (Postconditions)
-1. Bản ghi tài liệu mới được tạo trong bảng `documents` với trạng thái sẵn sàng.
+1. Bản ghi tài liệu mới được tạo trong bảng `documents`; xử lý text, thumbnail và Markdown tiếp tục ở BackgroundTasks.
 2. Metadata (kích thước, MIME, SHA-256 hash) được lưu trữ đầy đủ.
-3. Tác vụ trích xuất text chạy nền hoàn tất cập nhật trường `search_vector` để người dùng có thể tìm kiếm toàn văn ngay sau đó.
+3. Trigger PostgreSQL cập nhật `search_vector` từ `title` và `content` khi các trường này được ghi/cập nhật. `description` được tìm bổ sung bằng `LIKE`, chưa nằm trong trigger hiện tại.
