@@ -15,6 +15,7 @@ import { activityService } from "@/services/activityService";
 import { invalidateDashboard } from "@/utils/dashboardUtils";
 import type { DocumentAction } from "@/components/shared/documents/DocumentContextMenu";
 import { getFileExtension } from "@/utils/file";
+import { matchesLoadedFilters } from "@/utils/matchesLoadedFilters";
 import { formatSize } from "@/utils/formatSize";
 import { formatRelativeDate } from "@/utils/formatDate";
 import type { FolderType } from "../components/PersonalFoldersSection";
@@ -42,8 +43,7 @@ export function usePersonalDocuments(
     setSelectedFolderId(selectedFolderId);
   }, [selectedFolderId, setSelectedFolderId]);
 
-  // Bộ lọc phụ client (Q3: Chia sẻ, truy cập gần đây)
-  const [selectedAccessTime, setSelectedAccessTime] = useState<string | null>(null);
+  // Bộ lọc phụ client (Q3: Chia sẻ)
   const [selectedShareFilter, setSelectedShareFilter] = useState<string | null>(null);
 
   // --- 2. STATES GIAO DIỆN & MODAL ---
@@ -73,15 +73,17 @@ export function usePersonalDocuments(
     refetch,
   } = useInfiniteQuery({
     queryKey: ["documents", "personal", user?.id, filters.queryParams],
-    queryFn: ({ pageParam = 1 }) =>
+    queryFn: ({ pageParam = 1, signal }) =>
       documentService.getAll({
         ...filters.queryParams,
         page: pageParam as number,
         page_size: 20,
-      }),
+      }, undefined, signal),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.has_more ? lastPage.page + 1 : undefined,
+    // Giữ danh sách của filter trước trong lúc chờ filter mới -> không render skeleton.
+    placeholderData: (prev) => prev,
     staleTime: 30 * 1000,
     enabled: Boolean(user?.id),
   });
@@ -290,17 +292,34 @@ export function usePersonalDocuments(
 
   // Bộ lọc tài liệu đã được máy chủ thực hiện đầy đủ (Chỉ kèm fallback chia sẻ nếu chọn)
   const filteredDocuments = useMemo(() => {
-    if (!selectedShareFilter) return allDocCards;
-    return allDocCards.filter((doc) => {
-      if (selectedShareFilter === "shared_by_me") {
-        return doc.metadata?.is_shared === true || (doc.share_count ?? 0) > 0;
-      }
-      if (selectedShareFilter === "received_from_share") {
-        return !!doc.metadata?.shared_by;
-      }
-      return true;
-    });
-  }, [allDocCards, selectedShareFilter]);
+    const base = !selectedShareFilter
+      ? allDocCards
+      : allDocCards.filter((doc) => {
+          if (selectedShareFilter === "shared_by_me") {
+            return doc.metadata?.is_shared === true || (doc.share_count ?? 0) > 0;
+          }
+          if (selectedShareFilter === "received_from_share") {
+            return !!doc.metadata?.shared_by;
+          }
+          return true;
+        });
+
+    // Ẩn tạm item chắc chắn không khớp filter mới; server vẫn trả về danh sách đúng.
+    return isFetching
+      ? base.filter((doc) =>
+          matchesLoadedFilters(
+            {
+              rawType: doc.rawType,
+              file_path: doc.file_path,
+              created_at: doc.created_at,
+              tags: doc.tags,
+              is_bundle: doc.is_bundle,
+            },
+            filters.queryParams
+          )
+        )
+      : base;
+  }, [allDocCards, selectedShareFilter, isFetching, filters.queryParams]);
 
   return {
     // States
@@ -330,12 +349,12 @@ export function usePersonalDocuments(
     setSelectedFileType: filters.setSelectedFileType,
     selectedUploadTime: filters.selectedUploadTime,
     setSelectedUploadTime: filters.setSelectedUploadTime,
+    selectedAccessTime: filters.selectedAccessTime,
+    setSelectedAccessTime: filters.setSelectedAccessTime,
     selectedSort: filters.selectedSort,
     setSelectedSort: filters.setSelectedSort,
 
     // Extra Filters
-    selectedAccessTime,
-    setSelectedAccessTime,
     selectedShareFilter,
     setSelectedShareFilter,
 

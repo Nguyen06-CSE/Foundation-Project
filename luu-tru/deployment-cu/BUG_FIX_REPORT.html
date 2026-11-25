@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.10.2">
 <title data-rh="true">BUG_FIX_REPORT | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/deployment-cu/BUG_FIX_REPORT"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="BUG_FIX_REPORT | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="[!WARNING] TÀI LIỆU LƯU TRỮ LỊCH SỬ"><meta data-rh="true" property="og:description" content="[!WARNING] TÀI LIỆU LƯU TRỮ LỊCH SỬ"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/deployment-cu/BUG_FIX_REPORT"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/deployment-cu/BUG_FIX_REPORT" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/deployment-cu/BUG_FIX_REPORT" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"BUG_FIX_REPORT","item":"https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/deployment-cu/BUG_FIX_REPORT"}]}</script><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
-<script src="/Foundation-Project/assets/js/runtime~main.5f74e7e2.js" defer="defer"></script>
-<script src="/Foundation-Project/assets/js/main.c5d14836.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/runtime~main.bb1c219b.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.c23e267a.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -82,29 +82,29 @@ Do file lưu trên R2 có URL dạng <code>https://pub-xxx.r2.dev/...</code>, ch
 <li class=""><code>download_r2_to_temp_file()</code>: Tạo cơ chế <strong>On-Demand Temp Buffer</strong> tải file tạm về đĩa khi cần xử lý nặng và tự động xóa sau khi hoàn tất.</li>
 </ul>
 </li>
-<li class=""><strong>Refactor Tác Vụ Xử Lý Nền (<a href="/Foundation-Project/assets/files/documents-435e080f3a898dab45bd707ada2742a3.py" target="_blank" class=""><code>_process_document_background</code></a>)</strong>:
+<li class=""><strong>Refactor Tác Vụ Xử Lý Nền (<a href="/Foundation-Project/assets/files/documents-d41da05456d010f9b2dbabf74c0f1a49.py" target="_blank" class=""><code>_process_document_background</code></a>)</strong>:
 <ul>
 <li class="">Tự động tải file tạm từ R2 để các thư viện OCR, PDF2Image, Anydoc xử lý bình thường.</li>
 <li class="">Bảo vệ database: <strong>Chỉ cập nhật <code>doc.content</code> khi có dữ liệu mới, không bao giờ ghi đè chuỗi rỗng</strong>.</li>
 <li class="">Tự động đồng bộ ảnh bìa JPEG và file Markdown trích xuất lên lại Cloudflare R2.</li>
 </ul>
 </li>
-<li class=""><strong>Nâng Cấp Endpoint Raw (<a href="/Foundation-Project/assets/files/documents-435e080f3a898dab45bd707ada2742a3.py" target="_blank" class=""><code>GET /documents/{id}/raw</code></a>)</strong>:
+<li class=""><strong>Nâng Cấp Endpoint Raw (<a href="/Foundation-Project/assets/files/documents-d41da05456d010f9b2dbabf74c0f1a49.py" target="_blank" class=""><code>GET /documents/{id}/raw</code></a>)</strong>:
 <ul>
 <li class="">Thêm cơ chế Fallback đọc trực tiếp từ Cloudflare R2 nếu DB chưa có cache và tự động lưu ngược lại vào DB.</li>
 </ul>
 </li>
-<li class=""><strong>Đồng Bộ Hóa Upload Hàng Loạt (<a href="/Foundation-Project/assets/files/documents-435e080f3a898dab45bd707ada2742a3.py" target="_blank" class=""><code>documents.py</code></a> &amp; <a href="/Foundation-Project/assets/files/groups-7cb716e7936ab6c4006dc1bf7ea5e40f.py" target="_blank" class=""><code>groups.py</code></a>)</strong>:
+<li class=""><strong>Đồng Bộ Hóa Upload Hàng Loạt (<a href="/Foundation-Project/assets/files/documents-d41da05456d010f9b2dbabf74c0f1a49.py" target="_blank" class=""><code>documents.py</code></a> &amp; <a href="/Foundation-Project/assets/files/groups-1f5f4a62f9eb7a51a73aa7543950b09c.py" target="_blank" class=""><code>groups.py</code></a>)</strong>:
 <ul>
 <li class="">Đưa <code>save_upload_file</code> vào <code>upload_batch_documents</code>, <code>add_files_to_bundle</code> và <code>upload_group_batch_documents</code>. Xóa bỏ hoàn toàn việc ghi file vào ổ cứng local.</li>
 </ul>
 </li>
-<li class=""><strong>Nâng Cấp Đóng Gói ZIP (<a href="/Foundation-Project/assets/files/documents-435e080f3a898dab45bd707ada2742a3.py" target="_blank" class=""><code>download_bundle_zip</code></a>)</strong>:
+<li class=""><strong>Nâng Cấp Đóng Gói ZIP (<a href="/Foundation-Project/assets/files/documents-d41da05456d010f9b2dbabf74c0f1a49.py" target="_blank" class=""><code>download_bundle_zip</code></a>)</strong>:
 <ul>
 <li class="">Hỗ trợ kéo file trực tiếp từ R2 vào bộ nhớ đệm RAM (<code>io.BytesIO</code>) và nén ZIP trả về client.</li>
 </ul>
 </li>
-<li class=""><strong>Sửa Nhận Diện File &amp; Tác Vụ Cập Nhật Ảnh Bìa PDF Nhóm (<a href="/Foundation-Project/assets/files/file_processor-7812da7ee08111fbea19f569e2ed2c97.py" target="_blank" class=""><code>file_processor.py</code></a> &amp; <a href="/Foundation-Project/assets/files/groups-7cb716e7936ab6c4006dc1bf7ea5e40f.py" target="_blank" class=""><code>groups.py</code></a>)</strong>:
+<li class=""><strong>Sửa Nhận Diện File &amp; Tác Vụ Cập Nhật Ảnh Bìa PDF Nhóm (<a href="/Foundation-Project/assets/files/file_processor-7812da7ee08111fbea19f569e2ed2c97.py" target="_blank" class=""><code>file_processor.py</code></a> &amp; <a href="/Foundation-Project/assets/files/groups-1f5f4a62f9eb7a51a73aa7543950b09c.py" target="_blank" class=""><code>groups.py</code></a>)</strong>:
 <ul>
 <li class="">Truyền <code>file_path</code> vào <code>get_file_group</code> trong <code>create_thumbnail</code> để nhận diện đuôi file kể cả khi MIME type không rõ ràng.</li>
 <li class="">Nâng cấp endpoint <code>update_group_document_thumbnail</code> hỗ trợ tải tạm PDF từ R2 và upload ảnh bìa mới lên R2.</li>
@@ -132,7 +132,7 @@ Do file lưu trên R2 có URL dạng <code>https://pub-xxx.r2.dev/...</code>, ch
 </li>
 <li class=""><strong>Khắc Phục Điều Hướng &amp; Đảm Bảo Tương Thích Ngược</strong>:
 <ul>
-<li class="">Sửa URL điều hướng trong <a href="/Foundation-Project/assets/files/usePersonalDocuments-9a4fa26e2f48b0c68a9f7f82395b707b.ts" target="_blank" class=""><code>usePersonalDocuments.ts</code></a> thành <code>/personal/documents/${documentId}</code>.</li>
+<li class="">Sửa URL điều hướng trong <a href="/Foundation-Project/assets/files/usePersonalDocuments-d5c2a3e672e81534058db6ddbea650b5.ts" target="_blank" class=""><code>usePersonalDocuments.ts</code></a> thành <code>/personal/documents/${documentId}</code>.</li>
 <li class="">Bổ sung Route alias redirect trong <a href="/Foundation-Project/assets/files/App-313423dcee6aac83f964d857caeba8fd.tsx" target="_blank" class=""><code>App.tsx</code></a> chuyển hướng tự động từ <code>/ca-nhan/tai-lieu/:id</code> sang <code>/personal/documents/:id</code>.</li>
 </ul>
 </li>

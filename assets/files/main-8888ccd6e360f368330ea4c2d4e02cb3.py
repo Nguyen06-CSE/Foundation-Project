@@ -97,6 +97,8 @@ app.include_router(shares_router)
 
 @app.on_event("startup")
 async def startup():
+    # Fallback DDL (Batch 3): Giữ lại như cơ chế dự phòng an toàn cho đến khi toàn bộ
+    # môi trường triển khai (Docker Compose / Systemd) xác nhận runner migration độc lập.
     try:
         from sqlalchemy import text
         from app.core.database import AsyncSessionLocal

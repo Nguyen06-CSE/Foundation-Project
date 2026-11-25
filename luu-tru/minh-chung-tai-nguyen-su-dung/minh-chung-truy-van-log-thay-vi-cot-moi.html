@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Minh chứng tài nguyên sử dụng — Truy vấn log thay vì tạo cột/bảng riêng | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Minh chứng tài nguyên sử dụng — Truy vấn log thay vì tạo cột/bảng riêng | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Dẫn đề"><meta data-rh="true" property="og:description" content="Dẫn đề"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.bb1c219b.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.c23e267a.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>🧪 MINH CHỨNG TÀI NGUYÊN SỬ DỤNG</h1></header>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="dẫn-đề">Dẫn đề<a href="#dẫn-đề" class="hash-link" aria-label="Đường dẫn trực tiếp đến Dẫn đề" title="Đường dẫn trực tiếp đến Dẫn đề" translate="no">​</a></h2>
+<p>Bộ lọc <strong>&quot;Mở gần đây&quot;</strong> được triển khai bằng cách thêm query param <code>accessed_within</code> vào 2 endpoint có sẵn, sau đó truy vấn trực tiếp bảng <strong><code>download_logs</code></strong> — nguồn dữ liệu đang dùng cho tính năng thống kê <code>/stats</code>.</p>
+<p>Tài liệu này chứng minh 2 nhận định:</p>
+<ol>
+<li class=""><strong>Truy vấn log nhanh ở mức DB</strong>, đủ để dùng cho luồng lọc tài liệu.</li>
+<li class=""><strong>Không nên tạo cột hoặc bảng riêng</strong> trong bối cảnh hiện tại, vì chi phí tổng (migration, backfill, ghi bổ sung, đồng bộ, round-trip API) lớn hơn lợi ích tốc độ đọc mang lại.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-cách-triển-khai-hiện-tại">1. Cách triển khai hiện tại<a href="#1-cách-triển-khai-hiện-tại" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Cách triển khai hiện tại" title="Đường dẫn trực tiếp đến 1. Cách triển khai hiện tại" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-không-tạo-bảng-mới-không-tạo-endpoint-mới">1.1. Không tạo bảng mới, không tạo endpoint mới<a href="#11-không-tạo-bảng-mới-không-tạo-endpoint-mới" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.1. Không tạo bảng mới, không tạo endpoint mới" title="Đường dẫn trực tiếp đến 1.1. Không tạo bảng mới, không tạo endpoint mới" translate="no">​</a></h3>
+<p>Chỉ mở rộng API có sẵn:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Endpoint</th><th>Param mới</th></tr></thead><tbody><tr><td><code>GET /documents/</code></td><td><code>accessed_within</code></td></tr><tr><td><code>GET /groups/{group_id}/documents/</code></td><td><code>accessed_within</code></td></tr></tbody></table>
+<p>Frontend đưa lựa chọn dropdown vào <code>queryParams</code>, làm <code>queryKey</code> của <code>useInfiniteQuery</code> thay đổi và React Query tự refetch.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-truy-vấn-lõi">1.2. Truy vấn lõi<a href="#12-truy-vấn-lõi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.2. Truy vấn lõi" title="Đường dẫn trực tiếp đến 1.2. Truy vấn lõi" translate="no">​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">opened_doc_ids </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> select</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">DownloadLog</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">document_id</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">where</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    DownloadLog</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">user_id </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> current_user_id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    DownloadLog</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">action</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">in_</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">ActivityAction</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">VIEWED</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;view&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    DownloadLog</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">created_at </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> accessed_start</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">query </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> query</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">where</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">Document</span><span class="token punctuation" style="color:#393A34">.</span><span class="token builtin">id</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">in_</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">opened_doc_ids</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><br></div></code></pre></div></div>
+<p>Ý nghĩa:</p>
+<ul>
+<li class="">Lấy danh sách <code>document_id</code> có ít nhất 1 lần mở của <strong>chính user hiện tại</strong> trong khung thời gian.</li>
+<li class="">Áp dụng tiếp điều kiện scope có sẵn (<code>personal</code> hoặc <code>group</code>) ở query ngoài.</li>
+<li class="">Không có log nào khớp → <code>items: []</code>, <code>total: 0</code> → UI hiển thị EmptyState.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-phương-pháp-đo">2. Phương pháp đo<a href="#2-phương-pháp-đo" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Phương pháp đo" title="Đường dẫn trực tiếp đến 2. Phương pháp đo" translate="no">​</a></h2>
+<p>Script benchmark được thêm vào repo:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">backend/tests/benchmark_accessed_within.py</span><br></div></code></pre></div></div>
+<p>Chạy:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token builtin class-name">cd</span><span class="token plain"> backend</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">.venv/bin/python tests/benchmark_accessed_within.py</span><br></div></code></pre></div></div>
+<p>Đặc điểm:</p>
+<ul>
+<li class=""><strong>Read-only</strong>: chỉ <code>SELECT</code> và <code>EXPLAIN ANALYZE</code>, không ghi dữ liệu.</li>
+<li class=""><strong>Đối tượng</strong>: user có nhiều log nhất trong DB (<code>sv_an</code>, id=6, 133 log).</li>
+<li class=""><strong>Số lần chạy</strong>: 5 lần/case, lấy min / median / avg / max.</li>
+<li class=""><strong>Môi trường</strong>: DB Neon remote, <code>page_size=20</code>.</li>
+<li class="">Các case được đo:</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Case</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td>Không lọc thời gian</td><td>Baseline</td></tr><tr><td><code>uploaded_within=today</code></td><td>Lọc thẳng 1 cột trên bảng <code>documents</code> — <strong>tương đương tốc độ nếu thêm cột mới</strong></td></tr><tr><td><code>accessed_within=today</code></td><td>Truy vấn <code>download_logs</code> — cách đang dùng</td></tr><tr><td><code>accessed_within=last_7_days</code></td><td>Truy vấn <code>download_logs</code> với khung lớn hơn</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-kết-quả-đo">3. Kết quả đo<a href="#3-kết-quả-đo" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Kết quả đo" title="Đường dẫn trực tiếp đến 3. Kết quả đo" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="31-thời-gian-full-api-có-network--serialize">3.1. Thời gian full API (có network + serialize)<a href="#31-thời-gian-full-api-có-network--serialize" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.1. Thời gian full API (có network + serialize)" title="Đường dẫn trực tiếp đến 3.1. Thời gian full API (có network + serialize)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Case</th><th style="text-align:right"><code>total</code></th><th style="text-align:right">Median</th><th style="text-align:right">Min</th><th style="text-align:right">Max</th></tr></thead><tbody><tr><td>Không lọc thời gian</td><td style="text-align:right">16</td><td style="text-align:right">992.11 ms</td><td style="text-align:right">851.18 ms</td><td style="text-align:right">1.485,43 ms</td></tr><tr><td><code>uploaded_within=today</code></td><td style="text-align:right">0</td><td style="text-align:right">125.06 ms</td><td style="text-align:right">117.33 ms</td><td style="text-align:right">242.61 ms</td></tr><tr><td><code>accessed_within=today</code></td><td style="text-align:right">3</td><td style="text-align:right">485.91 ms</td><td style="text-align:right">477.16 ms</td><td style="text-align:right">873.91 ms</td></tr><tr><td><code>accessed_within=last_7_days</code></td><td style="text-align:right">10</td><td style="text-align:right">1.088,99 ms</td><td style="text-align:right">946.54 ms</td><td style="text-align:right">1.322,83 ms</td></tr></tbody></table>
+<blockquote>
+<p><strong>Lưu ý quan trọng để đọc đúng số liệu:</strong> các con số này chịu chi phí round-trip tới Neon, <code>count(*)</code> để tính <code>total</code>, hydrate <code>personal_view_count</code> / <code>bundle_children_count</code> và serialize <code>DocumentOut</code>. Case <code>uploaded_within=today</code> trả về <strong>0 bản ghi</strong> nên nhanh hơn không phải vì bản chất nhanh hơn, mà vì gần như không phải hydrate dữ liệu. Đây <strong>không phải so sánh tương đương</strong>. Phần quyết định nằm ở <code>EXPLAIN ANALYZE</code> bên dưới.</p>
+</blockquote>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="32-thời-gian-thật-của-truy-vấn-lõi-trong-db">3.2. Thời gian thật của truy vấn lõi trong DB<a href="#32-thời-gian-thật-của-truy-vấn-lõi-trong-db" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.2. Thời gian thật của truy vấn lõi trong DB" title="Đường dẫn trực tiếp đến 3.2. Thời gian thật của truy vấn lõi trong DB" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">EXPLAIN ANALYZE (accessed_within=today)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Limit  (actual time=0.066..0.067 rows=3 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  -&gt;  Sort  (actual time=0.065..0.066 rows=3 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">        -&gt;  Nested Loop  (actual time=0.054..0.060 rows=3 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">              -&gt;  HashAggregate  (actual time=0.047..0.048 rows=3 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                    -&gt;  Seq Scan on download_logs</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                          Filter: action IN (...) AND created_at &gt;= today AND user_id = 6</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                          Rows Removed by Filter: 211</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">              -&gt;  Index Scan using documents_pkey on documents</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Planning Time:  0.398 ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Execution Time: 0.111 ms</span><br></div></code></pre></div></div>
+<p><strong>Kết luận then chốt:</strong> phần lọc qua log chỉ tốn <strong>0,111 ms</strong> trong DB. Dù Postgres đang chọn <code>Seq Scan</code> (vì bảng chỉ ~215 dòng), truy vấn vẫn nhỏ hơn ~9.000 lần so với thời gian full API trung bình. Tức là <strong>chi phí nằm ở network/xử lý kết quả, không nằm ở việc đọc log</strong>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="33-index-đang-có">3.3. Index đang có<a href="#33-index-đang-có" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.3. Index đang có" title="Đường dẫn trực tiếp đến 3.3. Index đang có" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">ix_download_logs_user_id_created_at      (user_id, created_at DESC)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">ix_download_logs_action_created_at       (action, created_at DESC)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">ix_download_logs_document_id_created_at  (document_id, created_at DESC)</span><br></div></code></pre></div></div>
+<p>Các index này đã tồn tại từ migration <code>d76927b437fe_add_activity_tracking</code>, nên phần lọc này <strong>tốn 0 chi phí migration</strong>.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-vì-sao-cách-này-nhanh-hơn-tổng-thể">4. Vì sao cách này nhanh hơn tổng thể<a href="#4-vì-sao-cách-này-nhanh-hơn-tổng-thể" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Vì sao cách này nhanh hơn tổng thể" title="Đường dẫn trực tiếp đến 4. Vì sao cách này nhanh hơn tổng thể" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="41-không-có-round-trip-api-bổ-sung">4.1. Không có round-trip API bổ sung<a href="#41-không-có-round-trip-api-bổ-sung" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.1. Không có round-trip API bổ sung" title="Đường dẫn trực tiếp đến 4.1. Không có round-trip API bổ sung" translate="no">​</a></h3>
+<p>Nếu tạo API riêng kiểu <code>GET /documents/recently-opened</code>, frontend phải:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">gọi API lấy danh sách ID đã mở</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">→ gọi lại GET /documents/ để lấy chi tiết</span><br></div></code></pre></div></div>
+<p>Với DB remote, mỗi round-trip có thể tốn ~100 ms+. Gộp filter vào endpoint có sẵn giúp <strong>loại bỏ hoàn toàn round-trip thứ hai</strong>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="42-không-có-chi-phí-ghi-bổ-sung">4.2. Không có chi phí ghi bổ sung<a href="#42-không-có-chi-phí-ghi-bổ-sung" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.2. Không có chi phí ghi bổ sung" title="Đường dẫn trực tiếp đến 4.2. Không có chi phí ghi bổ sung" translate="no">​</a></h3>
+<p>Mỗi lần user mở tài liệu, hệ thống <strong>đã ghi</strong> <code>DownloadLog</code> rồi (phục vụ <code>/stats</code>). Cách hiện tại chỉ đọc lại dữ liệu đó.</p>
+<p>Nếu thêm cột/bảng cache, mỗi lần view phải làm thêm:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">UPSERT user_document_access(...)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">+ commit</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">+ xử lý rollback/đồng bộ khi log ghi thất bại</span><br></div></code></pre></div></div>
+<p>Đây là <strong>write amplification</strong> — chi phí tăng theo số lượt xem, trong khi read của cách hiện tại đã đủ nhanh.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="43-không-cần-backfill">4.3. Không cần backfill<a href="#43-không-cần-backfill" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.3. Không cần backfill" title="Đường dẫn trực tiếp đến 4.3. Không cần backfill" translate="no">​</a></h3>
+<p>Dùng log có sẵn → dữ liệu quá khứ đã có từ ngày triển khai activity tracking.</p>
+<p>Tạo bảng riêng → phải backfill từ <code>download_logs</code> sang bảng mới, kèm kiểm tra chéo.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="44-đúng-ngữ-nghĩa-per-user-mà-không-cần-schema-mới">4.4. Đúng ngữ nghĩa per-user mà không cần schema mới<a href="#44-đúng-ngữ-nghĩa-per-user-mà-không-cần-schema-mới" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.4. Đúng ngữ nghĩa per-user mà không cần schema mới" title="Đường dẫn trực tiếp đến 4.4. Đúng ngữ nghĩa per-user mà không cần schema mới" translate="no">​</a></h3>
+<p>&quot;Mở gần đây&quot; là hành vi <strong>của từng user</strong>. Truy vấn lọc theo <code>DownloadLog.user_id == current_user_id</code> đã đúng mà không cần thêm cột.</p>
+<p>Nếu thêm cột <code>last_accessed_at</code> trực tiếp vào <code>documents</code>, cột đó sẽ là lần mở gần nhất của <strong>bất kỳ ai</strong> → sai nghiệp vụ. Muốn đúng thì vẫn phải tạo bảng per-user, tức là quay lại đúng chi phí đang muốn tránh.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-so-sánh-với-phương-án-tạo-cột--bảng-riêng">5. So sánh với phương án tạo cột / bảng riêng<a href="#5-so-sánh-với-phương-án-tạo-cột--bảng-riêng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. So sánh với phương án tạo cột / bảng riêng" title="Đường dẫn trực tiếp đến 5. So sánh với phương án tạo cột / bảng riêng" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tiêu chí</th><th>Truy vấn log (hiện tại)</th><th>Thêm cột <code>documents.last_accessed_at</code></th><th>Thêm bảng cache per-user</th></tr></thead><tbody><tr><td>Tốc độ lọc trong DB</td><td>0,111 ms (đo thực tế)</td><td>Nhanh hơn một chút</td><td>Nhanh nhất</td></tr><tr><td>Số round-trip API</td><td>1</td><td>1</td><td>1 nếu gộp param; 2 nếu tách API</td></tr><tr><td>Migration</td><td><strong>0</strong></td><td>Cần</td><td>Cần</td></tr><tr><td>Backfill dữ liệu cũ</td><td><strong>0</strong></td><td>Cần</td><td>Cần</td></tr><tr><td>Ghi thêm mỗi lần view</td><td><strong>0</strong></td><td>Có</td><td>Có</td></tr><tr><td>Đúng theo user</td><td><strong>Có</strong></td><td><strong>Không</strong></td><td>Có</td></tr><tr><td>Nguồn dữ liệu</td><td>1 (log)</td><td>2 (log + cột)</td><td>2 (log + bảng)</td></tr><tr><td>Nguy cơ lệch dữ liệu</td><td><strong>Không</strong></td><td>Có</td><td>Có</td></tr><tr><td>Dùng cho sort &quot;Mở gần đây&quot;</td><td>Cần aggregate</td><td>Dễ</td><td>Rất dễ</td></tr><tr><td>Lịch sử/tần suất xem</td><td><strong>Có sẵn</strong></td><td>Vẫn cần log</td><td>Vẫn cần log</td></tr></tbody></table>
+<p>Bảng cache per-user có ưu điểm thật là đọc đơn giản và dễ sort, nhưng đổi lại phải trả bằng migration, backfill, write amplification và rủi ro two-source-of-truth. Với mức độ hiện tại, đó là <strong>chi phí lớn hơn lợi ích</strong>.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-khi-nào-nên-đổi-hướng">6. Khi nào nên đổi hướng<a href="#6-khi-nào-nên-đổi-hướng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6. Khi nào nên đổi hướng" title="Đường dẫn trực tiếp đến 6. Khi nào nên đổi hướng" translate="no">​</a></h2>
+<p>Giữ cách hiện tại là đúng cho quy mô hiện tại. Nếu số log tăng lớn (ví dụ hàng chục nghìn bản ghi/user), làm theo thứ tự:</p>
+<ol>
+<li class="">Thêm index composite:</li>
+</ol>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">CREATE</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">INDEX</span><span class="token plain"> CONCURRENTLY ix_download_logs_user_action_created</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">ON</span><span class="token plain"> download_logs </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">user_id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">action</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> created_at </span><span class="token keyword" style="color:#00009f">DESC</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<ol start="2">
+<li class="">Chạy lại <code>benchmark_accessed_within.py</code> để so sánh plan (từ <code>Seq Scan</code> sang <code>Index Scan</code>).</li>
+<li class="">Chỉ tạo bảng cache per-user nếu:
+<ul>
+<li class="">profile cho thấy đây thực sự là bottleneck, hoặc</li>
+<li class="">cần sort theo &quot;lần mở gần nhất&quot; với lượng dữ liệu lớn.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-kết-luận">7. Kết luận<a href="#7-kết-luận" class="hash-link" aria-label="Đường dẫn trực tiếp đến 7. Kết luận" title="Đường dẫn trực tiếp đến 7. Kết luận" translate="no">​</a></h2>
+<ul>
+<li class="">Truy vấn <code>download_logs</code> cho thấy <strong>Execution Time = 0,111 ms</strong> — nhanh hơn rất nhiều so với chi phí network/serialize bao quanh.</li>
+<li class="">Việc gộp <code>accessed_within</code> vào endpoint có sẵn <strong>không phát sinh round-trip mới</strong>.</li>
+<li class="">Cách này tận dụng index và dữ liệu đã có, <strong>không migration, không backfill, không ghi thêm</strong>, và <strong>đúng ngữ nghĩa per-user</strong>.</li>
+<li class="">Tạo cột hoặc bảng riêng chỉ nhanh hơn ở một phần rất nhỏ của read path, nhưng mang lại chi phí vận hành lớn hơn.</li>
+</ul>
+<p>👉 Vì vậy, triển khai truy vấn log là lựa chọn <strong>đúng và hiệu quả hơn</strong> trong bối cảnh hiện tại.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="phụ-lục--output-benchmark-đầy-đủ">Phụ lục — Output benchmark đầy đủ<a href="#phụ-lục--output-benchmark-đầy-đủ" class="hash-link" aria-label="Đường dẫn trực tiếp đến Phụ lục — Output benchmark đầy đủ" title="Đường dẫn trực tiếp đến Phụ lục — Output benchmark đầy đủ" translate="no">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">========================================================================</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">BENCHMARK accessed_within (READ-ONLY)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">========================================================================</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">User: sv_an (id=6) | tổng log: 133</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Số lần chạy mỗi case: 5 | page_size=20</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Không lọc thời gian (baseline)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   total=16 | items=16</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   min= 851.18ms | median= 992.11ms | avg=1054.89ms | max=1485.43ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">uploaded_within=today  [cột trên documents]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   total=0 | items=0</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   min= 117.33ms | median= 125.06ms | avg= 147.57ms | max= 242.61ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">accessed_within=today  [query download_logs]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   total=3 | items=3</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   min= 477.16ms | median= 485.91ms | avg= 567.00ms | max= 873.91ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">accessed_within=last_7_days  [query download_logs]</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   total=10 | items=10</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   min= 946.54ms | median=1088.99ms | avg=1102.06ms | max=1322.83ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">EXPLAIN ANALYZE (truy vấn lõi accessed_within=today):</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   Limit  (cost=15.30..15.30 rows=1 width=4) (actual time=0.066..0.067 rows=3.00 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">     Buffers: shared hit=12</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">     -&gt;  Sort  (cost=15.30..15.30 rows=1 width=4) (actual time=0.065..0.066 rows=3.00 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">           Sort Key: d.id DESC</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">           Sort Method: quicksort  Memory: 25kB</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">           Buffers: shared hit=12</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">           -&gt;  Nested Loop  (cost=6.64..15.29 rows=1 width=4) (actual time=0.054..0.060 rows=3.00 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                 Buffers: shared hit=12</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                 -&gt;  HashAggregate  (cost=6.36..6.37 rows=1 width=4) (actual time=0.047..0.048 rows=3.00 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Group Key: dl.document_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Batches: 1  Memory Usage: 32kB</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Buffers: shared hit=3</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       -&gt;  Seq Scan on download_logs dl  (cost=0.00..6.36 rows=1 width=4) (actual time=0.039..0.040 rows=4.00 loops=1)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                             Filter: (((action)::text = ANY (&#x27;{DOCUMENT_VIEWED,view}&#x27;::text[])) AND (created_at &gt;= &#x27;2026-11-23 00:00:00+00&#x27;::timestamp with time zone) AND (user_id = 6))</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                             Rows Removed by Filter: 211</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                             Buffers: shared hit=3</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                 -&gt;  Index Scan using documents_pkey on documents d  (cost=0.28..8.30 rows=1 width=4) (actual time=0.003..0.003 rows=1.00 loops=3)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Index Cond: (id = dl.document_id)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Filter: ((workspace_id IS NULL) AND (NOT is_deleted) AND (NOT is_public) AND (bundle_parent_id IS NULL) AND (owner_id = 6))</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Index Searches: 3</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">                       Buffers: shared hit=9</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   Planning:</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">     Buffers: shared hit=14</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   Planning Time: 0.398 ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   Execution Time: 0.111 ms</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">Index hiện có của download_logs:</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - download_logs_pkey: CREATE UNIQUE INDEX download_logs_pkey ON public.download_logs USING btree (id)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - ix_download_logs_action_created_at: CREATE INDEX ix_download_logs_action_created_at ON public.download_logs USING btree (action, created_at DESC)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - ix_download_logs_document_id_created_at: CREATE INDEX ix_download_logs_document_id_created_at ON public.download_logs USING btree (document_id, created_at DESC)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   - ix_download_logs_user_id_created_at: CREATE INDEX ix_download_logs_user_id_created_at ON public.download_logs USING btree (user_id, created_at DESC)</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">========================================================================</span><br></div></code></pre></div></div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/99-luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-23T09:45:46.000Z" itemprop="dateModified">23 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#dẫn-đề" class="table-of-contents__link toc-highlight">Dẫn đề</a></li><li><a href="#1-cách-triển-khai-hiện-tại" class="table-of-contents__link toc-highlight">1. Cách triển khai hiện tại</a><ul><li><a href="#11-không-tạo-bảng-mới-không-tạo-endpoint-mới" class="table-of-contents__link toc-highlight">1.1. Không tạo bảng mới, không tạo endpoint mới</a></li><li><a href="#12-truy-vấn-lõi" class="table-of-contents__link toc-highlight">1.2. Truy vấn lõi</a></li></ul></li><li><a href="#2-phương-pháp-đo" class="table-of-contents__link toc-highlight">2. Phương pháp đo</a></li><li><a href="#3-kết-quả-đo" class="table-of-contents__link toc-highlight">3. Kết quả đo</a><ul><li><a href="#31-thời-gian-full-api-có-network--serialize" class="table-of-contents__link toc-highlight">3.1. Thời gian full API (có network + serialize)</a></li><li><a href="#32-thời-gian-thật-của-truy-vấn-lõi-trong-db" class="table-of-contents__link toc-highlight">3.2. Thời gian thật của truy vấn lõi trong DB</a></li><li><a href="#33-index-đang-có" class="table-of-contents__link toc-highlight">3.3. Index đang có</a></li></ul></li><li><a href="#4-vì-sao-cách-này-nhanh-hơn-tổng-thể" class="table-of-contents__link toc-highlight">4. Vì sao cách này nhanh hơn tổng thể</a><ul><li><a href="#41-không-có-round-trip-api-bổ-sung" class="table-of-contents__link toc-highlight">4.1. Không có round-trip API bổ sung</a></li><li><a href="#42-không-có-chi-phí-ghi-bổ-sung" class="table-of-contents__link toc-highlight">4.2. Không có chi phí ghi bổ sung</a></li><li><a href="#43-không-cần-backfill" class="table-of-contents__link toc-highlight">4.3. Không cần backfill</a></li><li><a href="#44-đúng-ngữ-nghĩa-per-user-mà-không-cần-schema-mới" class="table-of-contents__link toc-highlight">4.4. Đúng ngữ nghĩa per-user mà không cần schema mới</a></li></ul></li><li><a href="#5-so-sánh-với-phương-án-tạo-cột--bảng-riêng" class="table-of-contents__link toc-highlight">5. So sánh với phương án tạo cột / bảng riêng</a></li><li><a href="#6-khi-nào-nên-đổi-hướng" class="table-of-contents__link toc-highlight">6. Khi nào nên đổi hướng</a></li><li><a href="#7-kết-luận" class="table-of-contents__link toc-highlight">7. Kết luận</a></li><li><a href="#phụ-lục--output-benchmark-đầy-đủ" class="table-of-contents__link toc-highlight">Phụ lục — Output benchmark đầy đủ</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-tinh-nang/toi-uu-loc-tai-lieu-va-loading" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Tối Ưu Lọc Tài Liệu &amp; Trạng Thái Loading (Stale-While-Revalidate) | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/tinh-nang/toi-uu-loc-tai-lieu-va-loading"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Tối Ưu Lọc Tài Liệu &amp; Trạng Thái Loading (Stale-While-Revalidate) | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="1. Mục Đích &amp; Bối Cảnh Nghiệp Vụ"><meta data-rh="true" property="og:description" content="1. Mục Đích &amp; Bối Cảnh Nghiệp Vụ"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/tinh-nang/toi-uu-loc-tai-lieu-va-loading"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/tinh-nang/toi-uu-loc-tai-lieu-va-loading" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/tinh-nang/toi-uu-loc-tai-lieu-va-loading" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.bb1c219b.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.c23e267a.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>⚡ TỐI ƯU LỌC TÀI LIỆU &amp; TRẠNG THÁI LOADING</h1></header>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-mục-đích--bối-cảnh-nghiệp-vụ">1. Mục Đích &amp; Bối Cảnh Nghiệp Vụ<a href="#1-mục-đích--bối-cảnh-nghiệp-vụ" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Mục Đích &amp; Bối Cảnh Nghiệp Vụ" title="Đường dẫn trực tiếp đến 1. Mục Đích &amp; Bối Cảnh Nghiệp Vụ" translate="no">​</a></h2>
+<p>Khi người dùng đổi bộ lọc trong <strong>Kho cá nhân</strong>, <strong>Kho nhóm</strong> hoặc <strong>Kho học liệu theo môn</strong>, danh sách tài liệu chuyển sang trạng thái loading trắng trong vài giây.</p>
+<p>Nguyên nhân không nằm ở tốc độ lọc của trình duyệt mà ở chuỗi sau:</p>
+<ol>
+<li class="">Filter được gom vào <code>queryParams</code> → nằm trong <code>queryKey</code> của <code>useInfiniteQuery</code> / <code>useQuery</code>.</li>
+<li class=""><code>queryKey</code> mới chưa có cache → TanStack Query chuyển <code>isLoading = true</code>, <code>data = undefined</code>.</li>
+<li class="">Component thay <strong>toàn bộ</strong> danh sách bằng skeleton (<code>GroupDocumentsSection</code>, <code>PersonalDocumentsSection</code>, <code>LibrarySubject</code>).</li>
+<li class="">API lọc chạy các subquery (<code>folder_id</code> qua <code>FolderTag</code>, <code>q</code> theo tên nhãn/con của bundle, <code>accessed_within</code> qua <code>download_logs</code>, <code>COUNT(*)</code> ở trang 1) nên thời gian chờ càng kéo dài cảm giác &quot;trắng&quot;.</li>
+</ol>
+<p>Mục tiêu: <strong>đổi filter không làm trống khung danh sách</strong>, vẫn giữ kết quả đúng từ server và giảm số request thừa.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-luồng-nghiệp-vụ-workflow">2. Luồng Nghiệp Vụ (Workflow)<a href="#2-luồng-nghiệp-vụ-workflow" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Luồng Nghiệp Vụ (Workflow)" title="Đường dẫn trực tiếp đến 2. Luồng Nghiệp Vụ (Workflow)" translate="no">​</a></h2>
+<!-- -->
+<p>Request cũ bị hủy qua <code>AbortSignal</code> nếu người dùng đổi filter liên tiếp.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-quy-tắc-nghiệp-vụ--ràng-buộc">3. Quy Tắc Nghiệp Vụ &amp; Ràng Buộc<a href="#3-quy-tắc-nghiệp-vụ--ràng-buộc" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Quy Tắc Nghiệp Vụ &amp; Ràng Buộc" title="Đường dẫn trực tiếp đến 3. Quy Tắc Nghiệp Vụ &amp; Ràng Buộc" translate="no">​</a></h2>
+<ol>
+<li class=""><strong>Giữ dữ liệu cũ khi đổi filter</strong>: <code>placeholderData: (prev) =&gt; prev</code> áp dụng cho 3 query: nhóm, cá nhân, kho môn học. Khi có dữ liệu placeholder, <code>isLoading</code> không bật → không render skeleton.</li>
+<li class=""><strong>Skeleton chỉ khi chưa có gì để hiển thị</strong>: điều kiện render là <code>isLoading &amp;&amp; items.length === 0</code> (kể cả trong <code>DocumentListView</code> / <code>DocumentDetailView</code>).</li>
+<li class=""><strong>Server là nguồn sự thật</strong>: component vẫn gọi API cho mọi filter. FE chỉ ẩn tạm để phản hồi tức thì; khi response về, danh sách server thay thế.</li>
+<li class=""><strong>Lọc optimistic chỉ dùng filter an toàn</strong> (<code>src/utils/matchesLoadedFilters.ts</code>):
+<ul>
+<li class=""><code>category</code>, <code>file_type</code>, <code>uploaded_within</code>, <code>tag_id</code> (bỏ qua item bundle vì bundle có thể khớp qua con).</li>
+<li class="">Không lọc FE: <code>q</code> (tìm cả tên tag/con bundle), <code>folder_id</code> (lọc qua <code>FolderTag</code>), <code>accessed_within</code> (log theo user), <code>sort=trending/views</code> (cần <code>DocumentStats</code>).</li>
+</ul>
+</li>
+<li class=""><strong>Khóa infinite scroll lúc đang lọc lại</strong>: <code>hasNextPage = !isFetching &amp;&amp; hasNextPage</code> để tránh nạp trang của filter cũ.</li>
+<li class=""><strong>Giảm spam request</strong>: debounce 150ms cho toàn bộ <code>queryParams</code>; ô tìm kiếm giữ debounce 300ms riêng (tổng ~450ms). <code>staleTime</code> là 30s ở cả 3 luồng.</li>
+<li class=""><strong>Hủy request cũ</strong>: <code>queryFn</code> nhận <code>signal</code> từ TanStack Query, truyền xuống axios trong <code>groupService.getDocuments</code> và <code>documentService.getAll</code>.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-mô-hình-dữ-liệu--chỉ-mục">4. Mô Hình Dữ Liệu &amp; Chỉ Mục<a href="#4-mô-hình-dữ-liệu--chỉ-mục" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Mô Hình Dữ Liệu &amp; Chỉ Mục" title="Đường dẫn trực tiếp đến 4. Mô Hình Dữ Liệu &amp; Chỉ Mục" translate="no">​</a></h2>
+<p>Không đổi schema nghiệp vụ. Chỉ bổ sung một chỉ mục phục vụ bộ lọc <strong>&quot;Mở gần đây&quot;</strong> (<code>accessed_within</code>):</p>
+<ul>
+<li class="">Migration: <code>alembic/versions/6a8f0b1c2d3e_add_download_logs_access_filter_index.py</code> (revises <code>c3d4e5f6a7b8</code>, head đã commit tại thời điểm tạo).</li>
+<li class="">Index: <code>ix_download_logs_user_action_created_document</code> trên <code>download_logs (user_id, action, created_at, document_id)</code>.</li>
+<li class="">Truy vấn được tối ưu: <code>user_id = :me AND action IN (&#x27;viewed&#x27;,&#x27;view&#x27;) AND created_at &gt;= :start</code> → lấy <code>document_id</code>.</li>
+</ul>
+<p>Các index cũ <code>(user_id, created_at)</code>, <code>(action, created_at)</code>, <code>(document_id, created_at)</code> vẫn giữ nguyên; index mới bao phủ đủ điều kiện lọc.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-tương-tác-api--giao-diện">5. Tương Tác API &amp; Giao Diện<a href="#5-tương-tác-api--giao-diện" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. Tương Tác API &amp; Giao Diện" title="Đường dẫn trực tiếp đến 5. Tương Tác API &amp; Giao Diện" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="endpoint-không-đổi-signature">Endpoint (không đổi signature)<a href="#endpoint-không-đổi-signature" class="hash-link" aria-label="Đường dẫn trực tiếp đến Endpoint (không đổi signature)" title="Đường dẫn trực tiếp đến Endpoint (không đổi signature)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Method</th><th style="text-align:left">Path</th><th style="text-align:left">Filter chính</th></tr></thead><tbody><tr><td style="text-align:left"><code>GET</code></td><td style="text-align:left"><code>/groups/{group_id}/documents/</code></td><td style="text-align:left"><code>q</code>, <code>tag_id</code>, <code>category</code>, <code>file_type</code>, <code>uploaded_within</code>, <code>accessed_within</code>, <code>sort</code>, <code>page</code>, <code>page_size</code></td></tr><tr><td style="text-align:left"><code>GET</code></td><td style="text-align:left"><code>/documents/</code></td><td style="text-align:left">Tương tự ở phạm vi cá nhân</td></tr><tr><td style="text-align:left"><code>GET</code></td><td style="text-align:left"><code>/library/subjects/{id}/documents/</code></td><td style="text-align:left"><code>page</code>, <code>sort</code>, <code>doc_type</code>, <code>academic_year</code></td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="file-triển-khai">File triển khai<a href="#file-triển-khai" class="hash-link" aria-label="Đường dẫn trực tiếp đến File triển khai" title="Đường dẫn trực tiếp đến File triển khai" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Việc</th><th style="text-align:left">File</th></tr></thead><tbody><tr><td style="text-align:left">Giữ data cũ, gửi <code>signal</code>, staleTime</td><td style="text-align:left"><code>useGroupDocuments.ts</code>, <code>usePersonalDocuments.ts</code>, <code>LibrarySubject.tsx</code></td></tr><tr><td style="text-align:left">Debounce toàn bộ filter</td><td style="text-align:left"><code>hooks/useDocumentFilters.ts</code></td></tr><tr><td style="text-align:left">Lọc optimistic dùng chung</td><td style="text-align:left"><code>utils/matchesLoadedFilters.ts</code></td></tr><tr><td style="text-align:left">Truyền <code>signal</code> xuống axios</td><td style="text-align:left"><code>services/groupService.ts</code>, <code>services/documentService.ts</code></td></tr><tr><td style="text-align:left">Bỏ nhánh skeleton, thêm indicator, khóa sentinel</td><td style="text-align:left"><code>GroupDocumentsSection.tsx</code>, <code>PersonalDocumentsSection.tsx</code>, <code>DocumentListView.tsx</code>, <code>DocumentDetailView.tsx</code>, <code>GroupSpace.tsx</code>, <code>DocumentsTab.tsx</code></td></tr><tr><td style="text-align:left">Index DB</td><td style="text-align:left"><code>alembic/versions/6a8f0b1c2d3e_add_download_logs_access_filter_index.py</code></td></tr></tbody></table>
+<p>UI: dòng <strong>&quot;Đang cập nhật...&quot;</strong> với spinner nhỏ cạnh ViewToggle; danh sách cũ mờ đi (<code>opacity-60 pointer-events-none</code>) thay vì biến mất.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-giới-hạn-kỹ-thuật--đánh-đổi">6. Giới Hạn Kỹ Thuật &amp; Đánh Đổi<a href="#6-giới-hạn-kỹ-thuật--đánh-đổi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6. Giới Hạn Kỹ Thuật &amp; Đánh Đổi" title="Đường dẫn trực tiếp đến 6. Giới Hạn Kỹ Thuật &amp; Đánh Đổi" translate="no">​</a></h2>
+<ul>
+<li class="">FE chỉ có 20 tài liệu/trang đầu. Lọc optimistic trên tập này <strong>có thể thiếu kết quả ở trang sau</strong>; vì vậy API vẫn luôn được gọi và là nguồn quyết định cuối cùng.</li>
+<li class="">Với bundle/tag hoặc <code>q</code>, item hợp lệ có thể bị ẩn thoáng qua trước khi response server về — đánh đổi để đổi filter có phản hồi ngay.</li>
+<li class=""><code>uploaded_within</code> dùng mốc UTC ở cả FE lẫn BE; chỉ khác biệt ở ranh giới ngày nếu người dùng ở múi giờ không phải UTC.</li>
+<li class="">Debounce 150ms làm đổi dropdown chậm hơn đúng 150ms so với trước; đổi lại giảm đáng kể request khi bấm liên tiếp.</li>
+<li class="">Index mới chỉ có tác dụng sau khi chạy <code>alembic upgrade head</code>.</li>
+<li class="">Đã kiểm tra: <code>npm run build</code>, <code>npm run lint</code>, self-check 11 assertion của hàm lọc, <code>alembic heads</code> (một head). <strong>Chưa</strong> thử nghiệm trên browser với API thật hay đo benchmark sau khi apply index.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="hướng-nâng-cấp">Hướng nâng cấp<a href="#hướng-nâng-cấp" class="hash-link" aria-label="Đường dẫn trực tiếp đến Hướng nâng cấp" title="Đường dẫn trực tiếp đến Hướng nâng cấp" translate="no">​</a></h3>
+<ul>
+<li class="">Thêm cột <code>last_accessed_at</code> trên <code>documents</code> để thay subquery <code>download_logs</code> (repo đã có <code>backend/tests/benchmark_accessed_within.py</code> để so sánh).</li>
+<li class="">Cache kết quả theo <code>filterKey</code> và preload các filter kề nhau để bật lại filter cũ dùng cache ngay.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/05-tinh-nang/08-toi-uu-loc-tai-lieu-va-loading.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-23T10:28:05.000Z" itemprop="dateModified">23 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-mục-đích--bối-cảnh-nghiệp-vụ" class="table-of-contents__link toc-highlight">1. Mục Đích &amp; Bối Cảnh Nghiệp Vụ</a></li><li><a href="#2-luồng-nghiệp-vụ-workflow" class="table-of-contents__link toc-highlight">2. Luồng Nghiệp Vụ (Workflow)</a></li><li><a href="#3-quy-tắc-nghiệp-vụ--ràng-buộc" class="table-of-contents__link toc-highlight">3. Quy Tắc Nghiệp Vụ &amp; Ràng Buộc</a></li><li><a href="#4-mô-hình-dữ-liệu--chỉ-mục" class="table-of-contents__link toc-highlight">4. Mô Hình Dữ Liệu &amp; Chỉ Mục</a></li><li><a href="#5-tương-tác-api--giao-diện" class="table-of-contents__link toc-highlight">5. Tương Tác API &amp; Giao Diện</a><ul><li><a href="#endpoint-không-đổi-signature" class="table-of-contents__link toc-highlight">Endpoint (không đổi signature)</a></li><li><a href="#file-triển-khai" class="table-of-contents__link toc-highlight">File triển khai</a></li></ul></li><li><a href="#6-giới-hạn-kỹ-thuật--đánh-đổi" class="table-of-contents__link toc-highlight">6. Giới Hạn Kỹ Thuật &amp; Đánh Đổi</a><ul><li><a href="#hướng-nâng-cấp" class="table-of-contents__link toc-highlight">Hướng nâng cấp</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
