@@ -48,7 +48,7 @@ async def create_workspace(
     member = WorkspaceMember(
         workspace_id=workspace.id,
         user_id=current_user.id,
-        permission_level="admin"
+        permission_level="full"
     )
     db.add(member)
     await db.commit()

@@ -12,12 +12,10 @@ from .document_tag import document_tags, document_tags as DocumentTag
 from .document import Document
 from .document_version import DocumentVersion
 from .note import Note
-from .trash_batch import TrashBatch
 from .document_share import DocumentShare
 from .notification import Notification
 from .favorite import Favorite
 from .download_log import DownloadLog
-from .processing_job import ProcessingJob
 from .folder import Folder
 from .folder_tag import FolderTag
 from .subject import Subject
@@ -42,12 +40,10 @@ __all__ = [
     "Document",
     "DocumentVersion",
     "Note",
-    "TrashBatch",
     "DocumentShare",
     "Notification",
     "Favorite",
     "DownloadLog",
-    "ProcessingJob",
     "Folder",
     "FolderTag",
     "Subject",

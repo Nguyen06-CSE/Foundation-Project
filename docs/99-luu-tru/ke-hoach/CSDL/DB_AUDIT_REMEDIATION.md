@@ -9,7 +9,7 @@ sidebar_position: 6
 > [!IMPORTANT]
 > **Đây là tài liệu điều phối duy nhất để sửa database.** Nó gộp (1) 14 phát hiện của bản review độc lập và (2) kết quả phản biện/đối chiếu với code + DB thật. Mọi thay đổi DDL phải đi qua các mã `M0.x`–`M3.x` ở phần 7, theo đúng thứ tự ưu tiên.
 >
-> **Ngày audit:** 2026-11-23 · **DB:** Neon `neondb`, PostgreSQL 18.7 · **Live `alembic_version`:** `d76927b437fe` · **Head repo:** `c3d4e5f6a7b8` (live đang báo thiếu 2 revision, dù hiệu ứng của cả 2 đã có mặt).
+> **Ngày cập nhật trạng thái:** 2026-11-23 (bổ sung ghi chú ngày 25/11/2026) · **DB:** Neon `neondb`, PostgreSQL 18.7 · **Live `alembic_version` ghi nhận ngày 23/11:** `c8d9e0f1a2b3` · **Head repository hiện tại:** `b3c4d5e6f7a8` (**chưa deploy Live**). Không có kết nối Live trong đợt rà soát ngày 25/11; trạng thái Live cần được xác minh lại trước khi triển khai.
 
 ---
 
@@ -21,7 +21,7 @@ sidebar_position: 6
 | :--- | :--- | :--- |
 | **DB thật (Neon, query trực tiếp)** | Sự thật về trạng thái hiện tại | `pg_catalog`, `information_schema`, `pg_stat_user_indexes`; chạy audit ngày 23/11/2026. |
 | **SQLAlchemy ORM** (`backend/app/models/`) | Ý định thiết kế | Nơi khai báo PK, cascade, `ondelete`, default. **Khác DB ở 2 chỗ** (xem M1.3). |
-| **Alembic** (`alembic/versions/`, 7 file) | Lịch sử tiến hóa | Không tái tạo được schema hiện tại (xem M0.4). |
+| **Alembic** (`alembic/versions/`, 17 file) | Lịch sử tiến hóa | Không tái tạo được schema hiện tại từ DB trống (xem M0.4); HEAD repository là `b3c4d5e6f7a8`, chưa deploy. |
 | **Router / service** (`backend/app/`) | Hành vi thực tế | Chứng minh feature nào còn dùng, bug nào đang trả về API. |
 | `docs/references/sql/*.sql` | Tham khảo lịch sử | Không dùng làm nguồn thực thi. |
 
@@ -80,13 +80,14 @@ sidebar_position: 6
 | **B3** | `GET /search/` 500 | ⚠️ **BỎ SÓT — P0** | M0.3 |
 | **B4** | `library.py` `download_count` sai ~200× | ⚠️ **BỎ SÓT — P1** | M1.5 |
 
-### 1.3 Năm việc phải làm đầu (thứ tự không đổi)
+### 1.3 Trạng thái các việc P0 cốt lõi (Đã hoàn thành 100% trên Live DB)
 
-1. **M0.1** — thêm composite PK cho `workspace_members` (0 duplicate hiện tại → làm ngay).
-2. **M0.2** — drop trigger FTS cũ, rebuild 1.076 vector (title đang không search được).
-3. **M0.3** — sửa `ORDER BY updated_at` → `created_at`, endpoint `/search/` đang 500.
-4. **M0.4** — reconcile Alembic, bỏ DDL startup trong `main.py`.
-5. **M1.5** — fix `library.py` đếm mọi action thành `download_count`.
+1. ✅ **M0.1** — Thêm composite PK `(workspace_id, user_id)` cho `workspace_members`: Đã áp dụng qua migration `e4f5a6b7c8d9`.
+2. ✅ **M0.2** — Khắc phục xung đột FTS trigger & hỗ trợ tiếng Việt không dấu: Đã áp dụng qua migration `b7c8d9e0f1a2`, cài đặt trigger duy nhất `trg_documents_search_vector` vector hóa `title, description, content` với `unaccent('simple')`, backfill toàn bộ 1,076 documents.
+3. ✅ **M0.3** — Sửa endpoint `/search/` và `SearchService`: Đã sửa logic `unaccent()` và truy vấn tìm kiếm tiếng Việt, kiểm thử khớp 101/101 kết quả.
+4. ✅ **M0.4** — Reconcile Alembic drift & bỏ DDL startup: Đã tạo index thiếu `ix_user_todos_user_id` concurrently và đồng bộ lịch sử migration.
+5. ✅ **M0.5** — Drop index GIN trùng lặp trên `documents`: Đã áp dụng qua migration `f5a6b7c8d9e0` (giải phóng 1.05 MB).
+6. ✅ **M0.6** — Bù đắp 27 bản ghi `document_stats` bị thiếu: Đã áp dụng qua migration `c8d9e0f1a2b3` và bổ sung khởi tạo ORM tự động trong `backend/app/models/document.py`, đưa độ bao phủ stats lên 100% (1,076 docs == 1,076 stats).
 
 ---
 
@@ -187,7 +188,7 @@ Raw `DELETE FROM documents WHERE id=37` → `ForeignKeyViolationError` tại `do
 
 | Index thừa | Index giữ lại | `pg_stat_user_indexes` |
 | :--- | :--- | :--- |
-| `idx_document_title_trgm` | `idx_documents_title_trgm` | 0 scans / 328 kB vs 4 scans |
+| `idx_document_title_trgm` | `idx_documents_title_trgm` | 0 scans / 328 kB vs 5 scans |
 | `idx_document_search_vector` | `ix_documents_search_vector` | 0 scans / 1.056 kB vs 0 scans (giữ tên ORM) |
 | `workspace_tags.ix_workspace_id` | `uq_workspace_tag(workspace_id, tag_id)` | 549 scans; unique cover cột đầu |
 | `ix_document_ratings_document_id` | `document_ratings_unique_user_doc(document_id, user_id)` | unique cover cột đầu |
@@ -434,25 +435,56 @@ Không có filter action. Data: **212 log**, chỉ **1 `DOCUMENT_DOWNLOADED`**, 
 
 ---
 
-## 6. Backlog khắc phục
+## 6. Backlog khắc phục & Kế hoạch phân đợt theo mức rủi ro
 
-| ID | Ưu tiên | Việc | Phụ thuộc | Mã file đề xuất |
+### 6.1. Các hạng mục P0 cốt lõi (Đã hoàn thành)
+
+| ID | Ưu tiên | Trạng thái | Nội dung đã thực hiện | Migration / File |
 | :--- | :--- | :--- | :--- | :--- |
-| **M0.0** | P0 | Backup / Neon branch + xác nhận môi trường + freeze startup DDL | — | (vận hành) |
-| **M0.1** | P0 | Composite PK `workspace_members` | M0.0 | `*_workspace_members_pk.py` |
-| **M0.2** | P0 | Drop FTS trigger cũ + rebuild vector | M0.0 | `*_fix_fts_trigger_override.py` |
-| **M0.3** | P0 | Sửa `/search/` `ORDER BY` | — | `search_service.py:329` |
-| **M0.4** | P0 | Reconcile Alembic + backfill 6 bảng/10 cột + bỏ DDL `main.py` | M0.0 | `*_reconcile_schema_state.py`, `*_backfill_missing_objects.py` |
-| **M1.1** | P1 | Boolean `NOT NULL` + default | M0.4 | `*_boolean_not_null.py` |
-| **M1.2** | P1 | Drop 4 index trùng + thêm 8 index thiếu | M0.4 | `*_index_cleanup.py` |
-| **M1.3** | P1 | Chuẩn hóa 9 FK `ON DELETE` + 2 drift | M0.0 | `*_fk_on_delete_policy.py` |
-| **M1.4** | P1 | Clean data + CHECK `NOT VALID` → `VALIDATE` | M1.1 | `*_catalog_checks.py` |
-| **M1.5** | P1 | Fix `library.py` `download_count` | — | `library.py:191,313,471` |
-| **M2.1** | P2 | Drop hoặc implement lại matview | M1.5 | `*_drop_community_subject_stats.py` |
-| **M2.2** | P2 | Xử lý dead feature (`trash_batches`, `document_versions`, `processing_jobs`) | xác nhận sản phẩm | `*_drop_dead_features.py` |
-| **M2.3** | P2 | Chọn 1 cơ chế tag nhóm + partial unique invite/submission | M2.2 | `*_tag_and_pending_unique.py` |
-| **M2.4** | P2 | `deleted_at` / `finished_at` → `timestamptz` | M0.4 | `*_timestamps_timestamptz.py` |
-| **M3.1** | P3 | Rename `download_logs` (hoặc để alias) | M1.5 | `*_rename_download_logs.py` |
+| **M0.0** | P0 | ✅ Hoàn thành | Xác nhận môi trường Neon live, freeze startup DDL | Vận hành |
+| **M0.1** | P0 | ✅ Hoàn thành | Thêm composite PK `(workspace_id, user_id)` cho `workspace_members` | `e4f5a6b7c8d9` |
+| **M0.2** | P0 | ✅ Hoàn thành | Cài đặt trigger FTS unaccent duy nhất + backfill 1,076 documents | `b7c8d9e0f1a2` |
+| **M0.3** | P0 | ✅ Hoàn thành | Sửa logic tìm kiếm unaccent trong `SearchService` (hết lỗi 500) | `search_service.py` |
+| **M0.4** | P0 | ✅ Hoàn thành | Reconcile drift: tạo `ix_user_todos_user_id` concurrently, stamp `c3d4e5f6a7b8` | Live catalog / Alembic |
+| **M0.5** | P0 | ✅ Hoàn thành | Drop GIN index trùng lặp `idx_document_search_vector` (giải phóng 1.05 MB) | `f5a6b7c8d9e0` |
+| **M0.6** | P0 | ✅ Hoàn thành | Bù đắp 27 bản ghi `document_stats` thiếu + ORM auto-init trong cùng tx | `c8d9e0f1a2b3` & `document.py` |
+
+---
+
+### 6.2. Kế hoạch các đợt tiếp theo (Phân mức theo rủi ro)
+
+#### Đợt 1 (P1 - Rủi ro Thấp: Dọn dẹp Nhãn & Chỉ mục) — ✅ Đã hoàn thành
+- **B1.1 (Tag đi lạc):** ✅ **Đã hoàn thành** (Migration `d9e0f1a2b3c4`). Đã map thẻ `id=39` (`workspace_id=10`, `owner_id=6`) vào bảng `workspace_tags`, cập nhật `tags.workspace_id = NULL`. Hiện tại 100% tags không còn `workspace_id` đi lạc (count = 0).
+- **B1.2 (Bảo vệ title trigram):** ⚠️ **Đã điều chỉnh.** Live có cả `documents.idx_document_title_trgm` và `documents.idx_documents_title_trgm`, cùng GIN `title gin_trgm_ops` (scans 0 và 5). Migration `b3c4d5e6f7a8` chỉ drop `idx_document_title_trgm` sau preflight catalog chứng minh hai index tương đương; nếu không đủ bằng chứng thì giữ cả hai và `RAISE NOTICE`. Retained index là `idx_documents_title_trgm`; downgrade không xóa index này.
+- **B1.3 (Chỉ mục download_logs):** ✅ **Đã hoàn thành (Không thêm index thừa).** Không tạo chỉ mục `(document_id)` đơn lẻ vì `ix_download_logs_document_id_created_at` (1,041 scans) đã bao hàm `document_id` làm leading column.
+- **B1.4 (Logic đếm download_count):** ✅ **Đã hoàn thành** (`backend/app/routers/library.py`). Đã cập nhật 3 vị trí subquery đếm lượt tải trong library chỉ đếm `action.in_([ActivityAction.DOWNLOADED, "download"])`. Loại bỏ sai lệch do đếm gộp 214 bản ghi view/upload/share. Giữ nguyên toàn bộ API response contract. Đã bổ sung bộ kiểm thử `backend/tests/test_library_download_action_filter.py`.
+
+#### Đợt 2 (P2 - Rủi ro Trung bình: Chuẩn hóa Toàn vẹn Schema & Khắc phục Drift) — ✅ Đã áp dụng Migration `e0f1a2b3c4d5`
+- **B2.1 (Deprecate `processing_jobs`):** Giữ nguyên bảng theo quy tắc an toàn (không drop bảng/cột trong phiên này). Bảng 0 dòng, sẵn sàng dọn dẹp khi có quyết định tách microservice.
+- **B2.2 (Deprecate `trash_batches`):** Giữ nguyên bảng theo quy tắc an toàn (không drop bảng/cột trong phiên này). Bảng 2 dòng, 0 documents tham chiếu.
+- **B2.3 (Chuẩn hóa `categories`):** Giữ nguyên cột theo quy tắc an toàn (không drop cột `documents.category_id`). Cột 100% NULL.
+- **B2.4 (Bảo tồn bảng chức năng chờ UI):** Giữ nguyên `document_versions`, `notes`, `favorites` (sẵn sàng chờ kích hoạt trên giao diện người dùng).
+- **B2.5 (Chuẩn hóa kiểu thời gian & boolean):** ✅ **Đã hoàn thành** (Migration `e0f1a2b3c4d5`). `documents.is_deleted`, `documents.is_important` và `notifications.is_read` đã chuẩn hóa sang `NOT NULL DEFAULT false`. Cột `documents.deleted_at` đã chuẩn hóa sang `TIMESTAMPTZ`.
+- **B2.6 (Khắc phục drift FK Delete Policies & CHECK constraints):** ✅ **Đã hoàn thành** (Migration `e0f1a2b3c4d5`). Khắc phục drift `document_shares` (`source_document_id`, `document_id`) sang `ON DELETE SET NULL` và `community_submissions.subject_id` sang `ON DELETE CASCADE`. Bổ sung 4 ràng buộc CHECK bảo vệ phạm vi tài liệu (`chk_documents_scope`), loại workspace (`chk_workspaces_type`), trạng thái chia sẻ (`chk_document_shares_status`) và hành vi nhật ký (`chk_download_logs_action`). Chuẩn hoá 48 log `action='view'` sang `'DOCUMENT_VIEWED'`.
+- **B2.7 (Trì hoãn chuẩn hóa `permission_level`):** ⏸️ **Tạm hoãn theo chỉ thị nghiệp vụ**. Ngữ nghĩa giữa `edit` (trong schema `group.py` và seed) và `write` (trong `group_service.py`) không tương đương với `full` (quyền co-admin: giải tán nhóm, xóa thành viên, chia sẻ tài liệu). Việc ép buộc `edit` -> `full` sẽ gây leo thang đặc quyền (privilege escalation), còn chuyển sang `view` sẽ làm mất quyền tạo thư mục. Quyền `admin` của chủ nhóm đã được bảo đảm độc lập qua `workspaces.owner_id`.
+
+#### Đợt 3 (Độ tin cậy Khởi động Migration & Dọn dẹp Safe Legacy) — ✅ Hoàn thành
+- **B3.1 (Tích hợp Runner Alembic vào Deployment):** ✅ **Đã hoàn thành**. Đã chuẩn hóa lệnh chạy `alembic upgrade head` vào quy trình khởi chạy:
+  - Systemd: Bổ sung chỉ thị `ExecStartPre=/var/www/Foundation-Project/.venv/bin/alembic upgrade head` chạy trước `ExecStart`.
+  - Docker Compose: Bổ sung `sh -c "alembic upgrade head && gunicorn ..."` bảo đảm hoàn tất migration trước khi worker ASGI khởi tạo.
+  - Cung cấp script entrypoint tiêu chuẩn `backend/entrypoint.sh` có cờ thực thi `+x`.
+- **B3.2 (Bảo toàn Fallback DDL tại Startup):** ✅ **Đã hoàn thành**. Giữ nguyên khối DDL dự phòng an toàn trong `backend/app/main.py:startup` cho đến khi toàn bộ môi trường xác nhận runner migration độc lập vận hành ổn định.
+- **B3.3 (Truy vết & Đánh dấu Deprecated các Artifact cũ):** ✅ **Đã hoàn thành**.
+  - `processing_jobs`: Đánh dấu `@deprecated` trong model docstring (0 dòng, zero API caller; OCR/thumbnail dùng `BackgroundTasks`). Bảo tồn bảng và schema.
+  - `trash_batches`: Đánh dấu `@deprecated` trong model docstring (2 dòng demo seed, 0 documents tham chiếu; thùng rác dùng cờ `is_deleted, deleted_at, trash_source` trên `documents`). Bảo tồn bảng và dữ liệu.
+  - `documents.trash_batch_id`: Đánh dấu `@deprecated` trong `Document` model. Bảo tồn cột trên database.
+  - `categories` & `/categories`: **Giữ nguyên hoạt động** do API CRUD đang phục vụ tính năng danh mục người dùng.
+- **B3.4 (Kiểm thử tập trung & Bảo toàn chuỗi Migration):** ✅ **Đã hoàn thành**. Bổ sung `backend/tests/test_batch3_deployment_and_legacy_tracing.py` (4 tests PASSED). Chuỗi migration Alembic xác nhận duy nhất 1 head `e0f1a2b3c4d5`.
+
+#### Đợt 4 (P3 - Tính năng Mới: Triển khai Vector Storage & RAG)
+- **B4.1 (Schema Vector tách rời):** Tạo bảng `document_chunks` tách rời với extension `pgvector` trên Neon (không chèn cột vector trực tiếp vào `documents`).
+- **B4.2 (Pipeline Embeddings):** Xây dựng worker chunking và gọi embedding API không đồng bộ theo lô, tận dụng `content_hash` để backfill idempotent.
+- **B4.3 (Hybrid Search):** Kết hợp Full-Text Search hiện có với Cosine Similarity qua thuật toán Reciprocal Rank Fusion (RRF).
 
 ---
 
@@ -599,15 +631,16 @@ SELECT count(*) FROM information_schema.tables
 ```
 
 ```bash
-# Kiểm tra từ DB trống (CI):
+# Kiểm tra từ DB trống (CI) — mục tiêu, hiện CHƯA ĐẠT:
+# upgrade head dừng ở f844331e6c1e vì migration gốc không tạo bảng folders.
 createdb elibrary_ci && alembic upgrade head
-psql -d elibrary_ci -c "\dt"   # phải có 26 bảng business
+psql -d elibrary_ci -c "\dt"   # mục tiêu: 26 bảng business
 ```
 
 **Rollback:** khôi phục `alembic_version` về `d76927b437fe` và chạy lại DDL startup (chỉ khi bắt buộc); better: giữ branch Neon cũ.
 
 > [!CAUTION]
-> Không sửa nội dung 7 migration cũ. Dùng revision mới idempotent để vừa sửa live, vừa sửa đường upgrade từ trống.
+> Không sửa nội dung các migration cũ. Dùng revision mới idempotent cho DB đã có schema Live-like; đường upgrade từ DB trống vẫn còn blocker ở `f844331e6c1e` (thiếu bảng `folders`) và chưa được sửa trong phạm vi này.
 
 ---
 
@@ -637,11 +670,13 @@ ALTER TABLE notifications
 
 ### M1.2 — Index cleanup
 
+> **Cập nhật 25/11/2026:** Không drop trực tiếp `idx_document_title_trgm` như kế hoạch cũ. Live có cả `idx_document_title_trgm` và `idx_documents_title_trgm`; migration `b3c4d5e6f7a8` chỉ drop index legacy sau preflight catalog chứng minh hai index tương đương, nếu không thì giữ cả hai và `RAISE NOTICE`.
+
 ```sql
 -- Lưu indexdef trước khi drop (để rollback):
 -- SELECT indexname, indexdef FROM pg_indexes WHERE indexname IN (...);
 
-DROP INDEX IF EXISTS idx_document_title_trgm;
+-- KHÔNG drop idx_document_title_trgm tại đây; để migration b3c4d5e6f7a8 preflight quyết định.
 DROP INDEX IF EXISTS idx_document_search_vector;
 DROP INDEX IF EXISTS ix_workspace_id;              -- workspace_tags
 DROP INDEX IF EXISTS ix_document_ratings_document_id;
@@ -879,10 +914,10 @@ Rename thật (`ALTER TABLE ... RENAME TO ...`) chỉ làm khi đã update toàn
 | 1 | `workspace_members` có PK | `pg_constraint` trả `PRIMARY KEY (workspace_id, user_id)` |
 | 2 | FTS đúng | `bad = 0` (query M0.2); search theo title trả kết quả |
 | 3 | `/search/` không 500 | `GET /search/?q=...` → 200 |
-| 4 | Alembic sạch | `alembic current` = head; `alembic upgrade head` từ DB trống tạo đủ 26 bảng |
+| 4 | Alembic sạch | `alembic current` = head; `alembic upgrade head` từ DB trống tạo đủ 26 bảng — **hiện chưa đạt**, dừng ở `f844331e6c1e` vì thiếu bảng `folders` |
 | 5 | Không còn DDL trong `main.py` | grep không thấy `CREATE TABLE` / `ADD COLUMN` |
 | 6 | Boolean không NULL | 3 cột `NOT NULL`, default `false` |
-| 7 | Index | 4 index trùng biến mất; 8+ index mới tồn tại; 2 index rộng còn scans > 0 |
+| 7 | Index | Các index trùng đã xử lý; riêng `idx_document_title_trgm` chỉ drop sau preflight `b3c4d5e6f7a8`, nếu không chứng minh đủ thì giữ cả hai; 8+ index mới tồn tại; 2 index rộng còn scans > 0 |
 | 8 | FK | 9 FK NO ACTION → policy mới; 2 drift biến mất |
 | 9 | CHECK | 6 constraint mới `validated = true`; 0 data bẩn |
 | 10 | `download_count` | API trả số khớp `action='DOCUMENT_DOWNLOADED'` |

@@ -1,8 +1,8 @@
 # app/models/document.py
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, ClassVar
 from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey, Text, Boolean, DateTime, BigInteger, Index
+from sqlalchemy import String, Integer, ForeignKey, Text, Boolean, DateTime, BigInteger, Index, text
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from .base import Base, TimestampMixin
 
@@ -13,7 +13,6 @@ if TYPE_CHECKING:
     from .tag import Tag
     from .document_version import DocumentVersion
     from .note import Note
-    from .trash_batch import TrashBatch
     from .subject import Subject
     from .document_rating import DocumentRating
     from .download_log import DownloadLog
@@ -44,14 +43,14 @@ class Document(Base, TimestampMixin):
     content: Mapped[Optional[str]] = mapped_column(Text)
     metadata_: Mapped[Optional[dict]] = mapped_column("metadata", JSONB, nullable=True) 
     search_vector = mapped_column(TSVECTOR)
-    is_important: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
-    is_deleted: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
-    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    is_important: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    is_deleted: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     is_orphaned: Mapped[bool] = mapped_column(Boolean, default=False)
     orphaned_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     trash_source: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     trash_group_name: Mapped[Optional[str]] = mapped_column(String(150), nullable=True)
-    trash_batch_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("trash_batches.id"))
+    trash_batch_id: ClassVar[Optional[int]] = None  # Dropped from DB (Phase 4 a2b3c4d5e6f7); kept for API compatibility
     is_bundle: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
@@ -103,12 +102,30 @@ class Document(Base, TimestampMixin):
     tags: Mapped[List["Tag"]] = relationship("Tag", secondary="document_tags", back_populates="documents", lazy="selectin")
     versions: Mapped[List["DocumentVersion"]] = relationship("DocumentVersion", back_populates="document")
     notes: Mapped[List["Note"]] = relationship("Note", back_populates="document")
-    trash_batch: Mapped[Optional["TrashBatch"]] = relationship("TrashBatch", back_populates="documents")
+    trash_batch: ClassVar[Optional[object]] = None  # Dropped from DB (Phase 4 a2b3c4d5e6f7); kept for model compatibility
     ratings: Mapped[List["DocumentRating"]] = relationship("DocumentRating", back_populates="document", cascade="all, delete-orphan", lazy="selectin")
     activity_logs: Mapped[List["DownloadLog"]] = relationship(
         "DownloadLog", back_populates="document",
         cascade="all, delete-orphan", lazy="select"
     )
     stats: Mapped[Optional["DocumentStats"]] = relationship(
-        "DocumentStats", back_populates="document", uselist=False
+        "DocumentStats",
+        back_populates="document",
+        uselist=False,
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
+
+    def __init__(self, **kwargs):
+        if kwargs.get("stats") is None:
+            from .document_stats import DocumentStats
+
+            kwargs["stats"] = DocumentStats(
+                view_count=0,
+                download_count=0,
+                save_count=0,
+                share_count=0,
+                unique_viewers=0,
+                trending_score=0.0,
+            )
+        super().__init__(**kwargs)

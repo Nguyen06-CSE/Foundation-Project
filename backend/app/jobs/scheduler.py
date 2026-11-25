@@ -1,13 +1,14 @@
+import logging
 import os
 from datetime import datetime, timedelta, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.database import AsyncSessionLocal
+from app.core.database import AsyncSessionLocal, engine
 from app.models.document import Document
 from app.models.document_stats import DocumentStats
 from app.models.download_log import DownloadLog
@@ -21,6 +22,9 @@ from app.services.file_service import remove_file_if_unreferenced, safe_remove a
 from app.services.group_service import copy_file
 
 scheduler = AsyncIOScheduler()
+logger = logging.getLogger(__name__)
+
+ADVISORY_LOCK_COMMUNITY_SUBJECT_STATS = 748291038592
 
 
 async def dissolve_workspace(db: AsyncSession, workspace: Workspace) -> None:
@@ -259,6 +263,33 @@ async def remind_due_todos() -> None:
         await db.commit()
 
 
+async def refresh_community_subject_stats() -> bool:
+    """
+    Chạy mỗi giờ: refresh materialized view community_subject_stats CONCURRENTLY.
+    Dùng transaction-level advisory lock trong cùng transaction với REFRESH để
+    an toàn với Neon/PgBouncer transaction pooler; lock tự nhả khi commit/rollback.
+    Nếu không lấy được lock thì bỏ qua (skip).
+    """
+    async with engine.begin() as conn:
+        if conn.dialect.name != "postgresql":
+            return False
+
+        lock_res = await conn.execute(
+            text("SELECT pg_try_advisory_xact_lock(:lock_id)"),
+            {"lock_id": ADVISORY_LOCK_COMMUNITY_SUBJECT_STATS},
+        )
+        if not bool(lock_res.scalar()):
+            logger.info("Bỏ qua refresh community_subject_stats: advisory lock đang được giữ bởi process khác.")
+            return False
+
+        logger.info("Đã lấy advisory lock, đang refresh MATERIALIZED VIEW CONCURRENTLY community_subject_stats...")
+        await conn.execute(
+            text("REFRESH MATERIALIZED VIEW CONCURRENTLY community_subject_stats")
+        )
+        logger.info("Refresh community_subject_stats hoàn tất.")
+        return True
+
+
 def register_jobs() -> None:
     scheduler.add_job(execute_group_dissolution, CronTrigger(minute="*/5"))
     scheduler.add_job(remind_due_todos, CronTrigger(minute="*/5"))
@@ -268,5 +299,11 @@ def register_jobs() -> None:
         refresh_document_stats,
         CronTrigger(minute=0),
         id="refresh_document_stats",
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        refresh_community_subject_stats,
+        CronTrigger(minute=0),
+        id="refresh_community_subject_stats",
         replace_existing=True,
     )

@@ -61,8 +61,8 @@ async def require_write_permission(db: AsyncSession, workspace_id: int, user_id:
     workspace = await db.get(Workspace, workspace_id)
     if not workspace or workspace.is_deleted:
         raise HTTPException(404, "Không tìm thấy nhóm")
-    # Cho phép nếu là owner, hoặc permission_level là 'write' hoặc 'full'
-    if perm not in ["write", "full"] and workspace.owner_id != user_id:
+    # Cho phép nếu là owner, hoặc permission_level là 'full'
+    if perm != "full" and workspace.owner_id != user_id:
         raise HTTPException(403, "Bạn không có quyền chỉnh sửa/tạo dữ liệu trong nhóm này")
 
 

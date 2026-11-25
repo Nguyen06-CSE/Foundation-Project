@@ -1,7 +1,7 @@
 import asyncio
 import hashlib
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -29,12 +29,10 @@ from app.models.document import Document
 from app.models.document_version import DocumentVersion
 from app.models.document_tag import document_tags
 from app.models.note import Note
-from app.models.trash_batch import TrashBatch
 from app.models.document_share import DocumentShare
 from app.models.notification import Notification
 from app.models.favorite import Favorite
 from app.models.download_log import DownloadLog
-from app.models.processing_job import ProcessingJob
 
 
 # =========================================================
@@ -228,11 +226,11 @@ async def seed_workspaces_and_members(
         (ws_class.id, users["sv_cuong"].id, "view"),
         (ws_group.id, users["sv_an"].id, "full"),
         (ws_group.id, users["sv_binh"].id, "full"),
-        (ws_group.id, users["sv_cuong"].id, "edit"),
+        (ws_group.id, users["sv_cuong"].id, "full"),
         (ws_kt.id, users["gv_mai"].id, "full"),
         (ws_kt.id, users["sv_dung"].id, "view"),
         (ws_python.id, users["sv_binh"].id, "full"),
-        (ws_python.id, users["sv_an"].id, "edit"),
+        (ws_python.id, users["sv_an"].id, "full"),
         (ws_python.id, users["sv_cuong"].id, "view"),
     ]
 
@@ -492,63 +490,13 @@ async def seed_folders(session: AsyncSession, users, classifications):
 
 
 # =========================================================
-# 6. SEED TRASH BATCHES
-# =========================================================
-async def seed_trash_batches(session: AsyncSession, users, workspaces):
-    print("6. Seeding Trash Batches...")
-
-    specs = [
-        {
-            "lookup": {
-                "workspace_id": workspaces["group_web"].id,
-                "name": "Nhóm BTL cũ (đã giải tán)",
-            },
-            "values": {
-                "deleted_by": users["sv_an"].id,
-                "deleted_at": datetime.now(),
-                "purge_at": datetime.now() + timedelta(days=30),
-            },
-        },
-        {
-            "lookup": {
-                "workspace_id": workspaces["group_python"].id,
-                "name": "Tài liệu ôn thi cũ",
-            },
-            "values": {
-                "deleted_by": users["sv_binh"].id,
-                "deleted_at": datetime.now(),
-                "purge_at": datetime.now() + timedelta(days=30),
-            },
-        },
-    ]
-
-    batches = {}
-    for spec in specs:
-        batch, created = await get_or_create(
-            session,
-            TrashBatch,
-            spec["lookup"],
-            spec["values"],
-        )
-        batches[spec["lookup"]["name"]] = batch
-        print(
-            f"  {'INSERT' if created else 'SKIP'} trash batch: "
-            f"{spec['lookup']['name']}"
-        )
-
-    await session.commit()
-    return batches
-
-
-# =========================================================
-# 7. SEED DOCUMENTS & METADATA
+# 6. SEED DOCUMENTS & METADATA
 # =========================================================
 async def seed_documents(
     session: AsyncSession,
     users,
     workspaces,
     classifications,
-    trash_batches,
 ):
     print("7. Seeding Documents, Tags, Versions, Notes...")
 
@@ -652,7 +600,6 @@ async def seed_documents(
                 "is_important": False,
                 "is_deleted": True,
                 "deleted_at": datetime.now(),
-                "trash_batch_id": trash_batches["Nhóm BTL cũ (đã giải tán)"].id,
             },
         },
     ]
@@ -938,53 +885,6 @@ async def seed_interactions(session: AsyncSession, users, workspaces, docs):
         )
         print(f"  {'INSERT' if created else 'SKIP'} download_log")
 
-    # ----- Processing jobs -----
-    job_specs = [
-        {
-            "lookup": {
-                "document_id": docs["py"].id,
-                "job_type": "virus_scan",
-            },
-            "values": {
-                "status": "done",
-                "result": {"safe": True},
-            },
-        },
-        {
-            "lookup": {
-                "document_id": docs["web"].id,
-                "job_type": "virus_scan",
-            },
-            "values": {
-                "status": "done",
-                "result": {"safe": True},
-            },
-        },
-        {
-            "lookup": {
-                "document_id": docs["db"].id,
-                "job_type": "thumbnail",
-            },
-            "values": {
-                "status": "done",
-                "result": {"generated": True, "pages": 12},
-            },
-        },
-    ]
-
-    for spec in job_specs:
-        _, created = await get_or_create(
-            session,
-            ProcessingJob,
-            spec["lookup"],
-            spec["values"],
-        )
-        print(
-            f"  {'INSERT' if created else 'SKIP'} processing_job: "
-            f"document={spec['lookup']['document_id']}, "
-            f"type={spec['lookup']['job_type']}"
-        )
-
     await session.commit()
 # =========================================================
 # 9. SEED ADDITIONAL DATA (TAGS, FOLDERS, DOCUMENTS) FOR MULTIPLE USERS
@@ -994,7 +894,6 @@ async def seed_additional_data(
     users,
     workspaces,
     classifications,
-    trash_batches,
 ):
     print("9. Seeding additional Tags, Folders, and Documents...")
 
@@ -1354,7 +1253,6 @@ async def seed_additional_data(
             "is_important": spec["is_important"],
             "is_deleted": False,
             "deleted_at": None,
-            "trash_batch_id": None,
         }
         doc, created = await get_or_create(session, Document, lookup, values)
         new_docs[spec["key"]] = doc
@@ -1443,18 +1341,11 @@ async def seed_database():
 
             folders = await seed_folders(session, users, classifications)
 
-            trash_batches = await seed_trash_batches(
-                session,
-                users,
-                workspaces,
-            )
-
             docs = await seed_documents(
                 session,
                 users,
                 workspaces,
                 classifications,
-                trash_batches,
             )
 
             await seed_interactions(
@@ -1464,7 +1355,7 @@ async def seed_database():
                 docs,
             )
 
-            await seed_additional_data(session, users, workspaces, classifications, trash_batches)
+            await seed_additional_data(session, users, workspaces, classifications)
 
             print("=" * 70)
             print("DATABASE SEEDED SUCCESSFULLY (INCREMENTAL / IDEMPOTENT)!")

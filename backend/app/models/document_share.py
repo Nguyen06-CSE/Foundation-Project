@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, ForeignKey, String, DateTime, Index, text
+from sqlalchemy import Integer, ForeignKey, String, DateTime, Index, CheckConstraint, text
 from .base import Base, TimestampMixin
 
 class DocumentShare(Base, TimestampMixin):
@@ -16,6 +16,10 @@ class DocumentShare(Base, TimestampMixin):
             "source_document_id",
             unique=True,
             postgresql_where=text("status = 'pending' AND source_document_id IS NOT NULL"),
+        ),
+        CheckConstraint(
+            "status IN ('pending', 'accepted', 'rejected', 'auto_accepted', 'expired', 'withdrawn')",
+            name="chk_document_shares_status",
         ),
     )
 

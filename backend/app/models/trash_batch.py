@@ -1,47 +1,26 @@
 # backend/app/models/trash_batch.py
-from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, List
-from datetime import datetime
-from sqlalchemy import Integer, String, DateTime, ForeignKey, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .base import Base
+"""
+DEPRECATED (Phase 4): Bảng trash_batches và mô hình ORM tương ứng đã được loại bỏ
+khỏi cơ sở dữ liệu và Base.metadata trong migration a2b3c4d5e6f7.
+File này được giữ lại như một legacy stub để duy trì khả năng tương thích mã nguồn.
+"""
+from typing import Optional, ClassVar
 
-if TYPE_CHECKING:
-    from .workspace import Workspace
-    from .user import User
-    from .document import Document
 
-class TrashBatch(Base):
+class TrashBatch:
+    """
+    DEPRECATED (Phase 4): Bảng trash_batches đã được loại bỏ khỏi DB trong migration a2b3c4d5e6f7.
+    Giao diện thùng rác hiện gom nhóm động theo ngày dựa trên Document.deleted_at.
+    """
     __tablename__ = "trash_batches"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    workspace_id: Mapped[Optional[int]] = mapped_column(
-        Integer, ForeignKey("workspaces.id", ondelete="SET NULL"), nullable=True
-    )
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
-    deleted_by: Mapped[int] = mapped_column(
-        Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=False
-    )
-    deleted_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False
-    )
-    purge_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        nullable=False
-    )
-
-    # Relationships
-    workspace: Mapped[Optional["Workspace"]] = relationship(
-        "Workspace", back_populates="trash_batches"
-    )
-    deleter: Mapped["User"] = relationship(
-        "User", foreign_keys=[deleted_by]
-    )
-    documents: Mapped[List["Document"]] = relationship(
-        "Document", back_populates="trash_batch"
-    )
+    id: Optional[int] = None
+    workspace_id: Optional[int] = None
+    name: Optional[str] = None
+    deleted_by: Optional[int] = None
+    deleted_at: Optional[object] = None
+    purge_at: Optional[object] = None
+    documents: ClassVar[Optional[object]] = None
 
     def __repr__(self) -> str:
         return f"<TrashBatch(id={self.id}, name='{self.name}', purge_at={self.purge_at})>"

@@ -30,7 +30,6 @@ from app.models import (
     Note,
     Favorite,
     DownloadLog,
-    ProcessingJob,
     DocumentStats,
 )
 

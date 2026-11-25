@@ -1,9 +1,9 @@
 {
   "alembic/env.py": {
-    "mtime": 1793187346.8152955,
-    "seen": 1793849166.5976262,
-    "ast_hash": "fbe47abe162a4cf07fe3b570cbf035e3",
-    "semantic_hash": "fbe47abe162a4cf07fe3b570cbf035e3"
+    "mtime": 1795493385.850937,
+    "seen": 1795494026.8812711,
+    "ast_hash": "0f547ca2abfaa48aad9d76810083be26",
+    "semantic_hash": ""
   },
   "alembic/versions/45ab664fbe54_restore_fts_search_vector_trigger.py": {
     "mtime": 1791636018.5558555,
@@ -108,22 +108,22 @@
     "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
   },
   "backend/app/jobs/scheduler.py": {
-    "mtime": 1793675201.0624073,
-    "seen": 1793849166.598366,
-    "ast_hash": "ef84f2cfb1e6c64dcb76a3a9c18e4272",
-    "semantic_hash": "ef84f2cfb1e6c64dcb76a3a9c18e4272"
+    "mtime": 1795572427.7592332,
+    "seen": 1795572883.678242,
+    "ast_hash": "95672df055531a8ea54e6351ff762cf2",
+    "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1794620989.2245352,
-    "seen": 1794624348.0033128,
-    "ast_hash": "bd4b277aa167fb6e7027fc405ed5d6c0",
+    "mtime": 1795440066.8115437,
+    "seen": 1795440200.0004292,
+    "ast_hash": "5fa6b62acd3f50426a9a2237d451112e",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
-    "mtime": 1793675197.8356698,
-    "seen": 1793849166.5984378,
-    "ast_hash": "ee043be38e152a27321ba1691b45ffc9",
-    "semantic_hash": "ee043be38e152a27321ba1691b45ffc9"
+    "mtime": 1795493382.0111885,
+    "seen": 1795494026.882014,
+    "ast_hash": "baf14fcd83f5a1c0a03397f7dff01a12",
+    "semantic_hash": ""
   },
   "backend/app/models/academic_class.py": {
     "mtime": 1791170670.418098,
@@ -138,10 +138,10 @@
     "semantic_hash": "437d58e16f976dd087e59a393b485b85"
   },
   "backend/app/models/category.py": {
-    "mtime": 1791170670.4183955,
-    "seen": 1793849166.598546,
+    "mtime": 1795440274.7725537,
+    "seen": 1795442025.531643,
     "ast_hash": "66d6c5e1b66eedacda29fbeef0b829e7",
-    "semantic_hash": "66d6c5e1b66eedacda29fbeef0b829e7"
+    "semantic_hash": ""
   },
   "backend/app/models/community_submission.py": {
     "mtime": 1791170670.418868,
@@ -150,10 +150,10 @@
     "semantic_hash": "e2f9ac82fa22190aa26aa306d1c01390"
   },
   "backend/app/models/document.py": {
-    "mtime": 1793187346.8182259,
-    "seen": 1793849166.5986161,
-    "ast_hash": "3f96c54eadf1ebe9fd19b0f98739d0bf",
-    "semantic_hash": "3f96c54eadf1ebe9fd19b0f98739d0bf"
+    "mtime": 1795493373.8788595,
+    "seen": 1795494026.882124,
+    "ast_hash": "987cc837bf30d1f6d8fbb1c4e7f571d7",
+    "semantic_hash": ""
   },
   "backend/app/models/document_rating.py": {
     "mtime": 1791170670.4198322,
@@ -162,9 +162,9 @@
     "semantic_hash": "996aa6c16846975939b4293b75352012"
   },
   "backend/app/models/document_share.py": {
-    "mtime": 1793951086.4400299,
-    "seen": 1793951910.268457,
-    "ast_hash": "451730a006019098d71aa14c51239fde",
+    "mtime": 1795572313.6449442,
+    "seen": 1795572883.6784441,
+    "ast_hash": "5d3c6c78890b11ace6ff0d15125aa5e3",
     "semantic_hash": ""
   },
   "backend/app/models/document_stats.py": {
@@ -222,16 +222,16 @@
     "semantic_hash": "63a38e8cb4d46a9047a3cf55555f3d1e"
   },
   "backend/app/models/notification.py": {
-    "mtime": 1793674836.5607805,
-    "seen": 1793849166.599047,
-    "ast_hash": "877fafdc3c332bccd736f8e272b7418c",
-    "semantic_hash": "877fafdc3c332bccd736f8e272b7418c"
+    "mtime": 1795438911.4098313,
+    "seen": 1795439371.3142378,
+    "ast_hash": "d98711128aada850af6b65e14cf7348b",
+    "semantic_hash": ""
   },
   "backend/app/models/processing_job.py": {
-    "mtime": 1791170670.4212599,
-    "seen": 1793849166.599083,
-    "ast_hash": "48fa8c8dcfeabf68cabb6c44840a4048",
-    "semantic_hash": "48fa8c8dcfeabf68cabb6c44840a4048"
+    "mtime": 1795493305.3558764,
+    "seen": 1795494026.882431,
+    "ast_hash": "e49a0684b2dd70d0aa5c2777444afda8",
+    "semantic_hash": ""
   },
   "backend/app/models/subject.py": {
     "mtime": 1791170670.421522,
@@ -252,22 +252,22 @@
     "semantic_hash": "a2b4eb52819d3685ffc6c4b66ef89774"
   },
   "backend/app/models/trash_batch.py": {
-    "mtime": 1791170670.4221873,
-    "seen": 1793849166.599224,
-    "ast_hash": "3a28e6fb4e4b170df2d478944ca8b004",
-    "semantic_hash": "3a28e6fb4e4b170df2d478944ca8b004"
+    "mtime": 1795493280.4338205,
+    "seen": 1795494026.8825128,
+    "ast_hash": "739a2168a0a041e384d01711c5e8851e",
+    "semantic_hash": ""
   },
   "backend/app/models/user.py": {
-    "mtime": 1792495074.4856129,
-    "seen": 1793849166.599261,
-    "ast_hash": "2a914b5007ad1eb775369bd925ee9c07",
-    "semantic_hash": "2a914b5007ad1eb775369bd925ee9c07"
+    "mtime": 1795493315.9730077,
+    "seen": 1795494026.882514,
+    "ast_hash": "53927169d00e2578d2e757415bf60342",
+    "semantic_hash": ""
   },
   "backend/app/models/workspace.py": {
-    "mtime": 1793501637.474651,
-    "seen": 1793849166.599297,
-    "ast_hash": "e8051769babcd598aaf874cdee6986e0",
-    "semantic_hash": "e8051769babcd598aaf874cdee6986e0"
+    "mtime": 1795493325.8486464,
+    "seen": 1795494026.882515,
+    "ast_hash": "2f79d24f35875108ec68b3754ed343a3",
+    "semantic_hash": ""
   },
   "backend/app/models/workspace_invitation.py": {
     "mtime": 1791170670.4231315,
@@ -324,9 +324,9 @@
     "semantic_hash": "40776b4ba50e2b21aa62282848c289eb"
   },
   "backend/app/routers/documents.py": {
-    "mtime": 1794621449.7295976,
-    "seen": 1794624348.0044239,
-    "ast_hash": "39229547beb01d17254d838081db5cb3",
+    "mtime": 1795426346.1871083,
+    "seen": 1795427804.111786,
+    "ast_hash": "e1765c56266c4c2336cc4eb07b1dc800",
     "semantic_hash": ""
   },
   "backend/app/routers/download_logs.py": {
@@ -348,15 +348,15 @@
     "semantic_hash": "94c0b222edcb5c8f88125585613316d3"
   },
   "backend/app/routers/groups.py": {
-    "mtime": 1794621493.0531416,
-    "seen": 1794624348.004522,
-    "ast_hash": "00479aca4755ce2dce565de2df3e4b79",
+    "mtime": 1795426355.2077818,
+    "seen": 1795427804.111886,
+    "ast_hash": "b3ce63ac6ff7ccc8e0938f12d713cfbe",
     "semantic_hash": ""
   },
   "backend/app/routers/library.py": {
-    "mtime": 1794561335.564794,
-    "seen": 1794577212.4403799,
-    "ast_hash": "687a799194d9e0ba98d563b27fb3e79f",
+    "mtime": 1795437878.6732337,
+    "seen": 1795438286.24111,
+    "ast_hash": "749758c5115046378accc2a9dab1adfe",
     "semantic_hash": ""
   },
   "backend/app/routers/notes.py": {
@@ -414,10 +414,10 @@
     "semantic_hash": "a07972b1fec91a7158e1f33c4629c324"
   },
   "backend/app/routers/workspaces.py": {
-    "mtime": 1791170670.4273434,
-    "seen": 1793849166.600213,
-    "ast_hash": "41f23466466366455dc04d12c939413b",
-    "semantic_hash": "41f23466466366455dc04d12c939413b"
+    "mtime": 1795441309.7441812,
+    "seen": 1795442025.532779,
+    "ast_hash": "b5e521a9532f01d53daade4debc3e56d",
+    "semantic_hash": ""
   },
   "backend/app/schemas/__init__.py": {
     "mtime": 1791170670.4274359,
@@ -474,10 +474,10 @@
     "semantic_hash": "55f1a56c30cc7df461802386def67505"
   },
   "backend/app/schemas/group.py": {
-    "mtime": 1792495074.4899676,
-    "seen": 1793849166.600567,
-    "ast_hash": "83624261af389cc484faa2c686d84ff8",
-    "semantic_hash": "83624261af389cc484faa2c686d84ff8"
+    "mtime": 1795441305.8616865,
+    "seen": 1795442025.5329878,
+    "ast_hash": "85a6ebed744a6963e65bb805dde2e5d4",
+    "semantic_hash": ""
   },
   "backend/app/schemas/library.py": {
     "mtime": 1793675607.6683686,
@@ -564,15 +564,15 @@
     "semantic_hash": "0e92cbe56e1f1f50d5a567f85ce32109"
   },
   "backend/app/services/group_service.py": {
-    "mtime": 1793872510.393062,
-    "seen": 1793872591.191326,
-    "ast_hash": "f690f4c15981a930322473692681acc4",
+    "mtime": 1795441316.6080492,
+    "seen": 1795442025.5333529,
+    "ast_hash": "409eaf8db2c64f0c296fb59d764f3a15",
     "semantic_hash": ""
   },
   "backend/app/services/search_service.py": {
-    "mtime": 1794976197.3088405,
-    "seen": 1794976321.741556,
-    "ast_hash": "cfe908a70293c2a4efbe8e6510ea5895",
+    "mtime": 1795430553.2102125,
+    "seen": 1795430680.513042,
+    "ast_hash": "e16439b54bf8f25fdc73dca6bfa32a42",
     "semantic_hash": ""
   },
   "backend/app/services/workspace_tag_service.py": {
@@ -612,10 +612,10 @@
     "semantic_hash": "63f2a7ed9bca04fb29fb5a4c1eb74add"
   },
   "backend/db/seed.py": {
-    "mtime": 1791170670.4322288,
-    "seen": 1793849166.6015308,
-    "ast_hash": "8ba1bdc333fdcd702b318aedddd36538",
-    "semantic_hash": "8ba1bdc333fdcd702b318aedddd36538"
+    "mtime": 1795494891.4038265,
+    "seen": 1795495024.135535,
+    "ast_hash": "403ae351c5c66efc96f9e0c7d25f55b9",
+    "semantic_hash": ""
   },
   "backend/db/seed_activity_heat.py": {
     "mtime": 1793501637.4784741,
@@ -630,16 +630,16 @@
     "semantic_hash": "65ac37d088a76d76e6d0a7b0845fe109"
   },
   "backend/db/seed_incremental.py": {
-    "mtime": 1791170670.4325125,
-    "seen": 1793849166.6016371,
-    "ast_hash": "7257ae917692719f0aae33b8cd79a6af",
-    "semantic_hash": "7257ae917692719f0aae33b8cd79a6af"
+    "mtime": 1795494887.3871753,
+    "seen": 1795495024.135584,
+    "ast_hash": "a92bc2f1ab6b1a017dd7ffa99b971404",
+    "semantic_hash": ""
   },
   "backend/db/sync_group_schema.py": {
-    "mtime": 1791170670.432636,
-    "seen": 1793849166.6016681,
-    "ast_hash": "dffa4581fd902192c5b972e92939af55",
-    "semantic_hash": "dffa4581fd902192c5b972e92939af55"
+    "mtime": 1795493396.3862479,
+    "seen": 1795494026.8841689,
+    "ast_hash": "13dba5ba9e26b1a784204fbdb0c532f7",
+    "semantic_hash": ""
   },
   "backend/tests/conftest.py": {
     "mtime": 1794561335.5665474,
@@ -900,9 +900,9 @@
     "semantic_hash": "3b18270b966427e03af31d7647afd7a3"
   },
   "frontend/digital-library/src/components/shared/documents/DocumentDetailView.tsx": {
-    "mtime": 1794901662.909531,
-    "seen": 1794912311.204832,
-    "ast_hash": "4e84a26e713d0bca8bc54d9e1f253583",
+    "mtime": 1795428404.062469,
+    "seen": 1795429110.684722,
+    "ast_hash": "c1c545522c81f03fdb10d0b8391d1b92",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentFilterBar.tsx": {
@@ -912,9 +912,9 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentListView.tsx": {
-    "mtime": 1794901640.5518181,
-    "seen": 1794912311.2048671,
-    "ast_hash": "dae1ce95ec933209626db3469b447349",
+    "mtime": 1795428404.062482,
+    "seen": 1795429110.6847548,
+    "ast_hash": "33ef2245bc180884c1e586aa3035ece8",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/shared/documents/DocumentRow.tsx": {
@@ -1212,9 +1212,9 @@
     "semantic_hash": "98cba6095b1a21622b1a7b2e15a71efa"
   },
   "frontend/digital-library/src/hooks/useDocumentFilters.ts": {
-    "mtime": 1794622188.554889,
-    "seen": 1794624348.010134,
-    "ast_hash": "870f995e311796db93045ba5418f83fd",
+    "mtime": 1795428919.6299295,
+    "seen": 1795429110.6865659,
+    "ast_hash": "3e6a1c29b2430cc424433ae3a62849cd",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/hooks/useHighlightElement.ts": {
@@ -1302,9 +1302,9 @@
     "semantic_hash": "964bb4abeb7fc18cf5e46f952fbea957"
   },
   "frontend/digital-library/src/pages/group/GroupSpace.tsx": {
-    "mtime": 1794622780.5443907,
-    "seen": 1794624348.010615,
-    "ast_hash": "bef97ca6bc168c1a666d055e5c8f1bd5",
+    "mtime": 1795428771.8519711,
+    "seen": 1795429110.6870131,
+    "ast_hash": "6f92a19c3a0444886e4d44c4098b842e",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/components/cards/GroupDocumentCard.tsx": {
@@ -1338,9 +1338,9 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/components/sections/GroupDocumentsSection.tsx": {
-    "mtime": 1794622807.2642455,
-    "seen": 1794624348.010877,
-    "ast_hash": "f78f5f75c4830817d5d0b88fc867a35b",
+    "mtime": 1795428771.8544333,
+    "seen": 1795429110.687244,
+    "ast_hash": "6a1d2c5ed18ac14188d94d5e24d5bc3c",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/components/sections/GroupFoldersSection.tsx": {
@@ -1362,9 +1362,9 @@
     "semantic_hash": "32fc4e430f75c3726a5373d2478046bd"
   },
   "frontend/digital-library/src/pages/group/components/tabs/DocumentsTab.tsx": {
-    "mtime": 1794622703.735735,
-    "seen": 1794624348.011009,
-    "ast_hash": "0b12028746da096b53a08cd8c305eba5",
+    "mtime": 1795428771.8529763,
+    "seen": 1795429110.687357,
+    "ast_hash": "e5e7dfb9a6babed840c9cf09e0ad8820",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/components/tabs/MembersTab.tsx": {
@@ -1404,15 +1404,15 @@
     "semantic_hash": "fbc14e1c55e64379d461bfc02983bbf8"
   },
   "frontend/digital-library/src/pages/group/hooks/useGroupDocuments.ts": {
-    "mtime": 1794624293.8062317,
-    "seen": 1794624348.011283,
-    "ast_hash": "5dabe16a2b980d645dc8889427303b84",
+    "mtime": 1795428925.2609143,
+    "seen": 1795429110.687577,
+    "ast_hash": "10d86202025174fb23220e5e2d6f9122",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/hooks/useGroupFilters.ts": {
-    "mtime": 1794912111.026062,
-    "seen": 1794912311.20771,
-    "ast_hash": "0f7c73879af353168f4843016e95b0fd",
+    "mtime": 1795426408.992892,
+    "seen": 1795427804.119841,
+    "ast_hash": "ded03a74ce5c26264c1e5f15a5c49b0e",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/hooks/useGroupFolders.ts": {
@@ -1428,9 +1428,9 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/group/types/groupSpace.types.ts": {
-    "mtime": 1794622554.8339033,
-    "seen": 1794624348.0113258,
-    "ast_hash": "8edecc68d035f067b26d79afc7b7ce03",
+    "mtime": 1795428771.8523986,
+    "seen": 1795429110.68768,
+    "ast_hash": "6fe03b7bdf3d134a35859ca91082131c",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/LibraryDocumentDetail.tsx": {
@@ -1452,9 +1452,9 @@
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/LibrarySubject.tsx": {
-    "mtime": 1794907863.3485074,
-    "seen": 1794912311.2078888,
-    "ast_hash": "1d2d7c3e9b7d757d7d31cec17bfe57b3",
+    "mtime": 1795428925.254789,
+    "seen": 1795429110.687787,
+    "ast_hash": "230445633e90b69c91757fb5449bb86c",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/library/admin/LibraryAdmin.tsx": {
@@ -1488,14 +1488,14 @@
     "semantic_hash": "cca440403d069f1d0e2a31f2e570ee94"
   },
   "frontend/digital-library/src/pages/personal/PersonalDashboard.tsx": {
-    "mtime": 1793947273.1083138,
-    "seen": 1793951910.275511,
-    "ast_hash": "86655d42295a260348ca34924a31e829",
+    "mtime": 1795401545.1305544,
+    "seen": 1795418804.562502,
+    "ast_hash": "895c214f5107cf61b16689661bf5dc06",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/personal/PersonalDocuments.tsx": {
-    "mtime": 1794622356.816863,
-    "seen": 1794624348.0116851,
+    "mtime": 1795428771.855951,
+    "seen": 1795429110.6879811,
     "ast_hash": "0699c95eab2194356bb617424ad1990f",
     "semantic_hash": ""
   },
@@ -1530,9 +1530,9 @@
     "semantic_hash": "30da41e08bd07b2164f2e9e4af3440b5"
   },
   "frontend/digital-library/src/pages/personal/components/PersonalDocumentsSection.tsx": {
-    "mtime": 1794907859.3217804,
-    "seen": 1794912311.208284,
-    "ast_hash": "ca971b10a5a2da427f817bb9f2b90b6e",
+    "mtime": 1795428771.856913,
+    "seen": 1795429110.688142,
+    "ast_hash": "d672d084cb72b94445f234a0d319f340",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/personal/components/PersonalFolderModalContainer.tsx": {
@@ -1626,9 +1626,9 @@
     "semantic_hash": "1ea124f10cfbc3befd351412dcd8894d"
   },
   "frontend/digital-library/src/pages/personal/hooks/usePersonalDocuments.ts": {
-    "mtime": 1794912140.031235,
-    "seen": 1794912311.2088351,
-    "ast_hash": "2029a12fd98f779a91291881c69a5e1c",
+    "mtime": 1795428925.2547388,
+    "seen": 1795429110.688693,
+    "ast_hash": "119bc53d6bcd89355fe9dae42ff913d4",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/pages/personal/hooks/usePersonalFolders.ts": {
@@ -1692,9 +1692,9 @@
     "semantic_hash": "afcc677d3e00cb8c659ee85a96ddca64"
   },
   "frontend/digital-library/src/services/documentService.ts": {
-    "mtime": 1794621507.4787126,
-    "seen": 1794624348.0129359,
-    "ast_hash": "d199dee64ec5758057176c0d833a6f2c",
+    "mtime": 1795428931.905129,
+    "seen": 1795429110.6891341,
+    "ast_hash": "a117818a4e1af413b8e4887c6013962d",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/services/folderService.ts": {
@@ -1704,9 +1704,9 @@
     "semantic_hash": "f48a32ef2386991e862e77a1f6c3c337"
   },
   "frontend/digital-library/src/services/groupService.ts": {
-    "mtime": 1794622174.0978227,
-    "seen": 1794624348.012966,
-    "ast_hash": "da949fc841bc8fb599585337e74cb91f",
+    "mtime": 1795428931.9051292,
+    "seen": 1795429110.689164,
+    "ast_hash": "245fb5b4f13ceec39c046ea8566f6782",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/services/libraryService.ts": {
@@ -1788,9 +1788,9 @@
     "semantic_hash": "da656baa34adb6ba6c412ae96d08cf0d"
   },
   "frontend/digital-library/src/types/document.ts": {
-    "mtime": 1794621503.7041306,
-    "seen": 1794624348.013439,
-    "ast_hash": "e9a501f2f5cfc4108042fc8f17d3e5ea",
+    "mtime": 1795426359.6837156,
+    "seen": 1795427804.122498,
+    "ast_hash": "6659e5d8bbd1b59079ea19ee760aa5e9",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/types/group.ts": {
@@ -1973,264 +1973,6 @@
     "ast_hash": "3d9aba53ae37595bcecfb3b9fd8d2e15",
     "semantic_hash": ""
   },
-  "docs/ACTIVITY_TRACKING.md": {
-    "mtime": 1793954004.601471,
-    "seen": 1794543497.161773,
-    "ast_hash": "0745ebdcb0d4bf6fc22353efb4a64767",
-    "semantic_hash": ""
-  },
-  "docs/AUDIT_REPORT.md": {
-    "mtime": 1793954022.206152,
-    "seen": 1794543497.1617742,
-    "ast_hash": "0543112e30cc64d2747e3ba96078702a",
-    "semantic_hash": ""
-  },
-  "docs/LOCAL_DEVELOPMENT_GUIDE.md": {
-    "mtime": 1794628330.8322246,
-    "seen": 1794628397.736327,
-    "ast_hash": "f55b019f7f1137b8d4c18e93a73e5e1a",
-    "semantic_hash": ""
-  },
-  "docs/architecture/STORAGE_SYSTEM.md": {
-    "mtime": 1793954030.4604416,
-    "seen": 1794543497.1617768,
-    "ast_hash": "5a77a827e28d186862878e51f548118c",
-    "semantic_hash": ""
-  },
-  "docs/deployment/BUG_FIX_REPORT.md": {
-    "mtime": 1792816950.3596995,
-    "seen": 1793850273.7399318,
-    "ast_hash": "80334151c6cbc3ae8cabe4ef04450d38",
-    "semantic_hash": ""
-  },
-  "docs/deployment/ENV_VARIABLES.md": {
-    "mtime": 1792816950.3600333,
-    "seen": 1793850273.7399318,
-    "ast_hash": "818cc8c1d3ba3ff889e3e47d4cbc0aeb",
-    "semantic_hash": ""
-  },
-  "docs/deployment/README.md": {
-    "mtime": 1794628495.1558645,
-    "seen": 1794628609.587347,
-    "ast_hash": "318af2e1938bcc09bc958a49102a77fd",
-    "semantic_hash": ""
-  },
-  "docs/deployment/STORAGE_R2.md": {
-    "mtime": 1792816950.360872,
-    "seen": 1793850273.739937,
-    "ast_hash": "c5e1537c0f5e57dace8ad15848e865d0",
-    "semantic_hash": ""
-  },
-  "docs/deployment/TROUBLESHOOTING.md": {
-    "mtime": 1792816950.36122,
-    "seen": 1793850273.739938,
-    "ast_hash": "c9199812e78c0a30c753254167719c3b",
-    "semantic_hash": ""
-  },
-  "docs/feat/activity-tracking/API.md": {
-    "mtime": 1793501637.4809122,
-    "seen": 1793850273.739939,
-    "ast_hash": "f285c0d52c4b4d3e873ec41d9babd289",
-    "semantic_hash": ""
-  },
-  "docs/feat/activity-tracking/BUSINESS_RULES.md": {
-    "mtime": 1793501637.4813387,
-    "seen": 1793850273.739939,
-    "ast_hash": "ec145125558af70e453a277f41b86d41",
-    "semantic_hash": ""
-  },
-  "docs/feat/activity-tracking/DATABASE.md": {
-    "mtime": 1793501637.4819927,
-    "seen": 1793850273.7399402,
-    "ast_hash": "4fa4a022e325db215686534acaa3d804",
-    "semantic_hash": ""
-  },
-  "docs/feat/activity-tracking/IMPLEMENTATION.md": {
-    "mtime": 1793501637.4823196,
-    "seen": 1793850273.7399411,
-    "ast_hash": "caeacbc750288f135a68b1d2a8b16c1c",
-    "semantic_hash": ""
-  },
-  "docs/feat/activity-tracking/README.md": {
-    "mtime": 1793954055.5610206,
-    "seen": 1794543497.162007,
-    "ast_hash": "683bb26f66bb6b0dc5763fa52f85c959",
-    "semantic_hash": ""
-  },
-  "docs/feat/bundle/API.md": {
-    "mtime": 1791170670.4346237,
-    "seen": 1793850273.739943,
-    "ast_hash": "e16b3a79ce028d4359cc13a895de5d32",
-    "semantic_hash": ""
-  },
-  "docs/feat/bundle/BUSINESS_RULES.md": {
-    "mtime": 1791170670.4350898,
-    "seen": 1793850273.739943,
-    "ast_hash": "3ccc19ed404383534f9ddba25a10e079",
-    "semantic_hash": ""
-  },
-  "docs/feat/bundle/DATABASE.md": {
-    "mtime": 1791170670.435439,
-    "seen": 1793850273.739944,
-    "ast_hash": "a45f94f11a9f5eab2477a453896849e9",
-    "semantic_hash": ""
-  },
-  "docs/feat/bundle/FRONTEND.md": {
-    "mtime": 1791170670.4357023,
-    "seen": 1793850273.739945,
-    "ast_hash": "e784f6071ec5757324714c31db181e64",
-    "semantic_hash": ""
-  },
-  "docs/feat/bundle/README.md": {
-    "mtime": 1793954055.5765576,
-    "seen": 1794543497.162136,
-    "ast_hash": "7ede7a20198e1add893a1403c66a99a5",
-    "semantic_hash": ""
-  },
-  "docs/feat/community-library/implementation.md": {
-    "mtime": 1791170670.4363556,
-    "seen": 1793850273.739946,
-    "ast_hash": "ed7a563d224ac2700a4c2bfd715afb2c",
-    "semantic_hash": ""
-  },
-  "docs/feat/community-library/management-extension.md": {
-    "mtime": 1791170670.4371452,
-    "seen": 1793850273.739947,
-    "ast_hash": "00c885cbd16086a619678a5bc0ff0236",
-    "semantic_hash": ""
-  },
-  "docs/feat/community-library/spec.md": {
-    "mtime": 1791170670.4376242,
-    "seen": 1793850273.739948,
-    "ast_hash": "150e0f08ed3507d56bb99bed06776341",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-preview-and-thumbnails/API.md": {
-    "mtime": 1791684917.1362298,
-    "seen": 1793850273.739949,
-    "ast_hash": "d7848fade775586392063591abdf3487",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-preview-and-thumbnails/BUSINESS_RULES.md": {
-    "mtime": 1791684954.6040661,
-    "seen": 1793850273.7399502,
-    "ast_hash": "c29b401b5eddfae95c45e1ddd6545330",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-preview-and-thumbnails/DATABASE.md": {
-    "mtime": 1791684934.818974,
-    "seen": 1793850273.7399502,
-    "ast_hash": "aae9e14cc532fb0c676ef17b6bc1a949",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-preview-and-thumbnails/IMPLEMENTATION.md": {
-    "mtime": 1791684975.849746,
-    "seen": 1793850273.7399511,
-    "ast_hash": "32586d17033e95ff8fc9455d5c1ae103",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-preview-and-thumbnails/README.md": {
-    "mtime": 1793954055.6016037,
-    "seen": 1794543497.162343,
-    "ast_hash": "7a6f803d7ab83eb6f6f69f0e389bfeac",
-    "semantic_hash": ""
-  },
-  "docs/feat/markdown-view/BUSINESS_RULES.md": {
-    "mtime": 1791206573.098238,
-    "seen": 1793850273.7399528,
-    "ast_hash": "03f3b467b50731031e75604d0fad7c59",
-    "semantic_hash": ""
-  },
-  "docs/feat/markdown-view/DATABASE.md": {
-    "mtime": 1791206573.0871594,
-    "seen": 1793850273.739954,
-    "ast_hash": "68301c833c3abaaa4cadbe144a67be3d",
-    "semantic_hash": ""
-  },
-  "docs/feat/markdown-view/IMPLEMENTATION.md": {
-    "mtime": 1791206573.0871046,
-    "seen": 1793850273.739954,
-    "ast_hash": "08232cad0d88806ec812e98323d8c67e",
-    "semantic_hash": ""
-  },
-  "docs/feat/markdown-view/README.md": {
-    "mtime": 1793954055.639471,
-    "seen": 1794543497.1626549,
-    "ast_hash": "dfece046e10ea2f97ca01dd6cbf1fc7b",
-    "semantic_hash": ""
-  },
-  "docs/feat/personal-dashboard/PERSONAL_DASHBOARD.md": {
-    "mtime": 1793501637.483197,
-    "seen": 1793850273.739956,
-    "ast_hash": "fee81b260769c7fc51322c8fce807ee2",
-    "semantic_hash": ""
-  },
-  "docs/feat/system-enhancements-2026/API.md": {
-    "mtime": 1793846677.60458,
-    "seen": 1793850273.739957,
-    "ast_hash": "01b5cdc2a2fb88c365d32cd1f9295246",
-    "semantic_hash": ""
-  },
-  "docs/feat/system-enhancements-2026/BUSINESS_RULES.md": {
-    "mtime": 1793846738.610179,
-    "seen": 1793850273.739957,
-    "ast_hash": "979205126a54127a2a1502f7638458de",
-    "semantic_hash": ""
-  },
-  "docs/feat/system-enhancements-2026/DATABASE.md": {
-    "mtime": 1793846651.8846118,
-    "seen": 1793850273.739958,
-    "ast_hash": "2eea795d60df04387fece48585492359",
-    "semantic_hash": ""
-  },
-  "docs/feat/system-enhancements-2026/FRONTEND.md": {
-    "mtime": 1793846709.4321866,
-    "seen": 1793850273.739959,
-    "ast_hash": "2d8d0f28ad656d9c68cd79efff226e1b",
-    "semantic_hash": ""
-  },
-  "docs/feat/system-enhancements-2026/README.md": {
-    "mtime": 1793954055.6528656,
-    "seen": 1794543497.162797,
-    "ast_hash": "6be613fb7eb25d89ed760479822c78ae",
-    "semantic_hash": ""
-  },
-  "docs/feat/system-enhancements-2026/SYSTEM_ENHANCEMENTS.md": {
-    "mtime": 1793676112.2628639,
-    "seen": 1793850273.7399611,
-    "ast_hash": "977ef2d6435eaa6dacc5cfb44103e6cf",
-    "semantic_hash": ""
-  },
-  "docs/project-management/PROJECT_STATUS_REPORT.md": {
-    "mtime": 1794631306.6698546,
-    "seen": 1794632021.45959,
-    "ast_hash": "5d038fc7ee8b2ae8e05d30b8aa244711",
-    "semantic_hash": ""
-  },
-  "docs/project-management/backlog.md": {
-    "mtime": 1791170670.4415493,
-    "seen": 1793850273.739965,
-    "ast_hash": "97f2052ec5364a6f7f953168937736e2",
-    "semantic_hash": ""
-  },
-  "docs/project-management/mau-slide-thuyet-trinh.md": {
-    "mtime": 1794632167.5414498,
-    "seen": 1794892280.397702,
-    "ast_hash": "4c177a90536ee631aa0d57e83126a806",
-    "semantic_hash": ""
-  },
-  "docs/project-management/report/10-05-2026-Nguyen.md": {
-    "mtime": 1791206573.0871282,
-    "seen": 1793850273.739966,
-    "ast_hash": "11723f492bc4a3ee87a357b928f3868a",
-    "semantic_hash": ""
-  },
-  "docs/project-management/roadmap.md": {
-    "mtime": 1791170670.4427302,
-    "seen": 1793850273.7399669,
-    "ast_hash": "211002db6d6d8831ceacc00938c05594",
-    "semantic_hash": ""
-  },
   "frontend/AGENTS.md": {
     "mtime": 1791170670.6080906,
     "seen": 1793850273.7399712,
@@ -2295,426 +2037,6 @@
     "mtime": 1793849731.9835906,
     "seen": 1793850273.739979,
     "ast_hash": "01075d4f23a927cc7ef7bfb6e510b7fe",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/cai-dat(1).png": {
-    "mtime": 1791170670.4446254,
-    "seen": 1793850273.7399821,
-    "ast_hash": "54a28c292128587f2d22851300a5d38a",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/cai-dat(2).png": {
-    "mtime": 1791170670.4463828,
-    "seen": 1793850273.7399821,
-    "ast_hash": "9ee03d632687fd6ee8eedfb05aeb8dd8",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/cai-dat(3).png": {
-    "mtime": 1791170670.448515,
-    "seen": 1793850273.739983,
-    "ast_hash": "b517d07a8a746271c86336b11498d8ac",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/giao-dien-dang-nhap.png": {
-    "mtime": 1791170670.4544983,
-    "seen": 1793850273.7399838,
-    "ast_hash": "611492012020fb05237e5a96c03d1306",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(1).png": {
-    "mtime": 1791170670.4585493,
-    "seen": 1793850273.739985,
-    "ast_hash": "275a08b089375fc88d8f4e8a0f5d11a1",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(10).png": {
-    "mtime": 1791170670.460765,
-    "seen": 1793850273.739986,
-    "ast_hash": "c70cb33e604fa314d36688bb530fc743",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(11).png": {
-    "mtime": 1791170670.462255,
-    "seen": 1793850273.739987,
-    "ast_hash": "5149bdbe68506406a4c566446db7de5b",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(12).png": {
-    "mtime": 1791170670.464705,
-    "seen": 1793850273.739987,
-    "ast_hash": "fc240533520f03c8cd27497ecbdd8a00",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(13)-thung-rac.png": {
-    "mtime": 1791170670.4663777,
-    "seen": 1793850273.7399879,
-    "ast_hash": "9269ccc33c6ad24c4119a946dc7d3229",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(2).png": {
-    "mtime": 1791170670.469583,
-    "seen": 1793850273.739989,
-    "ast_hash": "e006959e7626e716fdeec550921a897e",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(3).png": {
-    "mtime": 1791170670.4712114,
-    "seen": 1793850273.73999,
-    "ast_hash": "8061335a97abdb9fcf4cff4d26e4cfc8",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(4).png": {
-    "mtime": 1791170670.474213,
-    "seen": 1793850273.73999,
-    "ast_hash": "76a65029440ac7766aaabf6003ba833f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(5).png": {
-    "mtime": 1791170670.4765744,
-    "seen": 1793850273.739991,
-    "ast_hash": "fe0aa02ebc22801aa4ec098a1ee2ffc0",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(6).png": {
-    "mtime": 1791170670.478804,
-    "seen": 1793850273.7399921,
-    "ast_hash": "60fd315444e5640556ccd8ec12b97e15",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(7).png": {
-    "mtime": 1791170670.4812026,
-    "seen": 1793850273.739993,
-    "ast_hash": "655b408ecf05aa8ff96c340ab8c219fe",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(8).png": {
-    "mtime": 1791170670.4836295,
-    "seen": 1793850273.739994,
-    "ast_hash": "2dc2e9ebbf9f6f323bea220ceaf5b185",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT(9).png": {
-    "mtime": 1791170670.4861522,
-    "seen": 1793850273.739994,
-    "ast_hash": "6a2d51911c98b06ba8f9008946224329",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(1).png": {
-    "mtime": 1791170670.4884214,
-    "seen": 1793850273.7399948,
-    "ast_hash": "eb0633fdf6b08424a20031c6812e40a3",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(2).png": {
-    "mtime": 1791170670.4910069,
-    "seen": 1793850273.739996,
-    "ast_hash": "0f55964aa8914894910a3850f1031643",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(3).png": {
-    "mtime": 1791170670.4939132,
-    "seen": 1793850273.739996,
-    "ast_hash": "7f7970db5bfc8d45e110e92b5a69467f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(4).png": {
-    "mtime": 1791170670.4961426,
-    "seen": 1793850273.739997,
-    "ast_hash": "98097fc23c2fb6d542a9b4f107ef629c",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(5).png": {
-    "mtime": 1791170670.4996805,
-    "seen": 1793850273.7399979,
-    "ast_hash": "81a45a26b7cd4b7716d4c5d3a965eb66",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem(6).png": {
-    "mtime": 1791170670.5008736,
-    "seen": 1793850273.739999,
-    "ast_hash": "c6cb5c60d549c6036d11d5b60af03068",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(1).png": {
-    "mtime": 1791170670.503387,
-    "seen": 1793850273.739999,
-    "ast_hash": "c902fb9020a42fdde285bc3db74aaa5a",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(2).png": {
-    "mtime": 1791170670.5064025,
-    "seen": 1793850273.74,
-    "ast_hash": "1a30358a1fc6c005cdd277b24c01cd73",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(3).png": {
-    "mtime": 1791170670.5078123,
-    "seen": 1793850273.740001,
-    "ast_hash": "e367f406ec932cf9acbf2998c8b52f21",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER(4).png": {
-    "mtime": 1791170670.5113447,
-    "seen": 1793850273.740001,
-    "ast_hash": "053f903c1dd4e98f5e2bd06ba153ecdf",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(1).png": {
-    "mtime": 1791170670.5134687,
-    "seen": 1793850273.7400022,
-    "ast_hash": "4e8bc1f02a12493d0a05f1715ac02749",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(2).png": {
-    "mtime": 1791170670.5147877,
-    "seen": 1793850273.740003,
-    "ast_hash": "dcf58e0bb4aaec76fd4a7ac83613561f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(3).png": {
-    "mtime": 1791170670.5169675,
-    "seen": 1793850273.740004,
-    "ast_hash": "c1c03ee4102c901853b873e0a8f9f725",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(4).png": {
-    "mtime": 1791170670.5187848,
-    "seen": 1793850273.740004,
-    "ast_hash": "992d63772366eacdb4004768981bc8e4",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(5).png": {
-    "mtime": 1791170670.5213451,
-    "seen": 1793850273.740005,
-    "ast_hash": "3f0033cd8cb922757a350bb13e6efdcf",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(6).png": {
-    "mtime": 1791170670.5227723,
-    "seen": 1793850273.740006,
-    "ast_hash": "b1e60226f908674a50e375979813c44d",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(7).png": {
-    "mtime": 1791170670.524693,
-    "seen": 1793850273.740007,
-    "ast_hash": "b8a1e7dedc93489154c42403f19d6a2e",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-LOC(8).png": {
-    "mtime": 1791170670.5259252,
-    "seen": 1793850273.740007,
-    "ast_hash": "0f99034ffc7f29ab73463b36c1ca440f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-TIMKIEM(1).png": {
-    "mtime": 1791170670.5271833,
-    "seen": 1793850273.7400079,
-    "ast_hash": "e99a2be51592d81b19854badedeb8401",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-TIMKIEM(2).png": {
-    "mtime": 1791170670.5282629,
-    "seen": 1793850273.740009,
-    "ast_hash": "0a1240a7e73e66a7461c6ff9a350f47b",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(1).png": {
-    "mtime": 1791170670.530737,
-    "seen": 1793850273.74001,
-    "ast_hash": "8dc20d4e8d715a3acd855ab891224ca3",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(2).png": {
-    "mtime": 1791170670.5341313,
-    "seen": 1793850273.74001,
-    "ast_hash": "2788ea1d255f0987fb966592bf052f31",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(3).png": {
-    "mtime": 1791170670.5380218,
-    "seen": 1793850273.740011,
-    "ast_hash": "67a4f5d59f9b9ae5b8d29822a4279d13",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD(4).png": {
-    "mtime": 1791170670.5407283,
-    "seen": 1793850273.740012,
-    "ast_hash": "53a256b3ad21062938d43575fba75f7f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-ca-nhan.png": {
-    "mtime": 1791170670.5434735,
-    "seen": 1793850273.7400131,
-    "ast_hash": "778dc5ac3995623d627c599086b2ee01",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(1).png": {
-    "mtime": 1791170670.5446894,
-    "seen": 1793850273.740014,
-    "ast_hash": "5d0d3c85673d816f574c46ee8f63042e",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(10).png": {
-    "mtime": 1791170670.5462744,
-    "seen": 1793850273.740014,
-    "ast_hash": "d5eaa1a66457ec68e456d1eba97f543e",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(11).png": {
-    "mtime": 1791170670.547659,
-    "seen": 1793850273.740015,
-    "ast_hash": "6f3037e5f0927e1909ffa38ed9469a90",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(12).png": {
-    "mtime": 1791170670.5494838,
-    "seen": 1793850273.7400162,
-    "ast_hash": "44aec3c503e1b4e208eea3a678fc755d",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(13).png": {
-    "mtime": 1791170670.5511107,
-    "seen": 1793850273.740017,
-    "ast_hash": "f7c9a23549fc9466f0e560c4c62f3bea",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(14).png": {
-    "mtime": 1791170670.5540745,
-    "seen": 1793850273.740017,
-    "ast_hash": "3d875eda4262a04017aa22b48538ef86",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(15).png": {
-    "mtime": 1791170670.556241,
-    "seen": 1793850273.740018,
-    "ast_hash": "87504a58149624fa1ce9202f6f93363d",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(16).png": {
-    "mtime": 1791170670.5577662,
-    "seen": 1793850273.7400188,
-    "ast_hash": "9b176cf26d3bd80e251ce919001bc82f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(17).png": {
-    "mtime": 1791170670.559562,
-    "seen": 1793850273.74002,
-    "ast_hash": "1a703bb9070324cf7c10f96aceaab1e8",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(18).png": {
-    "mtime": 1791170670.561287,
-    "seen": 1793850273.74002,
-    "ast_hash": "404564ce132306d95b9bedce1e145161",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(19).png": {
-    "mtime": 1791170670.56277,
-    "seen": 1793850273.740021,
-    "ast_hash": "15580d35a26b2cdadfe3c39b6c5f405d",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(2).png": {
-    "mtime": 1791170670.5643613,
-    "seen": 1793850273.740022,
-    "ast_hash": "3195956204f8bb73526730b857893ae4",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(20).png": {
-    "mtime": 1791170670.5671463,
-    "seen": 1793850273.740022,
-    "ast_hash": "fc930cf1855df270f649bf8b57d85c01",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(21).png": {
-    "mtime": 1791170670.5690525,
-    "seen": 1793850273.7400231,
-    "ast_hash": "b232914fa71cfb8d2234e081930d30f7",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(22).png": {
-    "mtime": 1791170670.5705965,
-    "seen": 1793850273.740024,
-    "ast_hash": "bd281fb02e923f78d6b66a684b2f1199",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(23).png": {
-    "mtime": 1791170670.572168,
-    "seen": 1793850273.740025,
-    "ast_hash": "5cd192eaaf9c863d219b0f366ab98bfa",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(24).png": {
-    "mtime": 1791170670.5737774,
-    "seen": 1793850273.740025,
-    "ast_hash": "e90bbb14ec660945c92edfd97c504717",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(3).png": {
-    "mtime": 1791170670.5752368,
-    "seen": 1793850273.740026,
-    "ast_hash": "6afd78aae1f0b1298dbad24273731591",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(4).png": {
-    "mtime": 1791170670.5760472,
-    "seen": 1793850273.740027,
-    "ast_hash": "35d9bf03f12221a2e4795598a92d404f",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(5).png": {
-    "mtime": 1791170670.5769434,
-    "seen": 1793850273.740028,
-    "ast_hash": "db552fea8fd64859c53aa67dce06114e",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(6).png": {
-    "mtime": 1791170670.5798132,
-    "seen": 1793850273.740028,
-    "ast_hash": "d168d0d5d74addcca431227484485c68",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(7).png": {
-    "mtime": 1791170670.582286,
-    "seen": 1793850273.7400289,
-    "ast_hash": "a54b088909268cded867641c14d25524",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(8).png": {
-    "mtime": 1791170670.5854683,
-    "seen": 1793850273.74003,
-    "ast_hash": "9a8935218c8c17b1bb772fc0a0515a3e",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/kho-luu-tru-nhom(9).png": {
-    "mtime": 1791170670.5880704,
-    "seen": 1793850273.740031,
-    "ast_hash": "7ff1f94f14740467fe63537679aedca6",
-    "semantic_hash": ""
-  },
-  "docs/references/image/images-program/tai-lieu-test.png": {
-    "mtime": 1791170670.5904677,
-    "seen": 1793850273.740031,
-    "ast_hash": "509e5ca08323412dfeb66c91dcfccd7a",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/architecture/foundation-system-architecture.visual-check.1440x900.dark.png": {
-    "mtime": 1794909328.0600123,
-    "seen": 1794912311.216575,
-    "ast_hash": "efe218552f5b28929bef9a432f89f539",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/architecture/foundation-system-architecture.visual-check.1440x900.light.png": {
-    "mtime": 1791170670.5979173,
-    "seen": 1793850273.740033,
-    "ast_hash": "2b1645f91ac47ea797a0b70ccf0a4a8b",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/flow/foundation-dataflow.visual-check.1440x900.light.png": {
-    "mtime": 1791170670.60494,
-    "seen": 1793850273.740036,
-    "ast_hash": "478513cfc6c7d329505bf8cc71b25e5c",
     "semantic_hash": ""
   },
   "frontend/digital-library/public/favicon.svg": {
@@ -2999,88 +2321,10 @@
     "ast_hash": "46a8ba7f6d68a4f892aac67118fb6bb5",
     "semantic_hash": ""
   },
-  "docs/feat/document-view-modes/BUSINESS_RULES.md": {
-    "mtime": 1793868908.2850883,
-    "seen": 1793869398.7638788,
-    "ast_hash": "3affe3e61bf19f0fa4b142c7c5711067",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-view-modes/FRONTEND.md": {
-    "mtime": 1793868833.8880856,
-    "seen": 1793869398.76388,
-    "ast_hash": "04a4bda1fc4d638b9effd9222c7f420d",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-view-modes/README.md": {
-    "mtime": 1794908136.5604715,
-    "seen": 1794912311.212257,
-    "ast_hash": "8453ea1afc35e9749cc96430d07d1fbd",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-view-modes/REUSE_AND_INTEGRATION.md": {
-    "mtime": 1793868879.8401992,
-    "seen": 1793869398.763882,
-    "ast_hash": "6d81f5eb5069ebc236aeba62939de12b",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-view-modes/images/view_mode_detail.png": {
-    "mtime": 1793868734.5621653,
-    "seen": 1793869398.764825,
-    "ast_hash": "db17a0092777a4db88413e426e76602f",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-view-modes/images/view_mode_grid.png": {
-    "mtime": 1793868734.5672913,
-    "seen": 1793869398.764826,
-    "ast_hash": "9fe7cb3f18e4f37db7a1db794c533d9e",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-view-modes/images/view_mode_list.png": {
-    "mtime": 1793868734.5647418,
-    "seen": 1793869398.7648268,
-    "ast_hash": "fc3b355e9c3eb1233165ff8161ba3ff5",
-    "semantic_hash": ""
-  },
   "alembic/versions/c3d4e5f6a7b8_add_document_share_partial_unique_index.py": {
     "mtime": 1793951142.960727,
     "seen": 1793951910.267793,
     "ast_hash": "e819a0831913a401e5f73a29a72e6d51",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-sharing/API.md": {
-    "mtime": 1793952037.7099829,
-    "seen": 1793952089.6371021,
-    "ast_hash": "e6c9d23918cc41d64a6fbecad5b51761",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-sharing/BUSINESS_RULES.md": {
-    "mtime": 1793952059.973436,
-    "seen": 1793952089.637103,
-    "ast_hash": "73db944cbf195c6a44eaf3e0d9719e1e",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-sharing/DATABASE.md": {
-    "mtime": 1793952001.7381604,
-    "seen": 1793952089.637104,
-    "ast_hash": "bda8bc175fd04ad26df826e2a6918431",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-sharing/FRONTEND.md": {
-    "mtime": 1793952024.2586496,
-    "seen": 1793952089.637105,
-    "ast_hash": "14b5054cd324c20f10969437d0b7cf35",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-sharing/README.md": {
-    "mtime": 1793954055.6152704,
-    "seen": 1794543497.1624599,
-    "ast_hash": "aa3e8d8c0a4f57eadaffbb84354d5758",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-sharing/TROUBLESHOOTING.md": {
-    "mtime": 1793952075.803052,
-    "seen": 1793952089.637107,
-    "ast_hash": "1ceec144ac2dd267c73540c73d083dfb",
     "semantic_hash": ""
   },
   ".github/workflows/deploy-docs.yml": {
@@ -3090,9 +2334,9 @@
     "semantic_hash": ""
   },
   "docs-site/docusaurus.config.ts": {
-    "mtime": 1794631416.1052756,
-    "seen": 1794632021.449835,
-    "ast_hash": "d47f64f2278b66a1d7544b4b26ea4a90",
+    "mtime": 1795410279.4076865,
+    "seen": 1795418804.5553532,
+    "ast_hash": "c339b7f1acbfdcb5743d10e900966523",
     "semantic_hash": ""
   },
   "docs-site/package.json": {
@@ -3102,9 +2346,9 @@
     "semantic_hash": ""
   },
   "docs-site/sidebars.ts": {
-    "mtime": 1794631398.7211316,
-    "seen": 1794632021.449837,
-    "ast_hash": "0ffd9d4fb7a19f87eeebf3b684b9ae17",
+    "mtime": 1795410197.7695405,
+    "seen": 1795418804.555397,
+    "ast_hash": "ae1c93fffb728edd7d9e6b209c26a8a9",
     "semantic_hash": ""
   },
   "docs-site/tsconfig.json": {
@@ -3117,24 +2361,6 @@
     "mtime": 1793953873.8596308,
     "seen": 1794543497.161772,
     "ast_hash": "1347bffc484713bdb5c4c6c34f33d1fc",
-    "semantic_hash": ""
-  },
-  "docs/project-management/MoTaDuAn.md": {
-    "mtime": 1793969728.198972,
-    "seen": 1794543497.16283,
-    "ast_hash": "885435e17fee86d8ad837743628c5c65",
-    "semantic_hash": ""
-  },
-  "docs/project-management/task-assignment/BoSung-PhanRaChucNang.md": {
-    "mtime": 1791170670.4394019,
-    "seen": 1794543497.162969,
-    "ast_hash": "8c299ba29ccc9c20235b482ffb9cbdcc",
-    "semantic_hash": ""
-  },
-  "docs/project-management/task-assignment/PhanRaChucNang.md": {
-    "mtime": 1794631326.0990782,
-    "seen": 1794632021.459702,
-    "ast_hash": "c798f7cbe77699e8ff78b9b79243c5f8",
     "semantic_hash": ""
   },
   "docs-site/static/img/docusaurus-social-card.jpg": {
@@ -3185,16 +2411,10 @@
     "ast_hash": "2aa8e8754ecc6f2447fb724ba8bcadd8",
     "semantic_hash": ""
   },
-  "docs/feat/community-library/bug-fix-document-counting.md": {
-    "mtime": 1794561335.5676377,
-    "seen": 1794577212.450387,
-    "ast_hash": "da9c28b74f911a31ffdfbdb5aeb7eaa9",
-    "semantic_hash": ""
-  },
   "backend/app/services/document_query_service.py": {
-    "mtime": 1794621394.2974923,
-    "seen": 1794624348.005554,
-    "ast_hash": "d191a33169c2cadf0145b119fdd9268f",
+    "mtime": 1795426331.5522063,
+    "seen": 1795427804.113027,
+    "ast_hash": "7ee0e0247fab8c622dd1f06027f36d64",
     "semantic_hash": ""
   },
   "backend/db/seed_perf_documents.py": {
@@ -3215,88 +2435,16 @@
     "ast_hash": "9bc61da91e4b3d5e0715f3c75754bc27",
     "semantic_hash": ""
   },
-  "docs/feat/document-query-and-performance/API.md": {
-    "mtime": 1794625625.5250065,
-    "seen": 1794627595.812799,
-    "ast_hash": "5e0a45343ddbb1a6b62d3a062da9cef3",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-query-and-performance/BUSINESS_RULES.md": {
-    "mtime": 1794625611.1108766,
-    "seen": 1794627595.8128,
-    "ast_hash": "cbb80512f946ead44d9e161518608729",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-query-and-performance/DATABASE.md": {
-    "mtime": 1794625617.0665476,
-    "seen": 1794627595.812802,
-    "ast_hash": "3c15453e06e11af78b25da4a70ae07cf",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-query-and-performance/FRONTEND.md": {
-    "mtime": 1794625635.6742246,
-    "seen": 1794627595.812803,
-    "ast_hash": "f602092dd3ce8fb5c1ac58ff65056a0a",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-query-and-performance/README.md": {
-    "mtime": 1794625225.547046,
-    "seen": 1794625408.629081,
-    "ast_hash": "cfca61bbaf9db3e6618f44ba767092f4",
-    "semantic_hash": ""
-  },
-  "docs/feat/document-query-and-performance/TROUBLESHOOTING.md": {
-    "mtime": 1794625643.7701013,
-    "seen": 1794627595.8128388,
-    "ast_hash": "5082e2b7f2eafa186773d9ad08a6ee1f",
-    "semantic_hash": ""
-  },
-  "docs/overview/GLOSSARY.md": {
-    "mtime": 1794626975.0973444,
-    "seen": 1794627595.8135219,
-    "ast_hash": "48bf981859deaac4eb68202402c2203b",
-    "semantic_hash": ""
-  },
-  "docs/overview/KEY_FEATURES.md": {
-    "mtime": 1794626933.901133,
-    "seen": 1794627595.813523,
-    "ast_hash": "3ffc8d3bbc3f9c10fd6f6a55aaf9e3d5",
-    "semantic_hash": ""
-  },
-  "docs/overview/PROJECT_INTRODUCTION.md": {
-    "mtime": 1794626884.1584828,
-    "seen": 1794627595.813524,
-    "ast_hash": "da30186985e51609de54f81e9b6073d4",
-    "semantic_hash": ""
-  },
-  "docs/overview/PROJECT_SCOPE.md": {
-    "mtime": 1794626907.2672114,
-    "seen": 1794627595.813524,
-    "ast_hash": "ff84fb95183d550aadefc6c10ae5e7ff",
-    "semantic_hash": ""
-  },
-  "docs/overview/README.md": {
-    "mtime": 1794628161.3474739,
-    "seen": 1794628192.947684,
-    "ast_hash": "ff701d5d3a5b606a7a737dca45e83a03",
-    "semantic_hash": ""
-  },
-  "docs/overview/USER_ROLES_AND_PERMISSIONS.md": {
-    "mtime": 1794626955.4299164,
-    "seen": 1794627595.813526,
-    "ast_hash": "2627d77309823c9ac7875e5091eb906b",
-    "semantic_hash": ""
-  },
   "docs/requirements/BUSINESS_REQUIREMENTS.md": {
-    "mtime": 1794627380.6275997,
-    "seen": 1794627595.813781,
-    "ast_hash": "12b7e2b70fcaf3a6d539864a53d685cf",
+    "mtime": 1795409909.2493293,
+    "seen": 1795418804.565512,
+    "ast_hash": "d5c06e7fa5bff83ee25d0b525a147eee",
     "semantic_hash": ""
   },
   "docs/requirements/BUSINESS_RULES.md": {
-    "mtime": 1794627450.0360744,
-    "seen": 1794627595.813781,
-    "ast_hash": "0eb6b241a447fc08e95b1af05101bf4c",
+    "mtime": 1795409909.248856,
+    "seen": 1795418804.565513,
+    "ast_hash": "1ef24f0d2dfeb731a3660c5a5cb3bc73",
     "semantic_hash": ""
   },
   "docs/requirements/FUNCTIONAL_REQUIREMENTS.md": {
@@ -3306,9 +2454,9 @@
     "semantic_hash": ""
   },
   "docs/requirements/NON_FUNCTIONAL_REQUIREMENTS.md": {
-    "mtime": 1794627428.843075,
-    "seen": 1794627595.813783,
-    "ast_hash": "95275b4e47a155f40e997b76e91438a3",
+    "mtime": 1795409909.2496364,
+    "seen": 1795418804.565542,
+    "ast_hash": "96dd6fd1ceed34cfb1be4162b930edb4",
     "semantic_hash": ""
   },
   "docs/requirements/README.md": {
@@ -3324,9 +2472,9 @@
     "semantic_hash": ""
   },
   "docs/requirements/use-cases/UC01_UPLOAD_AND_DEDUPLICATION.md": {
-    "mtime": 1794627478.3257568,
-    "seen": 1794627595.813786,
-    "ast_hash": "91f1acac6ea8247fc83dab64ff18367a",
+    "mtime": 1795409909.2499926,
+    "seen": 1795418804.5655968,
+    "ast_hash": "90d155ee3e5ed0893d4d107e0e76f128",
     "semantic_hash": ""
   },
   "docs/requirements/use-cases/UC02_COMMUNITY_SUBMISSION_AND_APPROVAL.md": {
@@ -3348,153 +2496,15 @@
     "semantic_hash": ""
   },
   "docs/requirements/use-cases/UC05_TRASH_LIFECYCLE_AND_PURGE.md": {
-    "mtime": 1794627536.3611605,
-    "seen": 1794627595.8137898,
-    "ast_hash": "a8f72bb2a8324825c572e0bdac614ae2",
+    "mtime": 1795409909.2504127,
+    "seen": 1795418804.565693,
+    "ast_hash": "57cfb026f04ef75fcf859a8e2df5886e",
     "semantic_hash": ""
   },
   "docs/requirements/use-cases/UC06_GROUP_WORKSPACE_COLLABORATION.md": {
     "mtime": 1794627547.9046545,
     "seen": 1794627595.813791,
     "ast_hash": "ca4532668d37d518e658e43b8e167532",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/BACKEND_ARCHITECTURE.md": {
-    "mtime": 1794628001.7795823,
-    "seen": 1794628192.94822,
-    "ast_hash": "24a98ae2d4fd2108fb9bbe977e421920",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/DATABASE_ARCHITECTURE.md": {
-    "mtime": 1794628021.449814,
-    "seen": 1794628192.948221,
-    "ast_hash": "cd1d5f8c0a918de2d661d956c2a4c9b6",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/FRONTEND_ARCHITECTURE.md": {
-    "mtime": 1794627983.151685,
-    "seen": 1794628192.948222,
-    "ast_hash": "c238c96746fdd85dcb451a8205727f47",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/README.md": {
-    "mtime": 1794627910.5813868,
-    "seen": 1794628192.9482229,
-    "ast_hash": "4a49f8c204337eae7a0bd43496677380",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/SECURITY_ARCHITECTURE.md": {
-    "mtime": 1794628059.3695762,
-    "seen": 1794628192.948224,
-    "ast_hash": "2152c0881a1ecda48a7f79d088972796",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/STORAGE_ARCHITECTURE.md": {
-    "mtime": 1794628038.3405504,
-    "seen": 1794628192.948224,
-    "ast_hash": "266ab22ece633194dc8dec89ebdc3e85",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/SYSTEM_OVERVIEW.md": {
-    "mtime": 1794627933.329696,
-    "seen": 1794628192.948225,
-    "ast_hash": "2b1ac7131b6b17c1b77be4e6c9314eb7",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/TECHNOLOGY_STACK.md": {
-    "mtime": 1794627961.423425,
-    "seen": 1794628192.948226,
-    "ast_hash": "311d1bd6c554e41b22f22c4398c5b908",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/adr/ADR-001-HYBRID-STORAGE-R2-LOCAL.md": {
-    "mtime": 1794628079.5008101,
-    "seen": 1794628192.9482272,
-    "ast_hash": "89c5a95fb4cd0206e158118f26b4c86d",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/adr/ADR-002-DOCUMENT-CLONING-FORKING.md": {
-    "mtime": 1794628088.4125383,
-    "seen": 1794628192.9482281,
-    "ast_hash": "e433b00e5bd963b7de855fcdd2d47432",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/adr/ADR-003-POSTGRESQL-FULLTEXT-SEARCH.md": {
-    "mtime": 1794628098.9580383,
-    "seen": 1794628192.948229,
-    "ast_hash": "21b93b9b9f65cc8a2ebd53efa1b4a5b1",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/adr/ADR-004-CLIENT-SIDE-DOCUMENT-PREVIEW.md": {
-    "mtime": 1794628109.321159,
-    "seen": 1794628192.9482298,
-    "ast_hash": "2a25f1a027c238535d1e6d50602e66e0",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/adr/ADR-005-SHA256-DEDUPLICATION.md": {
-    "mtime": 1794628124.6571407,
-    "seen": 1794628192.948231,
-    "ast_hash": "5b66ba31f4b17f051e1d09f5f36caf7e",
-    "semantic_hash": ""
-  },
-  "docs/system-architecture/adr/README.md": {
-    "mtime": 1794628069.3802793,
-    "seen": 1794628192.948232,
-    "ast_hash": "4261757cdc336b04f72dd087206e2d5e",
-    "semantic_hash": ""
-  },
-  "docs/development/DATABASE_SETUP.md": {
-    "mtime": 1794628288.095625,
-    "seen": 1794628397.736476,
-    "ast_hash": "c7c814c17d8ceda88176caa3cae30318",
-    "semantic_hash": ""
-  },
-  "docs/development/DEVELOPMENT_WORKFLOW.md": {
-    "mtime": 1794628302.3894098,
-    "seen": 1794628397.736477,
-    "ast_hash": "b90bf59a095c54c89f65fba54c17427f",
-    "semantic_hash": ""
-  },
-  "docs/development/ENVIRONMENT_VARIABLES.md": {
-    "mtime": 1794628272.1211603,
-    "seen": 1794628397.7364779,
-    "ast_hash": "f3cf4008a94688b3640c9a4ffe5ac46a",
-    "semantic_hash": ""
-  },
-  "docs/development/PREREQUISITES.md": {
-    "mtime": 1794628256.4509583,
-    "seen": 1794628397.736479,
-    "ast_hash": "d9bb1a136e69cf6ca0fb9065a9e17a44",
-    "semantic_hash": ""
-  },
-  "docs/development/README.md": {
-    "mtime": 1794628242.9602985,
-    "seen": 1794628397.73648,
-    "ast_hash": "18dc52fbb9f04513e3f2fd965b97cb90",
-    "semantic_hash": ""
-  },
-  "docs/development/TROUBLESHOOTING.md": {
-    "mtime": 1794628319.4967725,
-    "seen": 1794628397.7364821,
-    "ast_hash": "25cf2deb39001bb25de7c8638356039c",
-    "semantic_hash": ""
-  },
-  "docs/deployment/DEPLOYMENT_GUIDE.md": {
-    "mtime": 1794628446.8654258,
-    "seen": 1794628609.58731,
-    "ast_hash": "89088ac68b09e6e274915bc67b0aae1f",
-    "semantic_hash": ""
-  },
-  "docs/deployment/ENVIRONMENT_CONFIGURATION.md": {
-    "mtime": 1794628462.2845635,
-    "seen": 1794628609.587311,
-    "ast_hash": "a493aef83cf39ea3fb2169c6af2bef7f",
-    "semantic_hash": ""
-  },
-  "docs/deployment/RELEASE_AND_ROLLBACK.md": {
-    "mtime": 1794628480.411203,
-    "seen": 1794628609.587349,
-    "ast_hash": "921cda256368f063f6d3d465371f0a8d",
     "semantic_hash": ""
   },
   "docs/api/openapi.json": {
@@ -3516,135 +2526,27 @@
     "semantic_hash": ""
   },
   "docs/api/API_CONVENTIONS.md": {
-    "mtime": 1794628824.346101,
-    "seen": 1794628865.747644,
-    "ast_hash": "f1473a94ba8381f0e0165d705d62d4bc",
+    "mtime": 1795409909.245793,
+    "seen": 1795418804.565482,
+    "ast_hash": "a7060c543d960e20809da5be2e485848",
     "semantic_hash": ""
   },
   "docs/api/AUTHENTICATION.md": {
-    "mtime": 1794628829.0746386,
-    "seen": 1794628865.747645,
-    "ast_hash": "d81bcdc9a515fae0128e1f9659cf07a3",
+    "mtime": 1795409909.2452612,
+    "seen": 1795418804.565483,
+    "ast_hash": "99d3432aef6fbd375116ed9c0c825f01",
     "semantic_hash": ""
   },
   "docs/api/ERROR_HANDLING.md": {
-    "mtime": 1794628832.4469092,
-    "seen": 1794628865.7476459,
-    "ast_hash": "3b0e15e26432a5ddb4d049b56b0fe3cd",
+    "mtime": 1795409909.2460454,
+    "seen": 1795418804.565484,
+    "ast_hash": "fbd98a42c9fbe6fc5432a349e87acac2",
     "semantic_hash": ""
   },
   "docs/api/README.md": {
     "mtime": 1794628820.4711237,
     "seen": 1794628865.747647,
     "ast_hash": "b595fa52073f232d69c01fda2565517c",
-    "semantic_hash": ""
-  },
-  "docs/data/DATABASE_OVERVIEW.md": {
-    "mtime": 1794628971.3115714,
-    "seen": 1794629111.776156,
-    "ast_hash": "bdbcb127ce2e2f73bf2664a6702d5f76",
-    "semantic_hash": ""
-  },
-  "docs/data/DATA_DICTIONARY.md": {
-    "mtime": 1794629035.2954237,
-    "seen": 1794629111.776157,
-    "ast_hash": "f3e801e75f4da13e33051b00c3b04199",
-    "semantic_hash": ""
-  },
-  "docs/data/ERD.md": {
-    "mtime": 1794629049.6568618,
-    "seen": 1794629111.7761579,
-    "ast_hash": "5576f9c30c27f83ce1a4a44926da7a22",
-    "semantic_hash": ""
-  },
-  "docs/data/MIGRATIONS.md": {
-    "mtime": 1794629067.1599684,
-    "seen": 1794629111.776159,
-    "ast_hash": "d5f841b43d357817a31efb0c6ea7e787",
-    "semantic_hash": ""
-  },
-  "docs/data/README.md": {
-    "mtime": 1794628951.6474562,
-    "seen": 1794629111.77616,
-    "ast_hash": "cda28cb47ace65726332cbd33ef1831e",
-    "semantic_hash": ""
-  },
-  "docs/feat/README.md": {
-    "mtime": 1794908136.5601585,
-    "seen": 1794912311.211334,
-    "ast_hash": "2db68d53b9700de02d82db33d074fac5",
-    "semantic_hash": ""
-  },
-  "docs/testing/QUALITY_AND_KNOWN_LIMITATIONS.md": {
-    "mtime": 1794629347.7593575,
-    "seen": 1794629389.422803,
-    "ast_hash": "4b201db7d0602eb50abab4713ba50687",
-    "semantic_hash": ""
-  },
-  "docs/testing/README.md": {
-    "mtime": 1794629277.0080159,
-    "seen": 1794629389.422805,
-    "ast_hash": "d6ac7a69bd2cf9742eb563d07dad8a3c",
-    "semantic_hash": ""
-  },
-  "docs/testing/RUNNING_TESTS.md": {
-    "mtime": 1794629305.532874,
-    "seen": 1794629389.422806,
-    "ast_hash": "c184140e1428c09c234f64ef03ad92bc",
-    "semantic_hash": ""
-  },
-  "docs/testing/TESTING_STRATEGY.md": {
-    "mtime": 1794629291.9582853,
-    "seen": 1794629389.422807,
-    "ast_hash": "f5068926520faa195dba136c03fe2f3d",
-    "semantic_hash": ""
-  },
-  "docs/testing/TEST_CASES.md": {
-    "mtime": 1794629328.8963006,
-    "seen": 1794629389.4228082,
-    "ast_hash": "37326aac9bcbc94927a4f1dafb39ca20",
-    "semantic_hash": ""
-  },
-  "docs/security/AUTHORIZATION_AND_ACCESS_CONTROL.md": {
-    "mtime": 1794629446.2629867,
-    "seen": 1794629535.856941,
-    "ast_hash": "ce5371f8ca851d0f70442b3d3ce5a086",
-    "semantic_hash": ""
-  },
-  "docs/security/DATA_HANDLING.md": {
-    "mtime": 1794629476.7341552,
-    "seen": 1794629535.8569422,
-    "ast_hash": "d3cf502a29ba685d707e53d750a144e4",
-    "semantic_hash": ""
-  },
-  "docs/security/README.md": {
-    "mtime": 1794629413.463939,
-    "seen": 1794629535.8569431,
-    "ast_hash": "29b2511ac80da3f78d323214ffc697be",
-    "semantic_hash": ""
-  },
-  "docs/security/SECRETS_AND_CONFIGURATION.md": {
-    "mtime": 1794629461.0187712,
-    "seen": 1794629535.856944,
-    "ast_hash": "f35f83b1b75611480c81a721fd4278f8",
-    "semantic_hash": ""
-  },
-  "docs/security/SECURITY_OVERVIEW.md": {
-    "mtime": 1794629429.9463384,
-    "seen": 1794629535.8569448,
-    "ast_hash": "9387befc12a0ac426737640dacaf2431",
-    "semantic_hash": ""
-  },
-  "docs/security/SECURITY_REPORTING.md": {
-    "mtime": 1794629488.5409086,
-    "seen": 1794629535.856946,
-    "ast_hash": "29c066858fefd674a98d678a0d87fc3c",
-    "semantic_hash": ""
-  },
-  "docs/DOCUMENTATION_GUIDE.md": {
-    "mtime": 1794629564.3086364,
-    "seen": 1794629659.675475,
-    "ast_hash": "d5ba32ccb99c8875b043e1c1dfacf517",
     "semantic_hash": ""
   },
   "docs/templates/ADR_TEMPLATE.md": {
@@ -3654,9 +2556,9 @@
     "semantic_hash": ""
   },
   "docs/templates/FEATURE_TEMPLATE.md": {
-    "mtime": 1794629577.502135,
-    "seen": 1794629659.6790888,
-    "ast_hash": "79bc3648d1a1c21dd0c87583e7e9e120",
+    "mtime": 1795409909.2479892,
+    "seen": 1795418804.565748,
+    "ast_hash": "7f870788c0b6c9928a6df6de3ad175f1",
     "semantic_hash": ""
   },
   "docs/templates/TEST_CASE_TEMPLATE.md": {
@@ -3684,15 +2586,15 @@
     "semantic_hash": ""
   },
   "docs-site/src/components/DocsUI/HeroSection.tsx": {
-    "mtime": 1794631703.0980022,
-    "seen": 1794632021.4498408,
-    "ast_hash": "c153d1c2bb938b2d281ee44f0b3a1aa5",
+    "mtime": 1795410279.410239,
+    "seen": 1795418804.55552,
+    "ast_hash": "b7b12a96fc2715a6f154d39d32c8c095",
     "semantic_hash": ""
   },
   "docs-site/src/components/DocsUI/RoleRoadmapTabs.tsx": {
-    "mtime": 1794631673.7438612,
-    "seen": 1794632021.449842,
-    "ast_hash": "5e23f04acb602068698fd3d462b792ba",
+    "mtime": 1795410279.4097273,
+    "seen": 1795418804.555522,
+    "ast_hash": "ea4c3ecfee64d468b31d36b86ff6da02",
     "semantic_hash": ""
   },
   "docs-site/src/components/DocsUI/StatusPill.tsx": {
@@ -3726,21 +2628,9 @@
     "semantic_hash": ""
   },
   "docs/README.mdx": {
-    "mtime": 1794631751.0083652,
-    "seen": 1794632021.457311,
-    "ast_hash": "05d9e10a602e3abf9a4328d714caef6f",
-    "semantic_hash": ""
-  },
-  "docs/feat/community-library/README.md": {
-    "mtime": 1794631868.1656382,
-    "seen": 1794632021.458264,
-    "ast_hash": "85dd253ae6d79998e1cef92e2336c531",
-    "semantic_hash": ""
-  },
-  "docs/feat/personal-dashboard/README.md": {
-    "mtime": 1794631856.6850116,
-    "seen": 1794632021.459241,
-    "ast_hash": "7441cd53626bc05fe5a9598f3bf06649",
+    "mtime": 1795410279.4088714,
+    "seen": 1795418804.565442,
+    "ast_hash": "d4167864f1671c67e1d58dc3cfde395b",
     "semantic_hash": ""
   },
   "frontend/digital-library/src/components/library/CommunityDocumentCard.tsx": {
@@ -3797,16 +2687,928 @@
     "ast_hash": "f66bf8766515781b6093076f2b9f5c2e",
     "semantic_hash": ""
   },
-  "docs/feat/document-search/README.md": {
-    "mtime": 1794907354.6417902,
-    "seen": 1794912311.212033,
-    "ast_hash": "45084cbf9ac9f7ea66ba063b3ac68e97",
+  "docs/01-tong-quan/README.md": {
+    "mtime": 1795407038.1396284,
+    "seen": 1795418804.565382,
+    "ast_hash": "c2780cc4e53c341ef3da41490ff63947",
     "semantic_hash": ""
   },
-  "docs/feat/document-view-modes/PERSISTENCE.md": {
-    "mtime": 1794908219.9094296,
-    "seen": 1794912311.212255,
-    "ast_hash": "5a92d57010125822632839974aeb0341",
+  "docs/01-tong-quan/boi-canh-va-muc-tieu.md": {
+    "mtime": 1795407038.1397574,
+    "seen": 1795418804.565384,
+    "ast_hash": "5a81841998ed0aa48b6aaf9f99c1dd43",
+    "semantic_hash": ""
+  },
+  "docs/01-tong-quan/pham-vi-san-pham.md": {
+    "mtime": 1795407038.1398911,
+    "seen": 1795418804.565386,
+    "ast_hash": "2766a854c28d6bebea337ce53d20d41c",
+    "semantic_hash": ""
+  },
+  "docs/01-tong-quan/thuat-ngu.md": {
+    "mtime": 1795407038.1399977,
+    "seen": 1795418804.565387,
+    "ast_hash": "e487dfb2f9d5ca762b735dbcc795f836",
+    "semantic_hash": ""
+  },
+  "docs/02-huong-dan-local/README.md": {
+    "mtime": 1795407104.7792163,
+    "seen": 1795418804.565388,
+    "ast_hash": "b4ade6ae58e31f72324fc8a333388be5",
+    "semantic_hash": ""
+  },
+  "docs/02-huong-dan-local/cai-dat-moi-truong.md": {
+    "mtime": 1795407104.7793365,
+    "seen": 1795418804.5653892,
+    "ast_hash": "f0f69a5ae9725a8727bf83a41f1b697d",
+    "semantic_hash": ""
+  },
+  "docs/02-huong-dan-local/cau-hinh-va-bien-moi-truong.md": {
+    "mtime": 1795407104.7795253,
+    "seen": 1795418804.565391,
+    "ast_hash": "78bb7fd1808119e3c6f87c6e5f717a10",
+    "semantic_hash": ""
+  },
+  "docs/02-huong-dan-local/khoi-chay-he-thong.md": {
+    "mtime": 1795407104.77944,
+    "seen": 1795418804.5653918,
+    "ast_hash": "c31a93dbae9e1cbaeefce19f3017a03f",
+    "semantic_hash": ""
+  },
+  "docs/02-huong-dan-local/xu-ly-su-co-local.md": {
+    "mtime": 1795407104.7796075,
+    "seen": 1795418804.565393,
+    "ast_hash": "33e8c3c3953539903972ab13ffc333db",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/README.md": {
+    "mtime": 1795407219.8057601,
+    "seen": 1795418804.565394,
+    "ast_hash": "35fe106726c965a895e63cf176a0afa3",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/backend-fastapi.md": {
+    "mtime": 1795407219.8059814,
+    "seen": 1795418804.5653949,
+    "ast_hash": "4c59db2807cb085f7a66ff584d198ce3",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/bao-mat-va-phan-quyen.md": {
+    "mtime": 1795407219.806272,
+    "seen": 1795418804.5653949,
+    "ast_hash": "37d9ffd523f2074e223fefca5bc1e4b8",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/frontend-react.md": {
+    "mtime": 1795407219.8060746,
+    "seen": 1795418804.565396,
+    "ast_hash": "61e30ec78ff3cf7ecac45bc6760d9e44",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/he-thong-luu-tru-tap-tin.md": {
+    "mtime": 1795407219.806179,
+    "seen": 1795418804.565398,
+    "ast_hash": "209b62e0da14b7f36f705cbc1309dfe9",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/quyet-dinh-kien-truc/ADR-001-LOCAL-STORAGE-ARCHITECTURE.md": {
+    "mtime": 1795410143.6112115,
+    "seen": 1795418804.565399,
+    "ast_hash": "f85434d3ff53c97a99e242b930a6dee1",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/quyet-dinh-kien-truc/ADR-002-DOCUMENT-CLONING-FORKING.md": {
+    "mtime": 1795410143.6108031,
+    "seen": 1795418804.5654001,
+    "ast_hash": "13309b8a6ecd07db6b555c1102a2aecc",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/quyet-dinh-kien-truc/ADR-003-POSTGRESQL-FULLTEXT-SEARCH.md": {
+    "mtime": 1795410143.6110039,
+    "seen": 1795418804.5654001,
+    "ast_hash": "bf14f492d1fd84acb69dd28b7f034723",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/quyet-dinh-kien-truc/ADR-004-CLIENT-SIDE-DOCUMENT-PREVIEW.md": {
+    "mtime": 1795410143.6114283,
+    "seen": 1795418804.565402,
+    "ast_hash": "b011671e9575387116527178c1665a8d",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/quyet-dinh-kien-truc/ADR-005-SHA256-DEDUPLICATION.md": {
+    "mtime": 1795410143.6105752,
+    "seen": 1795418804.565403,
+    "ast_hash": "06d098ca47a72701408685956b87a64d",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/tong-quan-kien-truc.md": {
+    "mtime": 1795407219.8058891,
+    "seen": 1795418804.565404,
+    "ast_hash": "3d76f01635b6bb98176a089809764af4",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/README.md": {
+    "mtime": 1795407319.0787315,
+    "seen": 1795418804.565405,
+    "ast_hash": "89cd13362306a30d871f3df644d72afc",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/alembic-va-tien-hoa-schema.md": {
+    "mtime": 1795439271.550242,
+    "seen": 1795439371.3241549,
+    "ast_hash": "91e5aaf168beae2f28931a3a800d3c40",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/db-schema-map.md": {
+    "mtime": 1795572778.601673,
+    "seen": 1795572883.688781,
+    "ast_hash": "41e6a72af8013e8719c9d2660bd5c23d",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/mo-hinh-thuc-the-erd.md": {
+    "mtime": 1795407319.0788527,
+    "seen": 1795418804.565408,
+    "ast_hash": "ca7b792e8d9e3c28f763dee52a7bd44b",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/postgresql-chuyen-sau.md": {
+    "mtime": 1795407319.0790641,
+    "seen": 1795418804.565409,
+    "ast_hash": "7459b7064ae8cc33c8cecbaa4d1013fd",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/tu-dien-du-lieu.md": {
+    "mtime": 1795410105.02501,
+    "seen": 1795418804.565409,
+    "ast_hash": "c5680b2d6c8049fc04010e5e687f2de1",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/01-kho-ca-nhan-va-quan-ly-tai-lieu.md": {
+    "mtime": 1795407458.034517,
+    "seen": 1795418804.5654101,
+    "ast_hash": "80c3f78f9ae1e904fcbb5771babff4fb",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/02-kho-nhom-va-khong-gian-lam-viec.md": {
+    "mtime": 1795407458.0346,
+    "seen": 1795418804.565411,
+    "ast_hash": "873576d113a10f75679855d7db676123",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/03-kho-hoc-lieu-va-duyet-tai-lieu.md": {
+    "mtime": 1795407525.2169719,
+    "seen": 1795418804.565412,
+    "ast_hash": "ce0904cc4ed70b8dac3e450a62538338",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/04-tim-kiem-va-tra-cuu.md": {
+    "mtime": 1795407525.2170837,
+    "seen": 1795418804.5654132,
+    "ast_hash": "806b839966786c299cc0e0717b357533",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/05-xem-truoc-va-xu-ly-noi-dung.md": {
+    "mtime": 1795407525.217232,
+    "seen": 1795418804.565414,
+    "ast_hash": "23ed109c13e877a4687efaca95e4d7bf",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/06-chia-se-va-lien-ket-tai-lieu.md": {
+    "mtime": 1795407525.2173474,
+    "seen": 1795418804.565415,
+    "ast_hash": "f7dfdfba55c604c0842d2051509ef2e2",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/07-nhat-ky-hoat-dong-va-thong-ke.md": {
+    "mtime": 1795407525.2174346,
+    "seen": 1795418804.5654159,
+    "ast_hash": "ca9e63dc1d5322ab63645e226b1963cc",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/README.md": {
+    "mtime": 1795429522.9908266,
+    "seen": 1795430680.523191,
+    "ast_hash": "da80c2b30ef732c806adcd6c5e6cdff9",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/template-tai-lieu-tinh-nang.md": {
+    "mtime": 1795407458.0344133,
+    "seen": 1795418804.565418,
+    "ast_hash": "fdb23a7ec0dfe57b043c49fe3c3cd959",
+    "semantic_hash": ""
+  },
+  "docs/06-kiem-thu-va-han-che/README.md": {
+    "mtime": 1795407715.273491,
+    "seen": 1795418804.565419,
+    "ast_hash": "5571547eb6791de6d7bb87fca006e369",
+    "semantic_hash": ""
+  },
+  "docs/06-kiem-thu-va-han-che/chien-luoc-va-ke-hoach-kiem-thu.md": {
+    "mtime": 1795407715.273642,
+    "seen": 1795418804.5654202,
+    "ast_hash": "ab14ca220c3673fc052a51554a71d02f",
+    "semantic_hash": ""
+  },
+  "docs/06-kiem-thu-va-han-che/hien-trang-va-gioi-han-he-thong.md": {
+    "mtime": 1795407715.274137,
+    "seen": 1795418804.565421,
+    "ast_hash": "0d0b16ff2808dbc9403e8ed0c516b594",
+    "semantic_hash": ""
+  },
+  "docs/06-kiem-thu-va-han-che/kich-ban-kiem-thu.md": {
+    "mtime": 1795407715.273862,
+    "seen": 1795418804.565422,
+    "ast_hash": "98613b94ebe4738561baf627c8d8a676",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/bao-cao/ACTIVITY_TRACKING.md": {
+    "mtime": 1795409909.251306,
+    "seen": 1795418804.565423,
+    "ast_hash": "1767bde317d26289d6297225c677c012",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/bao-cao/AUDIT_REPORT.md": {
+    "mtime": 1793954022.206152,
+    "seen": 1795418804.5654242,
+    "ast_hash": "0543112e30cc64d2747e3ba96078702a",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/bao-cao/PROJECT_STATUS_REPORT.md": {
+    "mtime": 1795410015.5052485,
+    "seen": 1795418804.565425,
+    "ast_hash": "5d038fc7ee8b2ae8e05d30b8aa244711",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/bao-cao/report/10-05-2026-Nguyen.md": {
+    "mtime": 1791206573.0871282,
+    "seen": 1795418804.5654259,
+    "ast_hash": "11723f492bc4a3ee87a357b928f3868a",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/BUG_FIX_REPORT.md": {
+    "mtime": 1795409945.4017773,
+    "seen": 1795418804.5654268,
+    "ast_hash": "aab525f3cdc6b01bc914470c35e6bd49",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/DEPLOYMENT_GUIDE.md": {
+    "mtime": 1795440092.1228056,
+    "seen": 1795440200.0116181,
+    "ast_hash": "c72a01d0fd71e9078489f4f67e298bfa",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/ENVIRONMENT_CONFIGURATION.md": {
+    "mtime": 1795409945.4028885,
+    "seen": 1795418804.565428,
+    "ast_hash": "e2d28c032a54fa62c47804faee1b0ef3",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/ENV_VARIABLES.md": {
+    "mtime": 1795409945.4013913,
+    "seen": 1795418804.565429,
+    "ast_hash": "171d5ac265148417e1934091e86b7791",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/README.md": {
+    "mtime": 1795409945.4033194,
+    "seen": 1795418804.56543,
+    "ast_hash": "7c66d734884ec8b957a0966d1fc3f2d0",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/RELEASE_AND_ROLLBACK.md": {
+    "mtime": 1795409945.4039237,
+    "seen": 1795418804.565431,
+    "ast_hash": "52eb4339bc1bf21d80051ebb5da0cd75",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/STORAGE_R2.md": {
+    "mtime": 1795409945.4026406,
+    "seen": 1795418804.565432,
+    "ast_hash": "2c78d326e041e6d5583eaf63cf7524e9",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/deployment-cu/TROUBLESHOOTING.md": {
+    "mtime": 1795409945.4022205,
+    "seen": 1795418804.565433,
+    "ast_hash": "ddb6b3b14fb59e9b24c6c67602994c2f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/ke-hoach/CSDL/DB_AUDIT_REMEDIATION.md": {
+    "mtime": 1795440177.1845663,
+    "seen": 1795440200.0117671,
+    "ast_hash": "81734186832471d30a74639bb33cd511",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/ke-hoach/CSDL/DB_SCHEMA_MAP.md": {
+    "mtime": 1795403253.0852597,
+    "seen": 1795418804.565435,
+    "ast_hash": "42480ce1bc2da6050d39f06254b4b2e8",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/phan-ra-cong-viec/BoSung-PhanRaChucNang.md": {
+    "mtime": 1791170670.4394019,
+    "seen": 1795418804.565436,
+    "ast_hash": "8c299ba29ccc9c20235b482ffb9cbdcc",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/phan-ra-cong-viec/PhanRaChucNang.md": {
+    "mtime": 1795409909.2522726,
+    "seen": 1795418804.565436,
+    "ast_hash": "4800c9f9bb8ccdd4b430aa987c030921",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-du-an-cu/DOCUMENTATION_GUIDE.md": {
+    "mtime": 1795409909.2527769,
+    "seen": 1795418804.5654368,
+    "ast_hash": "ea69b6acc97da1eb37c832923b8bbd36",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-du-an-cu/MoTaDuAn.md": {
+    "mtime": 1793969728.198972,
+    "seen": 1795418804.565438,
+    "ast_hash": "885435e17fee86d8ad837743628c5c65",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-du-an-cu/backlog.md": {
+    "mtime": 1791170670.4415493,
+    "seen": 1795418804.565439,
+    "ast_hash": "97f2052ec5364a6f7f953168937736e2",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-du-an-cu/mau-slide-thuyet-trinh.md": {
+    "mtime": 1795410044.0241804,
+    "seen": 1795418804.56544,
+    "ast_hash": "beb7c2d95cc4e99c8a786bfef51a59ee",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-du-an-cu/roadmap.md": {
+    "mtime": 1791170670.4427302,
+    "seen": 1795418804.5654411,
+    "ast_hash": "211002db6d6d8831ceacc00938c05594",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/images/foundation-dataflow.visual-check.1440x900.light.png": {
+    "mtime": 1791170670.60494,
+    "seen": 1795418804.5662541,
+    "ast_hash": "478513cfc6c7d329505bf8cc71b25e5c",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/images/foundation-system-architecture.visual-check.1440x900.dark.png": {
+    "mtime": 1794909328.0600123,
+    "seen": 1795418804.566255,
+    "ast_hash": "efe218552f5b28929bef9a432f89f539",
+    "semantic_hash": ""
+  },
+  "docs/03-kien-truc/images/foundation-system-architecture.visual-check.1440x900.light.png": {
+    "mtime": 1791170670.5979173,
+    "seen": 1795418804.566256,
+    "ast_hash": "2b1645f91ac47ea797a0b70ccf0a4a8b",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/cai-dat-1.png": {
+    "mtime": 1791170670.4446254,
+    "seen": 1795418804.566257,
+    "ast_hash": "54a28c292128587f2d22851300a5d38a",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/cai-dat-2.png": {
+    "mtime": 1791170670.4463828,
+    "seen": 1795418804.566259,
+    "ast_hash": "9ee03d632687fd6ee8eedfb05aeb8dd8",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/cai-dat-3.png": {
+    "mtime": 1791170670.448515,
+    "seen": 1795418804.566259,
+    "ast_hash": "b517d07a8a746271c86336b11498d8ac",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/giao-dien-dang-nhap.png": {
+    "mtime": 1791170670.4544983,
+    "seen": 1795418804.566261,
+    "ast_hash": "611492012020fb05237e5a96c03d1306",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-1.png": {
+    "mtime": 1791170670.4585493,
+    "seen": 1795418804.566262,
+    "ast_hash": "275a08b089375fc88d8f4e8a0f5d11a1",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-10.png": {
+    "mtime": 1791170670.460765,
+    "seen": 1795418804.566262,
+    "ast_hash": "c70cb33e604fa314d36688bb530fc743",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-11.png": {
+    "mtime": 1791170670.462255,
+    "seen": 1795418804.5662642,
+    "ast_hash": "5149bdbe68506406a4c566446db7de5b",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-12.png": {
+    "mtime": 1791170670.464705,
+    "seen": 1795418804.566266,
+    "ast_hash": "fc240533520f03c8cd27497ecbdd8a00",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-13-thung-rac.png": {
+    "mtime": 1791170670.4663777,
+    "seen": 1795418804.5662668,
+    "ast_hash": "9269ccc33c6ad24c4119a946dc7d3229",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-2.png": {
+    "mtime": 1791170670.469583,
+    "seen": 1795418804.566268,
+    "ast_hash": "e006959e7626e716fdeec550921a897e",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-3.png": {
+    "mtime": 1791170670.4712114,
+    "seen": 1795418804.566268,
+    "ast_hash": "8061335a97abdb9fcf4cff4d26e4cfc8",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-4.png": {
+    "mtime": 1791170670.474213,
+    "seen": 1795418804.566269,
+    "ast_hash": "76a65029440ac7766aaabf6003ba833f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-5.png": {
+    "mtime": 1791170670.4765744,
+    "seen": 1795418804.5662699,
+    "ast_hash": "fe0aa02ebc22801aa4ec098a1ee2ffc0",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-6.png": {
+    "mtime": 1791170670.478804,
+    "seen": 1795418804.566272,
+    "ast_hash": "60fd315444e5640556ccd8ec12b97e15",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-7.png": {
+    "mtime": 1791170670.4812026,
+    "seen": 1795418804.566273,
+    "ast_hash": "655b408ecf05aa8ff96c340ab8c219fe",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-8.png": {
+    "mtime": 1791170670.4836295,
+    "seen": 1795418804.566273,
+    "ast_hash": "2dc2e9ebbf9f6f323bea220ceaf5b185",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-9.png": {
+    "mtime": 1791170670.4861522,
+    "seen": 1795418804.5662742,
+    "ast_hash": "6a2d51911c98b06ba8f9008946224329",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem-1.png": {
+    "mtime": 1791170670.4884214,
+    "seen": 1795418804.5662751,
+    "ast_hash": "eb0633fdf6b08424a20031c6812e40a3",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem-2.png": {
+    "mtime": 1791170670.4910069,
+    "seen": 1795418804.566276,
+    "ast_hash": "0f55964aa8914894910a3850f1031643",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem-3.png": {
+    "mtime": 1791170670.4939132,
+    "seen": 1795418804.566277,
+    "ast_hash": "7f7970db5bfc8d45e110e92b5a69467f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem-4.png": {
+    "mtime": 1791170670.4961426,
+    "seen": 1795418804.566279,
+    "ast_hash": "98097fc23c2fb6d542a9b4f107ef629c",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem-5.png": {
+    "mtime": 1791170670.4996805,
+    "seen": 1795418804.5662808,
+    "ast_hash": "81a45a26b7cd4b7716d4c5d3a965eb66",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-DOCUMENT-tim-kiem-6.png": {
+    "mtime": 1791170670.5008736,
+    "seen": 1795418804.566282,
+    "ast_hash": "c6cb5c60d549c6036d11d5b60af03068",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER-1.png": {
+    "mtime": 1791170670.503387,
+    "seen": 1795418804.566284,
+    "ast_hash": "c902fb9020a42fdde285bc3db74aaa5a",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER-2.png": {
+    "mtime": 1791170670.5064025,
+    "seen": 1795418804.566286,
+    "ast_hash": "1a30358a1fc6c005cdd277b24c01cd73",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER-3.png": {
+    "mtime": 1791170670.5078123,
+    "seen": 1795418804.566287,
+    "ast_hash": "e367f406ec932cf9acbf2998c8b52f21",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-FOLDER-4.png": {
+    "mtime": 1791170670.5113447,
+    "seen": 1795418804.5662878,
+    "ast_hash": "053f903c1dd4e98f5e2bd06ba153ecdf",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-1.png": {
+    "mtime": 1791170670.5134687,
+    "seen": 1795418804.566289,
+    "ast_hash": "4e8bc1f02a12493d0a05f1715ac02749",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-2.png": {
+    "mtime": 1791170670.5147877,
+    "seen": 1795418804.56629,
+    "ast_hash": "dcf58e0bb4aaec76fd4a7ac83613561f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-3.png": {
+    "mtime": 1791170670.5169675,
+    "seen": 1795418804.5662909,
+    "ast_hash": "c1c03ee4102c901853b873e0a8f9f725",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-4.png": {
+    "mtime": 1791170670.5187848,
+    "seen": 1795418804.566292,
+    "ast_hash": "992d63772366eacdb4004768981bc8e4",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-5.png": {
+    "mtime": 1791170670.5213451,
+    "seen": 1795418804.566293,
+    "ast_hash": "3f0033cd8cb922757a350bb13e6efdcf",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-6.png": {
+    "mtime": 1791170670.5227723,
+    "seen": 1795418804.5662951,
+    "ast_hash": "b1e60226f908674a50e375979813c44d",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-7.png": {
+    "mtime": 1791170670.524693,
+    "seen": 1795418804.566296,
+    "ast_hash": "b8a1e7dedc93489154c42403f19d6a2e",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-LOC-8.png": {
+    "mtime": 1791170670.5259252,
+    "seen": 1795418804.566297,
+    "ast_hash": "0f99034ffc7f29ab73463b36c1ca440f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-TIMKIEM-1.png": {
+    "mtime": 1791170670.5271833,
+    "seen": 1795418804.566298,
+    "ast_hash": "e99a2be51592d81b19854badedeb8401",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-TIMKIEM-2.png": {
+    "mtime": 1791170670.5282629,
+    "seen": 1795418804.566299,
+    "ast_hash": "0a1240a7e73e66a7461c6ff9a350f47b",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD-1.png": {
+    "mtime": 1791170670.530737,
+    "seen": 1795418804.5663,
+    "ast_hash": "8dc20d4e8d715a3acd855ab891224ca3",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD-2.png": {
+    "mtime": 1791170670.5341313,
+    "seen": 1795418804.566302,
+    "ast_hash": "2788ea1d255f0987fb966592bf052f31",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD-3.png": {
+    "mtime": 1791170670.5380218,
+    "seen": 1795418804.566303,
+    "ast_hash": "67a4f5d59f9b9ae5b8d29822a4279d13",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan-UPLOAD-4.png": {
+    "mtime": 1791170670.5407283,
+    "seen": 1795418804.566304,
+    "ast_hash": "53a256b3ad21062938d43575fba75f7f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-ca-nhan.png": {
+    "mtime": 1791170670.5434735,
+    "seen": 1795418804.566305,
+    "ast_hash": "778dc5ac3995623d627c599086b2ee01",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-1.png": {
+    "mtime": 1791170670.5446894,
+    "seen": 1795418804.566306,
+    "ast_hash": "5d0d3c85673d816f574c46ee8f63042e",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-10.png": {
+    "mtime": 1791170670.5462744,
+    "seen": 1795418804.566307,
+    "ast_hash": "d5eaa1a66457ec68e456d1eba97f543e",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-11.png": {
+    "mtime": 1791170670.547659,
+    "seen": 1795418804.566308,
+    "ast_hash": "6f3037e5f0927e1909ffa38ed9469a90",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-12.png": {
+    "mtime": 1791170670.5494838,
+    "seen": 1795418804.5663092,
+    "ast_hash": "44aec3c503e1b4e208eea3a678fc755d",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-13.png": {
+    "mtime": 1791170670.5511107,
+    "seen": 1795418804.5663092,
+    "ast_hash": "f7c9a23549fc9466f0e560c4c62f3bea",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-14.png": {
+    "mtime": 1791170670.5540745,
+    "seen": 1795418804.56631,
+    "ast_hash": "3d875eda4262a04017aa22b48538ef86",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-15.png": {
+    "mtime": 1791170670.556241,
+    "seen": 1795418804.566311,
+    "ast_hash": "87504a58149624fa1ce9202f6f93363d",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-16.png": {
+    "mtime": 1791170670.5577662,
+    "seen": 1795418804.5663118,
+    "ast_hash": "9b176cf26d3bd80e251ce919001bc82f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-17.png": {
+    "mtime": 1791170670.559562,
+    "seen": 1795418804.5663118,
+    "ast_hash": "1a703bb9070324cf7c10f96aceaab1e8",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-18.png": {
+    "mtime": 1791170670.561287,
+    "seen": 1795418804.566313,
+    "ast_hash": "404564ce132306d95b9bedce1e145161",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-19.png": {
+    "mtime": 1791170670.56277,
+    "seen": 1795418804.566315,
+    "ast_hash": "15580d35a26b2cdadfe3c39b6c5f405d",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-2.png": {
+    "mtime": 1791170670.5643613,
+    "seen": 1795418804.566317,
+    "ast_hash": "3195956204f8bb73526730b857893ae4",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-20.png": {
+    "mtime": 1791170670.5671463,
+    "seen": 1795418804.566318,
+    "ast_hash": "fc930cf1855df270f649bf8b57d85c01",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-21.png": {
+    "mtime": 1791170670.5690525,
+    "seen": 1795418804.566319,
+    "ast_hash": "b232914fa71cfb8d2234e081930d30f7",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-22.png": {
+    "mtime": 1791170670.5705965,
+    "seen": 1795418804.5663202,
+    "ast_hash": "bd281fb02e923f78d6b66a684b2f1199",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-23.png": {
+    "mtime": 1791170670.572168,
+    "seen": 1795418804.5663218,
+    "ast_hash": "5cd192eaaf9c863d219b0f366ab98bfa",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-24.png": {
+    "mtime": 1791170670.5737774,
+    "seen": 1795418804.566323,
+    "ast_hash": "e90bbb14ec660945c92edfd97c504717",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-3.png": {
+    "mtime": 1791170670.5752368,
+    "seen": 1795418804.566324,
+    "ast_hash": "6afd78aae1f0b1298dbad24273731591",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-4.png": {
+    "mtime": 1791170670.5760472,
+    "seen": 1795418804.566325,
+    "ast_hash": "35d9bf03f12221a2e4795598a92d404f",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-5.png": {
+    "mtime": 1791170670.5769434,
+    "seen": 1795418804.566327,
+    "ast_hash": "db552fea8fd64859c53aa67dce06114e",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-6.png": {
+    "mtime": 1791170670.5798132,
+    "seen": 1795418804.566328,
+    "ast_hash": "d168d0d5d74addcca431227484485c68",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-7.png": {
+    "mtime": 1791170670.582286,
+    "seen": 1795418804.566329,
+    "ast_hash": "a54b088909268cded867641c14d25524",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-8.png": {
+    "mtime": 1791170670.5854683,
+    "seen": 1795418804.5663302,
+    "ast_hash": "9a8935218c8c17b1bb772fc0a0515a3e",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/kho-luu-tru-nhom-9.png": {
+    "mtime": 1791170670.5880704,
+    "seen": 1795418804.566331,
+    "ast_hash": "7ff1f94f14740467fe63537679aedca6",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/tai-lieu-ky-thuat-cu/references/image/images-program/tai-lieu-test.png": {
+    "mtime": 1791170670.5904677,
+    "seen": 1795418804.5663319,
+    "ast_hash": "509e5ca08323412dfeb66c91dcfccd7a",
+    "semantic_hash": ""
+  },
+  "alembic/versions/e4f5a6b7c8d9_add_workspace_members_primary_key.py": {
+    "mtime": 1795427752.2931547,
+    "seen": 1795427804.110163,
+    "ast_hash": "7f412c196099cdbb3daa0553fd39d9db",
+    "semantic_hash": ""
+  },
+  "alembic/versions/f5a6b7c8d9e0_drop_duplicate_fts_gin_index.py": {
+    "mtime": 1795427776.538575,
+    "seen": 1795427804.1101649,
+    "ast_hash": "425032d7ec36179fa27128213372a73a",
+    "semantic_hash": ""
+  },
+  "backend/tests/benchmark_accessed_within.py": {
+    "mtime": 1795426798.6502755,
+    "seen": 1795427804.1138802,
+    "ast_hash": "2bcfe932aa5d538fa825fb32aed7248c",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/minh-chung-tai-nguyen-su-dung/minh-chung-truy-van-log-thay-vi-cot-moi.md": {
+    "mtime": 1795427125.3402116,
+    "seen": 1795427804.125101,
+    "ast_hash": "205b12e2f497cb4e2ffb29cec62b0f46",
+    "semantic_hash": ""
+  },
+  "alembic/versions/6a8f0b1c2d3e_add_download_logs_access_filter_index.py": {
+    "mtime": 1795429667.3168216,
+    "seen": 1795430680.510425,
+    "ast_hash": "beac87316592881405e996fd43f5caa1",
+    "semantic_hash": ""
+  },
+  "frontend/digital-library/src/utils/matchesLoadedFilters.ts": {
+    "mtime": 1795428879.6318765,
+    "seen": 1795429110.690233,
+    "ast_hash": "f21a7ae415b8afd3979876885bf58317",
+    "semantic_hash": ""
+  },
+  "alembic/versions/b7c8d9e0f1a2_fix_fts_unaccent_trigger_and_backfill.py": {
+    "mtime": 1795430609.1915586,
+    "seen": 1795430680.510487,
+    "ast_hash": "1de3c5c5bfa4a58020c87265f8823903",
+    "semantic_hash": ""
+  },
+  "docs/05-tinh-nang/08-toi-uu-loc-tai-lieu-va-loading.md": {
+    "mtime": 1795429672.3171287,
+    "seen": 1795430680.523189,
+    "ast_hash": "08ee579be21a8334367b194592c50e89",
+    "semantic_hash": ""
+  },
+  "alembic/versions/c8d9e0f1a2b3_backfill_missing_document_stats.py": {
+    "mtime": 1795433154.603665,
+    "seen": 1795433225.374448,
+    "ast_hash": "edd6711780861b8b8f5d91d05661eaa9",
+    "semantic_hash": ""
+  },
+  "alembic/versions/d9e0f1a2b3c4_map_legacy_tag_and_clear_workspace.py": {
+    "mtime": 1795437713.0877023,
+    "seen": 1795438286.2396932,
+    "ast_hash": "d1d60580b19101df4d93afb431a74313",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_library_download_action_filter.py": {
+    "mtime": 1795441756.9773123,
+    "seen": 1795442025.5338728,
+    "ast_hash": "36207622e4a7a0a0f7ff72e79a058f0b",
+    "semantic_hash": ""
+  },
+  "alembic/versions/e0f1a2b3c4d5_batch2_integrity_normalization.py": {
+    "mtime": 1795438957.842869,
+    "seen": 1795439371.313382,
+    "ast_hash": "14cb3834dba87e221a39614b9af0dd92",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_batch2_integrity_constraints.py": {
+    "mtime": 1795439176.0561516,
+    "seen": 1795439371.316088,
+    "ast_hash": "d7ae73c1346fbc54efc91c0ec043dd41",
+    "semantic_hash": ""
+  },
+  "backend/entrypoint.sh": {
+    "mtime": 1795440102.7654746,
+    "seen": 1795440200.002509,
+    "ast_hash": "d06ea3463b4601de4cb8b8e87ce2ef58",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_batch3_deployment_and_legacy_tracing.py": {
+    "mtime": 1795572449.370287,
+    "seen": 1795572883.680817,
+    "ast_hash": "e410cbbf0b287c96a4de8f82e17d6665",
+    "semantic_hash": ""
+  },
+  "alembic/versions/a2b3c4d5e6f7_drop_obsolete_processing_jobs_and_trash_batches.py": {
+    "mtime": 1795493242.6612947,
+    "seen": 1795494026.881382,
+    "ast_hash": "fbebc6e3518e8fba702091f90d38e08e",
+    "semantic_hash": ""
+  },
+  "alembic/versions/f1a2b3c4d5e6_normalize_workspace_member_permission_levels.py": {
+    "mtime": 1795441344.806956,
+    "seen": 1795442025.531193,
+    "ast_hash": "c73f23aba525ac674fe72a1e0cd6a07b",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_permission_normalization.py": {
+    "mtime": 1795441911.930464,
+    "seen": 1795442025.533896,
+    "ast_hash": "cd010d1a0db09d916c7724cb29184c0c",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/BAO_CAO_RA_SOAT_VA_TOI_UU_CSDL.md": {
+    "mtime": 1795572834.2804399,
+    "seen": 1795572883.688736,
+    "ast_hash": "800d247edb39048381e9e1a44d6c24cc",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/so-do-erd.html": {
+    "mtime": 1795487686.020491,
+    "seen": 1795489883.5652921,
+    "ast_hash": "3220ab460ac1207936fe3f867adea792",
+    "semantic_hash": ""
+  },
+  "docs/04-co-so-du-lieu/BAO_CAO_KET_QUA_THUC_THI_MUC_4.md": {
+    "mtime": 1795572857.0488,
+    "seen": 1795572883.688735,
+    "ast_hash": "5d9c13583957f1d296720b37ad1591f5",
+    "semantic_hash": ""
+  },
+  "docs/99-luu-tru/ke-hoach/AI-Vector/ke-hoach-trien-khai-AI.md": {
+    "mtime": 1795490926.975488,
+    "seen": 1795494026.895068,
+    "ast_hash": "ff23914e904c991dd1658dce7c9899b9",
+    "semantic_hash": ""
+  },
+  "alembic/versions/b3c4d5e6f7a8_sync_schema_shares_bundle_and_community_stats.py": {
+    "mtime": 1795572292.179401,
+    "seen": 1795572883.677721,
+    "ast_hash": "111224b8b3f41aa5f0ed140532363f7e",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_schema_sync_shares_and_community_stats.py": {
+    "mtime": 1795572523.7179291,
+    "seen": 1795572883.681026,
+    "ast_hash": "3784f199af17e8d3de19129183c028a3",
     "semantic_hash": ""
   },
   "docs-site/package-lock.json": {

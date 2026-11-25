@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey
 
-from app.models.trash_batch import TrashBatch
 from app.models.workspace_tag import WorkspaceTag
 from .base import Base, TimestampMixin
 
@@ -98,6 +97,3 @@ class User(Base, TimestampMixin):
     workspace_tags_created: Mapped[List["WorkspaceTag"]] = relationship(
         "WorkspaceTag", back_populates="owner"
     )
-    deleted_trash_batches: Mapped[List["TrashBatch"]] = relationship(
-    "TrashBatch", foreign_keys="[TrashBatch.deleted_by]", back_populates="deleter"
-)

@@ -1,0 +1,444 @@
+2026-11-23 17:53:41,684 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-11-23 17:53:41,685 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-11-23 17:53:41,959 INFO sqlalchemy.engine.Engine select current_schema()
+2026-11-23 17:53:41,959 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-11-23 17:53:42,220 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2026-11-23 17:53:42,220 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-11-23 17:53:42,409 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-11-23 17:53:42,409 INFO sqlalchemy.engine.Engine SELECT version();
+2026-11-23 17:53:42,409 INFO sqlalchemy.engine.Engine [generated in 0.00009s] ()
+2026-11-23 17:53:42,606 INFO sqlalchemy.engine.Engine SELECT extname, extversion FROM pg_extension ORDER BY extname;
+2026-11-23 17:53:42,606 INFO sqlalchemy.engine.Engine [generated in 0.00019s] ()
+PG_VERSION: PostgreSQL 18.7 (84da7d8) on aarch64-unknown-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+EXTENSIONS: [{'extname': 'pg_trgm', 'extversion': '1.6'}, {'extname': 'plpgsql', 'extversion': '1.0'}, {'extname': 'unaccent', 'extversion': '1.1'}]
+2026-11-23 17:53:42,781 INFO sqlalchemy.engine.Engine SELECT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_stat_statements');
+2026-11-23 17:53:42,781 INFO sqlalchemy.engine.Engine [generated in 0.00016s] ()
+PG_STAT_STATEMENTS_EXISTS: False
+2026-11-23 17:53:43,120 INFO sqlalchemy.engine.Engine 
+            SELECT 
+                c.relname as table_name,
+                c.reltuples::bigint as est_rows,
+                pg_size_pretty(pg_total_relation_size(c.oid)) as total_size,
+                pg_size_pretty(pg_relation_size(c.oid)) as table_size,
+                pg_size_pretty(pg_indexes_size(c.oid)) as indexes_size,
+                pg_total_relation_size(c.oid) as total_bytes,
+                st.seq_scan,
+                st.seq_tup_read,
+                st.idx_scan,
+                st.n_live_tup,
+                st.n_dead_tup
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            LEFT JOIN pg_stat_user_tables st ON st.relid = c.oid
+            WHERE n.nspname = 'public' AND c.relkind = 'r'
+            ORDER BY pg_total_relation_size(c.oid) DESC;
+        
+2026-11-23 17:53:43,120 INFO sqlalchemy.engine.Engine [generated in 0.00018s] ()
+PUBLIC_TABLES_INVENTORY:
+[
+  {
+    "table_name": "documents",
+    "est_rows": 1076,
+    "total_size": "12 MB",
+    "table_size": "1080 kB",
+    "indexes_size": "5160 kB",
+    "total_bytes": 12754944,
+    "seq_scan": 18781,
+    "seq_tup_read": 1409564,
+    "idx_scan": 29587,
+    "n_live_tup": 1076,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "users",
+    "est_rows": 64,
+    "total_size": "360 kB",
+    "table_size": "16 kB",
+    "indexes_size": "312 kB",
+    "total_bytes": 368640,
+    "seq_scan": 57719,
+    "seq_tup_read": 3184602,
+    "idx_scan": 2634,
+    "n_live_tup": 66,
+    "n_dead_tup": 3
+  },
+  {
+    "table_name": "document_tags",
+    "est_rows": 2008,
+    "total_size": "232 kB",
+    "table_size": "72 kB",
+    "indexes_size": "128 kB",
+    "total_bytes": 237568,
+    "seq_scan": 8149,
+    "seq_tup_read": 1079441,
+    "idx_scan": 15227,
+    "n_live_tup": 2020,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "document_stats",
+    "est_rows": 1035,
+    "total_size": "160 kB",
+    "table_size": "88 kB",
+    "indexes_size": "40 kB",
+    "total_bytes": 163840,
+    "seq_scan": 973,
+    "seq_tup_read": 331903,
+    "idx_scan": 4055,
+    "n_live_tup": 1049,
+    "n_dead_tup": 17
+  },
+  {
+    "table_name": "download_logs",
+    "est_rows": 215,
+    "total_size": "152 kB",
+    "table_size": "24 kB",
+    "indexes_size": "96 kB",
+    "total_bytes": 155648,
+    "seq_scan": 2091,
+    "seq_tup_read": 327515,
+    "idx_scan": 1392,
+    "n_live_tup": 215,
+    "n_dead_tup": 3
+  },
+  {
+    "table_name": "subjects",
+    "est_rows": 54,
+    "total_size": "152 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "136 kB",
+    "total_bytes": 155648,
+    "seq_scan": 2894,
+    "seq_tup_read": 27876,
+    "idx_scan": 1284,
+    "n_live_tup": 54,
+    "n_dead_tup": 2
+  },
+  {
+    "table_name": "community_submissions",
+    "est_rows": -1,
+    "total_size": "96 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "80 kB",
+    "total_bytes": 98304,
+    "seq_scan": 20,
+    "seq_tup_read": 45,
+    "idx_scan": 3660,
+    "n_live_tup": 7,
+    "n_dead_tup": 7
+  },
+  {
+    "table_name": "workspace_tags",
+    "est_rows": 43,
+    "total_size": "88 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "80 kB",
+    "total_bytes": 90112,
+    "seq_scan": 763,
+    "seq_tup_read": 45212,
+    "idx_scan": 1494,
+    "n_live_tup": 76,
+    "n_dead_tup": 4
+  },
+  {
+    "table_name": "document_shares",
+    "est_rows": 5,
+    "total_size": "80 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "64 kB",
+    "total_bytes": 81920,
+    "seq_scan": 1983,
+    "seq_tup_read": 12807,
+    "idx_scan": 196,
+    "n_live_tup": 7,
+    "n_dead_tup": 6
+  },
+  {
+    "table_name": "workspaces",
+    "est_rows": 20,
+    "total_size": "80 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "64 kB",
+    "total_bytes": 81920,
+    "seq_scan": 16699,
+    "seq_tup_read": 301974,
+    "idx_scan": 4904,
+    "n_live_tup": 20,
+    "n_dead_tup": 18
+  },
+  {
+    "table_name": "document_ratings",
+    "est_rows": -1,
+    "total_size": "80 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "64 kB",
+    "total_bytes": 81920,
+    "seq_scan": 368,
+    "seq_tup_read": 3460,
+    "idx_scan": 6038,
+    "n_live_tup": 29,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "folders",
+    "est_rows": 35,
+    "total_size": "72 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "32 kB",
+    "total_bytes": 73728,
+    "seq_scan": 2793,
+    "seq_tup_read": 76157,
+    "idx_scan": 2661,
+    "n_live_tup": 35,
+    "n_dead_tup": 17
+  },
+  {
+    "table_name": "notifications",
+    "est_rows": 28,
+    "total_size": "64 kB",
+    "table_size": "16 kB",
+    "indexes_size": "16 kB",
+    "total_bytes": 65536,
+    "seq_scan": 3498,
+    "seq_tup_read": 118145,
+    "idx_scan": 12,
+    "n_live_tup": 43,
+    "n_dead_tup": 1
+  },
+  {
+    "table_name": "tags",
+    "est_rows": 126,
+    "total_size": "56 kB",
+    "table_size": "16 kB",
+    "indexes_size": "16 kB",
+    "total_bytes": 57344,
+    "seq_scan": 19601,
+    "seq_tup_read": 1346084,
+    "idx_scan": 22373,
+    "n_live_tup": 149,
+    "n_dead_tup": 14
+  },
+  {
+    "table_name": "workspace_invitations",
+    "est_rows": 2,
+    "total_size": "48 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "32 kB",
+    "total_bytes": 49152,
+    "seq_scan": 12629,
+    "seq_tup_read": 105722,
+    "idx_scan": 5,
+    "n_live_tup": 12,
+    "n_dead_tup": 12
+  },
+  {
+    "table_name": "user_todos",
+    "est_rows": 1,
+    "total_size": "48 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "32 kB",
+    "total_bytes": 49152,
+    "seq_scan": 819,
+    "seq_tup_read": 808,
+    "idx_scan": 16,
+    "n_live_tup": 1,
+    "n_dead_tup": 5
+  },
+  {
+    "table_name": "workspace_members",
+    "est_rows": 30,
+    "total_size": "40 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "32 kB",
+    "total_bytes": 40960,
+    "seq_scan": 8952,
+    "seq_tup_read": 241882,
+    "idx_scan": 1387,
+    "n_live_tup": 30,
+    "n_dead_tup": 17
+  },
+  {
+    "table_name": "faculties",
+    "est_rows": -1,
+    "total_size": "40 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "32 kB",
+    "total_bytes": 40960,
+    "seq_scan": 748,
+    "seq_tup_read": 8534,
+    "idx_scan": 747,
+    "n_live_tup": 15,
+    "n_dead_tup": 3
+  },
+  {
+    "table_name": "classes",
+    "est_rows": -1,
+    "total_size": "40 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "32 kB",
+    "total_bytes": 40960,
+    "seq_scan": 59,
+    "seq_tup_read": 533,
+    "idx_scan": 148,
+    "n_live_tup": 11,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "alembic_version",
+    "est_rows": -1,
+    "total_size": "24 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "16 kB",
+    "total_bytes": 24576,
+    "seq_scan": 54,
+    "seq_tup_read": 52,
+    "idx_scan": 27,
+    "n_live_tup": 1,
+    "n_dead_tup": 10
+  },
+  {
+    "table_name": "folder_tags",
+    "est_rows": 37,
+    "total_size": "24 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "16 kB",
+    "total_bytes": 24576,
+    "seq_scan": 7710,
+    "seq_tup_read": 414916,
+    "idx_scan": 7660,
+    "n_live_tup": 72,
+    "n_dead_tup": 42
+  },
+  {
+    "table_name": "trash_batches",
+    "est_rows": -1,
+    "total_size": "24 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "16 kB",
+    "total_bytes": 24576,
+    "seq_scan": 44,
+    "seq_tup_read": 81,
+    "idx_scan": 4,
+    "n_live_tup": 2,
+    "n_dead_tup": 1
+  },
+  {
+    "table_name": "categories",
+    "est_rows": -1,
+    "total_size": "24 kB",
+    "table_size": "8192 bytes",
+    "indexes_size": "16 kB",
+    "total_bytes": 24576,
+    "seq_scan": 41,
+    "seq_tup_read": 145,
+    "idx_scan": 63,
+    "n_live_tup": 6,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "document_versions",
+    "est_rows": -1,
+    "total_size": "16 kB",
+    "table_size": "0 bytes",
+    "indexes_size": "8192 bytes",
+    "total_bytes": 16384,
+    "seq_scan": 54,
+    "seq_tup_read": 192,
+    "idx_scan": 1,
+    "n_live_tup": 0,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "processing_jobs",
+    "est_rows": -1,
+    "total_size": "16 kB",
+    "table_size": "0 bytes",
+    "indexes_size": "8192 bytes",
+    "total_bytes": 16384,
+    "seq_scan": 24,
+    "seq_tup_read": 49,
+    "idx_scan": 3,
+    "n_live_tup": 0,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "notes",
+    "est_rows": -1,
+    "total_size": "16 kB",
+    "table_size": "0 bytes",
+    "indexes_size": "8192 bytes",
+    "total_bytes": 16384,
+    "seq_scan": 164,
+    "seq_tup_read": 1295,
+    "idx_scan": 3,
+    "n_live_tup": 0,
+    "n_dead_tup": 0
+  },
+  {
+    "table_name": "favorites",
+    "est_rows": -1,
+    "total_size": "8192 bytes",
+    "table_size": "0 bytes",
+    "indexes_size": "8192 bytes",
+    "total_bytes": 8192,
+    "seq_scan": 20,
+    "seq_tup_read": 0,
+    "idx_scan": 299,
+    "n_live_tup": 0,
+    "n_dead_tup": 0
+  }
+]
+2026-11-23 17:53:43,246 INFO sqlalchemy.engine.Engine 
+            SELECT 
+                c.relname as table_name,
+                i.relname as index_name,
+                ix.indisunique,
+                ix.indisvalid,
+                am.amname as method,
+                pg_size_pretty(pg_relation_size(i.oid)) as index_size,
+                pg_relation_size(i.oid) as index_bytes,
+                si.idx_scan,
+                si.idx_tup_read,
+                si.idx_tup_fetch,
+                pg_get_indexdef(ix.indexrelid) as indexdef
+            FROM pg_index ix
+            JOIN pg_class c ON c.oid = ix.indrelid
+            JOIN pg_class i ON i.oid = ix.indexrelid
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            JOIN pg_am am ON am.oid = i.relam
+            LEFT JOIN pg_stat_user_indexes si ON si.indexrelid = ix.indexrelid
+            WHERE n.nspname = 'public'
+            ORDER BY c.relname, i.relname;
+        
+2026-11-23 17:53:43,246 INFO sqlalchemy.engine.Engine [generated in 0.00010s] ()
+ALL_INDEXES_COUNT: 73
+ZERO_SCAN_NON_UNIQUE_INDEXES (14):
+  community_submissions.ix_community_submissions_reviewed_by (16 kB): CREATE INDEX ix_community_submissions_reviewed_by ON public.community_submissions USING btree (reviewed_by)
+  community_submissions.ix_community_submissions_subject (16 kB): CREATE INDEX ix_community_submissions_subject ON public.community_submissions USING btree (subject_id)
+  document_shares.ix_document_shares_from_user_status (16 kB): CREATE INDEX ix_document_shares_from_user_status ON public.document_shares USING btree (from_user_id, status)
+  documents.idx_document_title_trgm (1008 kB): CREATE INDEX idx_document_title_trgm ON public.documents USING gin (title gin_trgm_ops)
+  download_logs.ix_download_logs_user_action_created_document (32 kB): CREATE INDEX ix_download_logs_user_action_created_document ON public.download_logs USING btree (user_id, action, created_at, document_id)
+  subjects.idx_subjects_name_trgm (64 kB): CREATE INDEX idx_subjects_name_trgm ON public.subjects USING gin (name gin_trgm_ops)
+  user_todos.ix_user_todos_user_id (16 kB): CREATE INDEX ix_user_todos_user_id ON public.user_todos USING btree (user_id)
+  users.idx_users_email_trgm (40 kB): CREATE INDEX idx_users_email_trgm ON public.users USING gin (email gin_trgm_ops)
+  users.idx_users_full_name_trgm (48 kB): CREATE INDEX idx_users_full_name_trgm ON public.users USING gin (full_name gin_trgm_ops)
+  users.idx_users_student_code_trgm (32 kB): CREATE INDEX idx_users_student_code_trgm ON public.users USING gin (student_code gin_trgm_ops)
+  users.idx_users_username_trgm (32 kB): CREATE INDEX idx_users_username_trgm ON public.users USING gin (username gin_trgm_ops)
+  workspace_invitations.ix_workspace_invitations_invited_user (16 kB): CREATE INDEX ix_workspace_invitations_invited_user ON public.workspace_invitations USING btree (invited_user_id, status)
+  workspace_tags.ix_owner_user_id (16 kB): CREATE INDEX ix_owner_user_id ON public.workspace_tags USING btree (owner_user_id)
+  workspaces.idx_workspaces_name_trgm (24 kB): CREATE INDEX idx_workspaces_name_trgm ON public.workspaces USING gin (name gin_trgm_ops)
+2026-11-23 17:53:43,446 INFO sqlalchemy.engine.Engine 
+            SELECT 
+                c.relname as table_name,
+                con.conname as constraint_name,
+                con.contype as constraint_type,
+                pg_get_constraintdef(con.oid) as def
+            FROM pg_constraint con
+            JOIN pg_class c ON c.oid = con.conrelid
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public'
+            ORDER BY c.relname, con.contype, con.conname;
+        
+2026-11-23 17:53:43,446 INFO sqlalchemy.engine.Engine [generated in 0.00014s] ()
+ALL_CONSTRAINTS_COUNT: 229
+2026-11-23 17:53:43,582 INFO sqlalchemy.engine.Engine ROLLBACK

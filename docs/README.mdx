@@ -88,7 +88,7 @@ Hệ thống được thiết kế theo chuẩn **Offline-First**, hoạt độn
 
 - **Backend**: Python FastAPI, kiến trúc bất đồng bộ ASGI với `uvicorn` và `uvloop`.
 - **Cơ sở dữ liệu**: PostgreSQL 15+ cục bộ (`localhost:5432`), truy cập qua SQLAlchemy 2.0 AsyncSession và driver `asyncpg`.
-- **Quản lý Schema**: Quản lý lịch sử di chuyển cấu trúc CSDL bằng Alembic (7 bản migration tuyến tính).
+- **Quản lý Schema**: Quản lý lịch sử di chuyển cấu trúc CSDL bằng Alembic (17 bản migration tuyến tính; HEAD repository `b3c4d5e6f7a8`, chưa deploy Live).
 - **Lưu trữ tệp tin**: Hệ thống tập tin cục bộ tại thư mục `backend/storage/{owner_id}/`, kiểm soát trùng lặp qua mã băm SHA-256.
 - **Frontend**: React 18 SPA đóng gói bằng Vite, Tailwind CSS, Lucide React icons và Axios client.
 

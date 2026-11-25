@@ -19,8 +19,7 @@ if TYPE_CHECKING:
     from .document import Document
     from .folder import Folder
     from .academic_class import Class
-    from .faculty import Faculty
-    from .trash_batch import TrashBatch  
+    from .faculty import Faculty  
 
 class Workspace(Base, TimestampMixin):
     __tablename__ = "workspaces"
@@ -86,10 +85,6 @@ class Workspace(Base, TimestampMixin):
         "Faculty", back_populates="workspaces"
     )
 
-    # Relationship với TrashBatch (thêm mới)
-    trash_batches: Mapped[List["TrashBatch"]] = relationship(
-        "TrashBatch", back_populates="workspace"
-    )
     tags: Mapped[List["Tag"]] = relationship("Tag", back_populates="workspace", cascade="all, delete-orphan")
     
     workspace_tags: Mapped[List["WorkspaceTag"]] = relationship(

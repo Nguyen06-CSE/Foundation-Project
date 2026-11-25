@@ -1,7 +1,7 @@
 import asyncio
 import hashlib
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from sqlalchemy import select, insert, text, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,12 +27,10 @@ from app.models.document import Document
 from app.models.document_version import DocumentVersion
 from app.models.document_tag import document_tags
 from app.models.note import Note
-from app.models.trash_batch import TrashBatch
 from app.models.document_share import DocumentShare
 from app.models.notification import Notification
 from app.models.favorite import Favorite
 from app.models.download_log import DownloadLog
-from app.models.processing_job import ProcessingJob
 
 
 # =========================================================
@@ -369,29 +367,9 @@ async def seed_classifications(session: AsyncSession, users):
 
 
 # =========================================================
-# 6. SEED TRASH BATCHES (Kiểm tra trùng)
+# 6. SEED DOCUMENTS & METADATA (Kiểm tra trùng)
 # =========================================================
-async def seed_trash_batches(session: AsyncSession, users, workspaces):
-    print("5. Seeding Trash Batches...")
-    batch, created = await get_or_create(
-        session,
-        TrashBatch,
-        workspace_id=workspaces["Nhóm Đồ án Web"].id,
-        name="Nhóm BTL cũ (đã giải tán)",
-        defaults={
-            'deleted_by': users["sv_an"].id,
-            'deleted_at': datetime.now(),
-            'purge_at': datetime.now() + timedelta(days=30)
-        }
-    )
-    print(f"  {'✅ Created' if created else '⏭️  Already exists'} TrashBatch: Nhóm BTL cũ")
-    return batch
-
-
-# =========================================================
-# 7. SEED DOCUMENTS & METADATA (Kiểm tra trùng)
-# =========================================================
-async def seed_documents(session: AsyncSession, users, workspaces, classifications, trash_batch):
+async def seed_documents(session: AsyncSession, users, workspaces, classifications):
     print("6. Seeding Documents, Tags, Versions, Notes...")
     u_an = users["sv_an"]
     u_tuan = users["gv_tuan"]
@@ -440,7 +418,6 @@ async def seed_documents(session: AsyncSession, users, workspaces, classificatio
             "checksum": generate_checksum("trash"), 
             "is_deleted": True, 
             "deleted_at": datetime.now(), 
-            "trash_batch_id": trash_batch.id,
             "check_fields": {"checksum": generate_checksum("trash")}
         }
     ]
@@ -605,19 +582,6 @@ async def seed_interactions(session: AsyncSession, users, workspaces, docs):
     )
     print(f"  {'✅ Created' if created else '⏭️  Already exists'} DownloadLog")
 
-    # 5. Jobs
-    job, created = await get_or_create(
-        session,
-        ProcessingJob,
-        document_id=docs[0].id,
-        job_type="virus_scan",
-        defaults={
-            'status': "done",
-            'result': {"safe": True}
-        }
-    )
-    print(f"  {'✅ Created' if created else '⏭️  Already exists'} ProcessingJob")
-
     await session.commit()
 
 
@@ -639,8 +603,7 @@ async def seed_database():
             users = await seed_users(session, faculties, classes)
             workspaces = await seed_workspaces_and_members(session, users, faculties, classes)
             classifications = await seed_classifications(session, users)
-            trash_batch = await seed_trash_batches(session, users, workspaces)
-            docs = await seed_documents(session, users, workspaces, classifications, trash_batch)
+            docs = await seed_documents(session, users, workspaces, classifications)
             await seed_interactions(session, users, workspaces, docs)
             
             print("=" * 60)

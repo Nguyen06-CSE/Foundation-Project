@@ -245,8 +245,8 @@ class SearchService:
     async def full_text_search(db: AsyncSession, query: str, user_id: int, page: int = 1, page_size: int = 20):
         accessible_ws_ids = await SearchService._get_accessible_workspace_ids(db, user_id)
 
-        # websearch_to_tsquery xử lý tốt các toán tử logic tự nhiên hơn plainto_tsquery
-        ts_query = func.websearch_to_tsquery('simple', query)
+        # websearch_to_tsquery xử lý tốt các toán tử logic tự nhiên hơn plainto_tsquery; unaccent đảm bảo tìm kiếm không dấu
+        ts_query = func.websearch_to_tsquery('simple', func.unaccent(query))
         where_clauses = (
             Document.is_deleted == False,
             Document.search_vector.bool_op('@@')(ts_query),
@@ -322,7 +322,7 @@ async def search_documents(
         FROM documents
         WHERE is_deleted = false AND ({workspace_filter})
           AND (
-            search_vector @@ websearch_to_tsquery('simple', :query)
+            search_vector @@ websearch_to_tsquery('simple', unaccent(:query))
             OR unaccent(lower(title)) LIKE unaccent(lower(:like_query))
             OR unaccent(lower(coalesce(description, ''))) LIKE unaccent(lower(:like_query))
           )

@@ -35,8 +35,8 @@ sidebar_position: 4
 4. **File vật lý không nằm trong DB.** DB chỉ lưu `file_path`, `thumbnail_path`, `markdown_path` (local path hoặc R2 key). Nhiều bản ghi `documents` có thể trỏ tới **cùng một file vật lý** (single-instance storage theo `checksum`).
 5. **`ON DELETE`:** chỉ ghi nhận hành vi khi model/migration khai báo rõ. Nếu không ghi, FK mặc định là `NO ACTION/RESTRICT` ở DB.
 6. **JSONB:** `documents.metadata` (ORM attr `metadata_`) và `download_logs.extra_data`. Cấu trúc key xem mục 6.7.
-7. **Không có CHECK constraint cho hầu hết cột trạng thái** (role, status, permission…). Giá trị hợp lệ được kiểm soát ở tầng ứng dụng — xem mục 6.
-8. **Bảng dẫn xuất:** `document_stats` là bảng tổng hợp 1:1, có thể **chưa tồn tại row** cho một document (luôn `LEFT JOIN`).
+7. **Ràng buộc CHECK trạng thái và toàn vẹn:** Các CHECK constraint đã được chuẩn hóa qua Alembic bao gồm: `check_document_ratings_stars_range` (`stars BETWEEN 1 AND 5`), `chk_workspace_members_permission` (`permission_level IN ('view', 'full')` — migration `f1a2b3c4d5e6`), `chk_document_shares_status` (`status IN ('pending', 'accepted', 'rejected', 'auto_accepted', 'expired', 'withdrawn')` — migration `b3c4d5e6f7a8`), `chk_download_logs_action` (9 action chuẩn — migration `e0f1a2b3c4d5`), `chk_documents_scope`, và `chk_workspaces_type`. Các cột còn lại kiểm soát ở tầng ứng dụng — xem mục 6.
+8. **Bảng dẫn xuất:** `document_stats` là bảng tổng hợp 1:1. Từ revision `c8d9e0f1a2b3`, 100% tài liệu đã có row stats tương ứng và ORM tự động khởi tạo khi tạo document mới (vẫn khuyến nghị dùng `LEFT JOIN` cho an toàn tương thích).
 
 ---
 
@@ -88,7 +88,6 @@ erDiagram
     users ||--o{ workspace_members : "user_id"
     users ||--o{ workspace_invitations : "invited_user_id / invited_by"
     users ||--o{ workspace_tags : "owner_user_id"
-    users ||--o{ trash_batches : "deleted_by"
     users ||--o{ document_shares : "from_user_id / to_user_id"
 
     workspaces ||--o{ workspace_members : "1-n"
@@ -96,7 +95,6 @@ erDiagram
     workspaces ||--o{ workspace_tags : "1-n"
     workspaces ||--o{ folders : "1-n"
     workspaces ||--o{ documents : "1-n"
-    workspaces ||--o{ trash_batches : "1-n"
     workspaces ||--o{ document_shares : "source_workspace_id"
     workspaces ||--o{ download_logs : "workspace_id"
     workspaces ||--o{ notifications : "workspace_id"
@@ -122,13 +120,11 @@ erDiagram
     documents ||--o{ community_submissions : "published_document_id"
     documents ||--o{ document_shares : "source_document_id"
     documents ||--o{ document_shares : "document_id (bản copy)"
-    documents ||--o{ processing_jobs : "1-n"
     documents ||--o{ notifications : "document_id"
     documents ||--o{ user_todos : "document_id"
     documents ||--o| document_stats : "0..1 document_id"
     documents ||--o{ documents : "source_document_id (fork/copy)"
     documents ||--o{ documents : "bundle_parent_id"
-    documents ||--o{ trash_batches : "trash_batch_id"
 
     subjects ||--o{ documents : "subject_id"
     subjects ||--o{ community_submissions : "subject_id"
@@ -190,7 +186,7 @@ erDiagram
   - `class_id INTEGER NULL` → `classes.id`
   - `faculty_id INTEGER NULL` → `faculties.id`
   - `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
-- **Quan hệ:** n-1 `classes`, `faculties`; 1-n `documents`, `folders`, `categories`, `tags`, `notes`, `favorites`, `download_logs`, `document_versions`, `document_ratings`, `community_submissions`, `notifications`, `user_todos`, `owned_workspaces`, `workspace_memberships`, `received_invitations`, `sent_invitations`, `workspace_tags_created`, `deleted_trash_batches`; 2 vai trò trong `document_shares`.
+- **Quan hệ:** n-1 `classes`, `faculties`; 1-n `documents`, `folders`, `categories`, `tags`, `notes`, `favorites`, `download_logs`, `document_versions`, `document_ratings`, `community_submissions`, `notifications`, `user_todos`, `owned_workspaces`, `workspace_memberships`, `received_invitations`, `sent_invitations`, `workspace_tags_created`; 2 vai trò trong `document_shares`. (Quan hệ legacy `deleted_trash_batches` đã được gỡ bỏ sau migration `a2b3c4d5e6f7`).
 - **Giá trị `role`:** xem mục 6.1. Legacy `sysadmin`/`schooladmin` được chuẩn hóa trong code, nhưng DB có thể còn dữ liệu cũ.
 - **Ghi chú:** không có `avatar_url` (tài liệu cũ đề cập là sai).
 
@@ -215,7 +211,7 @@ erDiagram
   - `dissolve_at TIMESTAMPTZ NULL`
   - `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
   - `updated_at TIMESTAMPTZ NULL DEFAULT now()` (có `onupdate=now()`)
-- **Quan hệ:** 1-n `workspace_members`, `workspace_invitations`, `workspace_tags`, `folders`, `documents`, `trash_batches`, `tags` (`tags.workspace_id`), `document_shares` (`source_workspace_id`), `download_logs`, `notifications`, `user_todos`.
+- **Quan hệ:** 1-n `workspace_members`, `workspace_invitations`, `workspace_tags`, `folders`, `documents`, `tags` (`tags.workspace_id`), `document_shares` (`source_workspace_id`), `download_logs`, `notifications`, `user_todos`. (Quan hệ legacy `trash_batches` đã được gỡ bỏ sau migration `a2b3c4d5e6f7`).
 - **Vòng đời giải tán:** `is_dissolving = true` + `dissolve_at`; scheduler `execute_group_dissolution()` chạy khi tới hạn, chuyển tài liệu nhóm:
   - Nếu có bản copy cá nhân của thành viên → đưa bản copy vào thùng rác cá nhân với `trash_source = 'group_dissolved'`, `trash_group_name = <tên nhóm>`.
   - Nếu không → đánh dấu `is_orphaned = true`, `orphaned_at = now()`, chuyển file vào `storage/orphaned/`.
@@ -297,7 +293,7 @@ erDiagram
 | `orphaned_at` | TIMESTAMPTZ | YES | |
 | `trash_source` | VARCHAR(30) | YES | Nguồn vào thùng rác; giá trị code dùng: `group_dissolved`. |
 | `trash_group_name` | VARCHAR(150) | YES | Snapshot tên nhóm khi nhóm giải tán. |
-| `trash_batch_id` | INTEGER | YES | FK → `trash_batches.id`. |
+| `trash_batch_id` | INTEGER | YES | *(Đã xóa khỏi DB trong migration `a2b3c4d5e6f7`; giữ ClassVar/schema null để bảo toàn API).* |
 | `is_bundle` | BOOLEAN | NO | DEFAULT false. |
 | `bundle_parent_id` | INTEGER | YES | FK → `documents.id` **ON DELETE CASCADE**; có index. |
 | `created_at` | TIMESTAMPTZ | NO | DEFAULT now(). |
@@ -305,9 +301,9 @@ erDiagram
 - **Index:**
   - `ix_documents_checksum(checksum)`
   - `ix_documents_search_vector` GIN trên `search_vector`
-  - index trên `bundle_parent_id`
+  - `ix_documents_bundle_parent_id(bundle_parent_id)` (migration `b3c4d5e6f7a8`).
   - partial index `ix_documents_source_owner(source_document_id, owner_id) WHERE is_deleted = false AND source_document_id IS NOT NULL` (migration `c3d4e5f6a7b8`).
-- **Quan hệ ORM:** `owner`, `workspace`, `category`, `subject`; self-reference `source_document` ↔ `derived_documents`; self-reference `bundle_parent` ↔ `bundle_children` (cascade all, delete-orphan); `tags` (n-n qua `document_tags`); `versions`, `notes`, `trash_batch`, `ratings` (cascade), `activity_logs` (cascade), `stats` (1:1).
+- **Quan hệ ORM:** `owner`, `workspace`, `category`, `subject`; self-reference `source_document` ↔ `derived_documents`; self-reference `bundle_parent` ↔ `bundle_children` (cascade all, delete-orphan); `tags` (n-n qua `document_tags`); `versions`, `notes`, `ratings` (cascade), `activity_logs` (cascade), `stats` (1:1). (Thuộc tính `trash_batch` là `ClassVar = None` sau migration `a2b3c4d5e6f7`).
 - **Quy tắc dedup khi upload** (`document_service.create_document_from_upload`):
   - Phạm vi kiểm tra trùng: **cùng workspace** nếu upload vào nhóm; **cùng owner + `workspace_id IS NULL`** nếu upload cá nhân.
   - Kiểm tra cả bản ghi **đang active** và **đang trong thùng rác**; trùng active → lỗi `DUPLICATE`; trùng trong trash → lỗi `IN_TRASH`.
@@ -404,10 +400,11 @@ erDiagram
   - `expires_at TIMESTAMPTZ NULL` — thường `now + 30 ngày`.
   - `responded_at TIMESTAMPTZ NULL`
   - `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
-- **Index:**
+- **Index & Constraints:**
   - `ix_document_shares_to_user_status(to_user_id, status)`
   - `ix_document_shares_from_user_status(from_user_id, status)`
   - **partial unique** `uq_document_share_pending(from_user_id, to_user_id, source_document_id) WHERE status = 'pending' AND source_document_id IS NOT NULL`
+  - **CHECK constraint** `chk_document_shares_status`: `status IN ('pending', 'accepted', 'rejected', 'auto_accepted', 'expired', 'withdrawn')` (migration `b3c4d5e6f7a8`).
 - **Quy tắc auto-accept:** nếu `role_rank(sender) > role_rank(recipient)` → tạo bản copy ngay, status `auto_accepted`, `document_id` được set. Ngược lại → `pending`, `document_id = NULL`.
 - **Hết hạn:** khi list pending/sent, nếu `expires_at < now` và status `pending` → cập nhật thành `expired` (lazy expiration, không có job riêng).
 - **Withdraw:** người gửi có thể chuyển `pending` → `withdrawn`.
@@ -454,17 +451,18 @@ erDiagram
 
 ### 3.7. Cụm Vòng Đời & Thùng Rác
 
-#### `trash_batches` — Lô xóa
-- **Vai trò:** nhóm các tài liệu bị xóa cùng lúc (đặc biệt ở nhóm) để restore/purge theo lô.
-- **PK:** `id`.
-- **Cột:**
+#### `trash_batches` — Lô xóa *(Đã xóa khỏi DB trong migration `a2b3c4d5e6f7`)*
+- **Trạng thái:** Bảng đã được DROP trong migration `a2b3c4d5e6f7` (Mục 4). Model `TrashBatch` đã được unmap khỏi `Base.metadata` để tránh tạo lại.
+- **Vai trò lịch sử:** nhóm các tài liệu bị xóa cùng lúc (ở nhóm) để restore/purge theo lô.
+- **PK gốc:** `id`.
+- **Cột gốc:**
   - `workspace_id INTEGER NULL` → `workspaces.id` **ON DELETE SET NULL**
   - `name VARCHAR(255) NOT NULL`
   - `deleted_by INTEGER NOT NULL` → `users.id` **ON DELETE RESTRICT**
   - `deleted_at TIMESTAMPTZ NOT NULL DEFAULT now()`
   - `purge_at TIMESTAMPTZ NOT NULL` — thời điểm được phép xóa vĩnh viễn.
-- **Quan hệ:** 1-n `documents` (`documents.trash_batch_id`).
-- **Chính sách:** `TRASH_RETENTION_DAYS = 30`, `EXPIRING_TRASH_DAYS = 3` (cảnh báo UI). Scheduler `cleanup_deleted_documents()` xóa cứng các document có `is_deleted = true AND deleted_at < now - 30 ngày`.
+- **Quan hệ lịch sử:** 1-n `documents` (`documents.trash_batch_id`).
+- **Chính sách hiện tại:** `TRASH_RETENTION_DAYS = 30`, `EXPIRING_TRASH_DAYS = 3` (cảnh báo UI). Scheduler `cleanup_deleted_documents()` xóa cứng các document có `is_deleted = true AND deleted_at < now - 30 ngày` dựa trên cột `deleted_at` của chính `documents`.
 
 ---
 
@@ -556,10 +554,11 @@ erDiagram
 - **Ghi chú:** `is_completed` trong API/frontend là **giá trị dẫn xuất** từ `completed_at IS NOT NULL`, không phải cột DB.
 - **Nhắc việc:** scheduler `remind_due_todos()` tạo notification `todo_due` và set `reminded_at`.
 
-#### `processing_jobs` — Job xử lý tài liệu (chưa dùng)
-- **PK:** `id`.
-- **Cột:** `document_id INTEGER NOT NULL` → `documents.id`; `job_type VARCHAR(50) NOT NULL`; `status VARCHAR(20) NULL DEFAULT 'pending'`; `result JSONB NULL`; `finished_at TIMESTAMP NULL`; `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
-- **Trạng thái sử dụng:** bảng có trong schema và seed, nhưng **không có code ứng dụng ghi/đọc** trong backend hiện tại. Xử lý OCR/thumbnail/markdown hiện chạy qua `BackgroundTasks`, không qua bảng này.
+#### `processing_jobs` — Job xử lý tài liệu *(Đã xóa khỏi DB trong migration `a2b3c4d5e6f7`)*
+- **Trạng thái:** Bảng đã được DROP trong migration `a2b3c4d5e6f7` (Mục 4). Model `ProcessingJob` đã được unmap khỏi `Base.metadata` và đánh dấu DEPRECATED.
+- **PK gốc:** `id`.
+- **Cột gốc:** `document_id INTEGER NOT NULL` → `documents.id`; `job_type VARCHAR(50) NOT NULL`; `status VARCHAR(20) NULL DEFAULT 'pending'`; `result JSONB NULL`; `finished_at TIMESTAMP NULL`; `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
+- **Trạng thái sử dụng:** Không có code ứng dụng ghi/đọc trong backend. Xử lý OCR/thumbnail/markdown chạy qua `BackgroundTasks`, không qua bảng này. Đã gỡ bỏ toàn bộ khỏi seed/sync.
 
 ---
 
@@ -604,8 +603,8 @@ erDiagram
 | `folder_tags` | `tag_id` | `tags` | `id` | CASCADE |
 | `notes` | `document_id` | `documents` | `id` | — |
 | `notes` | `user_id` | `users` | `id` | — |
-| `trash_batches` | `workspace_id` | `workspaces` | `id` | SET NULL |
-| `trash_batches` | `deleted_by` | `users` | `id` | RESTRICT |
+| `trash_batches` *(dropped)* | `workspace_id` | `workspaces` | `id` | SET NULL *(Đã drop trong a2b3c4d5e6f7)* |
+| `trash_batches` *(dropped)* | `deleted_by` | `users` | `id` | RESTRICT *(Đã drop trong a2b3c4d5e6f7)* |
 | `document_shares` | `source_document_id` | `documents` | `id` | SET NULL |
 | `document_shares` | `document_id` | `documents` | `id` | SET NULL |
 | `document_shares` | `from_user_id` | `users` | `id` | — |
@@ -630,7 +629,7 @@ erDiagram
 | `user_todos` | `user_id` | `users` | `id` | CASCADE |
 | `user_todos` | `document_id` | `documents` | `id` | SET NULL |
 | `user_todos` | `workspace_id` | `workspaces` | `id` | SET NULL |
-| `processing_jobs` | `document_id` | `documents` | `id` | — |
+| `processing_jobs` *(dropped)* | `document_id` | `documents` | `id` | — *(Đã drop trong a2b3c4d5e6f7)* |
 
 ---
 
@@ -651,22 +650,28 @@ erDiagram
 | `workspace_tags` | `ix_workspace_id`, `ix_tag_id`, `ix_owner_user_id` | | |
 | `documents` | `ix_documents_checksum` | `checksum` | |
 | `documents` | `ix_documents_search_vector` GIN | `search_vector` | |
-| `documents` | index `bundle_parent_id` | | |
+| `documents` | `ix_documents_bundle_parent_id` | `bundle_parent_id` | migration `b3c4d5e6f7a8` |
+| `documents` | `idx_documents_title_trgm` GIN | `title gin_trgm_ops` | Index retained cho tìm kiếm tiêu đề; migration `b3c4d5e6f7a8` tạo nếu DB sạch thiếu |
+| `documents` | `idx_document_title_trgm` GIN | `title gin_trgm_ops` | Index legacy trùng; Live có cả hai. Migration `b3c4d5e6f7a8` chỉ drop sau preflight catalog, nếu không chứng minh đủ thì giữ và `NOTICE` |
 | `documents` | partial `ix_documents_source_owner` | `(source_document_id, owner_id)` | `WHERE is_deleted = false AND source_document_id IS NOT NULL` |
 | `document_tags` | PK composite | `(document_id, tag_id)` | |
 | `folder_tags` | PK composite | `(folder_id, tag_id)` | |
 | `folders` | `ix_folders_workspace_id` | `workspace_id` | |
+| `workspace_members` | CHECK `chk_workspace_members_permission` | `permission_level IN ('view', 'full')` | migration `f1a2b3c4d5e6` |
 | `document_shares` | `ix_document_shares_to_user_status` | `(to_user_id, status)` | |
 | `document_shares` | `ix_document_shares_from_user_status` | `(from_user_id, status)` | |
 | `document_shares` | partial UNIQUE `uq_document_share_pending` | `(from_user_id, to_user_id, source_document_id)` | `WHERE status = 'pending' AND source_document_id IS NOT NULL` |
+| `document_shares` | CHECK `chk_document_shares_status` | `status IN ('pending', 'accepted', 'rejected', 'auto_accepted', 'expired', 'withdrawn')` | migration `b3c4d5e6f7a8` |
 | `document_ratings` | UNIQUE `uq_document_ratings_document_user` | `(document_id, user_id)` | |
 | `document_ratings` | CHECK `check_document_ratings_stars_range` | `stars BETWEEN 1 AND 5` | |
 | `favorites` | PK composite | `(user_id, document_id)` | |
 | `download_logs` | `ix_download_logs_document_id_created_at` | `(document_id, created_at DESC)` | |
 | `download_logs` | `ix_download_logs_user_id_created_at` | `(user_id, created_at DESC)` | |
 | `download_logs` | `ix_download_logs_action_created_at` | `(action, created_at DESC)` | |
+| `download_logs` | CHECK `chk_download_logs_action` | 9 action chuẩn (`DOCUMENT_VIEWED`, `DOCUMENT_DOWNLOADED`, `DOCUMENT_UPLOADED`, `DOCUMENT_SHARED`, `DOCUMENT_DELETED`, `DOCUMENT_RESTORED`, `DOCUMENT_RECEIVED`, `DOCUMENT_CONTRIBUTED`, `DOCUMENT_SAVED`) | migration `e0f1a2b3c4d5` |
 | `document_stats` | PK | `document_id` | |
 | `user_todos` | `ix_user_todos_user_id` | `user_id` | |
+| `community_subject_stats` | Materialized View | `(subject_id, faculty_id, document_count bigint, total_downloads numeric, avg_rating numeric)` | migration `b3c4d5e6f7a8`; giữ công thức Live, chỉ lọc `dl.action = 'DOCUMENT_DOWNLOADED'`; `uq_community_subject_stats_subject_id(subject_id)`; refresh mỗi giờ qua scheduler với transaction-level advisory lock |
 
 **FTS trigger:**
 - Function `update_document_search_vector()` (PL/pgSQL):
@@ -702,6 +707,7 @@ Auto-accept share khi `rank(sender) > rank(recipient)`.
 `pending` | `accepted` | `rejected`.
 
 ### 6.4. `document_shares.status`
+Được bảo đảm bởi CHECK constraint `chk_document_shares_status` ở cấp CSDL và ORM model (migration `b3c4d5e6f7a8`), gồm đúng 6 giá trị:
 `pending` | `accepted` | `rejected` | `auto_accepted` | `expired` | `withdrawn`.
 `share_type`: `direct` | `bulk`.
 
@@ -724,7 +730,7 @@ Auto-accept share khi `rank(sender) > rank(recipient)`.
 12. `TAG_REMOVED`
 13. `BUNDLE_CREATED`
 
-> Lưu ý: code thống kê còn chấp nhận giá trị legacy `"view"` / `"download"`; dữ liệu cũ có thể chứa chúng.
+> Lưu ý: CHECK `chk_download_logs_action` (migration `e0f1a2b3c4d5`) chỉ cho phép 9 giá trị: `DOCUMENT_VIEWED`, `DOCUMENT_DOWNLOADED`, `DOCUMENT_UPLOADED`, `DOCUMENT_SHARED`, `DOCUMENT_DELETED`, `DOCUMENT_RESTORED`, `DOCUMENT_RECEIVED`, `DOCUMENT_CONTRIBUTED`, `DOCUMENT_SAVED`. Các mã `DOCUMENT_RENAMED`, `TAG_ADDED`, `TAG_REMOVED`, `BUNDLE_CREATED` có trong `ActivityAction` nhưng chưa nằm trong CHECK hiện tại, nên ghi các action này sẽ bị DB từ chối cho đến khi có migration mở rộng. Legacy `"view"` / `"download"` đã được chuẩn hoá bởi migration `e0f1a2b3c4d5`.
 
 `workspace_context`: `personal` | `group` | `library`.
 
@@ -857,7 +863,7 @@ Auto-accept share khi `rank(sender) > rank(recipient)`.
 
 14. **`documents.checksum` kiểu `VARCHAR(255)` trong ORM**, dù giá trị thực tế là SHA-256 64 ký tự. Đừng giả định độ dài 64 ở DB.
 
-15. **Không có CHECK constraint cho `role`, `status`, `permission_level`, `action`.** Dữ liệu legacy có thể chứa giá trị ngoài catalog.
+15. **Các cột trạng thái đã được bổ sung CHECK constraint qua Alembic:** `workspace_members.permission_level` (`chk_workspace_members_permission`, migration `f1a2b3c4d5e6`), `document_shares.status` (migration `b3c4d5e6f7a8`), `download_logs.action` (`chk_download_logs_action`, migration `e0f1a2b3c4d5`), và `document_ratings.stars`. Các cột còn lại như `users.role` chưa có CHECK ở cấp DB và được kiểm soát ở tầng ứng dụng.
 
 16. **`document_ratings`, `community_submissions`, `subjects` được tạo bởi `Base.metadata.create_all`**, không có migration Alembic riêng. Khi dựng DB mới chỉ chạy `alembic upgrade head` có thể thiếu các bảng này — cần chạy thêm sync script/seed hoặc `create_all`.
 
@@ -1020,13 +1026,13 @@ WHERE is_deleted = true
 | `community_submissions` | Quy trình duyệt đóng góp lên kho cộng đồng. |
 | `document_ratings` | Đánh giá 1–5 sao, unique theo user/tài liệu. |
 | `favorites` | Yêu thích (composite PK). |
-| `trash_batches` | Lô xóa, thời hạn purge 30 ngày. |
-| `download_logs` | Log hoạt động 13 loại action. |
+| `trash_batches` | *(Đã drop trong `a2b3c4d5e6f7`)* Lô xóa lịch sử. |
+| `download_logs` | Log hoạt động; enum ứng dụng có 13 loại, CHECK DB hiện cho phép 9 (xem 6.6). |
 | `document_stats` | Thống kê 1:1 + trending score. |
 | `notes` | Ghi chú cá nhân trên tài liệu. |
 | `notifications` | Thông báo + deep link. |
 | `user_todos` | Việc cần làm, nhắc hạn. |
-| `processing_jobs` | Job xử lý nền (chưa sử dụng). |
+| `processing_jobs` | *(Đã drop trong `a2b3c4d5e6f7`)* Job xử lý nền lịch sử. |
 
 ---
 
@@ -1041,4 +1047,4 @@ WHERE is_deleted = true
 7. Với folder, join qua `folder_tags` + `document_tags`, không tìm `documents.folder_id`.
 8. Với tag nhóm, xác định `tags.workspace_id` hay `workspace_tags`.
 9. Không xóa file vật lý dựa trên một row; dùng `remove_file_if_unreferenced`.
-10. Không dựa vào `processing_jobs`/`document_versions` cho luồng hiện tại.
+10. Không dựa vào `processing_jobs`/`document_versions` cho luồng hiện tại (`processing_jobs` và `trash_batches` đã được drop hoàn toàn khỏi DB trong migration `a2b3c4d5e6f7`).

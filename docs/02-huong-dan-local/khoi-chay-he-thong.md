@@ -71,9 +71,11 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
 
 5. Chạy di chuyển lược đồ CSDL bằng Alembic:
    ```bash
-   # Thực thi toàn bộ chuỗi 7 bản migration
+   # Thực thi toàn bộ chuỗi 17 bản migration
    alembic upgrade head
    ```
+
+   > **Lưu ý:** Chuỗi `upgrade head` từ database trống hiện dừng ở `f844331e6c1e` vì migration gốc không tạo bảng `folders` (và một số bảng chỉ có trong ORM/`create_all`). Với database đã có schema Live-like, cần stamp revision phù hợp trước khi upgrade. Xem chi tiết blocker tại [Lịch sử Migration Alembic](../04-co-so-du-lieu/alembic-va-tien-hoa-schema.md#4-hiện-trạng-kiểm-thử-chuỗi-migration).
 
 6. Khởi động máy chủ Backend API:
    ```bash

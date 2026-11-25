@@ -17,7 +17,7 @@ Nhằm tránh mọi mâu thuẫn giữa tài liệu mô tả và mã nguồn th�
 | Đối tượng kiểm chứng | Vị trí trong Repository | Vai trò & Mức độ ưu tiên |
 | :--- | :--- | :--- |
 | **SQLAlchemy ORM Models** | `backend/app/models/` (26 thực thể dữ liệu) | **Nguồn chuẩn bậc nhất (Authoritative)**: Định nghĩa cấu trúc bảng, kiểu dữ liệu từng cột, quan hệ khóa ngoại (Relationship) và tính toàn vẹn tầng ứng dụng. |
-| **Lịch sử Migration Alembic** | `alembic/versions/` (7 bản migration tuyến tính) | **Nguồn chuẩn tiến hóa schema**: Xác thực lịch sử thay đổi DDL, chỉ mục (Index), ràng buộc duy nhất có điều kiện (Partial Unique Index) và Trigger FTS. |
+| **Lịch sử Migration Alembic** | `alembic/versions/` (17 bản migration tuyến tính) | **Nguồn chuẩn tiến hóa schema**: Xác thực lịch sử thay đổi DDL, chỉ mục (Index), ràng buộc duy nhất có điều kiện (Partial Unique Index) và Trigger FTS. HEAD repository là `b3c4d5e6f7a8`, chưa deploy Live. |
 | **Tài liệu tham khảo lịch sử** | `99-luu-tru/tai-lieu-ky-thuat-cu/references/sql/` | **Tài liệu tham chiếu cũ**: Dùng để đối chiếu thiết kế ban đầu; tuyệt đối không dùng làm nguồn thực thi tự động. |
 
 > [!IMPORTANT]
@@ -32,7 +32,7 @@ Nhằm tránh mọi mâu thuẫn giữa tài liệu mô tả và mã nguồn th�
 | [**Sơ Đồ Thực Thể Quan Hệ (ERD)**](./mo-hinh-thuc-the-erd.md) | Sơ đồ Mermaid ERD trực quan biểu diễn mối quan hệ 1-N, N-N giữa 26 bảng dữ liệu chia theo 5 miền | Giảng viên, Hội đồng, Developers |
 | [**Từ Điển Dữ Liệu (Data Dictionary)**](./tu-dien-du-lieu.md) | Bảng mô tả chi tiết 26 bảng, kiểu dữ liệu từng cột, ràng buộc PK/FK, Nullable và chỉ mục | Fullstack Devs, QA, Auditors |
 | [**Bản Đồ Lược Đồ CSDL Cho AI & Dev**](./db-schema-map.md) | Mô tả toàn bộ 26 bảng bằng lời: cột, FK, index, catalog trạng thái, quy tắc nghiệp vụ, mẫu query và các bẫy thường gặp | AI Agents, Backend Developers |
-| [**Lịch Sử Migration Alembic**](./alembic-va-tien-hoa-schema.md) | Chuỗi 7 bản migration Alembic từ lúc khởi tạo đến hiện tại, cẩm nang lệnh vận hành an toàn | DevOps, SRE, Lead Developers |
+| [**Lịch Sử Migration Alembic**](./alembic-va-tien-hoa-schema.md) | Chuỗi 17 bản migration Alembic từ lúc khởi tạo đến hiện tại, cẩm nang lệnh vận hành an toàn | DevOps, SRE, Lead Developers |
 | [**Chuyên Đề PostgreSQL Chuyên Sâu**](./postgresql-chuyen-sau.md) | Phân tích sâu về Full-Text Search (tsvector/GIN), Partial Indexes, Connection Pooling asyncpg, ACID và so sánh có cơ sở với MongoDB/MySQL/Elasticsearch | Hội đồng chấm, Phản biện đồ án |
 
 ---

@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Integer, ForeignKey, String, Boolean
+from sqlalchemy import Integer, ForeignKey, String, Boolean, text
 from .base import Base, TimestampMixin
 
 class Notification(Base, TimestampMixin):
@@ -13,4 +13,4 @@ class Notification(Base, TimestampMixin):
     document_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("documents.id"))
     message: Mapped[str] = mapped_column(String(255), nullable=False)
     link: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    is_read: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)

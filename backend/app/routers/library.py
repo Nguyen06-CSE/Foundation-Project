@@ -193,6 +193,7 @@ async def get_documents_by_subject(
             DownloadLog.document_id,
             func.count(DownloadLog.id).label("download_count"),
         )
+        .where(DownloadLog.action.in_([ActivityAction.DOWNLOADED, "download"]))
         .group_by(DownloadLog.document_id)
         .subquery()
     )
@@ -315,7 +316,10 @@ async def get_community_document(
             DownloadLog.document_id,
             func.count(DownloadLog.id).label("download_count"),
         )
-        .where(DownloadLog.document_id == document_id)
+        .where(
+            DownloadLog.document_id == document_id,
+            DownloadLog.action.in_([ActivityAction.DOWNLOADED, "download"]),
+        )
         .group_by(DownloadLog.document_id)
         .subquery()
     )
@@ -473,6 +477,7 @@ async def search_community_documents(
             DownloadLog.document_id,
             func.count(DownloadLog.id).label("download_count"),
         )
+        .where(DownloadLog.action.in_([ActivityAction.DOWNLOADED, "download"]))
         .group_by(DownloadLog.document_id)
         .subquery()
     )

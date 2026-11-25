@@ -115,11 +115,7 @@ services:
     ports:
       - "8000:8000"
     command: >
-      gunicorn backend.app.main:app 
-      -w 4 
-      -k uvicorn.workers.UvicornWorker 
-      --bind 0.0.0.0:8000 
-      --access-logfile -
+      sh -c "alembic upgrade head && gunicorn backend.app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --access-logfile -"
 ```
 
 ### Cách 2: Triển khai trực tiếp qua Systemd Service (Linux Server)
@@ -134,6 +130,8 @@ User=www-data
 Group=www-data
 WorkingDirectory=/var/www/Foundation-Project
 EnvironmentFile=/var/www/Foundation-Project/.env
+# Chạy migration đồng bộ schema trước khi worker khởi động
+ExecStartPre=/var/www/Foundation-Project/.venv/bin/alembic upgrade head
 ExecStart=/var/www/Foundation-Project/.venv/bin/gunicorn backend.app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 127.0.0.1:8000
 
 [Install]
