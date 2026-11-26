@@ -69,12 +69,12 @@ def downgrade() -> None:
             RETURN NEW;
         END;
         $$ LANGUAGE plpgsql;
-
-        DROP TRIGGER IF EXISTS trg_documents_search_vector ON documents;
-
+    """)
+    op.execute("DROP TRIGGER IF EXISTS trg_documents_search_vector ON documents")
+    op.execute("""
         CREATE TRIGGER trg_documents_search_vector
         BEFORE INSERT OR UPDATE OF title, content
         ON documents
         FOR EACH ROW
-        EXECUTE FUNCTION update_document_search_vector();
+        EXECUTE FUNCTION update_document_search_vector()
     """)

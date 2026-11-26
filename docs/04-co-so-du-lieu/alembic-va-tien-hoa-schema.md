@@ -6,9 +6,9 @@ sidebar_position: 5
 
 # 🔄 LỊCH SỬ DI CHUYỂN LƯỢC ĐỒ (ALEMBIC MIGRATIONS)
 
-Hệ thống cơ sở dữ liệu của **Foundation Project** được quản lý tiến hóa thông qua công cụ di chuyển lược đồ **Alembic**. Toàn bộ lịch sử DDL/DML migrations được lưu vết qua **17 bản migration**, đã được hợp nhất thành một nhánh duy nhất với HEAD hiện tại là `b3c4d5e6f7a8`.
+Hệ thống cơ sở dữ liệu của **Foundation Project** được quản lý tiến hóa thông qua công cụ di chuyển lược đồ **Alembic**. Toàn bộ lịch sử DDL/DML migrations được lưu vết qua **18 bản migration** (17 bản cũ + 1 bridge), đã được hợp nhất thành một nhánh duy nhất với HEAD hiện tại là `b3c4d5e6f7a8`.
 
-> **Trạng thái triển khai:** `b3c4d5e6f7a8` mới tồn tại trong repository và đã được kiểm thử trên PostgreSQL disposable. Chưa chạy migration này lên Live DB. Chuỗi `alembic upgrade head` từ database trống hiện vẫn bị chặn bởi các migration cũ thiếu bảng (xem mục 4).
+> **Trạng thái triển khai (25/11/2026):** `alembic upgrade head` đã chạy thành công từ **database hoàn toàn trống** trên PostgreSQL 18.6 disposable, kèm kiểm thử downgrade/upgrade vòng bridge và `a2b3c4d5e6f7 ↔ b3c4d5e6f7a8`. Chưa chạy migration này lên Live DB; trạng thái `alembic_version` trên Live cần được xác minh lại trước khi triển khai (xem mục 4).
 
 ---
 
@@ -16,6 +16,9 @@ Hệ thống cơ sở dữ liệu của **Foundation Project** được quản l
 
 ```
 [ dae4972dff87 ] (Khởi tạo toàn bộ CSDL ban đầu)
+       │
+       ▼
+[ c9d0e1f2a3b4 ] (BRIDGE: folders/subjects/ratings/submissions + cột/index/FK còn thiếu)
        │
        ▼
 [ f844331e6c1e ] (Thêm is_dissolving và dissolve_at vào workspaces)
@@ -75,9 +78,16 @@ Hệ thống cơ sở dữ liệu của **Foundation Project** được quản l
 - **Mã Revision**: `dae4972dff87` (Gốc, `down_revision = None`)
 - **Nội dung DDL**: Khởi tạo cấu trúc các bảng cốt lõi: `users`, `faculties`, `classes`, `subjects`, `documents`, `document_versions`, `folders`, `tags`, `document_tags`, `folder_tags`, `workspaces`, `workspace_members`, `workspace_invitations`, `community_submissions`, `document_ratings`, `trash_batches`, `notes`, `favorites`, `processing_jobs`.
 - **Chỉ mục ban đầu**: Thiết lập các chỉ mục B-Tree trên các trường khóa ngoại và cờ xóa mềm `is_deleted`.
+- **Lưu ý**: Migration gốc thực tế **không** tạo `folders`, `subjects`, `document_ratings`, `community_submissions`, `folder_tags` và một số cột/index của `documents`; các object này chỉ có trong ORM/`create_all`/dump schema Live.
+
+### 2.1b. Bản bridge: `c9d0e1f2a3b4_bridge_live_baseline_before_f844.py`
+- **Mã Revision**: `c9d0e1f2a3b4` (`down_revision = dae4972dff87`)
+- **Mục đích**: Bù phần schema Live bị thiếu trong bản init, chèn tuyến tính ngay trước `f844331e6c1e` mà không đổi revision ID nào khác.
+- **DDL tạo**: `folders` ở dạng *pre-f844* (`created_at` naive `TIMESTAMP`, có `updated_at`, FK `folders_owner_id_fkey` `ON DELETE CASCADE`), `subjects`, `folder_tags`, `document_ratings`, `community_submissions` (FK `subject_id` `RESTRICT` để `e0f1a2b3c4d5` đổi sang `CASCADE`), `tags.workspace_id`, `workspaces.updated_at` và 10 cột của `documents` (`thumbnail_path` … `bundle_parent_id`) cùng FK/index/trigram tương ứng.
+- **Downgrade**: drop materialized view `community_subject_stats` trước (view do `b3c4d5e6f7a8` dựng lại có dependency vào `documents.subject_id`), sau đó reverse đúng các object đã tạo.
 
 ### 2.2. Bản migration 2: `f844331e6c1e_add_is_dissolving_and_dissolve_at_to_.py`
-- **Mã Revision**: `f844331e6c1e` (`down_revision = dae4972dff87`)
+- **Mã Revision**: `f844331e6c1e` (`down_revision = c9d0e1f2a3b4`)
 - **Mục đích**: Bổ sung cơ chế giải thể an toàn cho không gian làm việc nhóm.
 - **Thay đổi DDL**: Thêm hai cột vào bảng `workspaces`:
   - `is_dissolving BOOLEAN NOT NULL DEFAULT false`
@@ -92,6 +102,7 @@ Hệ thống cơ sở dữ liệu của **Foundation Project** được quản l
 - **Mã Revision**: `45ab664fbe54` (`down_revision = 93f46eb359df`)
 - **Mục đích**: Tự động hóa cập nhật chỉ mục tìm kiếm toàn văn Full-Text Search.
 - **Thay đổi DDL**: Tạo hàm PL/pgSQL `update_document_search_vector()` và trigger `trg_documents_search_vector` tự động tính toán `search_vector` mỗi khi thêm mới hoặc sửa đổi `title`, `content` của tài liệu.
+- **Tương thích asyncpg**: CREATE FUNCTION / DROP TRIGGER / CREATE TRIGGER được tách thành các lệnh `op.execute` riêng (asyncpg không nhận nhiều lệnh trong một prepared statement). Cách xử lý tương tự cũng áp dụng cho downgrade của `b7c8d9e0f1a2`.
 
 ### 2.5. Bản migration 5: `d76927b437fe_add_activity_tracking.py`
 - **Mã Revision**: `d76927b437fe` (`down_revision = 45ab664fbe54`)
@@ -185,7 +196,7 @@ Hệ thống cơ sở dữ liệu của **Foundation Project** được quản l
 - **Mã Revision**: `a2b3c4d5e6f7` (`down_revision = f1a2b3c4d5e6`)
 - **Mục đích**: Dọn artifact legacy `processing_jobs`, `trash_batches`, `documents.trash_batch_id`.
 - **Thay đổi DDL**: Drop FK/cột `documents.trash_batch_id`, drop hai bảng legacy.
-- **Lưu ý**: Downgrade phụ thuộc cứng vào các parent seed `users.id` 6/7 và `workspaces.id` 3/5; nếu thiếu thì `RAISE EXCEPTION` và rollback.
+- **Lưu ý**: Downgrade khôi phục 2 seed row lịch sử chỉ khi parent tồn tại (`users.id` 6/7 và `workspaces.id` 3/5); trên DB sạch không có các parent này thì bỏ qua seed thay vì `RAISE EXCEPTION`, giúp rollback không bị chặn. Các FK unnamed trong auto-generated downgrade đã được đặt tên tường minh để chạy được với asyncpg.
 
 ### 2.17. Bản migration 17 (HEAD): `b3c4d5e6f7a8_sync_schema_shares_bundle_and_community_stats.py`
 - **Mã Revision**: `b3c4d5e6f7a8` (`down_revision = a2b3c4d5e6f7`)
@@ -218,9 +229,27 @@ alembic downgrade -1
 
 ---
 
-## 4. Hiện Trạng Kiểm Thử Chuỗi Migration
+## 4. Hiện Trạng Kiểm Thử Chuỗi Migration (25/11/2026)
 
-- **Đã kiểm thử trên PostgreSQL 18.6 disposable:** dựng schema từ dump Live (schema-only), stamp `a2b3c4d5e6f7`, chạy upgrade `b3c4d5e6f7a8`, kiểm tra MV/type/index/CHECK, chạy downgrade về `a2b3c4d5e6f7`.
-- **Kết quả chính:** `document_count` bigint; `total_downloads` numeric và chỉ đếm `DOCUMENT_DOWNLOADED`; `avg_rating` numeric theo trung bình của trung bình từng document (không phải average toàn bộ ratings); unique index tồn tại; drop view có dependency bị fail và rollback, không CASCADE; trigram preflight drop đúng index trùng và giữ index retained.
-- **Chưa chạy trên Live DB.** Không có kết nối Live, không chạy migration/downgrade trên Neon trong đợt này.
-- **Blocker của chuỗi từ DB trống:** `alembic upgrade head` từ database rỗng hiện dừng ở `f844331e6c1e` vì bảng `folders` không được tạo bởi migration `dae4972dff87` (bảng này chỉ có trong ORM/`create_all`/dump Live). Các bảng `subjects`, `document_ratings`, `community_submissions` cũng không có migration tạo tương ứng. Việc sửa các migration cũ nằm ngoài phạm vi đợt này; chuỗi `a2 -> b3` chỉ được xác minh trên schema Live-like disposable.
+### 4.1. Kết quả đã xác minh
+
+- **Clean chain:** `alembic upgrade head` từ DB **rỗng tuyệt đối** chạy thành công tới `b3c4d5e6f7a8` trên PostgreSQL 18.6 disposable (có `pg_trgm`). `alembic heads` trả về đúng 1 head.
+- **Downgrade/upgrade:** `downgrade base → upgrade head` đầy đủ; riêng `b3c4d5e6f7a8 ↔ a2b3c4d5e6f7` và `f844331e6c1e ↔ c9d0e1f2a3b4 → head` đều thành công, dữ liệu thử (`faculties`, `users`, `subjects`, `documents`, `folders`, `document_ratings`) vẫn đọc được sau khi quay lại head.
+- **Schema diff:** so với baseline dựng từ dump schema Live, **cột khớp 100%**; phần còn lại là khác biệt có chủ đích của head so với dump (`uq_document_share_pending` partial, index `DESC`, MV có filter `DOCUMENT_DOWNLOADED`, trigger FTS, unique index MV) hoặc khác biệt biểu diễn CHECK constraint của PostgreSQL.
+- **Test tự động:** `backend/tests/test_migration_clean_chain.py` kiểm tra hình dạng bridge và (khi set `CLEAN_CHAIN_DATABASE_URL` tới PostgreSQL disposable trống) tự chạy toàn bộ chain. Bộ backend: `61 passed, 1 skipped` với `TEST_DATABASE_URL` trỏ DB local có seed.
+
+### 4.2. Blocker đã tìm thấy và sửa trong đợt này
+
+| Triệu chứng | Nguyên nhân | Cách xử lý tối thiểu |
+| :--- | :--- | :--- |
+| `relation "folders" does not exist` tại `f844331e6c1e` | Init migration thiếu nhiều object có trong Live/ORM | Thêm bridge `c9d0e1f2a3b4`, chỉ đổi `down_revision` của `f844331e6c1e` để trỏ vào bridge |
+| `cannot insert multiple commands into a prepared statement` | `op.execute` gộp CREATE FUNCTION/DROP/CREATE TRIGGER | Tách từng lệnh trong `45ab664fbe54` và `b7c8d9e0f1a2` |
+| Downgrade dừng vì thiếu `users.id=6/7`, `workspaces.id=3/5` | Seed restore bắt buộc parent tồn tại (`RAISE EXCEPTION`) | Chèn seed có điều kiện `WHERE EXISTS (...)` |
+| `Can't emit DROP CONSTRAINT ... it has no name` | `op.drop_constraint(None, ...)` trong downgrade auto-generated | Đặt tên FK tường minh trong `93f46eb359df` và `f844331e6c1e` |
+| `cannot drop column subject_id ... materialized view depends on it` | MV do head tạo lại khi downgrade vẫn còn khi reverse bridge | Bridge downgrade drop MV trước khi drop cột |
+
+### 4.3. Phạm vi Live & fallback DDL
+
+- **Không kết nối/chạy migration trên Live trong đợt rà soát này.** Live preflight vẫn phải làm ở giai đoạn triển khai: `alembic current`, backup, xác nhận revision đang stamp và chạy `upgrade head` từ revision đó.
+- Startup fallback trong `backend/app/main.py` (`ALTER notifications...`, `CREATE TABLE IF NOT EXISTS user_todos`) **vẫn được giữ**. Repo chỉ chứng minh được runner `backend/entrypoint.sh` chạy `alembic upgrade head`; không có compose/systemd trong repo để chứng minh mọi runner đã migration độc lập, nên chưa gỡ fallback.
+- `backend/db/sync_group_schema.py` và `sync_share_schema.py` vẫn gọi `Base.metadata.create_all`; cần rà soát riêng trước khi gỡ (không thuộc phạm vi phase này).

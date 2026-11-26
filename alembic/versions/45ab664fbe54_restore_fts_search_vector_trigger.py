@@ -30,20 +30,18 @@ def upgrade() -> None:
             RETURN NEW;
         END
         $$ LANGUAGE plpgsql;
-
-        DROP TRIGGER IF EXISTS trg_documents_search_vector ON documents;
-
+    """)
+    op.execute("DROP TRIGGER IF EXISTS trg_documents_search_vector ON documents")
+    op.execute("""
         CREATE TRIGGER trg_documents_search_vector
         BEFORE INSERT OR UPDATE OF title, content
         ON documents
         FOR EACH ROW
-        EXECUTE FUNCTION update_document_search_vector();
+        EXECUTE FUNCTION update_document_search_vector()
     """)
 
 
 def downgrade() -> None:
     """Downgrade schema."""
-    op.execute("""
-        DROP TRIGGER IF EXISTS trg_documents_search_vector ON documents;
-        DROP FUNCTION IF EXISTS update_document_search_vector();
-    """)
+    op.execute("DROP TRIGGER IF EXISTS trg_documents_search_vector ON documents")
+    op.execute("DROP FUNCTION IF EXISTS update_document_search_vector()")

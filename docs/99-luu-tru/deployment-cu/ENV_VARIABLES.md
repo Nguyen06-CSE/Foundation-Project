@@ -17,12 +17,12 @@ File cấu hình được đặt tại: `/Users/caotiendattx/Developer/Do_An_Co_
 
 | Tên biến | Kiểu dữ liệu | Bắt buộc | Giá trị mẫu | Mục đích & Mô tả chi tiết |
 | :--- | :--- | :---: | :--- | :--- |
-| `DATABASE_URL` | String | **Có** | `postgresql+asyncpg://user:pass@host/db` | Chuỗi kết nối PostgreSQL bất đồng bộ (asyncpg) tới Neon DB hoặc Postgres server. |
+| `DATABASE_URL` | String | **Có** | `postgresql+asyncpg://<REDACTED_USER>:<REDACTED_PASSWORD>@<REDACTED_HOST>/<REDACTED_DB>?sslmode=require` | Chuỗi kết nối PostgreSQL bất đồng bộ (asyncpg) tới Neon DB hoặc Postgres server. |
 | `SECRET_KEY` | String | **Có** | `your_secret_key_here` | Khóa bí mật dùng để mã hóa và giải mã JWT Access Token. |
-| `MINIO_ENDPOINT` | String (URL) | **Có** | `https://dd615d5044ab8d5708f4d8e02c48693b.r2.cloudflarestorage.com` | **S3 API Endpoint của Cloudflare R2**. Dùng cho thư viện `boto3` để thực hiện các thao tác PutObject, GetObject, HeadObject. |
-| `MINIO_ACCESS_KEY` | String | **Có** | `1d3e319abd2b39db6d391d704733b397` | Access Key ID của R2 API Token có quyền đọc/ghi trên bucket. |
-| `MINIO_SECRET_KEY` | String | **Có** | `df43912a30372dbe4eaf452143d1475f40f...` | Secret Access Key tương ứng của R2 API Token. |
-| `MINIO_PUBLIC_URL` | String (URL) | **Có** | `https://pub-54fbde7f3e0e4376aeebd41d1c0f3d1a.r2.dev` | **Tên miền Public CDN** của Bucket. Backend dùng biến này trong `get_file_url()` để chuyển đổi key tương đối thành Full URL gửi về cho Client. |
+| `MINIO_ENDPOINT` | String (URL) | **Có** | `https://<REDACTED_ACCOUNT>.r2.cloudflarestorage.com` | **S3 API Endpoint của Cloudflare R2**. Dùng cho thư viện `boto3` để thực hiện các thao tác PutObject, GetObject, HeadObject. |
+| `MINIO_ACCESS_KEY` | String | **Có** | `<REDACTED_R2_ACCESS_KEY>` | Access Key ID của R2 API Token có quyền đọc/ghi trên bucket. |
+| `MINIO_SECRET_KEY` | String | **Có** | `<REDACTED_R2_SECRET_KEY>` | Secret Access Key tương ứng của R2 API Token. |
+| `MINIO_PUBLIC_URL` | String (URL) | **Có** | `https://<REDACTED_PUBLIC_DOMAIN>` | **Tên miền Public CDN** của Bucket. Backend dùng biến này trong `get_file_url()` để chuyển đổi key tương đối thành Full URL gửi về cho Client. |
 | `BUCKET_NAME` | String | **Có** | `elibrary-bucket` | Tên Bucket đã tạo trên Cloudflare R2 (Mặc định: `elibrary-bucket`). |
 
 > [!WARNING]
@@ -38,8 +38,8 @@ File cấu hình được đặt tại: `/Users/caotiendattx/Developer/Do_An_Co_
 
 | Tên biến | Kiểu dữ liệu | Bắt buộc | Giá trị mẫu | Mục đích & Mô tả chi tiết |
 | :--- | :--- | :---: | :--- | :--- |
-| `VITE_API_URL` | String (URL) | **Có** | `https://macbook-pro-2.taile4a1e8.ts.net/api` hoặc `http://localhost:8000` | URL gốc của Backend FastAPI API. Mọi request qua Axios `api.ts` sẽ kết nối tới URL này. |
-| `VITE_R2_PUBLIC_URL` | String (URL) | **Có** | `https://pub-54fbde7f3e0e4376aeebd41d1c0f3d1a.r2.dev` | Tên miền Public CDN của Cloudflare R2. Dùng trong helper `getFullFileUrl()` để giải quyết fallback khi nhận đường dẫn tương đối. |
+| `VITE_API_URL` | String (URL) | **Có** | `https://<REDACTED_API_DOMAIN>` | URL gốc của Backend FastAPI API. Mọi request qua Axios `api.ts` sẽ kết nối tới URL này. |
+| `VITE_R2_PUBLIC_URL` | String (URL) | **Có** | `https://<REDACTED_PUBLIC_DOMAIN>` | Tên miền Public CDN của Cloudflare R2. Dùng trong helper `getFullFileUrl()` để giải quyết fallback khi nhận đường dẫn tương đối. |
 
 > [!IMPORTANT]
 > Tất cả biến môi trường trong Vite **bắt buộc phải có tiền tố `VITE_`** ở đầu tên biến để Vite có thể nhúng vào bundle lúc build client-side (`import.meta.env.VITE_...`).
@@ -67,24 +67,24 @@ File cấu hình được đặt tại: `/Users/caotiendattx/Developer/Do_An_Co_
 # ==========================================
 # CƠ SỞ DỮ LIỆU & BẢO MẬT
 # ==========================================
-DATABASE_URL=postgresql+asyncpg://neondb_owner:npg_0CbocrX7NQeM@ep-fancy-mouse-azv5qd9e-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb
+DATABASE_URL= postgresql+asyncpg://<REDACTED_USER>:<REDACTED_PASSWORD>@<REDACTED_HOST>/<REDACTED_DB>?sslmode=require
 SECRET_KEY=your_secret_key_here
 
 # ==========================================
 # CLOUDFLARE R2 (S3 COMPATIBLE STORAGE)
 # ==========================================
-MINIO_ENDPOINT=https://dd615d5044ab8d5708f4d8e02c48693b.r2.cloudflarestorage.com
-MINIO_ACCESS_KEY=1d3e319abd2b39db6d391d704733b397
-MINIO_SECRET_KEY=df43912a30372dbe4eaf452143d1475f40f4d84d9299027bc278faec033b0662
-MINIO_PUBLIC_URL=https://pub-54fbde7f3e0e4376aeebd41d1c0f3d1a.r2.dev
+MINIO_ENDPOINT= https://<REDACTED_ACCOUNT>.r2.cloudflarestorage.com
+MINIO_ACCESS_KEY= <REDACTED_R2_ACCESS_KEY>
+MINIO_SECRET_KEY= <REDACTED_R2_SECRET_KEY>
+MINIO_PUBLIC_URL= https://<REDACTED_PUBLIC_DOMAIN>
 BUCKET_NAME=elibrary-bucket
 ```
 
 ### Frontend `.env` Mẫu:
 ```bash
 # URL Backend API
-VITE_API_URL=https://macbook-pro-2.taile4a1e8.ts.net/api
+VITE_API_URL= https://<REDACTED_API_DOMAIN>
 
 # Public CDN của Cloudflare R2
-VITE_R2_PUBLIC_URL=https://pub-54fbde7f3e0e4376aeebd41d1c0f3d1a.r2.dev
+VITE_R2_PUBLIC_URL= https://<REDACTED_PUBLIC_DOMAIN>
 ```

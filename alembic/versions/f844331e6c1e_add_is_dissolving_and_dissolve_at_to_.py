@@ -13,7 +13,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = 'f844331e6c1e'
-down_revision: Union[str, Sequence[str], None] = 'dae4972dff87'
+down_revision: Union[str, Sequence[str], None] = 'c9d0e1f2a3b4'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -46,11 +46,11 @@ def downgrade() -> None:
     op.drop_column('workspaces', 'is_dissolving')
     op.drop_column('workspace_invitations', 'message')
     op.add_column('folders', sa.Column('updated_at', postgresql.TIMESTAMP(), server_default=sa.text('CURRENT_TIMESTAMP'), autoincrement=False, nullable=True))
-    op.drop_constraint(None, 'folders', type_='foreignkey')
+    op.drop_constraint('folders_owner_id_fkey', 'folders', type_='foreignkey')
     op.create_foreign_key(op.f('folders_owner_id_fkey'), 'folders', 'users', ['owner_id'], ['id'], ondelete='CASCADE')
     op.alter_column('folders', 'created_at',
                existing_type=sa.DateTime(timezone=True),
                type_=postgresql.TIMESTAMP(),
-               nullable=True,
+               nullable=False,
                existing_server_default=sa.text('CURRENT_TIMESTAMP'))
     # ### end Alembic commands ###

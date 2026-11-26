@@ -12,8 +12,11 @@ def test_register_and_login(client, monkeypatch):
         "email": "student01@example.com",
         "password": "password123",
         "full_name": "Student One",
+        "role": "sysadmin",
     })
     assert response.status_code == 201
+    created_user = next(item for item in client.app.state.fake_session.items if hasattr(item, "role"))
+    assert created_user.role == "student"
 
     from app.core.security import hash_password
 
@@ -39,3 +42,12 @@ def test_register_and_login(client, monkeypatch):
     })
     assert response.status_code == 200
     assert "access_token" in response.json()
+
+
+def test_update_me_cannot_set_role(client):
+    from app.schemas.user import UserUpdate
+
+    assert "role" not in UserUpdate.model_fields
+    response = client.patch("/users/me", json={"role": "sysadmin", "full_name": "Student Updated"})
+    assert response.status_code == 200
+    assert response.json()["role"] == "personal"

@@ -71,11 +71,17 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
 
 5. Chạy di chuyển lược đồ CSDL bằng Alembic:
    ```bash
-   # Thực thi toàn bộ chuỗi 17 bản migration
+   # Thực thi toàn bộ chuỗi 18 bản migration (đã có bridge c9d0e1f2a3b4)
    alembic upgrade head
    ```
 
-   > **Lưu ý:** Chuỗi `upgrade head` từ database trống hiện dừng ở `f844331e6c1e` vì migration gốc không tạo bảng `folders` (và một số bảng chỉ có trong ORM/`create_all`). Với database đã có schema Live-like, cần stamp revision phù hợp trước khi upgrade. Xem chi tiết blocker tại [Lịch sử Migration Alembic](../04-co-so-du-lieu/alembic-va-tien-hoa-schema.md#4-hiện-trạng-kiểm-thử-chuỗi-migration).
+   > **Đã xác minh (25/11/2026):** `upgrade head` chạy được từ database hoàn toàn trống, không cần `create_all` hay `stamp` thủ công. Có thể tự kiểm tra trên DB disposable riêng bằng lệnh dưới đây (chỉ chạy khi biến môi trường trỏ tới DB local/disposable, không dùng DB production):
+   >
+   > ```bash
+   > CLEAN_CHAIN_DATABASE_URL=<url DB trống> backend/.venv/bin/python -m pytest backend/tests/test_migration_clean_chain.py -q
+   > ```
+   >
+   > Xem chi tiết tại [Lịch sử Migration Alembic](../04-co-so-du-lieu/alembic-va-tien-hoa-schema.md).
 
 6. Khởi động máy chủ Backend API:
    ```bash

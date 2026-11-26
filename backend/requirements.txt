@@ -1,3 +1,4 @@
+aiosqlite==0.22.1
 alembic==1.16.5
 annotated-doc==0.0.5
 annotated-types==0.7.0

@@ -326,7 +326,7 @@ async def search_documents(
             OR unaccent(lower(title)) LIKE unaccent(lower(:like_query))
             OR unaccent(lower(coalesce(description, ''))) LIKE unaccent(lower(:like_query))
           )
-        ORDER BY updated_at DESC
+        ORDER BY created_at DESC
         LIMIT :limit
         """
     )

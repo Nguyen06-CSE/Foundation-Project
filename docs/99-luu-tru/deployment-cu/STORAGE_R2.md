@@ -52,8 +52,8 @@ Backend FastAPI cần thông tin định danh để gọi các hàm S3 API (`put
 5. Phạm vi (**Specify bucket**): Chọn bucket `elibrary-bucket`.
 6. Nhấn **Create API Token**.
 7. Lưu lại cẩn thận 3 thông số sau (chỉ hiển thị một lần duy nhất):
-   - **Access Key ID**: Ví dụ `1d3e319abd2b39db6d391d704733b397`
-   - **Secret Access Key**: Ví dụ `df43912a30372dbe4eaf452143d1475f40f4d84d9299027bc278faec033b0662`
+   - **Access Key ID**: Ví dụ `<REDACTED_R2_ACCESS_KEY>`
+   - **Secret Access Key**: Ví dụ `<REDACTED_R2_SECRET_KEY>`
    - **Endpoint**: URL dạng `https://<account_id>.r2.cloudflarestorage.com`
 
 ---

@@ -90,7 +90,11 @@ Trong toàn bộ quá trình tái cấu trúc CSDL, các nguyên tắc bất di 
 | **Phase 3** | Kịch bản triển khai Migration runner | `backend/entrypoint.sh`, Deployment doc | **Repo Config** | Tạo entrypoint thực thi migration tự động trước uvicorn. |
 | **Phase 3** | Đánh dấu Deprecate artifact thừa | Model `processing_job.py` | **Repo Code** | Đánh dấu deprecation trong docstring (0 rows live, 0 API). |
 | **Phase 3** | Duy trì thực thể Categories | `category.py`, `library.py` | **Repo & Live Bảo tồn** | Giữ nguyên vẹn bảng `categories` và 6 bản ghi live vì API đang hoạt động. |
-| **Phase 4** | DROP thực thể thừa legacy | `processing_jobs`, `trash_batches`, `documents.trash_batch_id` | **Live DB** (`a2b3c4d5e6f7`) | Đã DROP thành công sau kiểm chứng preflight 100% khớp (0 job, 0 doc ref, 2 seed row). |
+| **Phase 4** | DROP thực thể thừa legacy | `processing_jobs`, `trash_batches`, `documents.trash_batch_id` | **Live DB** (`b3c4d5e6f7a8`) | `a2b3c4d5e6f7` DROP sau preflight 100% khớp (0 job, 0 doc ref, 2 seed row); sau đó upgrade `b3` thành công. |
+| **Phase 4** | Sync shares/bundle/MV/trigram | `document_shares`, `documents`, `community_subject_stats` | **Live DB** (`b3c4d5e6f7a8`) | CHECK 6 status validated; index bundle; MV filter + unique index; trigram retained; counts không đổi. |
+| **Phase 5** | Sửa drift `documents.updated_at` | `search_service.py` | **Repo Code + Live verified** | Raw SQL `ORDER BY updated_at` → `created_at`; không cần migration; GET `/search/` và FTS không dấu PASS. |
+| **Phase 5** | Chặn tự gán `role` | `schemas/auth.py`, `schemas/user.py`, `routers/auth.py` | **Repo Code** | Đăng ký luôn `student`; `UserUpdate` bỏ `role`; test quyền PASS. |
+| **Phase 5** | Rà runtime role/credential | Docs + Live role | **Blocker** | Role runtime có nhiều đặc quyền; secret thật trong doc archived; cần rotate qua console/UI. |
 
 ---
 
@@ -319,7 +323,7 @@ Sau quá trình rà soát độc lập của OpenCode, các vấn đề kỹ thu
    - Tuân thủ nghiêm ngặt: **Không kết nối Live DB**, **không chạy downgrade/upgrade trên DB Neon live**, **không tạo migration mới**, và **không đưa ra tuyên bố benchmark mới**.
 
 ### 4.5. Trạng thái thực tế của Revision `b3c4d5e6f7a8`
-Revision đã có trong repository và đã được kiểm thử trên PostgreSQL disposable, nhưng **chưa deploy Live**:
+Revision **đã deploy Live** bằng đúng lệnh `backend/.venv/bin/alembic upgrade head` (`a2b3c4d5e6f7 → b3c4d5e6f7a8`, exit 0), sau khi backup logic và preflight read-only PASS. Các mục dưới đây ghi thiết kế kèm kết quả hậu kiểm:
 
 1. **Chuẩn hóa CHECK constraint `chk_document_shares_status`**:
    - Mở rộng từ 3 lên 6 giá trị: `pending`, `accepted`, `rejected`, `auto_accepted`, `expired`, `withdrawn`.
@@ -344,11 +348,11 @@ Revision đã có trong repository và đã được kiểm thử trên PostgreS
    - Migration chỉ drop `idx_document_title_trgm` sau preflight catalog đầy đủ; nếu không chứng minh đủ thì giữ cả hai và `RAISE NOTICE`. DB sạch thiếu retained index được tạo `idx_documents_title_trgm` chuẩn. Downgrade không xóa retained index.
 
 6. **Kiểm thử & giới hạn**:
-   - Cây migration có 1 head: `b3c4d5e6f7a8`.
-   - Unit tests liên quan đã chạy: 9 test schema/shares/community stats, 5 test batch 3, 7 test shares.
-   - PostgreSQL disposable: upgrade `a2 -> b3` và downgrade `b3 -> a2` chạy được trên schema Live-like; 6 statuses hợp lệ, invalid status bị từ chối; downloads chỉ đếm `DOCUMENT_DOWNLOADED`; avg per-document khác avg all-ratings; type numeric/bigint đúng; unique index tồn tại; trigram guard và lock contention/rollback đã kiểm tra.
-   - **Chưa chứng minh full chain từ DB trống**: `alembic upgrade head` từ database rỗng dừng ở `f844331e6c1e` vì migration gốc không tạo `folders`; `subjects`, `document_ratings`, `community_submissions` cũng thiếu migration tạo. Đây là blocker của migration cũ, không sửa trong phạm vi này.
-   - Không kết nối Live DB, không chạy migration/downgrade trên Neon.
+   - Cây migration có 1 head: `b3c4d5e6f7a8`; bridge `c9d0e1f2a3b4` nằm sau `dae4972dff87`, chỉ repoint `f844331e6c1e`, không nằm trên đường Live `a2 → b3`.
+   - Phase 1–3 đã chứng minh full chain từ PostgreSQL trống tới `b3c4d5e6f7a8`, chu trình `downgrade base → upgrade head`, bridge cycle và `a2 ↔ b3` đều PASS; clean-chain test 2/2 passed.
+   - PostgreSQL staging/Live-like: upgrade `a2 → b3` và downgrade `b3 → a2` chạy được; 6 statuses hợp lệ, invalid status bị từ chối; downloads chỉ đếm `DOCUMENT_DOWNLOADED`; avg per-document khác avg all-ratings; type numeric/bigint đúng; unique index tồn tại; trigram guard và lock contention/rollback đã kiểm tra.
+   - Hậu kiểm Live read-only sau upgrade: revision `b3c4d5e6f7a8`; CHECK 6 status `convalidated=true`; counts giữ nguyên (documents 1.076, shares 7, subjects 54, logs 223, categories 6); MV 54 rows, `total_downloads=0`, `document_count_sum=34`.
+   - Đã kết nối Live ở chế độ read-only cho preflight/hậu kiểm; **chỉ** lệnh Alembic được phép ghi schema. Không chạy downgrade trên Live.
 
 ---
 
@@ -392,6 +396,59 @@ Revision đã có trong repository và đã được kiểm thử trên PostgreS
   - `backend/tests/test_batch3_deployment_and_legacy_tracing.py`
   - `backend/tests/test_library_download_action_filter.py`
   - `backend/tests/test_permission_normalization.py`
+- Cập nhật sau Phase 5: bổ sung `backend/app/routers/auth.py`, `backend/app/schemas/auth.py`, `backend/app/schemas/user.py`, `backend/tests/test_auth.py` (modified) và `backend/tests/test_search_unaccent_integration.py` (untracked). Các dirty/untracked từ Phase 1–4 vẫn được giữ nguyên; không `commit`, `push` hay `reset`.
 
 ### 5.3. Tuân thủ an toàn bảo mật kết nối
-- Toàn bộ chuỗi kết nối (`postgresql+asyncpg://...`), tên người dùng, mật khẩu quản trị và endpoint URL đầy đủ của nhà cung cấp Neon Serverless đều được giữ kín trong tập tin `.env`, không xuất hiện trong tài liệu này hoặc bất kỳ file nhật ký công khai nào.
+- Trong phiên làm việc này, mọi kết nối Live đều lấy cấu hình từ môi trường/`.env`; không in credential hay `DATABASE_URL` ra kết quả.
+- Tuy nhiên, kiểm tra docs ở Phase 5 phát hiện tài liệu archived `docs/99-luu-tru/deployment-cu/ENV_VARIABLES.md:70` chứa chuỗi kết nối thật (kèm mật khẩu) của role runtime, và `:77/:89` chứa khóa R2 thật. Vì vậy nhận định cũ “không xuất hiện trong tài liệu nào” là **không còn đúng**; xem §6.3 để xử lý. Không đọc giá trị bí mật hay tự rotate trong phạm vi này.
+
+---
+
+## 6. PHASE 5 — DRIFT `/search/`, ROLE ESCALATION VÀ CREDENTIAL (BẰNG CHỨNG & VIỆC CÒN LẠI)
+
+### 6.1. Drift `documents.updated_at` trong `GET /search/`
+- **Graphify trace**: truy vết `search()`, `search_documents()`, `TimestampMixin`, `b3c4d5e6f7a8`, `documents` cho thấy lỗi không nằm ở ORM mapped column hay migration `b3`.
+- **Nguyên nhân**: `backend/app/services/search_service.py` dùng SQL thô `ORDER BY updated_at DESC` trong `search_documents()`, trong khi `TimestampMixin` chỉ định nghĩa `created_at` và schema Live/clean-chain đều **không có** `documents.updated_at`. Đây là drift cũ của query, không phải lỗi chuỗi Alembic.
+- **Rà drift tương tự**: so sánh `Base.metadata` với `information_schema.columns` trên Live (`b3`), staging (`b3`) và clean-chain (`b3`) đều cho **0 bảng/cột ORM bị thiếu**. Các lần dùng `updated_at` khác đều là cột có thật trên `workspaces`, `document_ratings`, `document_stats`, `user_todos` (startup DDL); riêng `search_documents()` là raw SQL trỏ tới cột không tồn tại.
+- **Đường sửa theo Ponytail**: đổi đúng 1 dòng `ORDER BY updated_at DESC` → `ORDER BY created_at DESC`. Không thêm cột, không migration mới, không SQL thủ công trên Live. Frontend vốn đã có fallback `updated_at || created_at`, nên không đổi API shape.
+- **Bằng chứng**:
+  - `backend/tests/test_search_unaccent_integration.py`: seed tài liệu `Kiến trúc máy tính` trên staging, gọi `GET /search/?q=kien truc` qua `TestClient`, kiểm tra `search_vector @@ websearch_to_tsquery('simple', unaccent('kien truc'))`, rồi dọn dẹp bản ghi thử — PASS.
+  - Gọi trực tiếp router trên Live ở transaction read-only: `unaccent_fts_rows_live = 52`, `search_api_live = ok, items = 3` (không còn `UndefinedColumnError`).
+  - Full suite: **63 passed, 1 skipped**; clean-chain integration vẫn được giữ ở phiên trước (2/2 passed).
+
+### 6.2. Role escalation khi đăng ký
+- **Trước fix**: `UserRegister.role` cho client gửi `role`, và `register()` ghi đúng giá trị đó vào `users.role`; `UserUpdate.role` cũng cho `PATCH /users/me` tự nâng quyền. `users.role` không có DB CHECK constraint.
+- **Fix nhỏ nhất**: bỏ `role` khỏi `UserRegister` và `UserUpdate`, hard-code `role="student"` trong `register()`. `UserCreate`/`UserOut` vẫn giữ `role` cho seed/admin và response.
+- **Test quyền**: gửi `role: "sysadmin"` khi đăng ký thì bản ghi tạo ra vẫn `role="student"`; `PATCH /users/me` với `role: "sysadmin"` bị bỏ qua (`role` không có trong `UserUpdate.model_fields`). Cả 2 test PASS.
+- **Dữ liệu Live**: phân bố `users.role` = `student 53`, `teacher 7`, `faculty_admin 4`, `school_admin 1`, `system_admin 1`. Không tự đổi các tài khoản admin này; cần xác minh nguồn gốc (seed vs đăng ký) và quyết định product trước khi downgrade/rotate.
+
+### 6.3. Runtime role & credential từng xuất hiện trong docs
+- Truy vấn read-only Live: role runtime là `neondb_owner`; `rolsuper=false` nhưng `rolcreatedb=true`, `rolcreaterole=true`, `rolreplication=true`, `rolbypassrls=true`. Không in mật khẩu hay connection string.
+- **Đã redact working tree**: `docs/99-luu-tru/deployment-cu/ENV_VARIABLES.md` — DB URL, R2 endpoint, access key, secret key, public URL và VITE API URL đều thành placeholder; `docs/99-luu-tru/deployment-cu/STORAGE_R2.md` — ví dụ access/secret key thành placeholder. Không giá trị bí mật nào được ghi vào diff/báo cáo này. Một bước inspect đầu tiên chưa mask đúng đã làm lộ 1 giá trị R2 trong output tạm; giá trị đó đã bị xóa khỏi working tree và vẫn phải rotate.
+- **Quét tracked files sau redact**: `exact_credential_hits = 0`, `non_placeholder_db_url_hits = 0`; chỉ còn URL example/local (`localhost`, `user:pass@host/db`, `<USER>`, v.v.). Không print giá trị nào.
+- **Chưa đủ**: redact working tree không làm credential đang dùng hết hạn; lịch sử git vẫn giữ giá trị cũ. Phải rotate trước, dọn lịch sử sau.
+- Seed scripts (`backend/db/seed.py`, `seed_inc_user.py`, `fix_passwords.py`) có mật khẩu demo dùng chung cho admin seed; cần xác nhận không tái sử dụng trên Live.
+
+### 6.4. Nơi đọc `DATABASE_URL` & đề xuất tách role
+- Graphify + grep xác nhận **cùng một** `DATABASE_URL` cho cả app và migration:
+  - `backend/app/core/config.py:13` — `Settings.DATABASE_URL` đọc từ `.env`.
+  - `backend/app/core/database.py:7` — engine async của app dùng `settings.DATABASE_URL`.
+  - `alembic/env.py:43` — `config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)`.
+  - `backend/entrypoint.sh:6` — `alembic upgrade head` chạy trước uvicorn với env đó.
+  - Không có biến `MIGRATION_DATABASE_URL` hay cơ chế tách role trong repo.
+- **Đề xuất** (không triển khai vì cần credential/console):
+  - `elibrary_app`: `CONNECT` DB, `USAGE` schema public, `SELECT/INSERT/UPDATE/DELETE` trên bảng ứng dụng, `USAGE/SELECT` sequence, `EXECUTE` function cần thiết; **không** `CREATEDB`, `CREATEROLE`, `REPLICATION`, `BYPASSRLS`, `SUPERUSER`, không DDL.
+  - `elibrary_migrator`: Quyền DDL (`CREATE/ALTER/DROP` table/index/constraint/view/materialized view/function/trigger) + DML để backfill trong migration; chỉ dùng cho `alembic upgrade head`, không dùng cho app runtime.
+  - Nếu tách: thêm `MIGRATION_DATABASE_URL` chỉ cho entrypoint/Alembic, giữ `DATABASE_URL` cho app; deploy cả hai secret rồi khử credential owner cũ.
+- **Blocker**: tạo role, cấp grant và đổi mật khẩu bắt buộc qua Neon console/SQL có quyền admin + credential mới. Đây không phải thay đổi thuần repo nên theo Ponytail không thêm biến/code half-done; không tự tạo/đổi/thử credential.
+
+### 6.5. Thứ tự rotate & việc còn lại
+1. **Neon DB**: tạo 2 role ít quyền ở trên trong Neon console → đặt mật khẩu mới → cập nhật secret store (`DATABASE_URL` app, `MIGRATION_DATABASE_URL` nếu tách) → deploy/restart → kiểm tra app query và `alembic current = b3c4d5e6f7a8` → chỉ sau đó reset/revoke mật khẩu `neondb_owner` cũ.
+2. **R2**: tạo API token mới với quyền Object Read & Write đúng bucket → cập nhật `MINIO_ACCESS_KEY`/`MINIO_SECRET_KEY` trong secret store → deploy/restart → kiểm tra upload/download → revoke token cũ.
+3. **Secret store/frontend**: cập nhật mọi env liên quan (backend, worker, `VITE_API_URL` nếu đổi domain) rồi restart; không ghi giá trị mới vào file track.
+4. **Kiểm tra**: quét lại tracked files (0 credential hit), `alembic current`, smoke API/search, R2 round-trip; không đụng schema/data Live ngoài Alembic đã duyệt.
+5. **Lịch sử git**: chỉ sau khi rotate xong mới rewrite/purge (git-filter-repo/BFG) với phê duyệt maintainer, force-push có kiểm soát và báo collaborator re-clone. Không dọn lịch sử trước khi credential cũ bị vô hiệu.
+- Audit 6 tài khoản `faculty_admin` + 2 tài khoản admin toàn cục; xác minh/đổi mật khẩu seed yếu nếu còn dùng.
+- Sau khi có danh sách role chuẩn từ product, mới cân nhắc migration ADD CHECK trên `users.role`; không thêm trong đợt này.
+- Startup DDL fallback trong `backend/app/main.py` vẫn giữ vì chỉ `backend/entrypoint.sh` được chứng minh là runner migration; vector/pgvector tiếp tục tạm hoãn.
+- Đợt này **không** đổi schema/data Live, không migration mới, không vector, không `commit`/`push`/`reset`; dirty/untracked được bảo tồn.

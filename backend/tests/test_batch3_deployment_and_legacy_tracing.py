@@ -76,7 +76,7 @@ def test_legacy_artifacts_and_models_preservation():
 
 
 def test_offline_downgrade_sql_contains_safety_checks():
-    """Kiểm tra offline downgrade SQL của revision a2b3c4d5e6f7 có đủ parent checks và sequence sync."""
+    """Kiểm tra offline downgrade SQL của revision a2b3c4d5e6f7 có parent guard và sequence sync."""
     cmd = [
         "backend/.venv/bin/alembic",
         "downgrade",
@@ -93,10 +93,11 @@ def test_offline_downgrade_sql_contains_safety_checks():
         env=env,
     )
     sql_output = result.stdout
-    # Kiểm tra parent validation block
-    assert "RAISE EXCEPTION" in sql_output
-    assert "parent workspace id=3 not found" in sql_output
-    assert "parent user id=6 not found" in sql_output
+    # Seed rows historical chỉ được khôi phục khi parent record còn tồn tại.
+    assert "WHERE EXISTS (SELECT 1 FROM users WHERE id = 6)" in sql_output
+    assert "AND EXISTS (SELECT 1 FROM workspaces WHERE id = 3)" in sql_output
+    assert "AND EXISTS (SELECT 1 FROM workspaces WHERE id = 5)" in sql_output
+    assert "RAISE EXCEPTION" not in sql_output
     # Kiểm tra sequence sync
     assert "pg_get_serial_sequence('trash_batches', 'id')" in sql_output
     assert "pg_get_serial_sequence('processing_jobs', 'id')" in sql_output

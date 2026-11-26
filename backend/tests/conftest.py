@@ -16,7 +16,11 @@ from dotenv import load_dotenv
 load_dotenv(ROOT.parent / ".env")
 load_dotenv(ROOT / ".env")
 
-os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://test:test@localhost/test")
+# Tests phải dùng DB local/disposable; không bao giờ kế thừa DATABASE_URL từ .env
+# (có thể trỏ tới DB production).
+os.environ["DATABASE_URL"] = os.environ.get(
+    "TEST_DATABASE_URL", "postgresql+asyncpg://test:test@localhost/test"
+)
 os.environ.setdefault("SECRET_KEY", "test-secret-key")
 
 from app.main import app

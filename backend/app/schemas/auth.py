@@ -10,7 +10,6 @@ class UserRegister(BaseModel):
     email: str
     password: str = Field(min_length=8, max_length=128)
     full_name: Optional[str] = Field(default=None, max_length=150)
-    role: Optional[str] = Field(default="student", max_length=20)
     student_code: Optional[str] = Field(default=None, max_length=20)
     class_id: Optional[int] = None
     faculty_id: Optional[int] = None

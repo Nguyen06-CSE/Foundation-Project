@@ -50,32 +50,23 @@ def downgrade() -> None:
         )
     """)
 
-    # 2. Validate existence of parent records before restoring hardcoded seed rows
-    # Fail cleanly and abort transaction if parent user/workspace does not exist
-    op.execute("""
-        DO $$
-        BEGIN
-            IF NOT EXISTS (SELECT 1 FROM users WHERE id = 6) THEN
-                RAISE EXCEPTION 'Cannot restore trash_batches seed row 1: parent user id=6 not found';
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM users WHERE id = 7) THEN
-                RAISE EXCEPTION 'Cannot restore trash_batches seed row 2: parent user id=7 not found';
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM workspaces WHERE id = 3) THEN
-                RAISE EXCEPTION 'Cannot restore trash_batches seed row 1: parent workspace id=3 not found';
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM workspaces WHERE id = 5) THEN
-                RAISE EXCEPTION 'Cannot restore trash_batches seed row 2: parent workspace id=5 not found';
-            END IF;
-        END $$
-    """)
-
-    # 3. Re-insert preserved historical seed rows if table is empty
+    # 2. Re-insert preserved historical seed rows only when their parent records
+    # still exist. A freshly built database has no such rows, so the downgrade
+    # must not abort just because those historical ids were never present.
     op.execute("""
         INSERT INTO trash_batches (id, workspace_id, name, deleted_by, deleted_at, purge_at)
-        VALUES 
-            (1, 3, 'Nhóm BTL cũ (đã giải tán)', 6, '2026-09-02 10:37:44.601535+00', '2026-10-02 10:37:44.601557+00'),
-            (2, 5, 'Tài liệu ôn thi cũ', 7, '2026-08-29 11:08:17.855059+00', '2026-09-28 11:08:17.855060+00')
+        SELECT 1, 3, 'Nhóm BTL cũ (đã giải tán)', 6,
+               '2026-09-02 10:37:44.601535+00', '2026-10-02 10:37:44.601557+00'
+        WHERE EXISTS (SELECT 1 FROM users WHERE id = 6)
+          AND EXISTS (SELECT 1 FROM workspaces WHERE id = 3)
+        ON CONFLICT (id) DO NOTHING
+    """)
+    op.execute("""
+        INSERT INTO trash_batches (id, workspace_id, name, deleted_by, deleted_at, purge_at)
+        SELECT 2, 5, 'Tài liệu ôn thi cũ', 7,
+               '2026-08-29 11:08:17.855059+00', '2026-09-28 11:08:17.855060+00'
+        WHERE EXISTS (SELECT 1 FROM users WHERE id = 7)
+          AND EXISTS (SELECT 1 FROM workspaces WHERE id = 5)
         ON CONFLICT (id) DO NOTHING
     """)
 
