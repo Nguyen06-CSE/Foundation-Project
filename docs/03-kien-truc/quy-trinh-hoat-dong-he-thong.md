@@ -64,7 +64,11 @@ Hiện source chưa có cơ chế khóa hoặc ràng buộc duy nhất đủ rõ
 
 ### 3.2. Xử lý sau khi tạo bản ghi
 
-API commit bản ghi và trả response trước khi hoàn thành trích xuất. Pipeline xử lý được đăng bằng FastAPI `BackgroundTasks`, không dùng worker queue riêng cho upload.
+API commit bản ghi và trả response trước khi hoàn thành trích xuất. OCR, thumbnail và
+Markdown vẫn dùng FastAPI `BackgroundTasks`. Việc hợp nhất nội dung và tạo đoạn trích
+dùng hàng đợi `document_index_runs` cùng worker riêng để có thể retry và tiếp tục sau
+khi tiến trình dừng. Khi provider embedding được cấu hình, worker gửi các đoạn theo
+lô, lưu vector vào PostgreSQL và chỉ công bố run sau khi hoàn tất.
 
 ## 4. Phân loại và tiền xử lý tài liệu
 
@@ -102,14 +106,15 @@ Nếu bản ghi đã có đầy đủ `content`, thumbnail và Markdown do tái 
 
 ## 7. Tìm kiếm PostgreSQL
 
-Trigger DB cập nhật `search_vector` khi `title` hoặc `content` thay đổi. Biểu thức hiện tại gồm:
+Trigger PostgreSQL tạo vector tìm kiếm từ ba trường.
 
 - `title` với trọng số `A`.
-- `content` với trọng số `B`.
+- `description` với trọng số `B`.
+- `content` với trọng số `C`.
 
 `search_vector` có GIN index. Truy vấn tìm kiếm dùng `websearch_to_tsquery`, đồng thời dùng `LIKE` trên `title` và `description`. Tài liệu có `is_deleted = true` luôn bị loại khỏi danh sách và FTS.
 
-`description` hiện được tìm bằng nhánh `LIKE`, chưa nằm trong biểu thức trigger tạo `search_vector`.
+Xem [các chế độ tìm kiếm và ví dụ](../05-tinh-nang/04-tim-kiem-va-tra-cuu.md).
 
 ## 8. Vòng đời tài liệu
 
@@ -138,20 +143,19 @@ Helper kiểm tra các tham chiếu qua cả `file_path`, `thumbnail_path` và `
 
 Source hiện xóa Storage trước rồi mới commit DB. Nếu commit thất bại, có nguy cơ bản ghi còn tồn tại nhưng tệp vật lý đã bị xóa; chưa có cơ chế bù trừ hoàn chỉnh cho trường hợp này.
 
-## 9. Vector hóa, hỏi đáp và tóm tắt
+## 9. Vector hóa và tìm kiếm kết hợp
 
-Các chức năng sau **chưa triển khai**:
+Phase 1/2 đã triển khai chia đoạn có nguồn, hàng đợi bền vững, embedding qua API
+tương thích OpenAI và lưu vector bằng `pgvector`. Tìm kiếm kết hợp thực hiện hai
+nhánh trong PostgreSQL: FTS trên `documents`/`document_chunks` và cosine trên
+embedding đúng model. Hai thứ hạng được gom theo tài liệu rồi hợp nhất bằng RRF.
+Toàn bộ nhánh đều áp dụng quyền cá nhân/nhóm tại thời điểm truy vấn.
 
-- Chia nội dung thành chunk để embedding.
-- Lưu vector vào bảng vector.
-- Hỏi đáp RAG.
-- Tóm tắt và lưu kết quả AI.
-
-Tài liệu `docs/99-luu-tru/ke-hoach/AI-Vector/ke-hoach-trien-khai-AI.md` chỉ là định hướng kiến trúc cho giai đoạn sau, không phải mô tả pipeline đang vận hành.
+Hỏi đáp RAG và tóm tắt trích dẫn được triển khai, hiệu chỉnh và nghiệm thu riêng
+ở Phase 3; không được coi là hoàn tất chỉ vì đã có endpoint thử nghiệm trong source.
 
 ## 10. Các điểm cần bổ sung hoặc cải thiện
 
 - Bổ sung khóa/ràng buộc chống race condition cho deduplication.
 - Thiết kế thứ tự hoặc cơ chế bù trừ giữa xóa Storage và commit DB.
-- Cập nhật trigger nếu muốn đưa `description` vào `search_vector`.
 - Viết đặc tả riêng cho luồng gộp nhiều ảnh thành PDF.

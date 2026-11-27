@@ -75,7 +75,12 @@ sequenceDiagram
 
 ### 2.1. Xử lý nền sau upload
 
-Pipeline chạy bằng FastAPI `BackgroundTasks`, không phải worker queue riêng. API commit bản ghi và trả response trước khi OCR, thumbnail hoặc Markdown hoàn tất. Tác vụ nền đọc tệp, trích xuất text, tạo thumbnail, sinh Markdown và cập nhật DB.
+Pipeline OCR, thumbnail và sinh Markdown chạy bằng FastAPI `BackgroundTasks`. Sau khi
+`documents.content` hoặc `markdown_path` thay đổi, trigger PostgreSQL đưa một job vào
+`document_index_runs`. Worker lập chỉ mục riêng hợp nhất hai bản nội dung thành
+`document_chunks`, gọi API embedding theo lô, ghi vector bằng `pgvector`, ghi độ
+bao phủ và chỉ công bố run còn khớp checksum hiện tại. Khi đổi model, run cũ vẫn
+được phục vụ đến khi bộ vector mới hoàn tất.
 
 Source chưa có khóa giao dịch hoặc unique constraint bảo vệ rõ ràng khỏi hai upload đồng thời cùng checksum. Đây là rủi ro race condition cần theo dõi.
 
@@ -92,9 +97,9 @@ PDF dùng `pdfplumber`, nếu không có text layer thì OCR; DOCX dùng `python
 
 ## 4. Tìm kiếm PostgreSQL
 
-Trigger DB cập nhật `documents.search_vector` khi `title` hoặc `content` thay đổi. Trigger hiện tại tạo `tsvector` từ `title` (trọng số A) và `content` (trọng số B), với chỉ mục GIN.
+Trigger PostgreSQL tạo `search_vector` từ tiêu đề (A), mô tả (B) và nội dung (C). PostgreSQL dùng chỉ mục GIN để tra các từ đã lập chỉ mục.
 
-Truy vấn tìm kiếm dùng `websearch_to_tsquery`, bổ sung `LIKE` trên `title` và `description`, đồng thời luôn lọc `is_deleted = false` và giới hạn theo kho người dùng có quyền truy cập. `description` hiện chưa nằm trong biểu thức trigger tạo `search_vector`.
+Truy vấn tìm kiếm dùng `websearch_to_tsquery`, bổ sung `LIKE` trên `title` và `description`, đồng thời luôn lọc `is_deleted = false` và giới hạn theo kho người dùng có quyền truy cập.
 
 ## 5. Xóa mềm, khôi phục và xóa vĩnh viễn
 
@@ -106,9 +111,16 @@ Xóa vĩnh viễn thủ công và tác vụ APScheduler `cleanup_deleted_documen
 
 Thứ tự hiện tại là xóa Storage trước, sau đó xóa bản ghi DB và commit. Nếu commit thất bại, có thể còn bản ghi trỏ tới tệp đã bị xóa; source chưa có cơ chế bù trừ cho trường hợp này.
 
-## 6. Vector hóa, hỏi đáp và tóm tắt
+## 6. Vector hóa và tìm kiếm kết hợp
 
-Vector hóa, embedding, hỏi đáp RAG và tóm tắt theo tài liệu AI-Vector **chưa triển khai trong source hiện tại**. Tài liệu AI-Vector chỉ là định hướng cho kế hoạch sau, không phải pipeline đang chạy.
+Migration Phase 2 bật extension `vector` và thêm embedding cho từng đoạn. Worker
+kiểm tra kích thước vector theo cấu hình provider, retry timeout/`429`, và chỉ
+chuyển run sang active sau khi toàn bộ đoạn đã được ghi. `GET /search/full` giữ
+`mode=keyword` làm mặc định tương thích và cung cấp `mode=hybrid` dùng cosine +
+Reciprocal Rank Fusion. Khi provider lỗi, truy vấn tự hạ xuống nhánh từ khóa.
+
+Hỏi đáp và tóm tắt trích dẫn thuộc Phase 3, chưa nằm trong phạm vi nghiệm thu
+của pipeline Phase 2 này.
 
 ## 7. Nội dung đã triển khai nhưng cần bổ sung docs
 
@@ -118,7 +130,6 @@ Phân loại tệp, OCR, Pygments, Anydoc và luồng gộp nhiều ảnh thành
 
 - Bổ sung cơ chế chống race condition nếu cần bảo đảm tuyệt đối theo checksum.
 - Xem xét thứ tự xóa Storage và DB để tránh bản ghi mồ côi khi commit thất bại.
-- Nếu muốn `description` nằm trong `search_vector`, cần cập nhật trigger và migration.
 
 <!-- Phần so sánh Local Storage và Cloud Object Storage được giữ ở dưới để tham khảo. -->
 

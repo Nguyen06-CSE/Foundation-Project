@@ -49,7 +49,8 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
    pip install -r requirements.txt
    ```
 
-4. Tạo tệp cấu hình môi trường `backend/.env`:
+4. Tạo tệp cấu hình môi trường `.env` tại thư mục gốc dự án (backend đọc đúng
+   tệp này qua `ROOT_DIR`):
    ```bash
    cat << 'EOF' > .env
    # Kết nối CSDL PostgreSQL qua asyncpg
@@ -66,12 +67,20 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
 
    # Cho phép kết nối từ Frontend Vite
    CORS_ORIGINS=["http://localhost:5173", "http://127.0.0.1:5173"]
+
+   # API embedding tương thích OpenAI; URL gốc đã gồm /v1
+   EMBEDDING_BASE_URL=https://provider.example/v1
+   EMBEDDING_API_KEY=
+   EMBEDDING_MODEL=
+   # Phải đúng bằng số chiều provider thực sự trả về
+   EMBEDDING_DIMENSIONS=0
+   EMBEDDING_BATCH_SIZE=32
    EOF
    ```
 
 5. Chạy di chuyển lược đồ CSDL bằng Alembic:
    ```bash
-   # Thực thi toàn bộ chuỗi 18 bản migration (đã có bridge c9d0e1f2a3b4)
+   # Tạo kho đoạn nội dung và bật extension pgvector cho Phase 2
    alembic upgrade head
    ```
 
@@ -88,6 +97,22 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
    > 🌐 Kiểm tra API hoạt động tại: `http://localhost:8000/docs` (Swagger UI).
+
+7. Mở cửa sổ Terminal backend thứ hai và chạy worker lập chỉ mục nội dung:
+   ```bash
+   cd /Users/caotiendattx/Developer/Foundation-Project/backend
+   source venv/bin/activate
+   python -m app.services.index_worker
+   ```
+
+   Worker đọc Markdown và `documents.content`, bổ sung vị trí trang/slide khi có,
+   gửi từng batch văn bản đến provider embedding rồi ghi vector vào PostgreSQL.
+   Chỉ chạy worker sau khi đã chấp thuận việc gửi nội dung tài liệu đến provider
+   đã cấu hình. Có thể chạy nhiều worker;
+   `FOR UPDATE SKIP LOCKED` bảo đảm một job chỉ được một tiến trình nhận. Để xử lý
+   hết hàng đợi hiện tại rồi thoát, dùng `python -m app.services.index_worker --once`.
+   Lệnh `--once` xử lý toàn bộ hàng đợi và có thể phát sinh nhiều lượt gọi API;
+   nên kiểm tra số job trước khi backfill một kho đã có dữ liệu.
 
 ---
 
@@ -125,3 +150,4 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
 2. Đăng ký tài khoản người dùng mới (ví dụ: `demo_user` / mật khẩu `Password123!`).
 3. Đăng nhập và thử tải lên một tệp tin PDF bất kỳ vào **Kho cá nhân**.
 4. Kiểm tra thư mục vật lý `backend/storage/` trên máy tính để thấy tệp tin đã được lưu trữ an toàn.
+5. Mở trang chi tiết tài liệu và kiểm tra trạng thái lập chỉ mục chuyển sang **Đã lập chỉ mục**.

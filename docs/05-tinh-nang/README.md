@@ -28,6 +28,8 @@ Mỗi tài liệu phân hệ tuân thủ cấu trúc chuẩn mực gồm 6 phầ
 
 ---
 
+Xem thêm [Thùng rác và vòng đời tài liệu khi giải tán nhóm](./09-thung-rac-va-giai-tan-nhom.md).
+
 ## 📋 Biểu Mẫu Chuẩn Hóa
 Để phục vụ việc mở rộng các tính năng mới trong tương lai hoặc làm mẫu báo cáo đồ án, vui lòng tham khảo:
 👉 [**Biểu Mẫu Chuẩn Đặc Tả Tính Năng (Feature Template)**](./template-tai-lieu-tinh-nang.md).

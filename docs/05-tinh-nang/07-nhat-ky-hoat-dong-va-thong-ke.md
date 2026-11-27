@@ -4,74 +4,21 @@ sidebar_label: 07. Nhật Ký & Thống Kê
 sidebar_position: 9
 ---
 
-# 📊 PHÂN HỆ 07: NHẬT KÝ HOẠT ĐỘNG & THỐNG KÊ (ACTIVITY & TRENDING)
+# Nhật ký hoạt động và sắp xếp trong kho cá nhân
 
-## 1. Mục Đích & Bối Cảnh Nghiệp Vụ
-Phân hệ cung cấp khả năng giám sát nhật ký tương tác của người dùng (Audit Trail) phục vụ công tác quản trị và bảo mật, đồng thời tính toán điểm số xu hướng (Trending Score) để đề xuất các tài liệu học tập nổi bật nhất cho sinh viên trên trang chủ.
+Trong **Kho cá nhân → Sắp xếp**, chọn **lượt xem** để đưa tài liệu có tổng số lần xem cao nhất lên đầu, hoặc **xu hướng** để ưu tiên tài liệu thu hút nhiều tương tác so với tuổi của nó. Danh sách mặc định dùng xu hướng. Việc sắp xếp áp dụng cho toàn bộ kết quả đã lọc trước khi lấy từng trang.
 
----
+| Kiểu sắp xếp | Giá trị dùng để so sánh | Khi bằng nhau |
+|---|---|---|
+| Lượt xem (`views`) | `document_stats.view_count` giảm dần | Tài liệu mới hơn, sau đó ID lớn hơn |
+| Xu hướng (`trending`) | `document_stats.trending_score` giảm dần | ID lớn hơn |
 
-## 2. Luồng Ghi Nhận Hoạt Động & Tính Điểm Xu Hướng
+Thẻ tài liệu ưu tiên hiển thị số lần **chính người dùng** đã xem (`personal_view_count`). Vì dropdown sắp theo tổng lượt xem của bản ghi, số trên các thẻ có thể không giảm đều theo thứ tự hiển thị.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User as Sinh Viên
-    participant API as FastAPI Router
-    participant Svc as ActivityService
-    participant DB as PostgreSQL
+## Từ sự kiện đến điểm xu hướng
 
-    User->>API: Tải xuống tài liệu: GET /documents/{id}/raw
-    API->>DB: INSERT INTO download_logs (document_id, user_id, downloaded_at)
-    API->>Svc: Kích hoạt cập nhật thống kê (Background Task)
-    Svc->>DB: UPDATE document_stats SET downloads_count = downloads_count + 1 WHERE document_id = :id
-    Svc->>Svc: Tính toán lại Trending Score dựa trên công thức suy giảm thời gian
-    Svc->>DB: UPDATE document_stats SET trending_score = :calculated_score
-    API-->>User: Trả về luồng dữ liệu tệp tin
-```
+1. Backend ghi sự kiện vào `download_logs` cùng tài liệu, người dùng, hành động và thời điểm. Nếu nơi gọi cấu hình khoảng chống lặp, sự kiện cùng người, tài liệu và hành động trong khoảng đó được bỏ qua.
+2. Cùng lúc ghi log, service tăng bộ đếm tương ứng trong `document_stats`. Điểm tăng tức thời theo tương tác, với xem +1, tải +2, lưu +5 và chia sẻ +2.
+3. Mỗi giờ, scheduler chọn các tài liệu có hoạt động trong 48 giờ qua rồi tính lại từ lịch sử của từng tài liệu. Cửa sổ 48 giờ dùng để chọn tài liệu cần cập nhật. Các lượt được tính trên toàn bộ lịch sử của tài liệu đó.
 
----
-
-## 3. Quy Tắc Nghiệp Vụ & Thuật Toán Tính Điểm Xu Hướng (Business Rules)
-
-### 3.1. Các Hành Động Được Ghi Nhật Ký (`ActivityAction`)
-Hệ thống chuẩn hóa các hành vi tương tác trong enum `ActivityAction`:
-- `UPLOAD`: Tải lên tài liệu mới.
-- `DOWNLOAD`: Tải tệp tin về máy.
-- `VIEW`: Xem trước nội dung tài liệu.
-- `SHARE`: Chia sẻ tài liệu cho người khác.
-- `DELETE`: Xóa tài liệu vào thùng rác.
-- `RESTORE`: Khôi phục tài liệu.
-
-### 3.2. Thuật Toán Tính Điểm Xu Hướng (Trending Score Algorithm)
-Điểm xu hướng không chỉ dựa vào tổng số lượt xem hay tải mà có tính đến **hệ số suy giảm theo thời gian (Time Decay Factor)**, nhằm ưu tiên các tài liệu đang được quan tâm nhiều trong tuần hoặc tháng gần nhất:
-
-$$
-	ext{Trending Score} = rac{W_v \cdot V + W_d \cdot D + W_r \cdot R}{(T + 2)^G}
-$$
-
-Trong đó:
-- $V$: Số lượt xem gần đây (`views_count`).
-- $D$: Số lượt tải gần đây (`downloads_count`).
-- $R$: Điểm đánh giá trung bình (`average_rating`).
-- $W_v, W_d, W_r$: Trọng số tương ứng ($W_d > W_v$ vì hành vi tải về thể hiện sự quan tâm sâu sắc hơn xem lướt).
-- $T$: Khoảng thời gian từ thời điểm tải lên đến hiện tại (tính bằng ngày).
-- $G$: Hệ số suy giảm trọng lực ($G = 1.5$).
-
----
-
-## 4. Mô Hình Dữ Liệu Liên Quan
-- `download_logs`: Lưu từng lượt tải cụ thể (`document_id`, `user_id`, `downloaded_at`).
-- `document_stats`: Bảng tổng hợp chỉ số tương tác (`views_count`, `downloads_count`, `average_rating`, `trending_score`, `updated_at`).
-
----
-
-## 5. Tương Tác API & Giao Diện Người Dùng
-- `GET /dashboard/stats`: Lấy thống kê tổng quan (Tổng số tài liệu, dung lượng đã dùng, phân bổ loại tệp).
-- `GET /dashboard/activities`: Lấy dòng nhật ký hoạt động gần đây của người dùng.
-- `GET /library/trending`: Lấy danh sách tài liệu có điểm xu hướng cao nhất để hiển thị tại banner trang chủ.
-
----
-
-## 6. Giới Hạn Kỹ Thuật
-- Điểm xu hướng hiện tại được cập nhật tức thì (On-the-fly) khi có sự kiện tải xuống hoặc xem tài liệu; với khối lượng truy cập đồng thời lớn, nên chuyển tác vụ tính toán này thành một CronJob chạy định kỳ hàng giờ.
+Điểm tính lại bằng `(xem + 2 × tải + 5 × lưu + 2 × chia sẻ) × hệ_số_gần_đây / (tuổi_giờ + 2)^1,5`. Hệ số là 1,5 nếu hoạt động cuối trong vòng 24 giờ, còn lại là 1. Ví dụ, hai tài liệu cùng tuổi, cùng có hoạt động hôm nay: tài liệu A có 10 lượt xem, tài liệu B có 6 lượt xem và 1 lượt lưu. A đứng trước khi sắp theo lượt xem, còn B đứng trước khi tính lại xu hướng vì tổng có trọng số là 11 so với 10. [Ghi sự kiện](../../backend/app/services/document_service.py) · [Tính lại thống kê](../../backend/app/jobs/scheduler.py) · [Sắp xếp trong kho](../../backend/app/services/document_query_service.py)

@@ -114,3 +114,11 @@ UI: dòng **"Đang cập nhật..."** với spinner nhỏ cạnh ViewToggle; dan
 
 - Thêm cột `last_accessed_at` trên `documents` để thay subquery `download_logs` (repo đã có `backend/tests/benchmark_accessed_within.py` để so sánh).
 - Cache kết quả theo `filterKey` và preload các filter kề nhau để bật lại filter cũ dùng cache ngay.
+
+## Tải 20 tài liệu đầu rồi tải thêm khi cuộn
+
+Kho cá nhân và kho nhóm dùng `useInfiniteQuery`. Lần mở kho, giao diện yêu cầu trang 1 với `page_size=20`. Backend áp dụng quyền truy cập, bộ lọc và thứ tự sắp xếp trước khi phân trang. Nó đếm tổng ở trang đầu và lấy dư một dòng để xác định `has_more`, rồi chỉ trả tối đa 20 tài liệu.
+
+Khi điểm đánh dấu cuối danh sách tiến vào vùng quan sát (mặc định cách mép khung nhìn 200 px), `IntersectionObserver` kích hoạt trang kế tiếp nếu còn dữ liệu và chưa tải dở. Giao diện nối trang mới sau các mục đang hiển thị. Nếu trang đầu chưa lấp đầy màn hình, điều kiện này cũng có thể đạt ngay. Khi tải thêm gặp lỗi, người dùng có thể bấm **Thử lại**.
+
+Ví dụ, với 47 tài liệu khớp bộ lọc, ba lần lấy dữ liệu lần lượt trả 20, 20 và 7 mục. Sau trang ba, giao diện dừng yêu cầu. Cách này giới hạn lượng dữ liệu truyền và số thẻ cần dựng khi mở kho. [Truy vấn kho cá nhân](../../frontend/digital-library/src/pages/personal/hooks/usePersonalDocuments.ts) · [Truy vấn kho nhóm](../../frontend/digital-library/src/pages/group/hooks/useGroupDocuments.ts) · [Điều kiện tải thêm](../../frontend/digital-library/src/components/shared/documents/InfiniteScrollSentinel.tsx)

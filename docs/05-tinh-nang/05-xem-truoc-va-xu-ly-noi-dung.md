@@ -53,3 +53,14 @@ Giúp người dùng đọc nhanh nội dung tài liệu ngay trên trình duy�
 
 ## 6. Giới Hạn Kỹ Thuật
 - Đối với các tệp tin Microsoft Office phức tạp (.docx, .pptx lớn có macro), hệ thống ưu tiên cho người dùng tải về máy thay vì dựng hoàn hảo 100% định dạng trên trình duyệt.
+
+## Từ tệp gốc đến bản đọc Markdown
+
+Ví dụ, khi tải một bài giảng DOCX, người dùng nhận được bản ghi sau khi API commit. FastAPI sau đó chạy `_process_document_background` bằng `BackgroundTasks`. Bản gốc vẫn truy cập qua `file_path`. Nếu đã tái sử dụng đủ nội dung, ảnh bìa và Markdown từ bản cùng checksum, tác vụ kết thúc ngay.
+
+1. Backend đọc tệp trên đĩa. Với tệp chỉ có ở R2, backend tải một bản tạm về máy để thư viện nhận được đường dẫn cục bộ.
+2. Backend trích xuất văn bản cho `documents.content` và thử tạo ảnh bìa. Để tạo bản đọc Markdown, backend gọi trực tiếp `anydoc.to_markdown(path)` của gói Python `firecrawl-anydoc==0.2.4`. Với mã nguồn hoặc văn bản thuần, Pygments nhận diện ngôn ngữ và backend bọc nội dung trong khối mã Markdown. [Kho mã nguồn Firecrawl AnyDoc](https://github.com/firecrawl/anydoc)
+3. Khi chuyển đổi trả về nội dung, backend ghi UTF‑8 vào `storage/markdowns/{document_id}.md`. Ở chế độ R2, tác vụ gửi bản Markdown lên cùng key với kiểu `text/markdown`. PostgreSQL lưu đường dẫn trong `documents.markdown_path`. Nếu chưa có ảnh bìa, tác vụ có thể lấy ảnh đầu tiên trong Markdown.
+4. Giao diện dùng đường dẫn này để đọc bản Markdown. Nếu thư viện lỗi hoặc trả về văn bản rỗng, tác vụ không gán đường dẫn Markdown mới. Người dùng vẫn có thể truy cập bản gốc. Tệp tạm tải về được dọn sau xử lý.
+
+[Hàm chuyển đổi](../../backend/app/services/file_processor.py) · [Tác vụ sau upload](../../backend/app/routers/documents.py)

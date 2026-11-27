@@ -79,4 +79,4 @@ sequenceDiagram
 ## 5. Hậu Điều Kiện (Postconditions)
 1. Bản ghi tài liệu mới được tạo trong bảng `documents`; xử lý text, thumbnail và Markdown tiếp tục ở BackgroundTasks.
 2. Metadata (kích thước, MIME, SHA-256 hash) được lưu trữ đầy đủ.
-3. Trigger PostgreSQL cập nhật `search_vector` từ `title` và `content` khi các trường này được ghi/cập nhật. `description` được tìm bổ sung bằng `LIKE`, chưa nằm trong trigger hiện tại.
+3. Trigger PostgreSQL cập nhật `search_vector` từ `title`, `description` và `content`.
