@@ -91,6 +91,8 @@ Video dưới đây mô tả luồng thao tác tổng quan của ứng dụng:
   Trình duyệt không hỗ trợ phát video. Bạn có thể <a href="docs/99-luu-tru/minh-hoa-luong-hoat-dong.mp4">mở video tại đây</a>.
 </video>
 
+https://github.com/user-attachments/assets/3ec3ee4c-9da7-4d6c-b4c9-2078d1a5de43
+
 Nếu trình xem README trên GitHub không phát video trực tiếp, hãy mở tệp [minh-hoa-luong-hoat-dong.mp4](docs/99-luu-tru/minh-hoa-luong-hoat-dong.mp4).
 
 ## Tài liệu dự án
