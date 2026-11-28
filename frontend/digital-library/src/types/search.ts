@@ -1,5 +1,20 @@
 // src/types/search.ts
 
+import type { Citation } from "@/types/ai";
+
+export type SearchMode = "keyword" | "hybrid";
+
+export type SearchMatchField = "title" | "content" | "semantic";
+export type SearchMatchMethod = "lexical_title" | "lexical_content" | "semantic";
+
+export interface SearchMatchProvenance {
+  methods: SearchMatchMethod[];
+  title_rank?: number | null;
+  content_rank?: number | null;
+  semantic_rank?: number | null;
+  fused_score?: number | null;
+}
+
 export type SearchItemType =
   | "personal_doc"
   | "group_doc"
@@ -15,6 +30,8 @@ export interface SearchResultItem {
   subtitle: string;
   url: string;
   snippet?: string | null;
+  citation?: Citation | null;
+  match?: SearchMatchProvenance | null;
 }
 
 export interface QuickSearchResponse {
@@ -26,4 +43,6 @@ export interface FullSearchResponse {
   total: number;
   page: number;
   page_size: number;
+  fallback?: boolean;
+  unavailable_match_fields?: SearchMatchField[];
 }

@@ -2,9 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Plus, X, Search, Check } from "lucide-react";
+import { Plus, X, Search, Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/utils/cn";
+import {
+  formatCitationLocation,
+  formatCitationSource,
+} from "@/utils/citation";
+import type { Citation, TagSuggestionsResponse } from "@/types/ai";
 import { COLORS, type TagType } from "../DocumentDetail.types";
 
 interface DocumentTagSectionProps {
@@ -18,6 +23,14 @@ interface DocumentTagSectionProps {
   isCreatingTag: boolean;
   onRemoveTag: (tagId: number) => void;
   isRemovingTag: boolean;
+  tagSuggestions?: TagSuggestionsResponse | null;
+  isLoadingTagSuggestions?: boolean;
+}
+
+function suggestionContext(citation: Citation): string {
+  return [formatCitationLocation(citation.location), formatCitationSource(citation.source)]
+    .filter(Boolean)
+    .join(" • ");
 }
 
 export function DocumentTagSection({
@@ -31,6 +44,8 @@ export function DocumentTagSection({
   isCreatingTag,
   onRemoveTag,
   isRemovingTag,
+  tagSuggestions,
+  isLoadingTagSuggestions = false,
 }: DocumentTagSectionProps) {
   const [selectedTags, setSelectedTags] = useState<TagType[]>(tags);
   const [isTagEditorOpen, setIsTagEditorOpen] = useState(false);
@@ -209,6 +224,90 @@ export function DocumentTagSection({
                     className="w-full rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                   />
                 </div>
+
+                {isLoadingTagSuggestions ? (
+                  <p className="mb-3 text-[11px] text-gray-400">
+                    Đang tải gợi ý nhãn...
+                  </p>
+                ) : (tagSuggestions?.existing.length ?? 0) > 0 ||
+                  (tagSuggestions?.new.length ?? 0) > 0 ? (
+                  <div className="mb-3 rounded-lg border border-primary-100 bg-primary-50/50 p-2.5">
+                    <p className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-primary-700">
+                      <Sparkles className="h-3 w-3" />
+                      Gợi ý từ nội dung tài liệu
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {tagSuggestions?.existing.map((suggestion) => {
+                        const selected = selectedTagIds.includes(
+                          suggestion.tag_id,
+                        );
+                        const context = suggestionContext(suggestion.citation);
+                        return (
+                          <button
+                            key={`existing-${suggestion.tag_id}`}
+                            type="button"
+                            onClick={() =>
+                              toggleTag({
+                                id: suggestion.tag_id,
+                                name: suggestion.name,
+                              })
+                            }
+                            title={context || suggestion.name}
+                            className={cn(
+                              "flex flex-col items-start rounded-md border px-2 py-1 text-left text-[11px] transition-colors",
+                              selected
+                                ? "border-primary-500 bg-primary-600 text-white"
+                                : "border-gray-200 bg-white text-gray-600 hover:border-primary-300 hover:text-primary-700",
+                            )}
+                          >
+                            <span className="flex items-center gap-1 font-medium">
+                              {selected && <Check className="h-3 w-3" />}
+                              {suggestion.name}
+                            </span>
+                            {context && (
+                              <span
+                                className={cn(
+                                  "text-[10px]",
+                                  selected
+                                    ? "text-white/75"
+                                    : "text-gray-400",
+                                )}
+                              >
+                                {context}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+
+                      {tagSuggestions?.new.map((suggestion) => {
+                        const context = suggestionContext(suggestion.citation);
+                        return (
+                          <button
+                            key={`new-${suggestion.name}`}
+                            type="button"
+                            onClick={() => {
+                              setTagSearchQuery(suggestion.name);
+                              setSelectedColor(COLORS[0].hex);
+                            }}
+                            title={context || suggestion.name}
+                            className="flex flex-col items-start rounded-md border border-dashed border-primary-300 bg-white px-2 py-1 text-left text-[11px] text-primary-600 transition-colors hover:bg-primary-50"
+                          >
+                            <span className="flex items-center gap-1 font-medium">
+                              <Plus className="h-3 w-3" />
+                              {suggestion.name}
+                            </span>
+                            {context && (
+                              <span className="text-[10px] text-gray-400">
+                                {context}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
 
                 <div className="max-h-36 overflow-y-auto pr-1 flex flex-wrap gap-2 custom-scrollbar">
                   {isLoadingTags ? (

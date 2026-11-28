@@ -262,7 +262,7 @@ export function usePersonalDocuments(
         markdown_path: doc.markdown_path ?? null,
         markdownPath: doc.markdown_path ?? null,
         file_path: doc.file_path ?? null,
-        content: doc.content,
+        preview_text: doc.preview_text ?? null,
         owner: sharerName ? { name: sharerName, avatar: "" } : undefined,
         rawType: doc.file_type,
         tags: doc.tags || [],

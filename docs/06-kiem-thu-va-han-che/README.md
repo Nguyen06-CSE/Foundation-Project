@@ -25,3 +25,6 @@ Phân hệ tài liệu này cung cấp báo cáo toàn diện, trung thực và 
 Trong một đồ án tốt nghiệp hoặc đồ án cơ sở ngành Công nghệ Thông tin, việc **thẳng thắn nhận diện các giới hạn kỹ thuật** và **giải thích rõ ràng các quyết định đánh đổi (Trade-offs)** có giá trị khoa học cao hơn nhiều so với việc đưa ra các tuyên bố tiếp thị không có bằng chứng.
 
 Tài liệu trong phân hệ này được xây dựng trên tinh thần trung thực khoa học, bám sát từng file test thực tế trong thư mục `backend/tests/`.
+# AI/vector QA
+
+Xem [kiểm thử AI/vector](./kiem-thu-ai-vector-va-ket-qua-nghiem-thu.md); DB local còn deferred.

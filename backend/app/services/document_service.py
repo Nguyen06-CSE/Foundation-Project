@@ -36,6 +36,8 @@ async def create_document_from_upload(
     await upload.seek(0)  # Reset con trỏ file sau khi đọc
     
     file_size = len(file_bytes)
+    if file_size == 0:
+        raise ValueError("empty_file")
     checksum = checksum_for_file(file_bytes)
     
     # 2. Kiểm tra file trùng lặp (kể cả file trong thùng rác)

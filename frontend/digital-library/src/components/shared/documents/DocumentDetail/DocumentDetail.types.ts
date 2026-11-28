@@ -12,7 +12,13 @@ export interface TagType {
   color?: string;
 }
 
-export type TabKey = "detail" | "content" | "description" | "note" | "activity";
+export type TabKey =
+  | "detail"
+  | "content"
+  | "insights"
+  | "description"
+  | "note"
+  | "activity";
 
 export interface DetailTabItem {
   key: TabKey;
@@ -22,6 +28,7 @@ export interface DetailTabItem {
 export const TABS: DetailTabItem[] = [
   { key: "detail", label: "Bản xem trước" },
   { key: "content", label: "Nội dung OCR" },
+  { key: "insights", label: "Hỏi đáp cùng AI" },
   { key: "description", label: "Mô tả" },
   { key: "note", label: "Ghi chú" },
   { key: "activity", label: "Hoạt động" },
@@ -95,7 +102,7 @@ export interface DocumentDetailPermissions {
 
 export interface SharedDocumentDetailProps {
   documentId?: number;
-  fetchDocumentFn?: (id: number) => Promise<any>;
+  fetchDocumentFn?: (id: number, fromSearch?: boolean) => Promise<any>;
   updateDocumentFn?: (id: number, data: Partial<Document>) => Promise<any>;
   deleteDocumentFn?: (id: number) => Promise<any>;
   updateTagsFn?: (id: number, tagIds: number[]) => Promise<any>;

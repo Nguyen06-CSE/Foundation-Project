@@ -14,6 +14,7 @@ import type {
 const VALID_TABS: readonly TabKey[] = [
   "detail",
   "content",
+  "insights",
   "description",
   "note",
   "activity",
@@ -31,7 +32,7 @@ const VALID_TABS: readonly TabKey[] = [
 export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
   const {
     documentId: propDocumentId,
-    fetchDocumentFn = documentService.getById,
+    fetchDocumentFn = (id, fromSearch) => documentService.getById(id, undefined, fromSearch),
     updateDocumentFn = documentService.update,
     deleteDocumentFn = documentService.delete,
     updateTagsFn = documentService.updateTags,
@@ -51,6 +52,7 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
   const params = useParams<{ id?: string; docId?: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const fromSearch = searchParams.get("from_search") === "1";
   const queryClient = useQueryClient();
 
   const id =
@@ -85,8 +87,8 @@ export function useDocumentDetail(props: SharedDocumentDetailProps = {}) {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: [...queryKeyPrefix, id],
-    queryFn: () => fetchDocumentFn(id),
+    queryKey: [...queryKeyPrefix, id, fromSearch],
+    queryFn: () => fetchDocumentFn(id, fromSearch),
     enabled: !isNaN(id) && id > 0,
   });
 

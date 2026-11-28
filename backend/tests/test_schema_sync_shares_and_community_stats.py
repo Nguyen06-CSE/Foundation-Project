@@ -18,12 +18,12 @@ from app.schemas.share import ShareStatus
 
 
 def test_migration_chain_sole_head_and_revision_order():
-    """Kiểm tra revision b3c4d5e6f7a8 là sole head và kế thừa trực tiếp a2b3c4d5e6f7."""
+    """Kiểm tra Phase 1 là sole head và revision batch 3 giữ đúng revision cha."""
     cfg = Config("alembic.ini")
     script = ScriptDirectory.from_config(cfg)
     heads = script.get_heads()
     assert len(heads) == 1, f"Kỳ vọng 1 head duy nhất nhưng nhận {heads}"
-    assert heads[0] == "b3c4d5e6f7a8"
+    assert heads[0] == "f2c3d4e5a6b7"
 
     rev = script.get_revision("b3c4d5e6f7a8")
     assert rev is not None

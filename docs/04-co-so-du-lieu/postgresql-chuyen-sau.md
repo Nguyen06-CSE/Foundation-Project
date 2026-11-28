@@ -103,3 +103,6 @@ Backend sử dụng driver C-extension **asyncpg** — thư viện giao tiếp P
 ### 5.3. PostgreSQL vs Elasticsearch
 - **Đánh đổi kiến trúc**: Elasticsearch là công cụ tìm kiếm phân tán số một, nhưng đòi hỏi môi trường máy ảo Java (JVM), tối thiểu 2-4GB RAM phụ trội và phải duy trì đường ống đồng bộ dữ liệu (Change Data Capture - CDC).
 - **Kết luận**: Với quy mô thư viện trường đại học (hàng chục nghìn tài liệu), việc tận dụng PostgreSQL FTS giúp đơn giản hóa 100% kiến trúc, loại bỏ nguy cơ lệch dữ liệu giữa DB và bộ máy tìm kiếm, tiết kiệm triệt để tài nguyên máy chủ.
+# Kỹ thuật PostgreSQL cho retrieval
+
+Code dùng FTS/unaccent + GIN; pgvector cosine `<=>`; partial unique indexes cho active/queued run; JSONB coverage/location/summary; CTE/rank fusion và window/aggregate cho retrieval/stats; `FOR UPDATE SKIP LOCKED` cho worker concurrency. Runtime EXPLAIN/benchmark còn TBD trên DB local.

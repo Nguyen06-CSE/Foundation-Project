@@ -264,6 +264,7 @@ async def get_group_document(
     group_id: int,
     document_id: int,
     background_tasks: BackgroundTasks,
+    from_search: bool = Query(False),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -318,7 +319,7 @@ async def get_group_document(
 
     background_tasks.add_task(
         _log_activity, db, document_id, current_user.id,
-        ActivityAction.VIEWED, "group", group_id, None, 30,
+        ActivityAction.VIEWED, "group", group_id, {"source": "search"} if from_search else None, 0,
     )
     return doc_out
 
@@ -403,6 +404,9 @@ async def upload_group_batch_documents(
 
         for file in files:
             content = await file.read()
+            if not content:
+                skipped.append({"filename": file.filename, "reason": "empty_file"})
+                continue
             checksum = hashlib.sha256(content).hexdigest()
 
             # Kiểm tra trùng trong workspace (active + trash)
@@ -570,6 +574,8 @@ async def upload_group_document(
                 "document_id": int(parts[1]),
                 "title": parts[2] if len(parts) > 2 else "tài liệu này"
             })
+        elif msg == "empty_file":
+            raise HTTPException(400, {"code": "EMPTY_FILE", "message": "Tệp tải lên rỗng"})
         raise
     await db.commit()
     await db.refresh(document)

@@ -151,8 +151,8 @@ export const groupService = {
   addTagsToGroup: (groupId: number, tagIds: number[]) =>
     api.post(`/workspaces/${groupId}/tags/bulk`, { tag_ids: tagIds }).then((r) => r.data),
 
-  getDocumentById: (groupId: number, docId: number) =>
-    api.get<Document>(`/groups/${groupId}/documents/${docId}`).then((r) => r.data),
+  getDocumentById: (groupId: number, docId: number, fromSearch = false) =>
+    api.get<Document>(`/groups/${groupId}/documents/${docId}`, { params: { from_search: fromSearch } }).then((r) => r.data),
 
   updateDocument: (groupId: number, docId: number, payload: Partial<Document>) =>
     api.patch<Document>(`/groups/${groupId}/documents/${docId}`, payload).then((r) => r.data),

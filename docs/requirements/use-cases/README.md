@@ -51,3 +51,6 @@ graph TD
 | **[UC-04](./UC04_FULLTEXT_SEARCH_AND_PREVIEW.md)** | **Tìm kiếm toàn văn & Xem trước đa dạng** | Mọi người dùng | Tìm kiếm từ khóa ngữ nghĩa qua PostgreSQL FTS và xem trước trực tiếp PDF/DOCX/Code trên trình duyệt. |
 | **[UC-05](./UC05_TRASH_LIFECYCLE_AND_PURGE.md)** | **Vòng đời thùng rác & Dọn rác tự động** | Người dùng & APScheduler | Xóa mềm an toàn, khôi phục nguyên trạng và tác vụ quét xóa vĩnh viễn sau 30 ngày. |
 | **[UC-06](./UC06_GROUP_WORKSPACE_COLLABORATION.md)** | **Cộng tác không gian nhóm học tập** | Trưởng nhóm & Thành viên | Tạo nhóm, phân quyền trưởng nhóm/thành viên, chia sẻ học liệu và quản lý thùng rác nhóm độc lập. |
+# UC-07 AI retrieval
+
+[UC-07](./UC07_AI_ASSISTED_RETRIEVAL_AND_INSIGHTS.md) bao phủ retrieval, citation và insights.

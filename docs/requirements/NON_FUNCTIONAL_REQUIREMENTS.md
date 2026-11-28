@@ -102,3 +102,9 @@ graph TD
 * **NFR-USE-01 (Đa nền tảng trình duyệt):** Tương thích 100% với các trình duyệt hiện đại: Chrome, Edge, Safari, Firefox (Hỗ trợ ECMAScript 2022+, HTML5 Canvas, WebAssembly).
 * **NFR-USE-02 (Thiết kế thích ứng - Responsive Design):** Tự động co giãn giao diện tối ưu trên cả 3 kích thước màn hình chính: Desktop (≥ 1280px), Tablet (768px - 1024px) và Smartphone (≤ 640px).
 * **NFR-USE-03 (Chế độ giao diện sáng/tối - Dark/Light Theme):** Đồng bộ chế độ hiển thị màu sắc theo sở thích hệ điều hành của người dùng.
+# AI non-functional requirements
+
+- NFR-AI-01: evidence/citation không vượt permission boundary.
+- NFR-AI-02: retry/idempotency, tối đa một active run.
+- NFR-AI-03: observability theo stage/run, không log secret/body.
+- NFR-AI-04: performance metrics p50/p95, storage/cost là TBD sau local DB.

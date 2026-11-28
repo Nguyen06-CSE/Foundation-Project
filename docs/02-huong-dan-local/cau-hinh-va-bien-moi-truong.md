@@ -37,3 +37,6 @@ Tài liệu này cung cấp định nghĩa chi tiết, kiểu dữ liệu, giá 
 > [!CAUTION]
 > Tuyệt đối không bao giờ commit các tệp `.env` chứa mật khẩu thực tế hoặc `SECRET_KEY` lên kho lưu trữ Git công khai.  
 > Cả hai thư mục `backend/` và `frontend/digital-library/` đều đã cấu hình `.gitignore` để tự động bỏ qua các tệp `.env`.
+# Cấu hình embedding và retry
+
+Các biến `EMBEDDING_BASE_URL`, `EMBEDDING_API_KEY` (secret), `EMBEDDING_MODEL`, `EMBEDDING_DIMENSIONS`, `EMBEDDING_BATCH_SIZE=32`, `SEMANTIC_MIN_SIMILARITY=0.65`; `INDEX_MAX_RETRIES=5` có trong Settings nhưng chưa có dòng `.env.example`. Không commit key/URL credential; dimension phải khớp vector provider. Local DB verification dùng `.env.example` riêng và còn deferred.

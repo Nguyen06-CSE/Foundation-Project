@@ -53,3 +53,8 @@ Trong môi trường giáo dục đại học, tài liệu học thuật và h�
 | **Tiết kiệm dung lượng** | Giảm thiểu lưu trữ trùng lặp: upload cùng 1 tệp N lần chỉ tốn dung lượng 1 lần | Kiểm tra thư mục vật lý `storage/` và bảng `documents` |
 | **Độ trễ tìm kiếm** | Thời gian phản hồi truy vấn tìm kiếm FTS < 100ms trên môi trường local | Đo kiểm thời gian thực thi query qua logs backend |
 | **Khả năng độc lập hạ tầng** | Khởi chạy và demo đầy đủ chức năng khi ngắt kết nối mạng Internet | Kiểm thử offline trên máy trạm chấm thi |
+# Mở rộng AI/vector trong thư viện số
+
+Người dùng thường tìm theo từ khóa nhưng không diễn đạt được ý định bằng đúng câu trong giáo trình; tài liệu dài khó khai thác, tag phải gắn thủ công và thiếu gợi ý tài liệu liên quan hoặc thống kê sở thích. Vì vậy hệ thống mở rộng PostgreSQL bằng FTS, embedding và hybrid retrieval để hỗ trợ học tập có căn cứ.
+
+Mục tiêu cũng là thực hành PostgreSQL nâng cao: tsvector/GIN, unaccent, pgvector, JSONB, trigger, transaction và khóa hàng. Giá trị hướng tới sinh viên là tìm nhanh và hỏi theo bằng chứng; giảng viên có thể điều hướng học liệu và quan sát chủ đề quan tâm. Phạm vi hiện tại không tuyên bố generative AI nâng cao.

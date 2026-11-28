@@ -10,6 +10,8 @@ import {
   FolderInput,
   Edit2,
   Trash2,
+  Loader2,
+  Sparkles,
   Image as ImageIcon, // <-- Thêm icon Image từ lucide-react
 } from "lucide-react";
 import { Card } from "@/components/ui/Card";
@@ -32,6 +34,8 @@ interface DocumentActionCardProps {
   onShare?: () => void;
   canShare?: boolean;
   onDownloadSuccess?: () => void;
+  onGenerateSummary?: () => void;
+  isSummaryLoading?: boolean;
 }
 
 export function DocumentActionCard({
@@ -50,6 +54,8 @@ export function DocumentActionCard({
   onShare,
   canShare = true,
   onDownloadSuccess,
+  onGenerateSummary,
+  isSummaryLoading = false,
 }: DocumentActionCardProps) {
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const downloadMenuRef = useRef<HTMLDivElement>(null);
@@ -176,6 +182,24 @@ export function DocumentActionCard({
           </div>
         )}
       </div>
+
+      {onGenerateSummary && (
+        <button
+          type="button"
+          onClick={onGenerateSummary}
+          disabled={isSummaryLoading}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-medium text-primary-700 transition-colors hover:bg-primary-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {isSummaryLoading ? (
+            <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+          ) : (
+            <Sparkles className="h-4 w-4 shrink-0" />
+          )}
+          <span className="truncate">
+            {isSummaryLoading ? "Đang tóm tắt..." : "Tóm tắt AI"}
+          </span>
+        </button>
+      )}
 
       {/* Danh sách hành động khác */}
       <div className="flex flex-col mt-1">

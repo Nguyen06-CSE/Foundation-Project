@@ -5,7 +5,8 @@ from app.models.base import Base  # giữ lại — không định nghĩa lại 
 
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=True,
+    echo=settings.SQL_ECHO,
+    hide_parameters=True,
     pool_pre_ping=True,
 )
 

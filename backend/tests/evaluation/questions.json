@@ -1,0 +1,1181 @@
+{
+  "dataset_version": "1.0",
+  "questions": [
+    {
+      "id": "CQ01",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Khóa chính có vai trò gì trong bảng?",
+      "query": "khóa chính xác định duy nhất",
+      "query_style": "accented",
+      "answer": "Xác định duy nhất mỗi hàng trong bảng.",
+      "citation": {
+        "doc_id": "C01",
+        "quote": "Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong bảng.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C01",
+        "C14"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ02",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Bốn thuộc tính của ACID là gì?",
+      "query": "acid nguyen tu nhat quan co lap ben vung",
+      "query_style": "unaccented",
+      "answer": "Nguyên tử, nhất quán, cô lập và bền vững.",
+      "citation": {
+        "doc_id": "C01",
+        "quote": "Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C01",
+        "C14"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ03",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Mô hình OSI có bao nhiêu lớp?",
+      "query": "mô hình OSI bảy lớp",
+      "query_style": "accented",
+      "answer": "Bảy lớp.",
+      "citation": {
+        "doc_id": "C02",
+        "quote": "Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng.",
+        "location": "trang 1, mục 1"
+      },
+      "gold_doc_ids": [
+        "C02",
+        "C15"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ04",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "TCP đảm bảo chất lượng truyền dữ liệu như thế nào?",
+      "query": "tcp truyen du lieu tin cay co thu tu",
+      "query_style": "unaccented",
+      "answer": "Tin cậy, có thứ tự và có kiểm tra lỗi.",
+      "citation": {
+        "doc_id": "C02",
+        "quote": "Giao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi.",
+        "location": "trang 1, mục 1"
+      },
+      "gold_doc_ids": [
+        "C02",
+        "C15"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ05",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Học có giám sát dùng dữ liệu gì để huấn luyện?",
+      "query": "học có giám sát dữ liệu gán nhãn",
+      "query_style": "accented",
+      "answer": "Dữ liệu đã gán nhãn.",
+      "citation": {
+        "doc_id": "C03",
+        "quote": "Học có giám sát sử dụng dữ liệu đã gán nhãn để huấn luyện mô hình.",
+        "location": "trang 1, mục Bài 1"
+      },
+      "gold_doc_ids": [
+        "C03"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ06",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Quá khớp xảy ra khi nào?",
+      "query": "qua khop hoc thuoc du lieu huan luyen",
+      "query_style": "unaccented",
+      "answer": "Khi mô hình học thuộc dữ liệu huấn luyện nhưng kém trên dữ liệu mới.",
+      "citation": {
+        "doc_id": "C03",
+        "quote": "Quá khớp xảy ra khi mô hình học thuộc dữ liệu huấn luyện nhưng kém trên dữ liệu mới.",
+        "location": "trang 1, mục Bài 1"
+      },
+      "gold_doc_ids": [
+        "C03"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ07",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Tam giác CIA gồm những tính chất nào?",
+      "query": "tam giác CIA bảo mật toàn vẹn sẵn sàng",
+      "query_style": "accented",
+      "answer": "Bảo mật, toàn vẹn và sẵn sàng.",
+      "citation": {
+        "doc_id": "C04",
+        "quote": "Tính bảo mật, tính toàn vẹn và tính sẵn sàng tạo thành tam giác CIA.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C04"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ08",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Chữ ký số giúp xác thực điều gì?",
+      "query": "chu ky so xac thuc nguon goc toan ven",
+      "query_style": "unaccented",
+      "answer": "Nguồn gốc và tính toàn vẹn của thông điệp.",
+      "citation": {
+        "doc_id": "C04",
+        "quote": "Chữ ký số giúp xác thực nguồn gốc và tính toàn vẹn của thông điệp.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C04"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ09",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "DataFrame trong pandas là gì?",
+      "query": "dataframe cấu trúc bảng hai chiều",
+      "query_style": "accented",
+      "answer": "Cấu trúc dữ liệu dạng bảng hai chiều.",
+      "citation": {
+        "doc_id": "C05",
+        "quote": "DataFrame là cấu trúc dữ liệu dạng bảng hai chiều trong pandas.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C05"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ10",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Biểu đồ đường phù hợp để thể hiện điều gì?",
+      "query": "bieu do duong xu huong thoi gian",
+      "query_style": "unaccented",
+      "answer": "Xu hướng theo thời gian.",
+      "citation": {
+        "doc_id": "C05",
+        "quote": "Biểu đồ đường thể hiện xu hướng theo thời gian.",
+        "location": "trang 2, mục Chương 2"
+      },
+      "gold_doc_ids": [
+        "C05"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ11",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Docker image là gì?",
+      "query": "docker image khuon mau chi doc",
+      "query_style": "unaccented",
+      "answer": "Khuôn mẫu chỉ đọc để tạo container.",
+      "citation": {
+        "doc_id": "C06",
+        "quote": "Docker image là khuôn mẫu chỉ đọc để tạo container.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C06"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ12",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Volume dùng để làm gì?",
+      "query": "volume lưu dữ liệu bền vững",
+      "query_style": "accented",
+      "answer": "Lưu dữ liệu bền vững ngoài vòng đời container.",
+      "citation": {
+        "doc_id": "C06",
+        "quote": "Volume dùng để lưu dữ liệu bền vững ngoài vòng đời container.",
+        "location": "trang 2, mục Chương 2"
+      },
+      "gold_doc_ids": [
+        "C06"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ13",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Sprint thường kéo dài bao lâu?",
+      "query": "sprint khoang thoi gian hai den bon tuan",
+      "query_style": "unaccented",
+      "answer": "Từ hai đến bốn tuần.",
+      "citation": {
+        "doc_id": "C07",
+        "quote": "Sprint là khoảng thời gian cố định, thường từ hai đến bốn tuần.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "C07"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ14",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Product Backlog là gì?",
+      "query": "product backlog danh sách ưu tiên",
+      "query_style": "accented",
+      "answer": "Danh sách ưu tiên các hạng mục cần thực hiện.",
+      "citation": {
+        "doc_id": "C07",
+        "quote": "Product Backlog là danh sách ưu tiên các hạng mục cần thực hiện.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "C07"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ15",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Phương thức HTTP nào dùng để tạo mới tài nguyên?",
+      "query": "post tao moi tai nguyen",
+      "query_style": "unaccented",
+      "answer": "POST.",
+      "citation": {
+        "doc_id": "C08",
+        "quote": "GET dùng để đọc tài nguyên, POST dùng để tạo mới.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "C08"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ16",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Mã trạng thái 404 có ý nghĩa gì?",
+      "query": "mã trạng thái 404 tài nguyên không tồn tại",
+      "query_style": "accented",
+      "answer": "Tài nguyên không tồn tại.",
+      "citation": {
+        "doc_id": "C08",
+        "quote": "Mã trạng thái 404 biểu thị tài nguyên không tồn tại.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "C08"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ17",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Học máy là gì?",
+      "query": "học máy nhánh trí tuệ nhân tạo",
+      "query_style": "accented",
+      "answer": "Một nhánh của trí tuệ nhân tạo sử dụng dữ liệu để học quy luật.",
+      "citation": {
+        "doc_id": "C11",
+        "quote": "Học máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "C11"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ18",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Học sâu sử dụng công nghệ gì?",
+      "query": "hoc sau mang no ron nhieu lop",
+      "query_style": "unaccented",
+      "answer": "Mạng nơ-ron nhiều lớp.",
+      "citation": {
+        "doc_id": "C11",
+        "quote": "Học sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "C11"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ19",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "User story mô tả điều gì?",
+      "query": "user story yêu cầu góc nhìn người dùng",
+      "query_style": "accented",
+      "answer": "Yêu cầu từ góc nhìn người dùng.",
+      "citation": {
+        "doc_id": "C12",
+        "quote": "User story mô tả yêu cầu từ góc nhìn người dùng.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "C12"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ20",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Velocity đo gì?",
+      "query": "velocity cong viec hoan thanh trong sprint",
+      "query_style": "unaccented",
+      "answer": "Lượng công việc hoàn thành trong một sprint.",
+      "citation": {
+        "doc_id": "C12",
+        "quote": "Velocity đo lượng công việc hoàn thành trong một sprint.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "C12"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ21",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Chỉ mục B-tree giúp ích gì?",
+      "query": "chỉ mục B-tree tăng tốc truy vấn",
+      "query_style": "accented",
+      "answer": "Tăng tốc truy vấn tìm kiếm theo khóa.",
+      "citation": {
+        "doc_id": "C14",
+        "quote": "Chỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C01",
+        "C14"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ22",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Hệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu ở đâu?",
+      "query": "he quan tri co so du lieu quan he bang hang cot",
+      "query_style": "unaccented",
+      "answer": "Trong các bảng gồm hàng và cột.",
+      "citation": {
+        "doc_id": "C14",
+        "quote": "Hệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "C01",
+        "C14"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ23",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Lớp giao vận trong mô hình OSI làm gì?",
+      "query": "lớp giao vận chia nhỏ dữ liệu",
+      "query_style": "accented",
+      "answer": "Chia nhỏ dữ liệu và ghép lại ở đích.",
+      "citation": {
+        "doc_id": "C15",
+        "quote": "Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích.",
+        "location": "trang 1, mục 1"
+      },
+      "gold_doc_ids": [
+        "C02",
+        "C15"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ24",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Địa chỉ IP dùng để làm gì?",
+      "query": "dia chi ip dinh danh thiet bi trong mang",
+      "query_style": "unaccented",
+      "answer": "Định danh thiết bị trong mạng.",
+      "citation": {
+        "doc_id": "C15",
+        "quote": "Địa chỉ IP dùng để định danh thiết bị trong mạng.",
+        "location": "trang 1, mục 1"
+      },
+      "gold_doc_ids": [
+        "C02",
+        "C15"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "CQ25",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "forbidden",
+      "question": "API gateway có vai trò gì?",
+      "query": "api gateway diem vao duy nhat dinh tuyen",
+      "query_style": "unaccented",
+      "answer": "Là điểm vào duy nhất, định tuyến yêu cầu đến dịch vụ phù hợp.",
+      "citation": {
+        "doc_id": "C09",
+        "quote": "API gateway là điểm vào duy nhất, định tuyến yêu cầu đến dịch vụ phù hợp.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [
+        "C09"
+      ],
+      "note": "Tài liệu thuộc G3; sv_an không phải thành viên."
+    },
+    {
+      "id": "CQ26",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "forbidden",
+      "question": "Độ co giãn của cầu theo giá đo gì?",
+      "query": "do co gian cua cau theo gia",
+      "query_style": "unaccented",
+      "answer": "Mức thay đổi phần trăm lượng cầu khi giá thay đổi một phần trăm.",
+      "citation": {
+        "doc_id": "C10",
+        "quote": "Độ co giãn của cầu theo giá đo mức thay đổi phần trăm lượng cầu khi giá thay đổi một phần trăm.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [
+        "C10"
+      ],
+      "note": "Tài liệu cá nhân của sv_binh."
+    },
+    {
+      "id": "CQ27",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "forbidden",
+      "question": "Chiến thắng Bạch Đằng năm 1288 do ai chỉ huy?",
+      "query": "chien thang Bach Dang 1288 Tran Hung Dao",
+      "query_style": "unaccented",
+      "answer": "Trần Hưng Đạo.",
+      "citation": {
+        "doc_id": "C13",
+        "quote": "Chiến thắng Bạch Đằng năm 1288 do Trần Hưng Đạo chỉ huy.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [
+        "C13"
+      ],
+      "note": "Tài liệu cá nhân của sv_binh."
+    },
+    {
+      "id": "CQ28",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "no_evidence",
+      "question": "Quy trình nấu phở bò gia truyền gồm những bước nào?",
+      "query": "quy trình nấu phở bò gia truyền",
+      "query_style": "accented",
+      "answer": null,
+      "citation": null,
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [],
+      "note": "Không tài liệu nào trong bộ mẫu chứa công thức nấu phở."
+    },
+    {
+      "id": "CQ29",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "no_evidence",
+      "question": "Máy chủ Dell PowerEdge R750 có thời gian bảo hành bao nhiêu tháng?",
+      "query": "thời gian bảo hành máy chủ Dell PowerEdge R750",
+      "query_style": "accented",
+      "answer": null,
+      "citation": null,
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [],
+      "note": "Không có tài liệu phần cứng hoặc chính sách bảo hành."
+    },
+    {
+      "id": "CQ30",
+      "split": "calibration",
+      "user": "sv_an",
+      "type": "no_evidence",
+      "question": "Giá vé tàu Hà Nội Đà Nẵng tháng 12 là bao nhiêu?",
+      "query": "giá vé tàu Hà Nội Đà Nẵng tháng 12",
+      "query_style": "accented",
+      "answer": null,
+      "citation": null,
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [],
+      "note": "Không có bảng giá hoặc thông tin giao thông."
+    },
+    {
+      "id": "EQ01",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Giao dịch đảm bảo điều gì?",
+      "query": "giao dịch cùng thành công hoặc cùng thất bại",
+      "query_style": "accented",
+      "answer": "Các thao tác hoặc cùng thành công hoặc cùng thất bại.",
+      "citation": {
+        "doc_id": "E01",
+        "quote": "Giao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "E01"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ02",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Chỉ mục hash phù hợp cho loại tìm kiếm nào?",
+      "query": "chi muc hash tim kiem bang dung",
+      "query_style": "unaccented",
+      "answer": "Tìm kiếm bằng đúng.",
+      "citation": {
+        "doc_id": "E01",
+        "quote": "Chỉ mục hash phù hợp cho tìm kiếm bằng đúng.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "E01"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ03",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Băng tần 5 GHz có ưu điểm gì?",
+      "query": "băng tần 5 GHz tốc độ cao phạm vi ngắn",
+      "query_style": "accented",
+      "answer": "Tốc độ cao hơn nhưng phạm vi ngắn hơn.",
+      "citation": {
+        "doc_id": "E02",
+        "quote": "Băng tần 5 GHz có tốc độ cao hơn nhưng phạm vi ngắn hơn.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "E02"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ04",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "WPA3 là gì?",
+      "query": "wpa3 giao thuc bao mat wifi hien dai",
+      "query_style": "unaccented",
+      "answer": "Giao thức bảo mật Wi-Fi hiện đại.",
+      "citation": {
+        "doc_id": "E02",
+        "quote": "WPA3 là giao thức bảo mật Wi-Fi hiện đại.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "E02"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ05",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Mạng nơ-ron tích chập thường dùng cho loại dữ liệu nào?",
+      "query": "mang no ron tich chap du lieu anh",
+      "query_style": "unaccented",
+      "answer": "Dữ liệu ảnh.",
+      "citation": {
+        "doc_id": "E03",
+        "quote": "Mạng nơ-ron tích chập thường dùng cho dữ liệu ảnh.",
+        "location": "trang 1, mục Ghi chú"
+      },
+      "gold_doc_ids": [
+        "E03"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ06",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Dropout làm gì khi huấn luyện?",
+      "query": "dropout tat ngau nhien no ron",
+      "query_style": "unaccented",
+      "answer": "Tắt ngẫu nhiên một phần nơ-ron.",
+      "citation": {
+        "doc_id": "E03",
+        "quote": "Dropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện.",
+        "location": "trang 1, mục Ghi chú"
+      },
+      "gold_doc_ids": [
+        "E03"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ07",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "AES là thuật toán gì?",
+      "query": "AES thuật toán mã hóa đối xứng",
+      "query_style": "accented",
+      "answer": "Mã hóa đối xứng phổ biến.",
+      "citation": {
+        "doc_id": "E04",
+        "quote": "AES là thuật toán mã hóa đối xứng phổ biến.",
+        "location": "trang 1, mục Ghi chú"
+      },
+      "gold_doc_ids": [
+        "E04"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ08",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "RSA dựa trên độ khó của bài toán nào?",
+      "query": "RSA phan tich thua so nguyen to",
+      "query_style": "unaccented",
+      "answer": "Phân tích thừa số nguyên tố.",
+      "citation": {
+        "doc_id": "E04",
+        "quote": "RSA dựa trên độ khó phân tích thừa số nguyên tố.",
+        "location": "trang 1, mục Ghi chú"
+      },
+      "gold_doc_ids": [
+        "E04"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ09",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Histogram thể hiện điều gì?",
+      "query": "histogram phan phoi cua mot bien so",
+      "query_style": "unaccented",
+      "answer": "Phân phối của một biến số.",
+      "citation": {
+        "doc_id": "E05",
+        "quote": "Histogram thể hiện phân phối của một biến số.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "E05"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ10",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Màu sắc trên dashboard cần đảm bảo gì?",
+      "query": "màu sắc dashboard độ tương phản người mù màu",
+      "query_style": "accented",
+      "answer": "Độ tương phản cho người mù màu.",
+      "citation": {
+        "doc_id": "E05",
+        "quote": "Màu sắc cần đảm bảo độ tương phản cho người mù màu.",
+        "location": "trang 2, mục Chương 2"
+      },
+      "gold_doc_ids": [
+        "E05"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ11",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Pod là gì trong Kubernetes?",
+      "query": "pod don vi trien khai nho nhat",
+      "query_style": "unaccented",
+      "answer": "Đơn vị triển khai nhỏ nhất.",
+      "citation": {
+        "doc_id": "E06",
+        "quote": "Pod là đơn vị triển khai nhỏ nhất trong Kubernetes.",
+        "location": "trang 1, mục Chương 1"
+      },
+      "gold_doc_ids": [
+        "E06"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ12",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Secret dùng để lưu gì?",
+      "query": "secret lưu thông tin nhạy cảm mật khẩu",
+      "query_style": "accented",
+      "answer": "Thông tin nhạy cảm như mật khẩu.",
+      "citation": {
+        "doc_id": "E06",
+        "quote": "Secret lưu thông tin nhạy cảm như mật khẩu.",
+        "location": "trang 2, mục Chương 2"
+      },
+      "gold_doc_ids": [
+        "E06"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ13",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Kiểm thử hồi quy đảm bảo điều gì?",
+      "query": "kiểm thử hồi quy không làm hỏng chức năng cũ",
+      "query_style": "accented",
+      "answer": "Thay đổi mới không làm hỏng chức năng cũ.",
+      "citation": {
+        "doc_id": "E07",
+        "quote": "Kiểm thử hồi quy đảm bảo thay đổi mới không làm hỏng chức năng cũ.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "E07",
+        "E08"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ14",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Độ bao phủ dòng đo gì?",
+      "query": "do bao phu dong ty le dong ma",
+      "query_style": "unaccented",
+      "answer": "Tỷ lệ dòng mã được thực thi bởi kiểm thử.",
+      "citation": {
+        "doc_id": "E07",
+        "quote": "Độ bao phủ dòng đo tỷ lệ dòng mã được thực thi bởi kiểm thử.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "E07",
+        "E08"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ15",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Kiểm thử đơn vị kiểm tra gì?",
+      "query": "kiem thu don vi tung ham hoac lop",
+      "query_style": "unaccented",
+      "answer": "Từng hàm hoặc lớp riêng lẻ.",
+      "citation": {
+        "doc_id": "E08",
+        "quote": "Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "E07",
+        "E08"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ16",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Kiểm thử tích hợp kiểm tra gì?",
+      "query": "kiểm thử tích hợp phối hợp thành phần",
+      "query_style": "accented",
+      "answer": "Sự phối hợp giữa các thành phần.",
+      "citation": {
+        "doc_id": "E08",
+        "quote": "Kiểm thử tích hợp kiểm tra sự phối hợp giữa các thành phần.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [
+        "E07",
+        "E08"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ17",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Phản hồi tức thời giúp gì cho người dùng?",
+      "query": "phan hoi tuc thoi he thong da nhan thao tac",
+      "query_style": "unaccented",
+      "answer": "Biết hệ thống đã nhận thao tác.",
+      "citation": {
+        "doc_id": "E11",
+        "quote": "Phản hồi tức thời cho người dùng biết hệ thống đã nhận thao tác.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "E11"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ18",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Kiểm thử khả dụng làm gì?",
+      "query": "kiểm thử khả dụng quan sát người dùng",
+      "query_style": "accented",
+      "answer": "Quan sát người dùng thực hiện tác vụ.",
+      "citation": {
+        "doc_id": "E11",
+        "quote": "Kiểm thử khả dụng quan sát người dùng thực hiện tác vụ.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "E11"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ19",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Sao lưu gia tăng lưu những gì?",
+      "query": "sao luu gia tang cac thay doi",
+      "query_style": "unaccented",
+      "answer": "Các thay đổi kể từ lần sao lưu gần nhất.",
+      "citation": {
+        "doc_id": "E12",
+        "quote": "Sao lưu gia tăng chỉ lưu các thay đổi kể từ lần sao lưu gần nhất.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "E12"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ20",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "RTO quy định điều gì?",
+      "query": "RTO thoi gian toi da khoi phuc",
+      "query_style": "unaccented",
+      "answer": "Thời gian tối đa để khôi phục.",
+      "citation": {
+        "doc_id": "E12",
+        "quote": "Thời gian phục hồi mục tiêu RTO quy định thời gian tối đa để khôi phục.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [
+        "E12"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ21",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Bộ tài liệu ôn thi Học máy gồm những tài liệu nào?",
+      "query": "bộ tài liệu ôn thi học máy đề cương báo cáo phân tích dữ liệu",
+      "query_style": "accented",
+      "answer": "Đề cương học máy và báo cáo phân tích dữ liệu.",
+      "citation": {
+        "doc_id": "E13",
+        "quote": "Gói gồm đề cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ.",
+        "location": "mô tả gói"
+      },
+      "gold_doc_ids": [
+        "E13"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ22",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Gói tài liệu này phục vụ mục đích gì?",
+      "query": "goi tai lieu phuc vu on thi cuoi ky",
+      "query_style": "unaccented",
+      "answer": "Ôn thi cuối kỳ.",
+      "citation": {
+        "doc_id": "E13",
+        "quote": "phục vụ ôn thi cuối kỳ",
+        "location": "mô tả gói"
+      },
+      "gold_doc_ids": [
+        "E13"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ23",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Bộ tài liệu nhóm về hạ tầng gồm những tài liệu nào?",
+      "query": "bộ tài liệu nhóm hạ tầng kubernetes mật mã ứng dụng",
+      "query_style": "accented",
+      "answer": "Tài liệu Kubernetes và mật mã ứng dụng.",
+      "citation": {
+        "doc_id": "E14",
+        "quote": "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm.",
+        "location": "mô tả gói"
+      },
+      "gold_doc_ids": [
+        "E14"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ24",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "answerable",
+      "question": "Gói tài liệu nhóm dùng cho hoạt động nào?",
+      "query": "goi tai lieu nhom thuyet trinh",
+      "query_style": "unaccented",
+      "answer": "Buổi thuyết trình nhóm.",
+      "citation": {
+        "doc_id": "E14",
+        "quote": "cho buổi thuyết trình nhóm",
+        "location": "mô tả gói"
+      },
+      "gold_doc_ids": [
+        "E14"
+      ],
+      "forbidden_doc_ids": [],
+      "note": null
+    },
+    {
+      "id": "EQ25",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "forbidden",
+      "question": "Service discovery giải quyết vấn đề gì?",
+      "query": "service discovery tim thay dia chi mang",
+      "query_style": "unaccented",
+      "answer": "Giúp các dịch vụ tìm thấy địa chỉ mạng của nhau.",
+      "citation": {
+        "doc_id": "E09",
+        "quote": "Service discovery là cơ chế giúp các dịch vụ tìm thấy địa chỉ mạng của nhau.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [
+        "E09"
+      ],
+      "note": "Tài liệu thuộc G3; sv_an không phải thành viên."
+    },
+    {
+      "id": "EQ26",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "forbidden",
+      "question": "Lạm phát cao ảnh hưởng gì đến đồng tiền?",
+      "query": "lam phat cao giam suc mua dong tien",
+      "query_style": "unaccented",
+      "answer": "Làm giảm sức mua.",
+      "citation": {
+        "doc_id": "E10",
+        "quote": "Lạm phát cao làm giảm sức mua của đồng tiền.",
+        "location": "mục Phần 1"
+      },
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [
+        "E10"
+      ],
+      "note": "Tài liệu cá nhân của sv_binh."
+    },
+    {
+      "id": "EQ27",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "forbidden",
+      "question": "Nhà Lê sơ thành lập năm nào?",
+      "query": "nha Le so thanh lap nam 1428",
+      "query_style": "unaccented",
+      "answer": "Năm 1428.",
+      "citation": {
+        "doc_id": "E15",
+        "quote": "Nhà Lê sơ thành lập năm 1428 sau khởi nghĩa Lam Sơn.",
+        "location": "slide 1"
+      },
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [
+        "E15"
+      ],
+      "note": "Tài liệu cá nhân của sv_binh."
+    },
+    {
+      "id": "EQ28",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "no_evidence",
+      "question": "Công thức làm bánh mì chả cá gồm những nguyên liệu gì?",
+      "query": "công thức bánh mì chả cá nguyên liệu",
+      "query_style": "accented",
+      "answer": null,
+      "citation": null,
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [],
+      "note": "Không tài liệu nào trong bộ mẫu chứa công thức nấu ăn."
+    },
+    {
+      "id": "EQ29",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "no_evidence",
+      "question": "Lịch thi đấu bóng đá Ngoại hạng Anh vòng 12 thế nào?",
+      "query": "lịch thi đấu bóng đá Ngoại hạng Anh vòng 12",
+      "query_style": "accented",
+      "answer": null,
+      "citation": null,
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [],
+      "note": "Không có dữ liệu thể thao."
+    },
+    {
+      "id": "EQ30",
+      "split": "evaluation",
+      "user": "sv_an",
+      "type": "no_evidence",
+      "question": "Cách trồng lan hồ điệp trong chậu ra sao?",
+      "query": "cách trồng lan hồ điệp trong chậu",
+      "query_style": "accented",
+      "answer": null,
+      "citation": null,
+      "gold_doc_ids": [],
+      "forbidden_doc_ids": [],
+      "note": "Không có tài liệu nông nghiệp."
+    }
+  ]
+}

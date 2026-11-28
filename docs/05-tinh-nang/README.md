@@ -33,3 +33,6 @@ Xem thêm [Thùng rác và vòng đời tài liệu khi giải tán nhóm](./09-
 ## 📋 Biểu Mẫu Chuẩn Hóa
 Để phục vụ việc mở rộng các tính năng mới trong tương lai hoặc làm mẫu báo cáo đồ án, vui lòng tham khảo:
 👉 [**Biểu Mẫu Chuẩn Đặc Tả Tính Năng (Feature Template)**](./template-tai-lieu-tinh-nang.md).
+# Phân hệ 08 — AI/vector
+
+Numbering cũ giữ nguyên; phân hệ 08 là [tra cứu, hỗ trợ AI và gợi ý nội dung](./10-tra-cuu-ho-tro-AI-va-goi-y-noi-dung.md), gồm sáu chức năng và không thay thế các mục legacy.

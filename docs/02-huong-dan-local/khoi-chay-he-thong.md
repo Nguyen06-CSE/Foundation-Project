@@ -151,3 +151,13 @@ psql -U postgres -c "CREATE DATABASE elibrary_db ENCODING 'UTF8';"
 3. Đăng nhập và thử tải lên một tệp tin PDF bất kỳ vào **Kho cá nhân**.
 4. Kiểm tra thư mục vật lý `backend/storage/` trên máy tính để thấy tệp tin đã được lưu trữ an toàn.
 5. Mở trang chi tiết tài liệu và kiểm tra trạng thái lập chỉ mục chuyển sang **Đã lập chỉ mục**.
+# Khởi động indexing AI/vector
+
+DB local cần extension `unaccent` (migration `b7c8d9e0f1a2`) và `vector` (migration `f2c3d4e5a6b7`), sau đó `alembic upgrade head`. Worker:
+
+```text
+PYTHONPATH=backend .venv/bin/python -u -m app.services.index_worker --once --document-id <id>
+cd backend && PYTHONPATH=. ../.venv/bin/python -u -m app.services.index_worker --once --document-id <id>
+```
+
+Bỏ `--once` để loop; `--document-id` giới hạn tài liệu. Không chạy trên Neon/DB không xác nhận.

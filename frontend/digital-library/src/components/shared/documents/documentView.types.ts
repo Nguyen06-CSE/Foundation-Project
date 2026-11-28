@@ -15,6 +15,7 @@ export interface DocumentListItem {
   markdown_path?: string | null
   description?: string
   content?: string | null
+  preview_text?: string | null
   pages?: number | null
   owner?: {
     full_name?: string

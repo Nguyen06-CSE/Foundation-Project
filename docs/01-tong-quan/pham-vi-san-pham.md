@@ -94,3 +94,8 @@ Hệ thống quy định 3 nhóm vai trò người dùng chính thức:
 | Quản lý danh mục Khoa & Môn học | ❌ | ❌ | ✅ |
 | Quản lý tài khoản người dùng | ❌ | ❌ | ✅ |
 | Cấu hình tham số hệ thống | ❌ | ❌ | ✅ |
+# Phạm vi AI/vector
+
+Sản phẩm bao gồm sáu chức năng: hybrid search; Q&A có citation; summary; tag suggestions; related documents; interest stats 7/30 ngày. Indexing, chunking, embedding và keyword là nền tảng kỹ thuật. Q&A/summary hiện evidence-based/extractive và gọi embedding API, không phải hệ thống text generation nâng cao.
+
+OCR chuyên biệt được dành cho Phase 7; advanced QA/generative workflows dành cho Phase 8.

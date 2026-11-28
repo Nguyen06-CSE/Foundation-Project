@@ -10,7 +10,7 @@ from fastapi import UploadFile
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.config import settings, s3_client
+from app.core.config import ROOT_DIR, settings, s3_client
 from app.utils.checksum import compute_file_checksum
 
 
@@ -28,7 +28,7 @@ async def save_upload_file(upload: UploadFile, owner_id: int) -> str:
 
     # 1. Lưu cục bộ nếu STORAGE_BACKEND là "local" hoặc không cấu hình R2
     if getattr(settings, "STORAGE_BACKEND", "local") == "local" or not s3_client:
-        dest_path = Path(file_key)
+        dest_path = ROOT_DIR / file_key
         dest_path.parent.mkdir(parents=True, exist_ok=True)
         dest_path.write_bytes(content)
         return file_key
@@ -75,15 +75,23 @@ def get_r2_key_from_path(file_path: str | None) -> str:
     return key.lstrip("/")
 
 
+def local_storage_path(key_or_path: str | None) -> Path | None:
+    if not key_or_path:
+        return None
+    path = Path(key_or_path)
+    return path if path.is_absolute() else ROOT_DIR / get_r2_key_from_path(key_or_path)
+
+
 def download_file_from_r2(key_or_url: str) -> bytes | None:
     """
     Tải nội dung binary của tệp tin (hỗ trợ đọc local disk hoặc Cloudflare R2).
     """
     key = get_r2_key_from_path(key_or_url)
     # 1. Thử đọc trực tiếp từ ổ đĩa cục bộ
-    if key and os.path.exists(key):
+    local_path = local_storage_path(key_or_url)
+    if local_path and local_path.exists():
         try:
-            return Path(key).read_bytes()
+            return local_path.read_bytes()
         except Exception:
             pass
     if os.path.exists(key_or_url):
@@ -112,7 +120,8 @@ def upload_bytes_to_r2(key: str, data: bytes, content_type: str = "application/o
 
     # Luôn ghi bản copy local nếu chạy local hoặc không có s3_client
     if getattr(settings, "STORAGE_BACKEND", "local") == "local" or not s3_client:
-        local_path = Path(clean_key)
+        local_path = local_storage_path(clean_key)
+        assert local_path is not None
         local_path.parent.mkdir(parents=True, exist_ok=True)
         local_path.write_bytes(data)
         return clean_key
@@ -137,15 +146,16 @@ def download_r2_to_temp_file(key_or_url: str, suffix: str = "") -> Path | None:
     Nếu file đã có trên local disk thì trả về trực tiếp.
     """
     clean_key = get_r2_key_from_path(key_or_url)
-    if clean_key and os.path.exists(clean_key):
-        return Path(clean_key)
+    local_path = local_storage_path(key_or_url)
+    if local_path and local_path.exists():
+        return local_path
     if os.path.exists(key_or_url):
         return Path(key_or_url)
 
     data = download_file_from_r2(key_or_url)
     if data is None:
         return None
-    temp_dir = Path("storage/temp")
+    temp_dir = ROOT_DIR / "storage/temp"
     temp_dir.mkdir(parents=True, exist_ok=True)
     if not suffix:
         suffix = Path(clean_key).suffix
@@ -188,8 +198,9 @@ def safe_remove(path: str | None) -> None:
             pass
     # 2. Xóa trên local disk nếu có tồn tại
     try:
-        if os.path.exists(path):
-            os.remove(path)
+        local_path = local_storage_path(path)
+        if local_path and local_path.exists():
+            local_path.unlink()
     except OSError:
         pass
 

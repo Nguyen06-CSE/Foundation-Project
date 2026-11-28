@@ -39,9 +39,31 @@ class DocumentStatsResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class InterestTopicOut(BaseModel):
+    name: str
+    personal_documents: int
+    read_views: int
+    read_documents: int
+    opened_from_search: int
+    scope: Optional[str] = None
+    workspace_id: Optional[int] = None
+
+
+class InterestsOut(BaseModel):
+    days: int
+    personal_documents: int
+    read_views: int
+    read_documents: int
+    opened_from_search: int
+    subjects: List[InterestTopicOut]
+    faculties: List[InterestTopicOut]
+    tags: List[InterestTopicOut]
+
+
 class MyStatsResponse(BaseModel):
     total_uploads: int
     total_views: int
     total_downloads: int
     recent_activities: List[ActivityLogResponse]
     activity_by_day: List[dict]
+    interests: Optional[InterestsOut] = None

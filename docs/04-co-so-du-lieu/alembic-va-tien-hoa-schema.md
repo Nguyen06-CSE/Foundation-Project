@@ -253,3 +253,6 @@ alembic downgrade -1
 - **Không kết nối/chạy migration trên Live trong đợt rà soát này.** Live preflight vẫn phải làm ở giai đoạn triển khai: `alembic current`, backup, xác nhận revision đang stamp và chạy `upgrade head` từ revision đó.
 - Startup fallback trong `backend/app/main.py` (`ALTER notifications...`, `CREATE TABLE IF NOT EXISTS user_todos`) **vẫn được giữ**. Repo chỉ chứng minh được runner `backend/entrypoint.sh` chạy `alembic upgrade head`; không có compose/systemd trong repo để chứng minh mọi runner đã migration độc lập, nên chưa gỡ fallback.
 - `backend/db/sync_group_schema.py` và `sync_share_schema.py` vẫn gọi `Base.metadata.create_all`; cần rà soát riêng trước khi gỡ (không thuộc phạm vi phase này).
+# Migration AI/vector
+
+`ea41b38547bc` tạo runs/chunks, trigger queue, partial unique indexes và GIN FTS. `f2c3d4e5a6b7` bật extension vector và cột embedding; `b7c8d9e0f1a2` bật unaccent. Xác minh bằng `alembic current`, `alembic heads` và SQL read-only; không downgrade trên DB thật.

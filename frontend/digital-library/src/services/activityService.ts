@@ -17,7 +17,7 @@ export const activityService = {
       .get<DocumentStats>(`/documents/${documentId}/stats`)
       .then((r) => r.data),
 
-  getMyStats: (params?: { scope?: 'me' | 'my_documents' }) =>
+  getMyStats: (params?: { scope?: 'me' | 'my_documents'; days?: 7 | 30 }) =>
     api
       .get<MyStats>('/stats/me', { params })
       .then((r) => r.data),

@@ -77,3 +77,6 @@ Tài liệu này tổng hợp các ca kiểm thử then chốt của hệ thốn
 - **Mục tiêu**: Tìm kiếm tài liệu có tiêu đề "Cơ sở dữ liệu" bằng từ khóa "co so du lieu".
 - **Dữ liệu đầu vào**: `GET /documents/search?q=co so du lieu`.
 - **Kết quả kỳ vọng**: Tài liệu "Cơ sở dữ liệu" xuất hiện trong danh sách kết quả nhờ cấu hình FTS `'simple'`; độ trễ truy vấn < 100ms.
+# Kịch bản sáu chức năng AI
+
+Upload → index status → keyword/hybrid → Q&A citation/insufficient → summary → tags → related → stats 7/30; lặp với owner, reader và revoked. Lưu response sanitized, không lưu token/body.

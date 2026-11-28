@@ -70,3 +70,12 @@ erDiagram
    - `folder_tags(folder_id, tag_id)`: Gắn nhãn cho thư mục.
 3. **Quan hệ Không Gian Làm Việc (`workspaces` - `workspace_members`)**:
    - Khóa chính kết hợp `(workspace_id, user_id)` trong `workspace_members` ngăn chặn việc một người dùng bị thêm trùng lặp vào cùng một nhóm.
+# Quan hệ AI index
+
+```mermaid
+erDiagram
+ documents ||--o{ document_index_runs : document_id
+ document_index_runs ||--o{ document_chunks : run_id
+```
+
+Một document có nhiều run theo checksum/model; mỗi run có chunks, tối đa một active run.

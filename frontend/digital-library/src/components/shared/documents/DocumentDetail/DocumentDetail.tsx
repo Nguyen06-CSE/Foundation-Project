@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { Navigate, useLocation, useSearchParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/utils/cn";
 import { formatSize } from "@/utils/formatSize";
@@ -13,20 +13,40 @@ import {
   type SharedDocumentDetailProps,
 } from "./DocumentDetail.types";
 import { useDocumentDetail } from "./hooks/useDocumentDetail";
+import { useDocumentInsights } from "./hooks/useDocumentInsights";
 import { DocumentTitleHeader } from "./components/DocumentTitleHeader";
 import { DocumentInfoCard } from "./components/DocumentInfoCard";
 import { DocumentActionCard } from "./components/DocumentActionCard";
 import { SetCoverModal } from "./components/SetCoverModal";
+import { ChunkContextCard } from "./components/ChunkContextCard";
 import { ShareDocumentModal } from "@/components/shared/documents/ShareDocumentModal";
 import { TabPreview } from "./tabs/TabPreview";
 import { TabContent } from "./tabs/TabContent";
+import { TabInsights } from "./tabs/TabInsights";
+import { AiSummarySection } from "./tabs/AiSummarySection";
 import { TabDescription, TabNote, TabActivity } from "./tabs/TabPanels";
+import { insightService } from "@/services/insightService";
+import { requestErrorLabel } from "@/utils/requestErrorLabel";
+import type { SummaryResponse } from "@/types/ai";
+
+interface SummaryRequestResult {
+  documentId: number;
+  data: SummaryResponse | null;
+  error: string | null;
+  elapsedMs: number;
+}
 
 export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
   const queryClient = useQueryClient();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const { pathname } = location;
   const highlightQuery = searchParams.get("q") ?? undefined;
+  const chunkId = Number(searchParams.get("chunk"));
+  const showInsights =
+    pathname.startsWith("/personal/") || pathname.startsWith("/groups/");
   const {
+    id,
     doc,
     isLoading,
     isError,
@@ -59,6 +79,106 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
     handleDelete,
     isDeleting,
   } = useDocumentDetail(props);
+
+  const insights = useDocumentInsights(
+    id,
+    chunkId,
+    showInsights,
+    permissions.canManageTags,
+  );
+
+  const summaryRequest = useMutation({
+    mutationFn: async (documentId: number): Promise<SummaryRequestResult> => {
+      const startedAt = performance.now();
+      try {
+        const data = await insightService.getSummary(documentId);
+        return {
+          documentId,
+          data,
+          error: null,
+          elapsedMs: performance.now() - startedAt,
+        };
+      } catch (error) {
+        return {
+          documentId,
+          data: null,
+          error: requestErrorLabel(error),
+          elapsedMs: performance.now() - startedAt,
+        };
+      }
+    },
+    onSuccess: (result) => {
+      if (result.data !== null) {
+        queryClient.setQueryData(["document-summary", result.documentId], result.data);
+        if (doc?.workspace_id) {
+          queryClient.invalidateQueries({
+            queryKey: ["documents", `group:${doc.workspace_id}`],
+          });
+        } else {
+          queryClient.invalidateQueries({
+            queryKey: ["documents", "personal"],
+          });
+        }
+      }
+    },
+  });
+
+  const activeSummaryRequest =
+    summaryRequest.data?.documentId === id ? summaryRequest.data : null;
+  const summaryData =
+    insights.summary.data ?? activeSummaryRequest?.data ?? null;
+  const summaryError = activeSummaryRequest
+    ? activeSummaryRequest.error
+    : insights.summary.error
+      ? requestErrorLabel(insights.summary.error)
+      : null;
+  const summaryElapsedMs = activeSummaryRequest?.elapsedMs ?? null;
+  const indexError = insights.indexStatus.error
+    ? "Không thể tải trạng thái lập chỉ mục. Vui lòng thử lại."
+    : null;
+
+  const lastSummaryDocIdRef = useRef(id);
+  useEffect(() => {
+    if (lastSummaryDocIdRef.current === id) return;
+    lastSummaryDocIdRef.current = id;
+    summaryRequest.reset();
+  }, [id]);
+
+  const summaryIntent = searchParams.get("summary") === "1";
+  const consumedSummaryIntentRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!summaryIntent || id <= 0) return;
+    const intentKey = `${location.key}:${id}`;
+    if (consumedSummaryIntentRef.current === intentKey) return;
+    consumedSummaryIntentRef.current = intentKey;
+    setActiveTab("description");
+    if (!summaryRequest.isPending) {
+      summaryRequest.reset();
+      summaryRequest.mutate(id);
+    }
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete("summary");
+        return next;
+      },
+      { replace: true },
+    );
+  }, [summaryIntent, id, location.key]);
+
+  const handleGenerateSummary = () => {
+    setActiveTab("description");
+    if (id > 0 && !summaryRequest.isPending) {
+      summaryRequest.reset();
+      summaryRequest.mutate(id);
+    }
+  };
+
+  const visibleTabs = showInsights
+    ? TABS
+    : TABS.filter((tab) => tab.key !== "insights");
+  const currentTab =
+    !showInsights && activeTab === "insights" ? "detail" : activeTab;
 
   const [viewMode, setViewMode] = useState<"original" | "markdown">("original");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -161,14 +281,14 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
           {/* Thanh chuyển tab */}
           <div className="-mx-5 flex items-center justify-between border-b border-gray-200 px-5">
             <div className="flex items-center gap-6">
-              {TABS.map((tab) => (
+              {visibleTabs.map((tab) => (
                 <button
                   key={tab.key}
                   type="button"
                   onClick={() => setActiveTab(tab.key)}
                   className={cn(
                     "pb-3 text-sm font-medium transition-colors focus:outline-none",
-                    activeTab === tab.key
+                    currentTab === tab.key
                       ? "border-b-2 border-primary-600 text-primary-600"
                       : "text-gray-500 hover:text-gray-900",
                   )}
@@ -180,7 +300,7 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
             {/* Bên phải: Nút Bản gốc / Markdown (nếu có) và Nút Info Toggle */}
             <div className="flex items-center gap-2 pb-2">
-              {activeTab === "detail" && markdownDownloadUrl && (
+              {currentTab === "detail" && markdownDownloadUrl && (
                 <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1">
                   <button
                     type="button"
@@ -233,8 +353,19 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
 
           {/* Nội dung tương ứng theo từng tab */}
           <div className="pt-1 flex-1 min-h-0 overflow-y-auto relative flex flex-col">
-            {" "}
-            {activeTab === "detail" && (
+            {showInsights &&
+              chunkId > 0 &&
+              (currentTab === "content" || currentTab === "insights") && (
+                <div className="px-5 pt-3">
+                  <ChunkContextCard
+                    chunk={insights.chunk.data}
+                    isLoading={insights.chunk.isLoading}
+                    requested
+                  />
+                </div>
+              )}
+
+            {currentTab === "detail" && (
               <TabPreview
                 doc={doc}
                 fileUrl={fileDownloadUrl}
@@ -253,16 +384,41 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
                 }
               />
             )}
-            {activeTab === "content" && (
+            {currentTab === "content" && (
               <TabContent content={doc.content || ""} highlightQuery={highlightQuery} />
             )}
-            {activeTab === "description" && (
+            {currentTab === "insights" && showInsights && (
+              <div className="px-5 pb-5 pt-3">
+                <TabInsights
+                  documentId={doc.id}
+                  indexStatus={insights.indexStatus.data}
+                  indexError={indexError}
+                  isIndexLoading={insights.indexStatus.isLoading}
+                  related={insights.related.data?.items}
+                  isRelatedLoading={insights.related.isLoading}
+                />
+              </div>
+            )}
+            {currentTab === "description" && (
               <TabDescription
                 description={doc.description ?? "Chưa có mô tả."}
-              />
+              >
+                {showInsights && (
+                  <AiSummarySection
+                    summary={summaryData}
+                    isLoading={
+                      summaryRequest.isPending || insights.summary.isLoading
+                    }
+                    error={summaryError}
+                    elapsedMs={summaryElapsedMs}
+                    indexStatus={insights.indexStatus.data}
+                    indexError={indexError}
+                  />
+                )}
+              </TabDescription>
             )}
-            {activeTab === "note" && <TabNote />}
-            {activeTab === "activity" && <TabActivity documentId={doc.id} />}
+            {currentTab === "note" && <TabNote />}
+            {currentTab === "activity" && <TabActivity documentId={doc.id} />}
           </div>
         </Card>
 
@@ -284,6 +440,12 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               isCreatingTag={isCreatingTag}
               onRemoveTag={handleRemoveTag}
               isRemovingTag={isRemovingTag}
+              tagSuggestions={
+                showInsights ? insights.tagSuggestions.data : undefined
+              }
+              isLoadingTagSuggestions={
+                showInsights && insights.tagSuggestions.isLoading
+              }
               viewCount={doc.view_count ?? 0}
               downloadCount={doc.download_count ?? 0}
               shareCount={doc.share_count ?? 0}
@@ -307,6 +469,10 @@ export function DocumentDetail(props: SharedDocumentDetailProps = {}) {
               onDelete={handleDelete}
               onSetCover={handleSetCover}
               onShare={() => setIsShareModalOpen(true)}
+              onGenerateSummary={
+                showInsights ? handleGenerateSummary : undefined
+              }
+              isSummaryLoading={summaryRequest.isPending}
               onDownloadSuccess={() => {
                 queryClient.invalidateQueries({
                   queryKey: [...(props.queryKeyPrefix || ["document"]), doc.id],

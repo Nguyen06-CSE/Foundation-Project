@@ -22,3 +22,6 @@ Thẻ tài liệu ưu tiên hiển thị số lần **chính người dùng** đ
 3. Mỗi giờ, scheduler chọn các tài liệu có hoạt động trong 48 giờ qua rồi tính lại từ lịch sử của từng tài liệu. Cửa sổ 48 giờ dùng để chọn tài liệu cần cập nhật. Các lượt được tính trên toàn bộ lịch sử của tài liệu đó.
 
 Điểm tính lại bằng `(xem + 2 × tải + 5 × lưu + 2 × chia sẻ) × hệ_số_gần_đây / (tuổi_giờ + 2)^1,5`. Hệ số là 1,5 nếu hoạt động cuối trong vòng 24 giờ, còn lại là 1. Ví dụ, hai tài liệu cùng tuổi, cùng có hoạt động hôm nay: tài liệu A có 10 lượt xem, tài liệu B có 6 lượt xem và 1 lượt lưu. A đứng trước khi sắp theo lượt xem, còn B đứng trước khi tính lại xu hướng vì tổng có trọng số là 11 so với 10. [Ghi sự kiện](../../backend/app/services/document_service.py) · [Tính lại thống kê](../../backend/app/jobs/scheduler.py) · [Sắp xếp trong kho](../../backend/app/services/document_query_service.py)
+# Interest stats
+
+`GET /stats/me?days=7|30` hỗ trợ chủ đề quan tâm và tracking `from_search`. Chi tiết [tài liệu AI](./10-tra-cuu-ho-tro-AI-va-goi-y-noi-dung.md).

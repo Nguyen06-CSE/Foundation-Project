@@ -26,7 +26,7 @@ export interface Folder {
   created_at: string;
 }
 
-export interface Document {
+export interface DocumentListItemResponse {
   id: number;
   owner_id?: number;
   workspace_id?: number | null;
@@ -42,7 +42,7 @@ export interface Document {
   description?: string;
   thumbnail_path?: string | null;
   markdown_path?: string | null;
-  content?: string | null;
+  preview_text?: string | null;
   tags?: Tag[];
   is_deleted?: boolean;
   deleted_at?: string | null;
@@ -50,7 +50,7 @@ export interface Document {
   orphaned_at?: string | null;
   trash_source?: "personal" | "group_orphaned" | string | null;
   trash_group_name?: string | null;
-  owner?: DocumentOwner | null; // <-- Thuộc tính mới bổ sung
+  owner?: DocumentOwner | null;
   is_bundle?: boolean;
   bundle_parent_id?: number | null;
   bundle_children_count?: number | null;
@@ -62,8 +62,12 @@ export interface Document {
   metadata?: Record<string, any> | null;
 }
 
+export interface Document extends DocumentListItemResponse {
+  content?: string | null;
+}
+
 export interface PaginatedDocuments {
-  items: Document[];
+  items: DocumentListItemResponse[];
   total: number;
   page: number;
   page_size: number;

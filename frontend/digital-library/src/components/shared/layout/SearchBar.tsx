@@ -64,9 +64,10 @@ export function SearchBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (url: string) => {
+  const handleSelect = (item: SearchResultItem) => {
     setIsOpen(false);
-    navigate(url);
+    const isDocument = item.type === "personal_doc" || item.type === "group_doc";
+    navigate(isDocument ? `${item.url}${item.url.includes("?") ? "&" : "?"}from_search=1` : item.url);
   };
 
   const handleSearchFull = () => {
@@ -108,7 +109,7 @@ export function SearchBar() {
                 {suggestions.map((item: SearchResultItem) => (
                   <div
                     key={`${item.type}-${item.id}`}
-                    onClick={() => handleSelect(item.url)}
+                    onClick={() => handleSelect(item)}
                     className="flex cursor-pointer items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                   >
                     {renderItemBadge(item.type)}

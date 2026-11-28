@@ -159,3 +159,6 @@ Hỏi đáp RAG và tóm tắt trích dẫn được triển khai, hiệu chỉn
 - Bổ sung khóa/ràng buộc chống race condition cho deduplication.
 - Thiết kế thứ tự hoặc cơ chế bù trừ giữa xóa Storage và commit DB.
 - Viết đặc tả riêng cho luồng gộp nhiều ảnh thành PDF.
+# Luồng upload-index-retrieve
+
+Upload tạo document và durable run; worker collect chunks, embedding rồi publish active run; API search/Q&A/summary đọc evidence theo permission. Chi tiết tại [AI/vector](./ai-vector-va-rag-co-ban.md). DB vận hành local vẫn deferred.

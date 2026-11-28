@@ -40,7 +40,7 @@ export interface DocCardType {
   bundle_parent_id?: number | null;
   bundle_children_count?: number | null;
   // Bổ sung cho Detail view
-  content?: string | null;
+  preview_text?: string | null;
   pages?: number | null;
   view_count?: number;
   personal_view_count?: number;
@@ -114,7 +114,7 @@ function toListItem(doc: DocCardType): DocumentListItem {
     is_bundle: doc.is_bundle,
     bundle_parent_id: doc.bundle_parent_id,
     bundle_children_count: doc.bundle_children_count,
-    content: doc.content ?? null,
+    preview_text: doc.preview_text ?? null,
     pages: doc.pages ?? null,
     view_count: doc.view_count,
     personal_view_count: doc.personal_view_count,
@@ -241,7 +241,7 @@ export function PersonalDocumentsSection({
         is_bundle: false,
         bundle_parent_id: Number(bundleId),
         bundle_children_count: null,
-        content: c.content ?? null,
+        preview_text: c.preview_text ?? null,
         pages: c.pages ?? null,
       }));
       setBundleChildrenMap((prev) => new Map(prev).set(bundleId, mapped));
@@ -423,7 +423,7 @@ export function PersonalDocumentsSection({
                 tags: c.tags,
                 workspace_type: "personal",
                 is_bundle: false,
-                content: c.content ?? null,
+                preview_text: c.preview_text ?? null,
                 pages: c.pages ?? null,
               }));
             }}

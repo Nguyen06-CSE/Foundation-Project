@@ -63,3 +63,6 @@ Host: localhost:8000
 ```
 
 Endpoint này được sử dụng bởi Docker container health checks, bộ cân bằng tải (Load Balancer) và kịch bản giám sát CI/CD.
+# AI API
+
+Xem mục AI/vector trong [API catalog](./API_CATALOG.md) và [error handling](./ERROR_HANDLING.md).

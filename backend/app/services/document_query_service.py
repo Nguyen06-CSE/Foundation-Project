@@ -2,8 +2,8 @@
 
 from datetime import UTC, datetime, timedelta
 from typing import Optional, List, Dict, Any, Tuple
-from sqlalchemy import select, func, or_, and_
-from sqlalchemy.orm import selectinload
+from sqlalchemy import select, func, or_, and_, text, bindparam
+from sqlalchemy.orm import selectinload, defer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.document import Document
@@ -14,7 +14,8 @@ from app.models.folder_tag import FolderTag
 from app.models.tag import Tag
 from app.models.download_log import DownloadLog
 from app.constants.activity_actions import ActivityAction
-from app.schemas.document import DocumentOut
+from app.schemas.document import DocumentListOut, DocumentOut
+from app.services.evidence_text import build_summary_text, format_preview_text
 
 CODE_EXTENSIONS = [
     "py", "js", "ts", "jsx", "tsx", "cpp", "c", "h", "java", "cs",
@@ -83,7 +84,12 @@ class DocumentQueryService:
         query = (
             select(Document, DocumentStats)
             .outerjoin(DocumentStats, DocumentStats.document_id == Document.id)
-            .options(selectinload(Document.tags), selectinload(Document.owner))
+            .options(
+                defer(Document.content),
+                defer(Document.search_vector),
+                selectinload(Document.tags),
+                selectinload(Document.owner),
+            )
         )
 
         if scope == "personal":
@@ -307,10 +313,78 @@ class DocumentQueryService:
             )
             personal_views_map = dict(p_res.all())
 
-        # 13. Map kết quả sang DocumentOut
+        # 13. Lấy preview theo batch cho các tài liệu trên trang (không query riêng từng doc, không nạp content)
+        non_bundle_ids = [d.id for d in items if not d.is_bundle]
+        previews: dict[int, Optional[str]] = {}
+        if non_bundle_ids:
+            preview_stmt = text("""
+                WITH active_runs AS (
+                  SELECT
+                    r.id AS run_id,
+                    r.document_id,
+                    r.summary
+                  FROM document_index_runs r
+                  JOIN documents d ON d.id = r.document_id
+                  WHERE r.document_id IN :doc_ids
+                    AND r.is_active
+                    AND r.checksum = d.checksum
+                ),
+                ranked_chunks AS (
+                  SELECT
+                    a.document_id,
+                    c.body,
+                    ROW_NUMBER() OVER (
+                      PARTITION BY a.document_id
+                      ORDER BY
+                        CASE
+                          WHEN lower(coalesce(c.heading, '')) ~* '(tóm tắt|tổng quan|giới thiệu|mục tiêu|tom tat|tong quan|gioi thieu|muc tieu|overview|abstract|introduction)' THEN 1
+                          ELSE 2
+                        END,
+                        c.ordinal ASC
+                    ) AS rn
+                  FROM active_runs a
+                  JOIN document_chunks c ON c.run_id = a.run_id
+                  WHERE (a.summary IS NULL OR jsonb_typeof(a.summary) <> 'array' OR jsonb_array_length(a.summary) = 0)
+                    AND length(trim(c.body)) >= 40
+                    AND coalesce(c.heading, '') !~* '(mục lục|table of contents|contents)'
+                    AND c.body !~* '^(#+\\s+[^\\n]+$)'
+                )
+                SELECT
+                  a.document_id,
+                  a.summary,
+                  rc.body AS chunk_body
+                FROM active_runs a
+                LEFT JOIN ranked_chunks rc ON rc.document_id = a.document_id AND rc.rn = 1
+            """).bindparams(bindparam("doc_ids", expanding=True))
+            try:
+                p_res = await db.execute(preview_stmt, {"doc_ids": non_bundle_ids})
+                for r in p_res.mappings():
+                    d_id = r["document_id"]
+                    sum_val = r["summary"]
+                    chunk_val = r["chunk_body"]
+
+                    text_content = None
+                    if sum_val and isinstance(sum_val, list):
+                        sum_text = build_summary_text(sum_val)
+                        if sum_text:
+                            text_content = sum_text
+                    elif sum_val and isinstance(sum_val, str):
+                        text_content = sum_val
+
+                    if not text_content and chunk_val:
+                        text_content = chunk_val
+
+                    if text_content:
+                        previews[d_id] = format_preview_text(text_content, 400)
+            except Exception:
+                # Bỏ qua nhẹ nhàng nếu môi trường kiểm thử không có bảng index
+                pass
+
+        # 14. Map kết quả sang DocumentListOut
         items_out = []
         for doc, stats in items_rows:
-            doc_out = DocumentOut.model_validate(doc)
+            doc_out = DocumentListOut.model_validate(doc)
+            doc_out.preview_text = previews.get(doc.id, None)
             if doc.is_bundle:
                 doc_out.bundle_children_count = counts_map.get(doc.id, 0)
             doc_out.trending_score = float(stats.trending_score) if stats else 0.0

@@ -1,6 +1,7 @@
 // src/components/shared/documents/DocumentDetail/components/DocumentInfoCard.tsx
 
 import { Card } from "@/components/ui/Card";
+import type { TagSuggestionsResponse } from "@/types/ai";
 import type { TagType } from "../DocumentDetail.types";
 import { DocumentTagSection } from "./DocumentTagSection";
 
@@ -54,6 +55,8 @@ interface DocumentInfoCardProps {
   isCreatingTag: boolean;
   onRemoveTag: (tagId: number) => void;
   isRemovingTag: boolean;
+  tagSuggestions?: TagSuggestionsResponse | null;
+  isLoadingTagSuggestions?: boolean;
   viewCount?: number;
   downloadCount?: number;
   shareCount?: number;
@@ -80,6 +83,8 @@ export function DocumentInfoCard({
   isCreatingTag,
   onRemoveTag,
   isRemovingTag,
+  tagSuggestions,
+  isLoadingTagSuggestions,
   viewCount = 0,
   downloadCount = 0,
   shareCount = 0,
@@ -118,6 +123,8 @@ export function DocumentInfoCard({
         isCreatingTag={isCreatingTag}
         onRemoveTag={onRemoveTag}
         isRemovingTag={isRemovingTag}
+        tagSuggestions={tagSuggestions}
+        isLoadingTagSuggestions={isLoadingTagSuggestions}
       />
 
       {/* Thống kê tương tác */}

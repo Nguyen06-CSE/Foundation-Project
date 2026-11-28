@@ -6,7 +6,6 @@ import { User, Heart, Download, Sparkles, Files, Calendar, HardDrive } from 'luc
 import { FileIcon } from './FileIcon'
 import { DocumentContextMenu, type DocumentAction } from './DocumentContextMenu'
 import { GroupDocumentContextMenu } from '@/pages/group/components/shared/GroupDocumentContextMenu'
-import { extractSummary } from '@/utils/textUtils'
 import { cn } from '@/utils/cn'
 import { getThumbnailUrl } from '@/utils/getThumbnailUrl'
 import { getActivityHeat } from '@/utils/activityHeat'
@@ -37,19 +36,24 @@ export function DocumentDetailView({
   const navigate = useNavigate()
   const [imageErrors, setImageErrors] = useState<Record<string | number, boolean>>({})
 
-  const handleRowClick = (doc: DocumentListItem) => {
+  const getDocumentPath = (doc: DocumentListItem) => {
     // ƯU TIÊN 1: Gọi navigationPath (Group, Class, Faculty sẽ truyền cái này)
-    if (navigationPath) {
-      navigate(navigationPath(doc.id))
-      return; 
-    } 
-    
+    if (navigationPath) return navigationPath(doc.id)
+
     // NẾU KHÔNG TRUYỀN (Mặc định cho Kho Cá Nhân)
-    if (doc.is_bundle) {
-      navigate(`/personal/bundle/${doc.id}`)
-    } else {
-      navigate(`/personal/documents/${doc.id}`)
-    }
+    return doc.is_bundle
+      ? `/personal/bundle/${doc.id}`
+      : `/personal/documents/${doc.id}`
+  }
+
+  const handleRowClick = (doc: DocumentListItem) => {
+    navigate(getDocumentPath(doc))
+  }
+
+  const handleSummaryClick = (doc: DocumentListItem) => {
+    const path = getDocumentPath(doc)
+    const separator = path.includes('?') ? '&' : '?'
+    navigate(`${path}${separator}tab=description&summary=1`)
   }
 
   if (isLoading && documents.length === 0) {
@@ -249,10 +253,10 @@ export function DocumentDetailView({
                   )}
                 </div>
 
-                {/* Trích xuất Nội dung (Tăng lên 4-5 dòng) */}
+                {/* Xem trước nội dung (khoảng 4 dòng) */}
                 <div className="mt-3 bg-gray-50/50 rounded-lg p-3 border border-gray-100/50">
                   <p className="text-sm text-gray-600 line-clamp-4 leading-relaxed font-normal">
-                    {extractSummary(doc.content, 600) || <span className="italic text-gray-400">Tài liệu không có trích xuất văn bản (OCR/Text).</span>}
+                    {doc.preview_text || <span className="italic text-gray-400">Chưa có nội dung xem trước.</span>}
                   </p>
                 </div>
               </div>
@@ -263,9 +267,7 @@ export function DocumentDetailView({
                 {/* Nút hành động nhanh (Bên trái) */}
                 <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   <button
-                    onClick={() => {
-                      alert('Tính năng AI Tóm tắt đang được phát triển!')
-                    }}
+                    onClick={() => handleSummaryClick(doc)}
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1.5 rounded-md transition-colors border border-blue-100/50"
                   >
                     <Sparkles className="h-3.5 w-3.5 text-blue-600" />

@@ -346,7 +346,7 @@ export const FileDocumentCard = memo(function FileDocumentCard({
                 onError={() => setImageError(true)}
               />
             )
-          ) : isCode && (document as any).content ? (
+          ) : isCode && (document.preview_text || (document as any).content) ? (
             <div
               className={cn(
                 "w-full bg-gray-900 text-green-400 p-3 pt-9 font-mono leading-snug text-left transition-opacity",
@@ -356,7 +356,7 @@ export const FileDocumentCard = memo(function FileDocumentCard({
               )}
             >
               <pre className="whitespace-pre-wrap break-words">
-                {(document as any).content
+                {(document.preview_text || (document as any).content || "")
                   .split("\n")
                   .slice(0, isExpanded ? 120 : 6)
                   .join("\n")}

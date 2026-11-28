@@ -103,3 +103,9 @@ Tài liệu này định nghĩa các **quy tắc nghiệp vụ bất biến (Bus
 * **Giới hạn kích thước:**
   * Mặc định tối đa: **50 MB** cho mỗi tệp tin đơn lẻ.
   * Tệp tin vượt quá 50MB bị từ chối ngay tại tầng kiểm tra kích thước phía Client và Backend để bảo vệ bộ nhớ đệm RAM máy chủ.
+# AI business rules
+
+- BR-AI-01: personal owner hoặc group write/full mới retry/tag mutate; reader/revoked bị chặn.
+- BR-AI-02: citation thuộc active checksum/version; stale trả 404.
+- BR-AI-03: empty file không tạo document/object/run; batch mới skip có reason.
+- BR-AI-04: chỉ failed được manual retry, reset attempts/error và giữ idempotent status khác.

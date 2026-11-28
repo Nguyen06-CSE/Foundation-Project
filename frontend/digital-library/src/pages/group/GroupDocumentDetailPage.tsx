@@ -39,7 +39,7 @@ export default function GroupDocumentDetailPage() {
       documentId={numericDocId}
 
       // Đẩy các hàm API của groupService vào
-      fetchDocumentFn={(dId) => groupService.getDocumentById(groupId, dId)}
+      fetchDocumentFn={(dId, fromSearch) => groupService.getDocumentById(groupId, dId, fromSearch)}
       updateDocumentFn={(dId, data) => groupService.updateDocument(groupId, dId, data)}
       deleteDocumentFn={(dId) => groupService.deleteDocument(groupId, dId)}
       updateTagsFn={(dId, tagIds) => groupService.updateTags(groupId, dId, tagIds)}

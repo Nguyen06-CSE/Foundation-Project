@@ -67,3 +67,11 @@ Kiểu dữ liệu danh sách các từ tố (lexeme) đã được chuẩn hóa
 
 ### Workspace (Không gian làm việc nhóm)
 Môi trường cộng tác khép kín dành cho một nhóm người dùng, hỗ trợ chia sẻ tài liệu, gắn nhãn nhóm và phân quyền thành viên theo 3 cấp độ: Owner, Admin, Member.
+# Thuật ngữ AI/vector
+
+- **FTS**: PostgreSQL Full-Text Search trên `tsvector`, GIN và `unaccent`.
+- **Embedding/vector**: biểu diễn số của văn bản; cosine distance dùng pgvector `<=>`.
+- **Hybrid search/RRF**: kết hợp xếp hạng lexical và semantic, báo provenance method.
+- **RAG cơ bản**: retrieve chunks visible rồi trả lời có citation; thiếu căn cứ thì abstain.
+- **Chunk/citation**: đoạn evidence có ordinal, source và location.
+- **Active run/coverage**: run index đang phục vụ; coverage mô tả đơn vị đã đọc.

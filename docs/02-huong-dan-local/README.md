@@ -39,3 +39,6 @@ Tài liệu này được biên soạn đặc biệt phục vụ các thành vi�
 2. **Cơ sở dữ liệu**: Sử dụng PostgreSQL cục bộ tại cổng `5432` với chuỗi kết nối bất đồng bộ:  
    `DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/elibrary_db`
 3. **Frontend API Endpoint**: Trỏ `VITE_API_URL=http://localhost:8000` trong `frontend/digital-library/.env`.
+# AI/vector local
+
+Xem [cấu hình embedding](./cau-hinh-va-bien-moi-truong.md), [khởi động worker](./khoi-chay-he-thong.md) và [xử lý sự cố AI/vector](./xu-ly-su-co-local.md). PostgreSQL local verification vẫn deferred; Neon không thay đổi kiến trúc triển khai.

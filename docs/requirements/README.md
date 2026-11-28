@@ -56,3 +56,6 @@ Một trong những mục tiêu trọng tâm của tài liệu này là chỉ ra
 3. [Yêu Cầu Phi Chức Năng (NON_FUNCTIONAL_REQUIREMENTS.md)](./NON_FUNCTIONAL_REQUIREMENTS.md) — Tiêu chuẩn về hiệu năng, độ sẵn sàng, bảo mật cấp sản phẩm, tính toán bộ nhớ và khả năng mở rộng.
 4. [Quy Tắc Nghiệp Vụ Dùng Chung (BUSINESS_RULES.md)](./BUSINESS_RULES.md) — Các ràng buộc bất biến (Invariants) ở cấp sản phẩm: quyền riêng tư kho cá nhân, cơ chế nhân bản tài liệu, thuật toán trending, vòng đời thùng rác 30 ngày.
 5. [Các Luồng Nghiệp Vụ Trọng Yếu (Use Cases)](./use-cases/README.md) — 6 kịch bản tương tác người dùng quan trọng nhất của hệ thống.
+# AI requirements
+
+UC-07 và FR/BR/NFR AI được mô tả trong [UC07](./use-cases/UC07_AI_ASSISTED_RETRIEVAL_AND_INSIGHTS.md).

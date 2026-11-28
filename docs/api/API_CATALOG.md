@@ -231,3 +231,18 @@ Router `groups` cung cấp 48 endpoints phục vụ làm việc nhóm, trao đ�
 | `PATCH` | `/todos/{todo_id}` | Cập nhật công việc, đánh dấu hoàn thành (`update_todo`) | Bearer Token | Implemented |
 | `DELETE` | `/todos/{todo_id}` | Xóa công việc (`delete_todo`) | Bearer Token | Implemented |
 | `GET` | `/health` | Kiểm tra tình trạng máy chủ (`health_check`) | Public | Implemented |
+# AI/vector endpoints
+
+| Method | Path | Auth/status |
+|---|---|---|
+| GET | `/search/full` | user; 200, fields/methods/fallback |
+| GET | `/documents/{id}/index-status` | visible user; 200/404 |
+| POST | `/documents/{id}/index-retry` | owner/group write; 200/403/404 |
+| GET | `/documents/{id}/chunks/{chunk}` | visible active citation; 200/404 |
+| POST | `/documents/{id}/questions` | visible; answered/insufficient/not_ready |
+| GET | `/documents/{id}/summary` | visible; summary/coverage |
+| GET | `/documents/{id}/tag-suggestions` | visible |
+| GET | `/documents/{id}/related` | visible |
+| GET | `/stats/me?days=7|30` | user; 200/422 |
+
+Contract details: [feature doc](../05-tinh-nang/10-tra-cuu-ho-tro-AI-va-goi-y-noi-dung.md).

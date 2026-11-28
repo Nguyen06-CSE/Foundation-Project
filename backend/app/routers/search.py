@@ -1,12 +1,14 @@
 # app/routers/search.py
 from fastapi import APIRouter, Depends, Query
+from typing import Literal
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.models.user import User
-from app.schemas.search import QuickSearchOut, FullSearchOut
+from app.schemas.search import QuickSearchOut, FullSearchOut, MatchField
 from app.services.search_service import SearchService, search_documents
+from app.services import evidence_search
 
 router = APIRouter(prefix="/search", tags=["search"])
 
@@ -41,8 +43,14 @@ async def full_text_search(
     q: str = Query(..., min_length=1),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=50),
+    mode: Literal["keyword", "hybrid"] = "keyword",
+    match_fields: list[MatchField] | None = Query(None),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    if match_fields is not None:
+        return await evidence_search.search(db, current_user.id, q, page, page_size, match_fields)
+    if mode == "hybrid":
+        return await evidence_search.search(db, current_user.id, q, page, page_size)
     results = await SearchService.full_text_search(db, q, current_user.id, page, page_size)
     return results

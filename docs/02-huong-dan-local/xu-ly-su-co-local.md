@@ -86,3 +86,11 @@ Cấp quyền ghi cho người dùng hiện tại trên thư mục lưu trữ:
 mkdir -p backend/storage
 chmod -R 755 backend/storage
 ```
+# Sự cố AI/vector
+
+- Collect/file missing: kiểm tra storage resolver, retry sau khi sửa file; không log body/path secret.
+- `retry`/`failed`: xem stage/attempt; failed chỉ retry qua API owner/editor, backoff tối đa 900 giây.
+- Timeout/429/5xx: provider tự retry tối đa ba lần, giữ sanitized status; lexical fallback không biến thành 500.
+- Dimension mismatch: đối chiếu model và `EMBEDDING_DIMENSIONS`, re-index sau đổi model.
+- Thiếu `unaccent`/`vector`: kiểm tra revision/extension trước khi migrate DB local.
+- Provider unavailable: search trả fallback lexical và `unavailable_match_fields`; không gọi đây là semantic PASS.

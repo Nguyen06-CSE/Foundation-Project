@@ -27,6 +27,7 @@ export interface DocumentItem {
   thumbnail_path?: string | null;
   markdown_path?: string | null;
   markdownPath?: string | null;
+  preview_text?: string | null;
   tags?: DocumentTag[];
   is_bundle?: boolean;
   bundle_parent_id?: number | null;

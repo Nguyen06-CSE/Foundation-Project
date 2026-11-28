@@ -13,8 +13,8 @@ export const createDocumentService = (getBaseUrl: (groupId?: number | string) =>
     return response.data
   },
 
-  getById: (id: number, groupId?: number | string) =>
-    api.get<Document>(`${getBaseUrl(groupId)}/${id}`)
+  getById: (id: number, groupId?: number | string, fromSearch = false) =>
+    api.get<Document>(`${getBaseUrl(groupId)}/${id}`, { params: { from_search: fromSearch } })
       .then(r => r.data),
 
   // ✅ Bỏ header thủ công — Axios tự thêm boundary

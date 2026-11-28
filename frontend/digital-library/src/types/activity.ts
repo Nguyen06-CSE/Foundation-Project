@@ -37,4 +37,24 @@ export interface MyStats {
   total_downloads: number;
   recent_activities: ActivityLog[];
   activity_by_day: { date: string; count: number }[];
+  interests?: {
+    days: number;
+    personal_documents: number;
+    read_views: number;
+    read_documents: number;
+    opened_from_search: number;
+    subjects: InterestTopic[];
+    faculties: InterestTopic[];
+    tags: InterestTopic[];
+  } | null;
+}
+
+export interface InterestTopic {
+  name: string;
+  personal_documents: number;
+  read_views: number;
+  read_documents: number;
+  opened_from_search: number;
+  scope?: "personal" | "group" | null;
+  workspace_id?: number | null;
 }

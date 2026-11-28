@@ -46,3 +46,6 @@ Nhằm tránh mọi mâu thuẫn giữa tài liệu mô tả và mã nguồn th�
   - Chỉ mục Partial Unique Index (`uq_document_share_pending`) chống trùng lặp chia sẻ tài liệu đang chờ duyệt.
   - Chỉ mục Partial Index (`ix_documents_source_owner`) tăng tốc tra cứu nguồn gốc tài liệu đã clone mà chưa bị xóa mềm.
   - Chỉ mục B-Tree trên các cột tra cứu tần suất cao: `workspace_id`, `owner_id`, `created_at`, `status`.
+# AI/vector schema
+
+Phần AI dùng `document_index_runs` và `document_chunks`, pgvector, FTS/unaccent và queue trigger. Xem [ERD](./mo-hinh-thuc-the-erd.md), [từ điển](./tu-dien-du-lieu.md), [migration](./alembic-va-tien-hoa-schema.md) và [PostgreSQL nâng cao](./postgresql-chuyen-sau.md).

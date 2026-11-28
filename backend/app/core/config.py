@@ -2,6 +2,7 @@
 from typing import Optional
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 import boto3
 
 # Tính toán đường dẫn gốc của dự án
@@ -11,6 +12,14 @@ ENV_PATH = ROOT_DIR / ".env"
 
 class Settings(BaseSettings):
     DATABASE_URL: str
+    SQL_ECHO: bool = False
+    EMBEDDING_BASE_URL: str = ""
+    EMBEDDING_API_KEY: str = ""
+    EMBEDDING_MODEL: str = ""
+    EMBEDDING_DIMENSIONS: int = 0
+    EMBEDDING_BATCH_SIZE: int = 32
+    INDEX_MAX_RETRIES: int = Field(default=5, ge=1, le=100)
+    SEMANTIC_MIN_SIMILARITY: float = Field(default=0.65, ge=-1, le=1)
     SECRET_KEY: str
 
     # Chế độ lưu trữ: "local" (mặc định cho main/local) hoặc "r2" (cho cloud/produc)

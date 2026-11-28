@@ -23,7 +23,7 @@ def test_migration_chain_is_single_head():
     script = ScriptDirectory.from_config(cfg)
     heads = script.get_heads()
     assert len(heads) == 1, f"Kỳ vọng 1 head duy nhất nhưng nhận {heads}"
-    assert heads[0] == "b3c4d5e6f7a8"
+    assert heads[0] == "f2c3d4e5a6b7"
 
 
 def test_legacy_artifacts_and_models_preservation():

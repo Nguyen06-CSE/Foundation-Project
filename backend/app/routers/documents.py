@@ -199,6 +199,8 @@ async def upload_document(
                 "document_id": int(parts[1]),
                 "title": parts[2] if len(parts) > 2 else "tài liệu này"
             })
+        elif msg == "empty_file":
+            raise HTTPException(400, {"code": "EMPTY_FILE", "message": "Tệp tải lên rỗng"})
         raise
 
     await db.commit()
@@ -287,6 +289,9 @@ async def upload_batch_documents(
 
         for file in files:
             content = await file.read()
+            if not content:
+                skipped.append({"filename": file.filename, "reason": "empty_file"})
+                continue
             checksum = hashlib.sha256(content).hexdigest()
 
             # Kiểm tra trùng trong kho cá nhân (active + trash)
@@ -512,6 +517,7 @@ async def get_document(
     document_id: int,
     background_tasks: BackgroundTasks,
     include_deleted: bool = Query(False),
+    from_search: bool = Query(False),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -565,7 +571,11 @@ async def get_document(
 
     background_tasks.add_task(
         _log_activity, db, document_id, current_user.id,
-        ActivityAction.VIEWED, "personal", None, None, 30,
+        ActivityAction.VIEWED,
+        "group" if document.workspace_id else "personal",
+        document.workspace_id,
+        {"source": "search"} if from_search else None,
+        0,
     )
     return doc_out
 
@@ -1016,6 +1026,11 @@ async def add_files_to_bundle(
         for file in files:
             content = await file.read()
             await file.seek(0)
+            if not content:
+                raise HTTPException(
+                    status_code=400,
+                    detail={"code": "EMPTY_FILE", "message": "Tệp tải lên rỗng"},
+                )
             added_size += len(content)
             checksum = checksum_for_file(content)
 
@@ -1043,6 +1058,9 @@ async def add_files_to_bundle(
                 tags=bundle_tags,
             )
             db.add(child)
+            # BackgroundTasks captures arguments immediately. Flush here so the
+            # processor and the durable index trigger both receive the real id.
+            await db.flush()
             new_children.append(child)
             background_tasks.add_task(
                 _process_document_background,
@@ -1077,11 +1095,7 @@ async def add_files_to_bundle(
     except Exception as e:
         await db.rollback()
         for p in saved_paths:
-            if os.path.exists(p):
-                try:
-                    os.remove(p)
-                except Exception:
-                    pass
+            _safe_remove(p)
         if isinstance(e, HTTPException):
             raise e
         raise HTTPException(status_code=500, detail=f"Lỗi khi thêm file vào gói: {str(e)}")

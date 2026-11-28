@@ -1,0 +1,4787 @@
+{
+  "generated_at": "2026-11-26T14:06:23+00:00",
+  "environment": {
+    "postgres_version": "18.6 (Homebrew)",
+    "python": "3.11.17",
+    "k": 5,
+    "isolated_cluster": "temporary cluster, removed after run",
+    "search_index": "GIN(search_vector), trigger b7c8d9e0f1a2",
+    "extractor": "app.services.file_processor.extract_text"
+  },
+  "dataset": {
+    "version": "1.0",
+    "dataset_hash": "5956a24d2be91e96b6ae02eb06844e1bffa121ddf28519a94e61020301dbd430",
+    "documents": 30,
+    "questions": 60,
+    "splits": {
+      "calibration": {
+        "documents": 15,
+        "questions": 30
+      },
+      "evaluation": {
+        "documents": 15,
+        "questions": 30
+      }
+    },
+    "formats": {
+      "bundle": 2,
+      "docx": 8,
+      "pdf_mixed": 4,
+      "pdf_scan": 4,
+      "pdf_text": 6,
+      "pptx": 6
+    }
+  },
+  "corpus": {
+    "extraction": {
+      "by_format": {
+        "bundle": {
+          "documents": 2,
+          "mean_token_recall": 1.0,
+          "min_token_recall": 1.0
+        },
+        "docx": {
+          "documents": 8,
+          "mean_token_recall": 1.0,
+          "min_token_recall": 1.0
+        },
+        "pdf_mixed": {
+          "documents": 4,
+          "mean_token_recall": 0.5178,
+          "min_token_recall": 0.4727
+        },
+        "pdf_scan": {
+          "documents": 4,
+          "mean_token_recall": 1.0,
+          "min_token_recall": 1.0
+        },
+        "pdf_text": {
+          "documents": 6,
+          "mean_token_recall": 1.0,
+          "min_token_recall": 1.0
+        },
+        "pptx": {
+          "documents": 6,
+          "mean_token_recall": 1.0,
+          "min_token_recall": 1.0
+        }
+      },
+      "documents": [
+        {
+          "id": "C01",
+          "format": "pdf_text",
+          "chars": 350,
+          "expected_chars": 348,
+          "token_recall": 1.0,
+          "text_pages": 1,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C02",
+          "format": "pdf_text",
+          "chars": 265,
+          "expected_chars": 265,
+          "token_recall": 1.0,
+          "text_pages": 1,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C03",
+          "format": "pdf_scan",
+          "chars": 306,
+          "expected_chars": 301,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 1,
+          "ocr_used": true,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C04",
+          "format": "pdf_scan",
+          "chars": 279,
+          "expected_chars": 275,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 1,
+          "ocr_used": true,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C05",
+          "format": "pdf_mixed",
+          "chars": 210,
+          "expected_chars": 401,
+          "token_recall": 0.5536,
+          "text_pages": 1,
+          "scanned_pages": 1,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C06",
+          "format": "pdf_mixed",
+          "chars": 179,
+          "expected_chars": 393,
+          "token_recall": 0.4727,
+          "text_pages": 1,
+          "scanned_pages": 1,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C07",
+          "format": "docx",
+          "chars": 368,
+          "expected_chars": 287,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C08",
+          "format": "docx",
+          "chars": 338,
+          "expected_chars": 250,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C09",
+          "format": "docx",
+          "chars": 338,
+          "expected_chars": 249,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C10",
+          "format": "docx",
+          "chars": 300,
+          "expected_chars": 232,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C11",
+          "format": "pptx",
+          "chars": 282,
+          "expected_chars": 255,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C12",
+          "format": "pptx",
+          "chars": 295,
+          "expected_chars": 275,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C13",
+          "format": "pptx",
+          "chars": 183,
+          "expected_chars": 166,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E01",
+          "format": "pdf_text",
+          "chars": 264,
+          "expected_chars": 264,
+          "token_recall": 1.0,
+          "text_pages": 1,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E02",
+          "format": "pdf_text",
+          "chars": 218,
+          "expected_chars": 218,
+          "token_recall": 1.0,
+          "text_pages": 1,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E03",
+          "format": "pdf_scan",
+          "chars": 217,
+          "expected_chars": 215,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 1,
+          "ocr_used": true,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E04",
+          "format": "pdf_scan",
+          "chars": 200,
+          "expected_chars": 196,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 1,
+          "ocr_used": true,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E05",
+          "format": "pdf_mixed",
+          "chars": 177,
+          "expected_chars": 361,
+          "token_recall": 0.5167,
+          "text_pages": 1,
+          "scanned_pages": 1,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E06",
+          "format": "pdf_mixed",
+          "chars": 176,
+          "expected_chars": 342,
+          "token_recall": 0.5283,
+          "text_pages": 1,
+          "scanned_pages": 1,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E07",
+          "format": "docx",
+          "chars": 326,
+          "expected_chars": 265,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E09",
+          "format": "docx",
+          "chars": 325,
+          "expected_chars": 237,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E10",
+          "format": "docx",
+          "chars": 290,
+          "expected_chars": 221,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E11",
+          "format": "pptx",
+          "chars": 293,
+          "expected_chars": 278,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E12",
+          "format": "pptx",
+          "chars": 307,
+          "expected_chars": 284,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E13",
+          "format": "bundle",
+          "chars": 77,
+          "expected_chars": 77,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "bundle_description"
+        },
+        {
+          "id": "E14",
+          "format": "bundle",
+          "chars": 74,
+          "expected_chars": 74,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "bundle_description"
+        },
+        {
+          "id": "E15",
+          "format": "pptx",
+          "chars": 204,
+          "expected_chars": 175,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C14",
+          "format": "pdf_text",
+          "chars": 350,
+          "expected_chars": 348,
+          "token_recall": 1.0,
+          "text_pages": 1,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "C15",
+          "format": "pdf_text",
+          "chars": 265,
+          "expected_chars": 265,
+          "token_recall": 1.0,
+          "text_pages": 1,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        },
+        {
+          "id": "E08",
+          "format": "docx",
+          "chars": 326,
+          "expected_chars": 265,
+          "token_recall": 1.0,
+          "text_pages": 0,
+          "scanned_pages": 0,
+          "ocr_used": false,
+          "extractor": "app.services.file_processor.extract_text"
+        }
+      ]
+    },
+    "documents": [
+      {
+        "id": "C01",
+        "format": "pdf_text",
+        "split": "calibration",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "cơ sở dữ liệu",
+          "giáo trình"
+        ],
+        "view_count": 12
+      },
+      {
+        "id": "C02",
+        "format": "pdf_text",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "mạng máy tính",
+          "bài giảng"
+        ],
+        "view_count": 8
+      },
+      {
+        "id": "C03",
+        "format": "pdf_scan",
+        "split": "calibration",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "học máy",
+          "đề cương"
+        ],
+        "view_count": 5
+      },
+      {
+        "id": "C04",
+        "format": "pdf_scan",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "an toàn thông tin",
+          "mã hóa"
+        ],
+        "view_count": 9
+      },
+      {
+        "id": "C05",
+        "format": "pdf_mixed",
+        "split": "calibration",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "phân tích dữ liệu",
+          "pandas"
+        ],
+        "view_count": 15
+      },
+      {
+        "id": "C06",
+        "format": "pdf_mixed",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "docker",
+          "hạ tầng"
+        ],
+        "view_count": 7
+      },
+      {
+        "id": "C07",
+        "format": "docx",
+        "split": "calibration",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "scrum",
+          "quản lý dự án"
+        ],
+        "view_count": 11
+      },
+      {
+        "id": "C08",
+        "format": "docx",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "rest api",
+          "backend"
+        ],
+        "view_count": 6
+      },
+      {
+        "id": "C09",
+        "format": "docx",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G3",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "microservices",
+          "kiến trúc"
+        ],
+        "view_count": 3
+      },
+      {
+        "id": "C10",
+        "format": "docx",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "kinh tế",
+          "vi mô"
+        ],
+        "view_count": 4
+      },
+      {
+        "id": "C11",
+        "format": "pptx",
+        "split": "calibration",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "trí tuệ nhân tạo",
+          "học máy"
+        ],
+        "view_count": 20
+      },
+      {
+        "id": "C12",
+        "format": "pptx",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "agile",
+          "quản lý dự án"
+        ],
+        "view_count": 10
+      },
+      {
+        "id": "C13",
+        "format": "pptx",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "lịch sử",
+          "việt nam"
+        ],
+        "view_count": 3
+      },
+      {
+        "id": "E01",
+        "format": "pdf_text",
+        "split": "evaluation",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "cơ sở dữ liệu",
+          "postgresql"
+        ],
+        "view_count": 18
+      },
+      {
+        "id": "E02",
+        "format": "pdf_text",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "mạng không dây",
+          "wifi"
+        ],
+        "view_count": 13
+      },
+      {
+        "id": "E03",
+        "format": "pdf_scan",
+        "split": "evaluation",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "học sâu",
+          "học máy"
+        ],
+        "view_count": 17
+      },
+      {
+        "id": "E04",
+        "format": "pdf_scan",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "mật mã",
+          "an toàn thông tin"
+        ],
+        "view_count": 14
+      },
+      {
+        "id": "E05",
+        "format": "pdf_mixed",
+        "split": "evaluation",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "trực quan hóa",
+          "dashboard"
+        ],
+        "view_count": 16
+      },
+      {
+        "id": "E06",
+        "format": "pdf_mixed",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "kubernetes",
+          "hạ tầng"
+        ],
+        "view_count": 19
+      },
+      {
+        "id": "E07",
+        "format": "docx",
+        "split": "evaluation",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "kiểm thử",
+          "chất lượng"
+        ],
+        "view_count": 21
+      },
+      {
+        "id": "E09",
+        "format": "docx",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G3",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "microservices",
+          "kiến trúc"
+        ],
+        "view_count": 5
+      },
+      {
+        "id": "E10",
+        "format": "docx",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "kinh tế",
+          "vĩ mô"
+        ],
+        "view_count": 6
+      },
+      {
+        "id": "E11",
+        "format": "pptx",
+        "split": "evaluation",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "ui/ux",
+          "thiết kế"
+        ],
+        "view_count": 22
+      },
+      {
+        "id": "E12",
+        "format": "pptx",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "cơ sở dữ liệu",
+          "sao lưu"
+        ],
+        "view_count": 12
+      },
+      {
+        "id": "E13",
+        "format": "bundle",
+        "split": "evaluation",
+        "owner": "sv_an",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [
+          "E03",
+          "E05"
+        ],
+        "tags": [
+          "học máy",
+          "bundle"
+        ],
+        "view_count": 8
+      },
+      {
+        "id": "E14",
+        "format": "bundle",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": null,
+        "bundle_children": [
+          "E04",
+          "E06"
+        ],
+        "tags": [
+          "hạ tầng",
+          "bundle"
+        ],
+        "view_count": 4
+      },
+      {
+        "id": "E15",
+        "format": "pptx",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": null,
+        "duplicate_of": null,
+        "bundle_children": [],
+        "tags": [
+          "lịch sử",
+          "việt nam"
+        ],
+        "view_count": 2
+      },
+      {
+        "id": "C14",
+        "format": "pdf_text",
+        "split": "calibration",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": "C01",
+        "bundle_children": [],
+        "tags": [
+          "cơ sở dữ liệu",
+          "giáo trình"
+        ],
+        "view_count": 2
+      },
+      {
+        "id": "C15",
+        "format": "pdf_text",
+        "split": "calibration",
+        "owner": "sv_an",
+        "workspace": "G2",
+        "duplicate_of": "C02",
+        "bundle_children": [],
+        "tags": [
+          "mạng máy tính",
+          "bài giảng"
+        ],
+        "view_count": 1
+      },
+      {
+        "id": "E08",
+        "format": "docx",
+        "split": "evaluation",
+        "owner": "sv_binh",
+        "workspace": "G1",
+        "duplicate_of": "E07",
+        "bundle_children": [],
+        "tags": [
+          "kiểm thử",
+          "chất lượng"
+        ],
+        "view_count": 2
+      }
+    ]
+  },
+  "database": {
+    "documents": 30,
+    "tags": 47,
+    "search_vectors": 30,
+    "gin_indexes": 1
+  },
+  "baseline": {
+    "summary": {
+      "calibration": {
+        "answerable": {
+          "n": 24,
+          "hit@1": 0.9167,
+          "hit@3": 0.9167,
+          "hit@5": 0.9167,
+          "mrr": 0.9167,
+          "citation_hit": 0.9167
+        },
+        "forbidden": {
+          "n": 3,
+          "queries_with_leak": 0,
+          "leak_rate": 0.0,
+          "unscoped_retrieval_rate": 1.0
+        },
+        "no_evidence": {
+          "n": 3,
+          "false_positive_rate": 0.0
+        },
+        "scope": {
+          "queries": 30,
+          "queries_with_denied_results": 0,
+          "denied_result_count": 0
+        },
+        "latency_ms": {
+          "median": 2.02,
+          "p95": 3.3,
+          "max": 12.64
+        }
+      },
+      "evaluation": {
+        "answerable": {
+          "n": 24,
+          "hit@1": 0.875,
+          "hit@3": 0.875,
+          "hit@5": 0.875,
+          "mrr": 0.875,
+          "citation_hit": 0.875
+        },
+        "forbidden": {
+          "n": 3,
+          "queries_with_leak": 0,
+          "leak_rate": 0.0,
+          "unscoped_retrieval_rate": 1.0
+        },
+        "no_evidence": {
+          "n": 3,
+          "false_positive_rate": 0.0
+        },
+        "scope": {
+          "queries": 30,
+          "queries_with_denied_results": 0,
+          "denied_result_count": 0
+        },
+        "latency_ms": {
+          "median": 1.82,
+          "p95": 2.41,
+          "max": 2.74
+        }
+      },
+      "overall": {
+        "answerable": {
+          "n": 48,
+          "hit@1": 0.8958,
+          "hit@3": 0.8958,
+          "hit@5": 0.8958,
+          "mrr": 0.8958,
+          "citation_hit": 0.8958
+        },
+        "forbidden": {
+          "n": 6,
+          "queries_with_leak": 0,
+          "leak_rate": 0.0,
+          "unscoped_retrieval_rate": 1.0
+        },
+        "no_evidence": {
+          "n": 6,
+          "false_positive_rate": 0.0
+        },
+        "scope": {
+          "queries": 60,
+          "queries_with_denied_results": 0,
+          "denied_result_count": 0
+        },
+        "latency_ms": {
+          "median": 1.88,
+          "p95": 2.94,
+          "max": 12.64
+        }
+      }
+    },
+    "queries": [
+      {
+        "id": "CQ01",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "khóa chính xác định duy nhất",
+        "top_ids": [
+          "C01",
+          "C14"
+        ],
+        "top_titles": [
+          "Giáo trình Cơ sở dữ liệu - Chương 1",
+          "Giáo trình Cơ sở dữ liệu - bản nhóm"
+        ],
+        "top_snippets": [
+          "...liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính...",
+          "...liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính..."
+        ],
+        "gold": [
+          "C01",
+          "C14"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 12.64
+      },
+      {
+        "id": "CQ02",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "acid nguyen tu nhat quan co lap ben vung",
+        "top_ids": [
+          "C01",
+          "C14"
+        ],
+        "top_titles": [
+          "Giáo trình Cơ sở dữ liệu - Chương 1",
+          "Giáo trình Cơ sở dữ liệu - bản nhóm"
+        ],
+        "top_snippets": [
+          "...nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững . Chỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa.",
+          "...nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững . Chỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa."
+        ],
+        "gold": [
+          "C01",
+          "C14"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 3.3
+      },
+      {
+        "id": "CQ03",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "mô hình OSI bảy lớp",
+        "top_ids": [
+          "C02",
+          "C15"
+        ],
+        "top_titles": [
+          "Bài giảng Mạng máy tính",
+          "Bài giảng Mạng máy tính - bản đồ án"
+        ],
+        "top_snippets": [
+          "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu...",
+          "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu..."
+        ],
+        "gold": [
+          "C02",
+          "C15"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.42
+      },
+      {
+        "id": "CQ04",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "tcp truyen du lieu tin cay co thu tu",
+        "top_ids": [
+          "C02",
+          "C15"
+        ],
+        "top_titles": [
+          "Bài giảng Mạng máy tính",
+          "Bài giảng Mạng máy tính - bản đồ án"
+        ],
+        "top_snippets": [
+          "...dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng.",
+          "...dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng."
+        ],
+        "gold": [
+          "C02",
+          "C15"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.94
+      },
+      {
+        "id": "CQ05",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "học có giám sát dữ liệu gán nhãn",
+        "top_ids": [
+          "C03"
+        ],
+        "top_titles": [
+          "Đề cương Học máy"
+        ],
+        "top_snippets": [
+          "Bài 1. Học có giám sát Học có giám sát sử dụng dữ liệu đã gán nhãn để huấn luyện mô hình. Học không giám sát tìm cấu trúc ẩn trong dữ liệu chưa gán nhãn. Quá khớp xảy ra khi mô..."
+        ],
+        "gold": [
+          "C03"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 3.08
+      },
+      {
+        "id": "CQ06",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "qua khop hoc thuoc du lieu huan luyen",
+        "top_ids": [
+          "C03"
+        ],
+        "top_titles": [
+          "Đề cương Học máy"
+        ],
+        "top_snippets": [
+          "...trúc ẩn trong dữ liệu chưa gán nhãn. Quá khớp xảy ra khi mô hình học thuộc dữ liệu huấn luyện nhưng kém trên dữ liệu mới. Kỹ thuật kiểm chứng chéo giúp đánh giá khả năng tổng quát..."
+        ],
+        "gold": [
+          "C03"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.28
+      },
+      {
+        "id": "CQ07",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "tam giác CIA bảo mật toàn vẹn sẵn sàng",
+        "top_ids": [
+          "C04"
+        ],
+        "top_titles": [
+          "Tài liệu An toàn thông tin"
+        ],
+        "top_snippets": [
+          "Chương 1. Tam giác CIA Tinh bảo mật, tính toàn ven và tính sẵn sàng tạo thành tam giác CIA. Mã hóa đối xứng dùng cùng một khóa cho mã hóa và giải mã. Mã hóa bất đối xứng dùng cặp..."
+        ],
+        "gold": [
+          "C04"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.29
+      },
+      {
+        "id": "CQ08",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "chu ky so xac thuc nguon goc toan ven",
+        "top_ids": [
+          "C04"
+        ],
+        "top_titles": [
+          "Tài liệu An toàn thông tin"
+        ],
+        "top_snippets": [
+          "Chương 1. Tam giác CIA Tinh bảo mật, tính toàn ven và tính sẵn sàng tạo thành tam giác CIA. Mã hóa đối xứng dùng cùng một khóa cho mã hóa và giải mã. Mã hóa bất đối xứng dùng cặp..."
+        ],
+        "gold": [
+          "C04"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.06
+      },
+      {
+        "id": "CQ09",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "dataframe cấu trúc bảng hai chiều",
+        "top_ids": [
+          "C05"
+        ],
+        "top_titles": [
+          "Báo cáo Phân tích dữ liệu"
+        ],
+        "top_snippets": [
+          "Chương 1. Xử lý dữ liệu với pandas DataFrame là cấu trúc dữ liệu dạng bảng hai chiều trong pandas. Hàm groupby dùng để nhóm dữ liệu theo một hoặc nhiều cột. Hàm merge dùng để nối..."
+        ],
+        "gold": [
+          "C05"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.99
+      },
+      {
+        "id": "CQ10",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "bieu do duong xu huong thoi gian",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [
+          "C05"
+        ],
+        "forbidden": [],
+        "hit@1": false,
+        "hit@3": false,
+        "hit@5": false,
+        "mrr": 0.0,
+        "citation_hit": false,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.93
+      },
+      {
+        "id": "CQ11",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "docker image khuon mau chi doc",
+        "top_ids": [
+          "C06"
+        ],
+        "top_titles": [
+          "Hướng dẫn Docker"
+        ],
+        "top_snippets": [
+          "Chương 1. Docker cơ bản Docker image là khuôn mẫu chỉ đọc để tạo container. Container là môi trường chạy độc lập được tạo từ image. Dockerfile chứa các chỉ dẫn để xây dựng image."
+        ],
+        "gold": [
+          "C06"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.15
+      },
+      {
+        "id": "CQ12",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "volume lưu dữ liệu bền vững",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [
+          "C06"
+        ],
+        "forbidden": [],
+        "hit@1": false,
+        "hit@3": false,
+        "hit@5": false,
+        "mrr": 0.0,
+        "citation_hit": false,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.93
+      },
+      {
+        "id": "CQ13",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "sprint khoang thoi gian hai den bon tuan",
+        "top_ids": [
+          "C07"
+        ],
+        "top_titles": [
+          "Quy trình Scrum"
+        ],
+        "top_snippets": [
+          "...Scrum Master và Development Team. Sprint là khoảng thời gian cố định, thường từ hai đến bốn tuần. Product Backlog là danh sách ưu tiên các hạng mục cần thực hiện. Sprint Review..."
+        ],
+        "gold": [
+          "C07"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.04
+      },
+      {
+        "id": "CQ14",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "product backlog danh sách ưu tiên",
+        "top_ids": [
+          "C07"
+        ],
+        "top_titles": [
+          "Quy trình Scrum"
+        ],
+        "top_snippets": [
+          "...và sự kiện Scrum có ba vai trò chính: Product Owner, Scrum Master và Development Team. Sprint là khoảng thời gian cố định, thường từ hai đến bốn tuần. Product Backlog là danh sách..."
+        ],
+        "gold": [
+          "C07"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.87
+      },
+      {
+        "id": "CQ15",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "post tao moi tai nguyen",
+        "top_ids": [
+          "C08"
+        ],
+        "top_titles": [
+          "Thiết kế REST API"
+        ],
+        "top_snippets": [
+          "...nguyên. GET dùng để đọc tài nguyên, POST dùng để tạo mới. PUT cập nhật toàn bộ tài nguyên, PATCH cập nhật một phần. Mã trạng thái 404 biểu thị tài nguyên không tồn tại."
+        ],
+        "gold": [
+          "C08"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.82
+      },
+      {
+        "id": "CQ16",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "mã trạng thái 404 tài nguyên không tồn tại",
+        "top_ids": [
+          "C08"
+        ],
+        "top_titles": [
+          "Thiết kế REST API"
+        ],
+        "top_snippets": [
+          "Thiết kế REST API Phương thức HTTP và mã trạng thái trong thiết kế REST API. mục Phần 1 Phần 1. Thiết kế tài nguyên REST API sử dụng các phương thức HTTP để thao tác tài nguyên...."
+        ],
+        "gold": [
+          "C08"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.83
+      },
+      {
+        "id": "CQ17",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "học máy nhánh trí tuệ nhân tạo",
+        "top_ids": [
+          "C11"
+        ],
+        "top_titles": [
+          "Tổng quan Trí tuệ nhân tạo"
+        ],
+        "top_snippets": [
+          "...năng thực hiện nhiệm vụ thông minh. Học máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật. Học sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu."
+        ],
+        "gold": [
+          "C11"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.37
+      },
+      {
+        "id": "CQ18",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "hoc sau mang no ron nhieu lop",
+        "top_ids": [
+          "C11"
+        ],
+        "top_titles": [
+          "Tổng quan Trí tuệ nhân tạo"
+        ],
+        "top_snippets": [
+          "...năng thực hiện nhiệm vụ thông minh. Học máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật. Học sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu."
+        ],
+        "gold": [
+          "C11"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.06
+      },
+      {
+        "id": "CQ19",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "user story yêu cầu góc nhìn người dùng",
+        "top_ids": [
+          "C12"
+        ],
+        "top_titles": [
+          "Quản lý dự án Agile"
+        ],
+        "top_snippets": [
+          "...thay vì tuân thủ kế hoạch cứng nhắc. User story mô tả yêu cầu từ góc nhìn người dùng. Velocity đo lượng công việc hoàn thành trong một sprint. Daily stand-up là cuộc họp ngắn hằng..."
+        ],
+        "gold": [
+          "C12"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.89
+      },
+      {
+        "id": "CQ20",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "velocity cong viec hoan thanh trong sprint",
+        "top_ids": [
+          "C12"
+        ],
+        "top_titles": [
+          "Quản lý dự án Agile"
+        ],
+        "top_snippets": [
+          "...mô tả yêu cầu từ góc nhìn người dùng. Velocity đo lượng công việc hoàn thành trong một sprint. Daily stand-up là cuộc họp ngắn hằng ngày để đồng bộ tiến độ."
+        ],
+        "gold": [
+          "C12"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.79
+      },
+      {
+        "id": "CQ21",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "chỉ mục B-tree tăng tốc truy vấn",
+        "top_ids": [
+          "C01",
+          "C14"
+        ],
+        "top_titles": [
+          "Giáo trình Cơ sở dữ liệu - Chương 1",
+          "Giáo trình Cơ sở dữ liệu - bản nhóm"
+        ],
+        "top_snippets": [
+          "...trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô...",
+          "...trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô..."
+        ],
+        "gold": [
+          "C01",
+          "C14"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.8
+      },
+      {
+        "id": "CQ22",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "he quan tri co so du lieu quan he bang hang cot",
+        "top_ids": [
+          "C01",
+          "C14"
+        ],
+        "top_titles": [
+          "Giáo trình Cơ sở dữ liệu - Chương 1",
+          "Giáo trình Cơ sở dữ liệu - bản nhóm"
+        ],
+        "top_snippets": [
+          "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu Hệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định...",
+          "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu Hệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định..."
+        ],
+        "gold": [
+          "C01",
+          "C14"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.16
+      },
+      {
+        "id": "CQ23",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "lớp giao vận chia nhỏ dữ liệu",
+        "top_ids": [
+          "C02",
+          "C15"
+        ],
+        "top_titles": [
+          "Bài giảng Mạng máy tính",
+          "Bài giảng Mạng máy tính - bản đồ án"
+        ],
+        "top_snippets": [
+          "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu...",
+          "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu..."
+        ],
+        "gold": [
+          "C02",
+          "C15"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.04
+      },
+      {
+        "id": "CQ24",
+        "split": "calibration",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "dia chi ip dinh danh thiet bi trong mang",
+        "top_ids": [
+          "C02",
+          "C15"
+        ],
+        "top_titles": [
+          "Bài giảng Mạng máy tính",
+          "Bài giảng Mạng máy tính - bản đồ án"
+        ],
+        "top_snippets": [
+          "...tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng.",
+          "...tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng."
+        ],
+        "gold": [
+          "C02",
+          "C15"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.95
+      },
+      {
+        "id": "CQ25",
+        "split": "calibration",
+        "type": "forbidden",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "api gateway diem vao duy nhat dinh tuyen",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [
+          "C09"
+        ],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": false,
+        "unscoped_forbidden_ids": [
+          "C09"
+        ],
+        "unscoped_retrieved": true,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.83
+      },
+      {
+        "id": "CQ26",
+        "split": "calibration",
+        "type": "forbidden",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "do co gian cua cau theo gia",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [
+          "C10"
+        ],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": false,
+        "unscoped_forbidden_ids": [
+          "C10"
+        ],
+        "unscoped_retrieved": true,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.08
+      },
+      {
+        "id": "CQ27",
+        "split": "calibration",
+        "type": "forbidden",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "chien thang Bach Dang 1288 Tran Hung Dao",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [
+          "C13"
+        ],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": false,
+        "unscoped_forbidden_ids": [
+          "C13"
+        ],
+        "unscoped_retrieved": true,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.25
+      },
+      {
+        "id": "CQ28",
+        "split": "calibration",
+        "type": "no_evidence",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "quy trình nấu phở bò gia truyền",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": false,
+        "latency_ms": 1.11
+      },
+      {
+        "id": "CQ29",
+        "split": "calibration",
+        "type": "no_evidence",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "thời gian bảo hành máy chủ Dell PowerEdge R750",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": false,
+        "latency_ms": 0.87
+      },
+      {
+        "id": "CQ30",
+        "split": "calibration",
+        "type": "no_evidence",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "giá vé tàu Hà Nội Đà Nẵng tháng 12",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": false,
+        "latency_ms": 0.84
+      },
+      {
+        "id": "EQ01",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "giao dịch cùng thành công hoặc cùng thất bại",
+        "top_ids": [
+          "E01"
+        ],
+        "top_titles": [
+          "Cơ sở dữ liệu nâng cao"
+        ],
+        "top_snippets": [
+          "Chương 1. Giao dịch và chỉ mục Giao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại. Chỉ mục B-tree hỗ trợ tìm kiếm theo khoảng giá trị. Chỉ mục hash phù hợp cho..."
+        ],
+        "gold": [
+          "E01"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.18
+      },
+      {
+        "id": "EQ02",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "chi muc hash tim kiem bang dung",
+        "top_ids": [
+          "E01"
+        ],
+        "top_titles": [
+          "Cơ sở dữ liệu nâng cao"
+        ],
+        "top_snippets": [
+          "Chương 1. Giao dịch và chỉ mục Giao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại. Chỉ mục B-tree hỗ trợ tìm kiếm theo khoảng giá trị. Chỉ mục hash phù hợp cho..."
+        ],
+        "gold": [
+          "E01"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.85
+      },
+      {
+        "id": "EQ03",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "băng tần 5 GHz tốc độ cao phạm vi ngắn",
+        "top_ids": [
+          "E02"
+        ],
+        "top_titles": [
+          "Mạng không dây"
+        ],
+        "top_snippets": [
+          "...hoạt động theo chuẩn IEEE 802.11. Băng tần 2.4 GHz có phạm vi tốt hơn nhưng dễ nhiễu. Băng tần 5 GHz có tốc độ cao hơn nhưng phạm vi ngắn hơn. WPA3 là giao thức bảo mật Wi-Fi hiện..."
+        ],
+        "gold": [
+          "E02"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.89
+      },
+      {
+        "id": "EQ04",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "wpa3 giao thuc bao mat wifi hien dai",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [
+          "E02"
+        ],
+        "forbidden": [],
+        "hit@1": false,
+        "hit@3": false,
+        "hit@5": false,
+        "mrr": 0.0,
+        "citation_hit": false,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.8
+      },
+      {
+        "id": "EQ05",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "mang no ron tich chap du lieu anh",
+        "top_ids": [
+          "E03"
+        ],
+        "top_titles": [
+          "Học sâu"
+        ],
+        "top_snippets": [
+          "Mạng nơ-ron tích chập thường dùng cho dữ liệu ảnh. Hàm kích hoạt ReLU giúp giảm hiện tượng triệt tiêu đạo hàm. Dropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện. Batch..."
+        ],
+        "gold": [
+          "E03"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.78
+      },
+      {
+        "id": "EQ06",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "dropout tat ngau nhien no ron",
+        "top_ids": [
+          "E03"
+        ],
+        "top_titles": [
+          "Học sâu"
+        ],
+        "top_snippets": [
+          "...giảm hiện tượng triệt tiêu đạo hàm. Dropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện. Batch normalization ổn định quá trình huấn luyện."
+        ],
+        "gold": [
+          "E03"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.79
+      },
+      {
+        "id": "EQ07",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "AES thuật toán mã hóa đối xứng",
+        "top_ids": [
+          "E04"
+        ],
+        "top_titles": [
+          "Mật mã ứng dụng"
+        ],
+        "top_snippets": [
+          "AES là thuật toán mã hóa đối xứng phổ biến. RSA dựa trên độ khó phân tích thừa số nguyên tố. Hàm băm SHA-256 tạo giá trị băm 256 bit. Chữ ký số dùng khóa riêng để ký và khóa công..."
+        ],
+        "gold": [
+          "E04"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.91
+      },
+      {
+        "id": "EQ08",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "RSA phan tich thua so nguyen to",
+        "top_ids": [
+          "E04"
+        ],
+        "top_titles": [
+          "Mật mã ứng dụng"
+        ],
+        "top_snippets": [
+          "...thuật toán mã hóa đối xứng phổ biến. RSA dựa trên độ khó phân tích thừa số nguyên tố. Hàm băm SHA-256 tạo giá trị băm 256 bit. Chữ ký số dùng khóa riêng để ký và khóa công khai để..."
+        ],
+        "gold": [
+          "E04"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.8
+      },
+      {
+        "id": "EQ09",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "histogram phan phoi cua mot bien so",
+        "top_ids": [
+          "E05"
+        ],
+        "top_titles": [
+          "Trực quan hóa dữ liệu"
+        ],
+        "top_snippets": [
+          "...hộp hiển thị trung vị và tứ phân vị. Histogram thể hiện phân phối của một biến số."
+        ],
+        "gold": [
+          "E05"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.78
+      },
+      {
+        "id": "EQ10",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "màu sắc dashboard độ tương phản người mù màu",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [
+          "E05"
+        ],
+        "forbidden": [],
+        "hit@1": false,
+        "hit@3": false,
+        "hit@5": false,
+        "mrr": 0.0,
+        "citation_hit": false,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.82
+      },
+      {
+        "id": "EQ11",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "pod don vi trien khai nho nhat",
+        "top_ids": [
+          "E06"
+        ],
+        "top_titles": [
+          "Kubernetes"
+        ],
+        "top_snippets": [
+          "Chương 1. Đơn vị triển khai Pod là đơn vị triển khai nhỏ nhất trong Kubernetes. Deployment quản lý việc tạo và cập nhật Pod. Service cung cấp địa chỉ ổn định cho một nhóm Pod."
+        ],
+        "gold": [
+          "E06"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.77
+      },
+      {
+        "id": "EQ12",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "secret lưu thông tin nhạy cảm mật khẩu",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [
+          "E06"
+        ],
+        "forbidden": [],
+        "hit@1": false,
+        "hit@3": false,
+        "hit@5": false,
+        "mrr": 0.0,
+        "citation_hit": false,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.8
+      },
+      {
+        "id": "EQ13",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "kiểm thử hồi quy không làm hỏng chức năng cũ",
+        "top_ids": [
+          "E07",
+          "E08"
+        ],
+        "top_titles": [
+          "Kiểm thử phần mềm",
+          "Kiểm thử phần mềm - bản nhóm"
+        ],
+        "top_snippets": [
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+        ],
+        "gold": [
+          "E07",
+          "E08"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.06
+      },
+      {
+        "id": "EQ14",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "do bao phu dong ty le dong ma",
+        "top_ids": [
+          "E07",
+          "E08"
+        ],
+        "top_titles": [
+          "Kiểm thử phần mềm",
+          "Kiểm thử phần mềm - bản nhóm"
+        ],
+        "top_snippets": [
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+        ],
+        "gold": [
+          "E07",
+          "E08"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.1
+      },
+      {
+        "id": "EQ15",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "kiem thu don vi tung ham hoac lop",
+        "top_ids": [
+          "E07",
+          "E08"
+        ],
+        "top_titles": [
+          "Kiểm thử phần mềm",
+          "Kiểm thử phần mềm - bản nhóm"
+        ],
+        "top_snippets": [
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+        ],
+        "gold": [
+          "E07",
+          "E08"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.06
+      },
+      {
+        "id": "EQ16",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "kiểm thử tích hợp phối hợp thành phần",
+        "top_ids": [
+          "E07",
+          "E08"
+        ],
+        "top_titles": [
+          "Kiểm thử phần mềm",
+          "Kiểm thử phần mềm - bản nhóm"
+        ],
+        "top_snippets": [
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+          "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+        ],
+        "gold": [
+          "E07",
+          "E08"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.41
+      },
+      {
+        "id": "EQ17",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "phan hoi tuc thoi he thong da nhan thao tac",
+        "top_ids": [
+          "E11"
+        ],
+        "top_titles": [
+          "Thiết kế UI/UX"
+        ],
+        "top_snippets": [
+          "...dùng dự đoán hành vi của giao diện. Phản hồi tức thời cho người dùng biết hệ thống đã nhận thao tác. Khả năng tiếp cận đảm bảo sản phẩm dùng được với nhiều nhóm người. Kiểm thử..."
+        ],
+        "gold": [
+          "E11"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.85
+      },
+      {
+        "id": "EQ18",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "kiểm thử khả dụng quan sát người dùng",
+        "top_ids": [
+          "E11"
+        ],
+        "top_titles": [
+          "Thiết kế UI/UX"
+        ],
+        "top_snippets": [
+          "...phẩm dùng được với nhiều nhóm người. Kiểm thử khả dụng quan sát người dùng thực hiện tác vụ."
+        ],
+        "gold": [
+          "E11"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.74
+      },
+      {
+        "id": "EQ19",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "sao luu gia tang cac thay doi",
+        "top_ids": [
+          "E12"
+        ],
+        "top_titles": [
+          "Quản trị cơ sở dữ liệu"
+        ],
+        "top_snippets": [
+          "Quản trị cơ sở dữ liệu Slide 1. Sao lưu và phục hồi Sao lưu toàn phần tạo bản sao đầy đủ của cơ sở dữ liệu. Sao lưu gia tăng chỉ lưu các thay đổi kể từ lần sao lưu gần nhất. Điểm..."
+        ],
+        "gold": [
+          "E12"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.96
+      },
+      {
+        "id": "EQ20",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "RTO thoi gian toi da khoi phuc",
+        "top_ids": [
+          "E12"
+        ],
+        "top_titles": [
+          "Quản trị cơ sở dữ liệu"
+        ],
+        "top_snippets": [
+          "...thể mất. Thời gian phục hồi mục tiêu RTO quy định thời gian tối đa để khôi phục."
+        ],
+        "gold": [
+          "E12"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.82
+      },
+      {
+        "id": "EQ21",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "bộ tài liệu ôn thi học máy đề cương báo cáo phân tích dữ liệu",
+        "top_ids": [
+          "E13"
+        ],
+        "top_titles": [
+          "Bộ tài liệu ôn thi Học máy"
+        ],
+        "top_snippets": [
+          "...cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ."
+        ],
+        "gold": [
+          "E13"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.94
+      },
+      {
+        "id": "EQ22",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "goi tai lieu phuc vu on thi cuoi ky",
+        "top_ids": [
+          "E13"
+        ],
+        "top_titles": [
+          "Bộ tài liệu ôn thi Học máy"
+        ],
+        "top_snippets": [
+          "Gói gồm đề cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ."
+        ],
+        "gold": [
+          "E13"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.07
+      },
+      {
+        "id": "EQ23",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "bộ tài liệu nhóm hạ tầng kubernetes mật mã ứng dụng",
+        "top_ids": [
+          "E14"
+        ],
+        "top_titles": [
+          "Bộ tài liệu nhóm về hạ tầng"
+        ],
+        "top_snippets": [
+          "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm."
+        ],
+        "gold": [
+          "E14"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 2.22
+      },
+      {
+        "id": "EQ24",
+        "split": "evaluation",
+        "type": "answerable",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "goi tai lieu nhom thuyet trinh",
+        "top_ids": [
+          "E14"
+        ],
+        "top_titles": [
+          "Bộ tài liệu nhóm về hạ tầng"
+        ],
+        "top_snippets": [
+          "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm."
+        ],
+        "gold": [
+          "E14"
+        ],
+        "forbidden": [],
+        "hit@1": true,
+        "hit@3": true,
+        "hit@5": true,
+        "mrr": 1.0,
+        "citation_hit": true,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.82
+      },
+      {
+        "id": "EQ25",
+        "split": "evaluation",
+        "type": "forbidden",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "service discovery tim thay dia chi mang",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [
+          "E09"
+        ],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": false,
+        "unscoped_forbidden_ids": [
+          "E09"
+        ],
+        "unscoped_retrieved": true,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 0.87
+      },
+      {
+        "id": "EQ26",
+        "split": "evaluation",
+        "type": "forbidden",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "lam phat cao giam suc mua dong tien",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [
+          "E10"
+        ],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": false,
+        "unscoped_forbidden_ids": [
+          "E10"
+        ],
+        "unscoped_retrieved": true,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.14
+      },
+      {
+        "id": "EQ27",
+        "split": "evaluation",
+        "type": "forbidden",
+        "user": "sv_an",
+        "query_style": "unaccented",
+        "query": "nha Le so thanh lap nam 1428",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [
+          "E15"
+        ],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": false,
+        "unscoped_forbidden_ids": [
+          "E15"
+        ],
+        "unscoped_retrieved": true,
+        "denied_ids": [],
+        "false_positive": null,
+        "latency_ms": 1.06
+      },
+      {
+        "id": "EQ28",
+        "split": "evaluation",
+        "type": "no_evidence",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "công thức bánh mì chả cá nguyên liệu",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": false,
+        "latency_ms": 1.13
+      },
+      {
+        "id": "EQ29",
+        "split": "evaluation",
+        "type": "no_evidence",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "lịch thi đấu bóng đá Ngoại hạng Anh vòng 12",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": false,
+        "latency_ms": 0.87
+      },
+      {
+        "id": "EQ30",
+        "split": "evaluation",
+        "type": "no_evidence",
+        "user": "sv_an",
+        "query_style": "accented",
+        "query": "cách trồng lan hồ điệp trong chậu",
+        "top_ids": [],
+        "top_titles": [],
+        "top_snippets": [],
+        "gold": [],
+        "forbidden": [],
+        "hit@1": null,
+        "hit@3": null,
+        "hit@5": null,
+        "mrr": null,
+        "citation_hit": null,
+        "leaked_forbidden_ids": [],
+        "leaked_any": null,
+        "unscoped_forbidden_ids": [],
+        "unscoped_retrieved": null,
+        "denied_ids": [],
+        "false_positive": false,
+        "latency_ms": 0.81
+      }
+    ]
+  },
+  "queries": [
+    {
+      "id": "CQ01",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "khóa chính xác định duy nhất",
+      "top_ids": [
+        "C01",
+        "C14"
+      ],
+      "top_titles": [
+        "Giáo trình Cơ sở dữ liệu - Chương 1",
+        "Giáo trình Cơ sở dữ liệu - bản nhóm"
+      ],
+      "top_snippets": [
+        "...liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính...",
+        "...liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính..."
+      ],
+      "gold": [
+        "C01",
+        "C14"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 12.64
+    },
+    {
+      "id": "CQ02",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "acid nguyen tu nhat quan co lap ben vung",
+      "top_ids": [
+        "C01",
+        "C14"
+      ],
+      "top_titles": [
+        "Giáo trình Cơ sở dữ liệu - Chương 1",
+        "Giáo trình Cơ sở dữ liệu - bản nhóm"
+      ],
+      "top_snippets": [
+        "...nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững . Chỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa.",
+        "...nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững . Chỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa."
+      ],
+      "gold": [
+        "C01",
+        "C14"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 3.3
+    },
+    {
+      "id": "CQ03",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "mô hình OSI bảy lớp",
+      "top_ids": [
+        "C02",
+        "C15"
+      ],
+      "top_titles": [
+        "Bài giảng Mạng máy tính",
+        "Bài giảng Mạng máy tính - bản đồ án"
+      ],
+      "top_snippets": [
+        "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu...",
+        "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu..."
+      ],
+      "gold": [
+        "C02",
+        "C15"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.42
+    },
+    {
+      "id": "CQ04",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "tcp truyen du lieu tin cay co thu tu",
+      "top_ids": [
+        "C02",
+        "C15"
+      ],
+      "top_titles": [
+        "Bài giảng Mạng máy tính",
+        "Bài giảng Mạng máy tính - bản đồ án"
+      ],
+      "top_snippets": [
+        "...dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng.",
+        "...dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng."
+      ],
+      "gold": [
+        "C02",
+        "C15"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.94
+    },
+    {
+      "id": "CQ05",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "học có giám sát dữ liệu gán nhãn",
+      "top_ids": [
+        "C03"
+      ],
+      "top_titles": [
+        "Đề cương Học máy"
+      ],
+      "top_snippets": [
+        "Bài 1. Học có giám sát Học có giám sát sử dụng dữ liệu đã gán nhãn để huấn luyện mô hình. Học không giám sát tìm cấu trúc ẩn trong dữ liệu chưa gán nhãn. Quá khớp xảy ra khi mô..."
+      ],
+      "gold": [
+        "C03"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 3.08
+    },
+    {
+      "id": "CQ06",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "qua khop hoc thuoc du lieu huan luyen",
+      "top_ids": [
+        "C03"
+      ],
+      "top_titles": [
+        "Đề cương Học máy"
+      ],
+      "top_snippets": [
+        "...trúc ẩn trong dữ liệu chưa gán nhãn. Quá khớp xảy ra khi mô hình học thuộc dữ liệu huấn luyện nhưng kém trên dữ liệu mới. Kỹ thuật kiểm chứng chéo giúp đánh giá khả năng tổng quát..."
+      ],
+      "gold": [
+        "C03"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.28
+    },
+    {
+      "id": "CQ07",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "tam giác CIA bảo mật toàn vẹn sẵn sàng",
+      "top_ids": [
+        "C04"
+      ],
+      "top_titles": [
+        "Tài liệu An toàn thông tin"
+      ],
+      "top_snippets": [
+        "Chương 1. Tam giác CIA Tinh bảo mật, tính toàn ven và tính sẵn sàng tạo thành tam giác CIA. Mã hóa đối xứng dùng cùng một khóa cho mã hóa và giải mã. Mã hóa bất đối xứng dùng cặp..."
+      ],
+      "gold": [
+        "C04"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.29
+    },
+    {
+      "id": "CQ08",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "chu ky so xac thuc nguon goc toan ven",
+      "top_ids": [
+        "C04"
+      ],
+      "top_titles": [
+        "Tài liệu An toàn thông tin"
+      ],
+      "top_snippets": [
+        "Chương 1. Tam giác CIA Tinh bảo mật, tính toàn ven và tính sẵn sàng tạo thành tam giác CIA. Mã hóa đối xứng dùng cùng một khóa cho mã hóa và giải mã. Mã hóa bất đối xứng dùng cặp..."
+      ],
+      "gold": [
+        "C04"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.06
+    },
+    {
+      "id": "CQ09",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "dataframe cấu trúc bảng hai chiều",
+      "top_ids": [
+        "C05"
+      ],
+      "top_titles": [
+        "Báo cáo Phân tích dữ liệu"
+      ],
+      "top_snippets": [
+        "Chương 1. Xử lý dữ liệu với pandas DataFrame là cấu trúc dữ liệu dạng bảng hai chiều trong pandas. Hàm groupby dùng để nhóm dữ liệu theo một hoặc nhiều cột. Hàm merge dùng để nối..."
+      ],
+      "gold": [
+        "C05"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.99
+    },
+    {
+      "id": "CQ10",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "bieu do duong xu huong thoi gian",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [
+        "C05"
+      ],
+      "forbidden": [],
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false,
+      "mrr": 0.0,
+      "citation_hit": false,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.93
+    },
+    {
+      "id": "CQ11",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "docker image khuon mau chi doc",
+      "top_ids": [
+        "C06"
+      ],
+      "top_titles": [
+        "Hướng dẫn Docker"
+      ],
+      "top_snippets": [
+        "Chương 1. Docker cơ bản Docker image là khuôn mẫu chỉ đọc để tạo container. Container là môi trường chạy độc lập được tạo từ image. Dockerfile chứa các chỉ dẫn để xây dựng image."
+      ],
+      "gold": [
+        "C06"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.15
+    },
+    {
+      "id": "CQ12",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "volume lưu dữ liệu bền vững",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [
+        "C06"
+      ],
+      "forbidden": [],
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false,
+      "mrr": 0.0,
+      "citation_hit": false,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.93
+    },
+    {
+      "id": "CQ13",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "sprint khoang thoi gian hai den bon tuan",
+      "top_ids": [
+        "C07"
+      ],
+      "top_titles": [
+        "Quy trình Scrum"
+      ],
+      "top_snippets": [
+        "...Scrum Master và Development Team. Sprint là khoảng thời gian cố định, thường từ hai đến bốn tuần. Product Backlog là danh sách ưu tiên các hạng mục cần thực hiện. Sprint Review..."
+      ],
+      "gold": [
+        "C07"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.04
+    },
+    {
+      "id": "CQ14",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "product backlog danh sách ưu tiên",
+      "top_ids": [
+        "C07"
+      ],
+      "top_titles": [
+        "Quy trình Scrum"
+      ],
+      "top_snippets": [
+        "...và sự kiện Scrum có ba vai trò chính: Product Owner, Scrum Master và Development Team. Sprint là khoảng thời gian cố định, thường từ hai đến bốn tuần. Product Backlog là danh sách..."
+      ],
+      "gold": [
+        "C07"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.87
+    },
+    {
+      "id": "CQ15",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "post tao moi tai nguyen",
+      "top_ids": [
+        "C08"
+      ],
+      "top_titles": [
+        "Thiết kế REST API"
+      ],
+      "top_snippets": [
+        "...nguyên. GET dùng để đọc tài nguyên, POST dùng để tạo mới. PUT cập nhật toàn bộ tài nguyên, PATCH cập nhật một phần. Mã trạng thái 404 biểu thị tài nguyên không tồn tại."
+      ],
+      "gold": [
+        "C08"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.82
+    },
+    {
+      "id": "CQ16",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "mã trạng thái 404 tài nguyên không tồn tại",
+      "top_ids": [
+        "C08"
+      ],
+      "top_titles": [
+        "Thiết kế REST API"
+      ],
+      "top_snippets": [
+        "Thiết kế REST API Phương thức HTTP và mã trạng thái trong thiết kế REST API. mục Phần 1 Phần 1. Thiết kế tài nguyên REST API sử dụng các phương thức HTTP để thao tác tài nguyên...."
+      ],
+      "gold": [
+        "C08"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.83
+    },
+    {
+      "id": "CQ17",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "học máy nhánh trí tuệ nhân tạo",
+      "top_ids": [
+        "C11"
+      ],
+      "top_titles": [
+        "Tổng quan Trí tuệ nhân tạo"
+      ],
+      "top_snippets": [
+        "...năng thực hiện nhiệm vụ thông minh. Học máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật. Học sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu."
+      ],
+      "gold": [
+        "C11"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.37
+    },
+    {
+      "id": "CQ18",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "hoc sau mang no ron nhieu lop",
+      "top_ids": [
+        "C11"
+      ],
+      "top_titles": [
+        "Tổng quan Trí tuệ nhân tạo"
+      ],
+      "top_snippets": [
+        "...năng thực hiện nhiệm vụ thông minh. Học máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật. Học sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu."
+      ],
+      "gold": [
+        "C11"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.06
+    },
+    {
+      "id": "CQ19",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "user story yêu cầu góc nhìn người dùng",
+      "top_ids": [
+        "C12"
+      ],
+      "top_titles": [
+        "Quản lý dự án Agile"
+      ],
+      "top_snippets": [
+        "...thay vì tuân thủ kế hoạch cứng nhắc. User story mô tả yêu cầu từ góc nhìn người dùng. Velocity đo lượng công việc hoàn thành trong một sprint. Daily stand-up là cuộc họp ngắn hằng..."
+      ],
+      "gold": [
+        "C12"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.89
+    },
+    {
+      "id": "CQ20",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "velocity cong viec hoan thanh trong sprint",
+      "top_ids": [
+        "C12"
+      ],
+      "top_titles": [
+        "Quản lý dự án Agile"
+      ],
+      "top_snippets": [
+        "...mô tả yêu cầu từ góc nhìn người dùng. Velocity đo lượng công việc hoàn thành trong một sprint. Daily stand-up là cuộc họp ngắn hằng ngày để đồng bộ tiến độ."
+      ],
+      "gold": [
+        "C12"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.79
+    },
+    {
+      "id": "CQ21",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "chỉ mục B-tree tăng tốc truy vấn",
+      "top_ids": [
+        "C01",
+        "C14"
+      ],
+      "top_titles": [
+        "Giáo trình Cơ sở dữ liệu - Chương 1",
+        "Giáo trình Cơ sở dữ liệu - bản nhóm"
+      ],
+      "top_snippets": [
+        "...trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô...",
+        "...trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong b ảng. Thuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô..."
+      ],
+      "gold": [
+        "C01",
+        "C14"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.8
+    },
+    {
+      "id": "CQ22",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "he quan tri co so du lieu quan he bang hang cot",
+      "top_ids": [
+        "C01",
+        "C14"
+      ],
+      "top_titles": [
+        "Giáo trình Cơ sở dữ liệu - Chương 1",
+        "Giáo trình Cơ sở dữ liệu - bản nhóm"
+      ],
+      "top_snippets": [
+        "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu Hệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định...",
+        "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu Hệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột. Khóa chính là một cột hoặc tổ hợp cột dùng để xác định..."
+      ],
+      "gold": [
+        "C01",
+        "C14"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.16
+    },
+    {
+      "id": "CQ23",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "lớp giao vận chia nhỏ dữ liệu",
+      "top_ids": [
+        "C02",
+        "C15"
+      ],
+      "top_titles": [
+        "Bài giảng Mạng máy tính",
+        "Bài giảng Mạng máy tính - bản đồ án"
+      ],
+      "top_snippets": [
+        "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu...",
+        "Mục 1. Mô hình OSI Mô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng. Lớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích. Giao thức TCP đảm bảo truyền dữ liệu..."
+      ],
+      "gold": [
+        "C02",
+        "C15"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.04
+    },
+    {
+      "id": "CQ24",
+      "split": "calibration",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "dia chi ip dinh danh thiet bi trong mang",
+      "top_ids": [
+        "C02",
+        "C15"
+      ],
+      "top_titles": [
+        "Bài giảng Mạng máy tính",
+        "Bài giảng Mạng máy tính - bản đồ án"
+      ],
+      "top_snippets": [
+        "...tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng.",
+        "...tin cậy, có thứ tự và kiểm tra lỗi. Địa chỉ IP dùng để định danh thiết bị trong mạng."
+      ],
+      "gold": [
+        "C02",
+        "C15"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.95
+    },
+    {
+      "id": "CQ25",
+      "split": "calibration",
+      "type": "forbidden",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "api gateway diem vao duy nhat dinh tuyen",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [
+        "C09"
+      ],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": false,
+      "unscoped_forbidden_ids": [
+        "C09"
+      ],
+      "unscoped_retrieved": true,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.83
+    },
+    {
+      "id": "CQ26",
+      "split": "calibration",
+      "type": "forbidden",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "do co gian cua cau theo gia",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [
+        "C10"
+      ],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": false,
+      "unscoped_forbidden_ids": [
+        "C10"
+      ],
+      "unscoped_retrieved": true,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.08
+    },
+    {
+      "id": "CQ27",
+      "split": "calibration",
+      "type": "forbidden",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "chien thang Bach Dang 1288 Tran Hung Dao",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [
+        "C13"
+      ],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": false,
+      "unscoped_forbidden_ids": [
+        "C13"
+      ],
+      "unscoped_retrieved": true,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.25
+    },
+    {
+      "id": "CQ28",
+      "split": "calibration",
+      "type": "no_evidence",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "quy trình nấu phở bò gia truyền",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": false,
+      "latency_ms": 1.11
+    },
+    {
+      "id": "CQ29",
+      "split": "calibration",
+      "type": "no_evidence",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "thời gian bảo hành máy chủ Dell PowerEdge R750",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": false,
+      "latency_ms": 0.87
+    },
+    {
+      "id": "CQ30",
+      "split": "calibration",
+      "type": "no_evidence",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "giá vé tàu Hà Nội Đà Nẵng tháng 12",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": false,
+      "latency_ms": 0.84
+    },
+    {
+      "id": "EQ01",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "giao dịch cùng thành công hoặc cùng thất bại",
+      "top_ids": [
+        "E01"
+      ],
+      "top_titles": [
+        "Cơ sở dữ liệu nâng cao"
+      ],
+      "top_snippets": [
+        "Chương 1. Giao dịch và chỉ mục Giao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại. Chỉ mục B-tree hỗ trợ tìm kiếm theo khoảng giá trị. Chỉ mục hash phù hợp cho..."
+      ],
+      "gold": [
+        "E01"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.18
+    },
+    {
+      "id": "EQ02",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "chi muc hash tim kiem bang dung",
+      "top_ids": [
+        "E01"
+      ],
+      "top_titles": [
+        "Cơ sở dữ liệu nâng cao"
+      ],
+      "top_snippets": [
+        "Chương 1. Giao dịch và chỉ mục Giao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại. Chỉ mục B-tree hỗ trợ tìm kiếm theo khoảng giá trị. Chỉ mục hash phù hợp cho..."
+      ],
+      "gold": [
+        "E01"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.85
+    },
+    {
+      "id": "EQ03",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "băng tần 5 GHz tốc độ cao phạm vi ngắn",
+      "top_ids": [
+        "E02"
+      ],
+      "top_titles": [
+        "Mạng không dây"
+      ],
+      "top_snippets": [
+        "...hoạt động theo chuẩn IEEE 802.11. Băng tần 2.4 GHz có phạm vi tốt hơn nhưng dễ nhiễu. Băng tần 5 GHz có tốc độ cao hơn nhưng phạm vi ngắn hơn. WPA3 là giao thức bảo mật Wi-Fi hiện..."
+      ],
+      "gold": [
+        "E02"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.89
+    },
+    {
+      "id": "EQ04",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "wpa3 giao thuc bao mat wifi hien dai",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [
+        "E02"
+      ],
+      "forbidden": [],
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false,
+      "mrr": 0.0,
+      "citation_hit": false,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.8
+    },
+    {
+      "id": "EQ05",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "mang no ron tich chap du lieu anh",
+      "top_ids": [
+        "E03"
+      ],
+      "top_titles": [
+        "Học sâu"
+      ],
+      "top_snippets": [
+        "Mạng nơ-ron tích chập thường dùng cho dữ liệu ảnh. Hàm kích hoạt ReLU giúp giảm hiện tượng triệt tiêu đạo hàm. Dropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện. Batch..."
+      ],
+      "gold": [
+        "E03"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.78
+    },
+    {
+      "id": "EQ06",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "dropout tat ngau nhien no ron",
+      "top_ids": [
+        "E03"
+      ],
+      "top_titles": [
+        "Học sâu"
+      ],
+      "top_snippets": [
+        "...giảm hiện tượng triệt tiêu đạo hàm. Dropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện. Batch normalization ổn định quá trình huấn luyện."
+      ],
+      "gold": [
+        "E03"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.79
+    },
+    {
+      "id": "EQ07",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "AES thuật toán mã hóa đối xứng",
+      "top_ids": [
+        "E04"
+      ],
+      "top_titles": [
+        "Mật mã ứng dụng"
+      ],
+      "top_snippets": [
+        "AES là thuật toán mã hóa đối xứng phổ biến. RSA dựa trên độ khó phân tích thừa số nguyên tố. Hàm băm SHA-256 tạo giá trị băm 256 bit. Chữ ký số dùng khóa riêng để ký và khóa công..."
+      ],
+      "gold": [
+        "E04"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.91
+    },
+    {
+      "id": "EQ08",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "RSA phan tich thua so nguyen to",
+      "top_ids": [
+        "E04"
+      ],
+      "top_titles": [
+        "Mật mã ứng dụng"
+      ],
+      "top_snippets": [
+        "...thuật toán mã hóa đối xứng phổ biến. RSA dựa trên độ khó phân tích thừa số nguyên tố. Hàm băm SHA-256 tạo giá trị băm 256 bit. Chữ ký số dùng khóa riêng để ký và khóa công khai để..."
+      ],
+      "gold": [
+        "E04"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.8
+    },
+    {
+      "id": "EQ09",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "histogram phan phoi cua mot bien so",
+      "top_ids": [
+        "E05"
+      ],
+      "top_titles": [
+        "Trực quan hóa dữ liệu"
+      ],
+      "top_snippets": [
+        "...hộp hiển thị trung vị và tứ phân vị. Histogram thể hiện phân phối của một biến số."
+      ],
+      "gold": [
+        "E05"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.78
+    },
+    {
+      "id": "EQ10",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "màu sắc dashboard độ tương phản người mù màu",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [
+        "E05"
+      ],
+      "forbidden": [],
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false,
+      "mrr": 0.0,
+      "citation_hit": false,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.82
+    },
+    {
+      "id": "EQ11",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "pod don vi trien khai nho nhat",
+      "top_ids": [
+        "E06"
+      ],
+      "top_titles": [
+        "Kubernetes"
+      ],
+      "top_snippets": [
+        "Chương 1. Đơn vị triển khai Pod là đơn vị triển khai nhỏ nhất trong Kubernetes. Deployment quản lý việc tạo và cập nhật Pod. Service cung cấp địa chỉ ổn định cho một nhóm Pod."
+      ],
+      "gold": [
+        "E06"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.77
+    },
+    {
+      "id": "EQ12",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "secret lưu thông tin nhạy cảm mật khẩu",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [
+        "E06"
+      ],
+      "forbidden": [],
+      "hit@1": false,
+      "hit@3": false,
+      "hit@5": false,
+      "mrr": 0.0,
+      "citation_hit": false,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.8
+    },
+    {
+      "id": "EQ13",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "kiểm thử hồi quy không làm hỏng chức năng cũ",
+      "top_ids": [
+        "E07",
+        "E08"
+      ],
+      "top_titles": [
+        "Kiểm thử phần mềm",
+        "Kiểm thử phần mềm - bản nhóm"
+      ],
+      "top_snippets": [
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+      ],
+      "gold": [
+        "E07",
+        "E08"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.06
+    },
+    {
+      "id": "EQ14",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "do bao phu dong ty le dong ma",
+      "top_ids": [
+        "E07",
+        "E08"
+      ],
+      "top_titles": [
+        "Kiểm thử phần mềm",
+        "Kiểm thử phần mềm - bản nhóm"
+      ],
+      "top_snippets": [
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+      ],
+      "gold": [
+        "E07",
+        "E08"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.1
+    },
+    {
+      "id": "EQ15",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "kiem thu don vi tung ham hoac lop",
+      "top_ids": [
+        "E07",
+        "E08"
+      ],
+      "top_titles": [
+        "Kiểm thử phần mềm",
+        "Kiểm thử phần mềm - bản nhóm"
+      ],
+      "top_snippets": [
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+      ],
+      "gold": [
+        "E07",
+        "E08"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.06
+    },
+    {
+      "id": "EQ16",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "kiểm thử tích hợp phối hợp thành phần",
+      "top_ids": [
+        "E07",
+        "E08"
+      ],
+      "top_titles": [
+        "Kiểm thử phần mềm",
+        "Kiểm thử phần mềm - bản nhóm"
+      ],
+      "top_snippets": [
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp...",
+        "Kiểm thử phần mềm Các mức kiểm thử và độ bao phủ. mục Phần 1 Phần 1. Các mức kiểm thử Kiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ. Kiểm thử tích hợp kiểm tra sự phối hợp..."
+      ],
+      "gold": [
+        "E07",
+        "E08"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.41
+    },
+    {
+      "id": "EQ17",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "phan hoi tuc thoi he thong da nhan thao tac",
+      "top_ids": [
+        "E11"
+      ],
+      "top_titles": [
+        "Thiết kế UI/UX"
+      ],
+      "top_snippets": [
+        "...dùng dự đoán hành vi của giao diện. Phản hồi tức thời cho người dùng biết hệ thống đã nhận thao tác. Khả năng tiếp cận đảm bảo sản phẩm dùng được với nhiều nhóm người. Kiểm thử..."
+      ],
+      "gold": [
+        "E11"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.85
+    },
+    {
+      "id": "EQ18",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "kiểm thử khả dụng quan sát người dùng",
+      "top_ids": [
+        "E11"
+      ],
+      "top_titles": [
+        "Thiết kế UI/UX"
+      ],
+      "top_snippets": [
+        "...phẩm dùng được với nhiều nhóm người. Kiểm thử khả dụng quan sát người dùng thực hiện tác vụ."
+      ],
+      "gold": [
+        "E11"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.74
+    },
+    {
+      "id": "EQ19",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "sao luu gia tang cac thay doi",
+      "top_ids": [
+        "E12"
+      ],
+      "top_titles": [
+        "Quản trị cơ sở dữ liệu"
+      ],
+      "top_snippets": [
+        "Quản trị cơ sở dữ liệu Slide 1. Sao lưu và phục hồi Sao lưu toàn phần tạo bản sao đầy đủ của cơ sở dữ liệu. Sao lưu gia tăng chỉ lưu các thay đổi kể từ lần sao lưu gần nhất. Điểm..."
+      ],
+      "gold": [
+        "E12"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.96
+    },
+    {
+      "id": "EQ20",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "RTO thoi gian toi da khoi phuc",
+      "top_ids": [
+        "E12"
+      ],
+      "top_titles": [
+        "Quản trị cơ sở dữ liệu"
+      ],
+      "top_snippets": [
+        "...thể mất. Thời gian phục hồi mục tiêu RTO quy định thời gian tối đa để khôi phục."
+      ],
+      "gold": [
+        "E12"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.82
+    },
+    {
+      "id": "EQ21",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "bộ tài liệu ôn thi học máy đề cương báo cáo phân tích dữ liệu",
+      "top_ids": [
+        "E13"
+      ],
+      "top_titles": [
+        "Bộ tài liệu ôn thi Học máy"
+      ],
+      "top_snippets": [
+        "...cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ."
+      ],
+      "gold": [
+        "E13"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.94
+    },
+    {
+      "id": "EQ22",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "goi tai lieu phuc vu on thi cuoi ky",
+      "top_ids": [
+        "E13"
+      ],
+      "top_titles": [
+        "Bộ tài liệu ôn thi Học máy"
+      ],
+      "top_snippets": [
+        "Gói gồm đề cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ."
+      ],
+      "gold": [
+        "E13"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.07
+    },
+    {
+      "id": "EQ23",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "bộ tài liệu nhóm hạ tầng kubernetes mật mã ứng dụng",
+      "top_ids": [
+        "E14"
+      ],
+      "top_titles": [
+        "Bộ tài liệu nhóm về hạ tầng"
+      ],
+      "top_snippets": [
+        "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm."
+      ],
+      "gold": [
+        "E14"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 2.22
+    },
+    {
+      "id": "EQ24",
+      "split": "evaluation",
+      "type": "answerable",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "goi tai lieu nhom thuyet trinh",
+      "top_ids": [
+        "E14"
+      ],
+      "top_titles": [
+        "Bộ tài liệu nhóm về hạ tầng"
+      ],
+      "top_snippets": [
+        "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm."
+      ],
+      "gold": [
+        "E14"
+      ],
+      "forbidden": [],
+      "hit@1": true,
+      "hit@3": true,
+      "hit@5": true,
+      "mrr": 1.0,
+      "citation_hit": true,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.82
+    },
+    {
+      "id": "EQ25",
+      "split": "evaluation",
+      "type": "forbidden",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "service discovery tim thay dia chi mang",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [
+        "E09"
+      ],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": false,
+      "unscoped_forbidden_ids": [
+        "E09"
+      ],
+      "unscoped_retrieved": true,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 0.87
+    },
+    {
+      "id": "EQ26",
+      "split": "evaluation",
+      "type": "forbidden",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "lam phat cao giam suc mua dong tien",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [
+        "E10"
+      ],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": false,
+      "unscoped_forbidden_ids": [
+        "E10"
+      ],
+      "unscoped_retrieved": true,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.14
+    },
+    {
+      "id": "EQ27",
+      "split": "evaluation",
+      "type": "forbidden",
+      "user": "sv_an",
+      "query_style": "unaccented",
+      "query": "nha Le so thanh lap nam 1428",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [
+        "E15"
+      ],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": false,
+      "unscoped_forbidden_ids": [
+        "E15"
+      ],
+      "unscoped_retrieved": true,
+      "denied_ids": [],
+      "false_positive": null,
+      "latency_ms": 1.06
+    },
+    {
+      "id": "EQ28",
+      "split": "evaluation",
+      "type": "no_evidence",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "công thức bánh mì chả cá nguyên liệu",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": false,
+      "latency_ms": 1.13
+    },
+    {
+      "id": "EQ29",
+      "split": "evaluation",
+      "type": "no_evidence",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "lịch thi đấu bóng đá Ngoại hạng Anh vòng 12",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": false,
+      "latency_ms": 0.87
+    },
+    {
+      "id": "EQ30",
+      "split": "evaluation",
+      "type": "no_evidence",
+      "user": "sv_an",
+      "query_style": "accented",
+      "query": "cách trồng lan hồ điệp trong chậu",
+      "top_ids": [],
+      "top_titles": [],
+      "top_snippets": [],
+      "gold": [],
+      "forbidden": [],
+      "hit@1": null,
+      "hit@3": null,
+      "hit@5": null,
+      "mrr": null,
+      "citation_hit": null,
+      "leaked_forbidden_ids": [],
+      "leaked_any": null,
+      "unscoped_forbidden_ids": [],
+      "unscoped_retrieved": null,
+      "denied_ids": [],
+      "false_positive": false,
+      "latency_ms": 0.81
+    }
+  ]
+}

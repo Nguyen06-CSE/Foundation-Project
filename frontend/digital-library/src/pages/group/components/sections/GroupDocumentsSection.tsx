@@ -191,7 +191,7 @@ export function GroupDocumentsSection({
     is_bundle: Boolean(doc.is_bundle),
     bundle_parent_id: doc.bundle_parent_id ?? null,
     bundle_children_count: doc.bundle_children_count ?? null,
-    content: doc.content ?? null,
+    preview_text: doc.preview_text ?? null,
     pages: doc.pages ?? null,
   }));
 
@@ -276,7 +276,7 @@ export function GroupDocumentsSection({
         is_bundle: false,
         bundle_parent_id: Number(bundleId),
         bundle_children_count: null,
-        content: c.content ?? null,
+        preview_text: c.preview_text ?? null,
         pages: c.pages ?? null,
       })
     );

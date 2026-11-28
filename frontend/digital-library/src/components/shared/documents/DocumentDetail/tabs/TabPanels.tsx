@@ -1,5 +1,6 @@
 // src/components/shared/documents/DocumentDetail/tabs/TabPanels.tsx
 
+import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Activity } from "lucide-react";
 import EmptyState from "@/components/shared/feedback/EmptyState";
@@ -45,13 +46,19 @@ const ACTION_COLORS: Record<string, string> = {
 /**
  * TabDescription - Hiển thị mô tả chi tiết của tài liệu
  */
-export function TabDescription({ description }: { description: string }) {
+interface TabDescriptionProps {
+  description: string;
+  children?: ReactNode;
+}
+
+export function TabDescription({ description, children }: TabDescriptionProps) {
   return (
     <div>
       <h3 className="text-sm font-semibold text-gray-900 mb-3">
         Mô tả chi tiết
       </h3>
       <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+      {children}
     </div>
   );
 }

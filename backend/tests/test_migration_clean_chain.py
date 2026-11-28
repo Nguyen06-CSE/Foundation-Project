@@ -13,7 +13,7 @@ from alembic.script import ScriptDirectory
 BRIDGE = "c9d0e1f2a3b4"
 BASE = "dae4972dff87"
 F844 = "f844331e6c1e"
-HEAD = "b3c4d5e6f7a8"
+HEAD = "f2c3d4e5a6b7"
 
 
 def _script() -> ScriptDirectory:
@@ -74,7 +74,17 @@ def test_clean_chain_upgrade_from_empty_database():
             "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
         )
         tables = {row[0] for row in cur.fetchall()}
-        assert {"folders", "subjects", "document_ratings", "community_submissions", "folder_tags"} <= tables
+        assert {
+            "folders", "subjects", "document_ratings", "community_submissions", "folder_tags",
+            "document_index_runs", "document_chunks",
+        } <= tables
+        cur.execute("SELECT extversion FROM pg_extension WHERE extname = 'vector'")
+        assert cur.fetchone() is not None
+        cur.execute(
+            "SELECT udt_name FROM information_schema.columns "
+            "WHERE table_name = 'document_chunks' AND column_name = 'embedding'"
+        )
+        assert cur.fetchone()[0] == "vector"
         cur.execute("SELECT matviewname FROM pg_matviews WHERE schemaname = 'public'")
         assert "community_subject_stats" in {row[0] for row in cur.fetchall()}
         cur.execute(

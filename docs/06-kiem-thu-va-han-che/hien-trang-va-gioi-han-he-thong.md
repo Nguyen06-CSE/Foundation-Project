@@ -50,3 +50,6 @@ Mặc dù hệ thống đã có bộ kiểm thử tích hợp Backend bằng `py
 - **Hiện trạng**: PostgreSQL FTS hiện tại sử dụng cấu hình ngôn ngữ `'simple'` để đối khớp các từ tố không dấu.
 - **Giới hạn**: Hệ thống chưa có từ điển đồng nghĩa (Synonyms) hoặc từ điển tách từ ghép tiếng Việt chuyên sâu (như từ điển phân tích hình thái học).
 - **Phương án khắc phục**: Tích hợp extension `pg_trgm` (Trigram similarity) hoặc mô-đun tách từ tiếng Việt vào PostgreSQL trong giai đoạn phát triển tiếp theo.
+# Trạng thái AI/vector
+
+Code/test acceptance có điều kiện; operational DB local deferred. Benchmark TBD. OCR chuyên biệt Phase 7 và advanced QA Phase 8 chưa triển khai.

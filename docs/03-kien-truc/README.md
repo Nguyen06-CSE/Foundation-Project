@@ -21,3 +21,6 @@ Phân hệ tài liệu này mô tả chi tiết toàn bộ thiết kế kiến t
 | [**Hệ Thống Lưu Trữ Tập Tin Cục Bộ**](./he-thong-luu-tru-tap-tin.md) | Kiến trúc lưu trữ đĩa cứng cục bộ, giải thuật băm SHA-256 khử trùng lặp và phân tích so sánh với S3 |
 | [**Kiến Trúc Bảo Mật & Phân Quyền**](./bao-mat-va-phan-quyen.md) | Xác thực JSON Web Token, băm mật khẩu `bcrypt`, mô hình phân quyền hai lớp (RBAC + Object-Level) |
 | [**Biên Bản Quyết Định Kiến Trúc (ADR)**](./quyet-dinh-kien-truc/ADR-001-LOCAL-STORAGE-ARCHITECTURE.md) | 5 quyết định kiến trúc trọng yếu: Lưu trữ cục bộ, Nhân bản tài liệu, PostgreSQL FTS, Xem trước Client-side, SHA-256 |
+# Kiến trúc AI/vector
+
+Đọc [ADR-006](./quyet-dinh-kien-truc/ADR-006-POSTGRESQL-HYBRID-RAG-PGVECTOR.md), [kiến trúc AI/vector](./ai-vector-va-rag-co-ban.md) và [quy trình hệ thống](./quy-trinh-hoat-dong-he-thong.md).

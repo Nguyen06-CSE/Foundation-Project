@@ -370,3 +370,8 @@ Quản lý công việc cá nhân (Todos) gắn với tài liệu học tập.
 | `completed_at` | `DATETIME` | NULL | - | - | Thời điểm đánh dấu hoàn thành |
 | `created_at` | `DATETIME` | NOT NULL | - | `utcnow` | Thời điểm tạo |
 | `updated_at` | `DATETIME` | NOT NULL | - | `utcnow` | Thời điểm sửa đổi |
+# Từ điển AI/vector
+
+`document_index_runs`: `id` bigserial PK, `document_id` integer FK cascade, `checksum` text, `model` text default `''`, `processor` integer default 1, `status` text default pending, `is_active` boolean default false, `attempts` integer default 0, `next_attempt` timestamptz default now, `last_error` nullable text, `coverage` JSONB default `{}`, `summary` nullable JSONB.
+
+`document_chunks`: `id` bigserial PK, `run_id` bigint FK cascade, `ordinal` integer, `body/heading/source` text, `location` JSONB, `search_vector` tsvector, `embedding` vector nullable. Unique `(run_id, ordinal)`; source là markdown/page/slide/content.

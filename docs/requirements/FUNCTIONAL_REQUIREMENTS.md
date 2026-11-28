@@ -141,3 +141,13 @@ Tài liệu này chi tiết hóa toàn bộ hành vi, chức năng và phản h�
 * **Trạng thái nghiệp vụ:** `[Confirmed]`
 * **Hiện trạng mã nguồn:** `[Needs Verification]`
 * **Mô tả:** Backend đã có bảng `academic_classes` và router `routers/academic.py`, frontend có thư mục `pages/class`. Cần xác minh luồng đồng bộ danh sách sinh viên theo từng lớp học phần thực tế từ hệ thống đào tạo của trường.
+# AI functional requirements
+
+- FR-AI-01: queue/index document thành chunks và active run.
+- FR-AI-02: keyword/hybrid search có semantic fallback.
+- FR-AI-03: Q&A citation và abstain khi thiếu evidence.
+- FR-AI-04: summary evidence-based coexist description.
+- FR-AI-05: tag suggestions confirm-before-write.
+- FR-AI-06: related permission-safe.
+- FR-AI-07: interest stats 7/30.
+- FR-AI-08: owner/group write retry; reader/revoked không mutate/read evidence.

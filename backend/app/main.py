@@ -28,6 +28,7 @@ from app.routers.stats import router as stats_router
 from app.routers.dashboard import router as dashboard_router
 from app.routers.todos import router as todos_router
 from app.routers.shares import router as shares_router
+from app.routers.document_insights import router as document_insights_router
 
 app = FastAPI(
     title="Thư Viện Số - Quản Lí Tài Liệu",
@@ -76,6 +77,7 @@ app.include_router(users_router)
 app.include_router(categories_router)
 app.include_router(tags_router)
 app.include_router(documents_router)
+app.include_router(document_insights_router)
 app.include_router(document_versions_router)
 app.include_router(notes_router)
 app.include_router(favorites_router)

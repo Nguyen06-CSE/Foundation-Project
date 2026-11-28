@@ -54,3 +54,6 @@ Ngày 26/11/2026, PostgreSQL 18.6 chạy cục bộ trên 20.000 dòng giả, 20
 | FTS `thuat toan`, xếp hạng 20 kết quả đầu | 0,142 ms | 193 shared hits |
 
 Cả hai lượt đều dùng Bitmap Index Scan. Phép đo minh họa chi phí tra chỉ mục trên dữ liệu đã có trong bộ đệm. Thời gian phản hồi API thực tế còn gồm kiểm tra quyền, truy vấn phụ, truyền dữ liệu và độ trễ mạng.
+# Tích hợp hybrid retrieval
+
+`GET /search/full` hỗ trợ keyword/hybrid, match fields title/content/semantic và badges từ `match.methods`; provider lỗi trả lexical fallback. Chi tiết [tài liệu AI](./10-tra-cuu-ho-tro-AI-va-goi-y-noi-dung.md).

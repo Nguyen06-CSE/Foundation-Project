@@ -1,0 +1,12 @@
+2026-11-28 11:14:19,263 INFO __main__ event=worker_started document_id=None once=False
+2026-11-28 11:14:19,811 INFO __main__ run=306 event=start attempt=1
+2026-11-28 11:14:20,518 WARNING __main__ run=306 event=retry stage=collect error=OSError http_status=None elapsed_s=0.707
+2026-11-28 11:14:20,695 INFO __main__ run=306 event=committed elapsed_s=0.884
+2026-11-28 11:14:21,004 INFO __main__ run=307 event=start attempt=1
+2026-11-28 11:14:21,330 WARNING __main__ run=307 event=retry stage=collect error=OSError http_status=None elapsed_s=0.325
+2026-11-28 11:15:28,954 INFO __main__ run=379 event=start attempt=1
+2026-11-28 11:15:29,241 WARNING __main__ run=379 event=retry stage=collect error=OSError http_status=None elapsed_s=0.287
+2026-11-28 11:15:29,364 INFO __main__ run=379 event=committed elapsed_s=0.410
+2026-11-28 11:15:29,670 INFO __main__ run=380 event=start attempt=1
+2026-11-28 11:15:29,980 WARNING __main__ run=380 event=retry stage=collect error=OSError http_status=None elapsed_s=0.311
+2026-11-28 11:15:30,126 INFO __main__ run=380 event=committed elapsed_s=0.456

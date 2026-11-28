@@ -56,3 +56,6 @@ pytest tests/test_storage_dedup.py -v
 # Chạy kiểm tra bộ đếm tài liệu thư viện học liệu
 pytest tests/test_library_counts.py -v
 ```
+# Retrieval evaluation
+
+Đánh giá fixture bằng hit@5/precision/recall, fallback provider, citation correctness và permission matrix; performance p50/p95/EXPLAIN/cost TBD trên local DB.

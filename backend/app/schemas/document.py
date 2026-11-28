@@ -39,7 +39,7 @@ class DocumentOwnerOut(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-class DocumentOut(DocumentBase):
+class DocumentListOut(DocumentBase):
     id: int
     owner_id: int
     owner: Optional[DocumentOwnerOut] = None
@@ -50,10 +50,9 @@ class DocumentOut(DocumentBase):
     thumbnail_path: Optional[str] = None
     markdown_path: Optional[str] = None
     checksum: str
-    content: Optional[str] = None
+    preview_text: Optional[str] = None
     # Đổi alias thành serialization_alias để Pydantic đọc doc.metadata_ từ ORM
     metadata_: Optional[dict] = Field(default=None, serialization_alias="metadata")
-    search_vector: Optional[str] = None
     is_important: bool = False
     is_deleted: bool = False
     deleted_at: Optional[datetime] = None
@@ -99,13 +98,18 @@ class DocumentOut(DocumentBase):
         return get_file_url(v)
 
 
+class DocumentOut(DocumentListOut):
+    content: Optional[str] = None
+    search_vector: Optional[str] = None
+
+
 # Aliases tương thích
 DocumentResponse = DocumentOut
 DocumentDetailResponse = DocumentOut
 
 
 class PaginatedDocuments(BaseModel):
-    items: list[DocumentOut]
+    items: list[DocumentListOut]
     total: int
     page: int
     page_size: int

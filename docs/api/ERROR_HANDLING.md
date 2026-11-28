@@ -115,3 +115,10 @@ apiClient.interceptors.response.use(
   }
 );
 ```
+# AI error contracts
+
+- Empty single upload: `400 detail.code=EMPTY_FILE`; batch: `skipped.reason=empty_file`.
+- Index status `not_ready` blocks Q&A/summary; unsupported question returns `insufficient` with no invented citation.
+- Failed run uses retry/backoff; manual retry resets attempts only for owner/editor.
+- Stale/inaccessible citation returns 404; revoked users are permission-filtered.
+- Embedding timeout/429/5xx is retried by provider; search can return lexical fallback, not an arbitrary 500.

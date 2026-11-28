@@ -64,3 +64,6 @@ Ví dụ, khi tải một bài giảng DOCX, người dùng nhận được bả
 4. Giao diện dùng đường dẫn này để đọc bản Markdown. Nếu thư viện lỗi hoặc trả về văn bản rỗng, tác vụ không gán đường dẫn Markdown mới. Người dùng vẫn có thể truy cập bản gốc. Tệp tạm tải về được dọn sau xử lý.
 
 [Hàm chuyển đổi](../../backend/app/services/file_processor.py) · [Tác vụ sau upload](../../backend/app/routers/documents.py)
+# Tích hợp indexing/summary/citation
+
+Preview không trả full content; index status, summary và citation dùng active run. Summary coexist với description, không persist overwrite. Xem [tài liệu AI](./10-tra-cuu-ho-tro-AI-va-goi-y-noi-dung.md).

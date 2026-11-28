@@ -58,10 +58,11 @@ const groupByDay = (activities: ActivityLog[]) => {
 
 export default function StatsPage() {
   const [scope, setScope] = useState<"me" | "my_documents">("me");
+  const [days, setDays] = useState<7 | 30>(30);
 
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ["my-stats", scope],
-    queryFn: () => activityService.getMyStats({ scope }),
+  const { data: stats, isLoading, isError, refetch } = useQuery({
+    queryKey: ["my-stats", scope, days],
+    queryFn: () => activityService.getMyStats({ scope, days }),
   });
 
   const chartData = useMemo(() => {
@@ -124,6 +125,51 @@ export default function StatsPage() {
           </button>
         </div>
       </div>
+
+      {scope === "me" && isError && (
+        <Card className="flex items-center justify-between gap-4 border-red-200 bg-red-50">
+          <p className="text-sm text-red-700">Không thể tải thống kê chủ đề quan tâm.</p>
+          <button type="button" onClick={() => refetch()} className="rounded-lg border border-red-300 bg-white px-3 py-1.5 text-sm text-red-700">Thử lại</button>
+        </Card>
+      )}
+
+      {scope === "me" && !isLoading && !isError && !stats?.interests && (
+        <Card><p className="text-sm text-gray-500">Chưa có dữ liệu chủ đề quan tâm.</p></Card>
+      )}
+
+      {scope === "me" && stats?.interests && (
+        <Card className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">Chủ đề bạn quan tâm</h2>
+              <p className="text-xs text-gray-500">Dựa trên tài liệu cá nhân và những lần bạn mở đọc.</p>
+            </div>
+            <select aria-label="Khoảng thời gian thống kê" value={days} onChange={(e) => setDays(Number(e.target.value) as 7 | 30)} className="rounded-lg border border-gray-300 px-3 py-2 text-sm">
+              <option value={7}>7 ngày</option><option value={30}>30 ngày</option>
+            </select>
+          </div>
+          <div className="grid gap-3 text-sm sm:grid-cols-4">
+            <p>Tài liệu cá nhân: <strong>{stats.interests.personal_documents}</strong></p>
+            <p>Lượt đọc: <strong>{stats.interests.read_views}</strong></p>
+            <p>Tài liệu đã đọc: <strong>{stats.interests.read_documents}</strong></p>
+            <p>Tài liệu đã mở từ tìm kiếm: <strong>{stats.interests.opened_from_search}</strong></p>
+          </div>
+          {stats.interests.subjects.every((x) => x.read_views === 0) ? (
+            <p className="text-sm text-gray-500">Chưa có hoạt động đọc trong khoảng thời gian này.</p>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-3">
+              {(["faculties", "subjects", "tags"] as const).map((kind) => (
+                <div key={kind}>
+                  <h3 className="mb-2 text-sm font-medium">{kind === "faculties" ? "Khoa" : kind === "subjects" ? "Môn học" : "Chủ đề (tag đã gắn)"}</h3>
+                  {stats.interests?.[kind].filter((x) => x.read_views > 0).sort((a, b) => b.read_views - a.read_views).slice(0, 5).map((topic) => (
+                    <p key={`${topic.name}-${topic.scope ?? kind}-${topic.workspace_id ?? "none"}`} className="flex justify-between gap-2 border-t py-1.5 text-xs"><span>{topic.name}{kind === "tags" && topic.scope === "group" ? ` · Nhóm #${topic.workspace_id}` : ""}</span><span>{topic.read_views} lượt · {topic.read_documents} tài liệu</span></p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      )}
 
       {/* Section 1 — Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

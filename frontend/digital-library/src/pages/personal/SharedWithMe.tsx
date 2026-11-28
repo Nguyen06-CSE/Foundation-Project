@@ -201,7 +201,7 @@ export default function SharedWithMe() {
         is_bundle: Boolean(doc.is_bundle),
         bundle_parent_id: doc.bundle_parent_id ?? null,
         bundle_children_count: doc.bundle_children_count ?? null,
-        content: doc.content ?? null,
+        preview_text: (doc as any).preview_text ?? null,
         view_count: doc.view_count ?? 0,
         trending_score: doc.trending_score ?? 0,
         share_count: doc.share_count ?? 0,
