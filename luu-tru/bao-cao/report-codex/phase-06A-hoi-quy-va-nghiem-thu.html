@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-luu-tru/bao-cao/report-codex/phase-06A-hoi-quy-va-nghiem-thu" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Báo Cáo Kiểm Tra Hồi Quy Và Nghiệm Thu Độc Lập Task 6A | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-06A-hoi-quy-va-nghiem-thu"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Báo Cáo Kiểm Tra Hồi Quy Và Nghiệm Thu Độc Lập Task 6A | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="- Dự án: Webapp Thư Viện Số (Foundation Project)"><meta data-rh="true" property="og:description" content="- Dự án: Webapp Thư Viện Số (Foundation Project)"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-06A-hoi-quy-va-nghiem-thu"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-06A-hoi-quy-va-nghiem-thu" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-06A-hoi-quy-va-nghiem-thu" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.31488eaf.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.9b395aa4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>Báo Cáo Kiểm Tra Hồi Quy Và Nghiệm Thu Độc Lập Task 6A</h1></header>
+<ul>
+<li class=""><strong>Dự án</strong>: Webapp Thư Viện Số (Foundation Project)</li>
+<li class=""><strong>Đối tượng kiểm tra</strong>: Sáu chức năng AI (Hybrid Search, Q&amp;A trích dẫn, Tóm tắt nội dung, Gợi ý Tag, Tài liệu liên quan, Thống kê chủ đề quan tâm) và tính năng Preview danh sách tài liệu.</li>
+<li class=""><strong>Vai trò</strong>: Kiểm tra viên độc lập (Independent Verification &amp; Regression Agent).</li>
+<li class=""><strong>Ngày thực hiện</strong>: 28/11/2026.</li>
+<li class=""><strong>Thư mục artifacts</strong>: <code>docs/99-luu-tru/bao-cao/report-codex/phase-06A-artifacts/</code></li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-môi-trường-và-trạng-thái-code-được-kiểm-tra">1. Môi Trường Và Trạng Thái Code Được Kiểm Tra<a href="#1-môi-trường-và-trạng-thái-code-được-kiểm-tra" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Môi Trường Và Trạng Thái Code Được Kiểm Tra" title="Đường dẫn trực tiếp đến 1. Môi Trường Và Trạng Thái Code Được Kiểm Tra" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-trạng-thái-git-repository">1.1 Trạng thái Git Repository<a href="#11-trạng-thái-git-repository" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.1 Trạng thái Git Repository" title="Đường dẫn trực tiếp đến 1.1 Trạng thái Git Repository" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Repository path</strong>: <code>/Users/caotiendattx/Developer/Foundation-Project</code></li>
+<li class=""><strong>Git HEAD</strong>: <code>0fa3d8e13de0a91e4290497dc26682d32367a771</code> (nhánh <code>main</code>, ahead of <code>origin/main</code> 3 commits).</li>
+<li class=""><strong>Trạng thái working tree</strong>: Sạch (<code>git diff --check</code> trả về exit code 0, không có trailing whitespace lỗi hoặc xung đột).</li>
+<li class=""><strong>Nguyên tắc bảo vệ mã nguồn</strong>: Tuyệt đối không chỉnh sửa mã nguồn production trong <code>backend/app/</code> và <code>frontend/</code>. Không reset, checkout hay ghi đè commit hiện có. Mọi script kiểm tra được tổ chức trong thư mục scratch của task session.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-môi-trường-cơ-sở-dữ-liệu-và-ai">1.2 Môi trường Cơ sở dữ liệu và AI<a href="#12-môi-trường-cơ-sở-dữ-liệu-và-ai" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.2 Môi trường Cơ sở dữ liệu và AI" title="Đường dẫn trực tiếp đến 1.2 Môi trường Cơ sở dữ liệu và AI" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Database cách ly (Disposable PostgreSQL)</strong>:
+<ul>
+<li class="">Khởi chạy container Docker <code>pgvector-disposable</code> từ image <code>pgvector/pgvector:pg16</code>.</li>
+<li class="">Host/Port: <code>127.0.0.1:55433</code> | Database: <code>phase6a_test</code> | User: <code>postgres</code>.</li>
+<li class="">Extensions xác nhận: <code>vector</code> (version 0.8.7), <code>unaccent</code> (version 1.1).</li>
+<li class="">Tuyệt đối không dùng <code>DATABASE_URL</code> trong <code>.env</code> (Neon Cloud) để tránh làm bẩn hoặc thay đổi dữ liệu thật của người dùng.</li>
+</ul>
+</li>
+<li class=""><strong>Embedding Provider &amp; Model</strong>:
+<ul>
+<li class="">Model: <code>gemini-embedding-001</code> (3072 dimensions).</li>
+<li class="">Provider endpoint: <code>https://generativelanguage.googleapis.com/v1beta</code>.</li>
+<li class="">Cấu hình provider và model được giữ nguyên vẹn.</li>
+<li class="">Áp dụng triệt để chính sách bảo vệ dữ liệu: Không gửi tài liệu cá nhân của người dùng tới embedding provider; sử dụng tập dữ liệu mẫu và fixture kiểm thử tiêu chuẩn.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-các-lệnh-đã-chạy-và-kết-quả">2. Các Lệnh Đã Chạy Và Kết Quả<a href="#2-các-lệnh-đã-chạy-và-kết-quả" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Các Lệnh Đã Chạy Và Kết Quả" title="Đường dẫn trực tiếp đến 2. Các Lệnh Đã Chạy Và Kết Quả" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:center">STT</th><th style="text-align:left">Lệnh thực hiện</th><th style="text-align:left">Mục đích</th><th style="text-align:center">Exit Code</th><th style="text-align:left">Kết quả ghi nhận</th><th style="text-align:left">Log Artifact</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:left"><code>git rev-parse HEAD &amp;&amp; git diff --check</code></td><td style="text-align:left">Kiểm tra HEAD và whitespace</td><td style="text-align:center">0</td><td style="text-align:left">HEAD: <code>0fa3d8e...</code>, sạch</td><td style="text-align:left"><code>docs/.../phase-06A-artifacts/git_check.log</code></td></tr><tr><td style="text-align:center">2</td><td style="text-align:left"><code>cd frontend/digital-library &amp;&amp; npm run build</code></td><td style="text-align:left">Build ứng dụng Frontend</td><td style="text-align:center">0</td><td style="text-align:left"><code>tsc -b &amp;&amp; vite build</code> thành công trong 792ms</td><td style="text-align:left">Ghi nhận trong console</td></tr><tr><td style="text-align:center">3</td><td style="text-align:left"><code>cd frontend/digital-library &amp;&amp; npm run lint</code></td><td style="text-align:left">Linting frontend (<code>oxlint</code>)</td><td style="text-align:center">0</td><td style="text-align:left">38 warnings, 0 errors</td><td style="text-align:left">Ghi nhận trong console</td></tr><tr><td style="text-align:center">4</td><td style="text-align:left"><code>PYTHONPATH=backend .venv/bin/python -m pytest backend/tests -q</code></td><td style="text-align:left">Chạy toàn bộ test suite backend</td><td style="text-align:center">1</td><td style="text-align:left">142 passed, 3 skipped, 2 failed, 1 error (3.59s). Lỗi do kết nối DB 5432 cục bộ không tồn tại.</td><td style="text-align:left"><code>docs/.../phase-06A-artifacts/pytest_full.log</code></td></tr><tr><td style="text-align:center">5</td><td style="text-align:left"><code>PYTHONPATH=backend .venv/bin/python -m pytest &lt;focused 20 files&gt; -q</code></td><td style="text-align:left">Chạy 20 file test logic AI &amp; unit</td><td style="text-align:center">0</td><td style="text-align:left">133 passed, 2 skipped, 0 failed (2.74s)</td><td style="text-align:left"><code>docs/.../phase-06A-artifacts/pytest_focused.log</code></td></tr><tr><td style="text-align:center">6</td><td style="text-align:left"><code>PYTHONPATH=backend .venv/bin/python backend/tests/evaluation/run_hybrid_benchmark.py --configured-database --offline --require-pgvector</code></td><td style="text-align:left">Benchmark độc lập tập đánh giá cuối</td><td style="text-align:center">0</td><td style="text-align:left">60 câu hỏi (30 calibration, 30 evaluation). RRF kết hợp đạt Hit@5 = 0.938.</td><td style="text-align:left"><code>docs/.../phase-06A-artifacts/benchmark_run.log</code><br><code>docs/.../phase-06A-artifacts/hybrid_benchmark.json</code><br><code>docs/.../phase-06A-artifacts/hybrid_benchmark.md</code></td></tr><tr><td style="text-align:center">7</td><td style="text-align:left"><code>PYTHONPATH=backend .venv/bin/python scratch/run_phase6a_matrix.py</code></td><td style="text-align:left">Kiểm tra ma trận chức năng, nghiệp vụ và quyền</td><td style="text-align:center">0</td><td style="text-align:left">Xác nhận luồng preview, tìm kiếm, Q&amp;A, summary, related, stats và ma trận quyền. Phát hiện BUG-AI-01 tại gợi ý tag.</td><td style="text-align:left"><code>docs/.../phase-06A-artifacts/matrix_run.log</code></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-ma-trận-sáu-chức-năng-ai-và-preview-danh-sách">3. Ma Trận Sáu Chức Năng AI Và Preview Danh Sách<a href="#3-ma-trận-sáu-chức-năng-ai-và-preview-danh-sách" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Ma Trận Sáu Chức Năng AI Và Preview Danh Sách" title="Đường dẫn trực tiếp đến 3. Ma Trận Sáu Chức Năng AI Và Preview Danh Sách" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:center">STT</th><th style="text-align:left">Chức năng kiểm tra</th><th style="text-align:center">Trạng thái</th><th style="text-align:left">Bằng chứng thực nghiệm</th><th style="text-align:left">Ghi chú &amp; Đánh giá</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:left"><strong>Tìm kiếm kết hợp (Hybrid Search)</strong></td><td style="text-align:center"><strong>PASS</strong></td><td style="text-align:left">- Truy vấn từ khóa <code>khóa chính xác định duy nhất</code> -&gt; trả về Doc 1 với method <code>lexical_content</code>.<br>- Truy vấn ngữ nghĩa/diễn đạt lại <code>khuôn mẫu tạo môi trường container</code> -&gt; trả về Doc 1 với method <code>semantic</code>.<br>- Truy vấn không dấu <code>khuon mau tao moi truong container</code> -&gt; trả về Doc 1.<br>- Tập Evaluation: Hit@5 đạt <strong>87.5%</strong>, MRR đạt <strong>0.875</strong>.</td><td style="text-align:left">Cơ chế RRF kết hợp điểm tốt. Fallback sang lexical khi embedding lỗi hoạt động ổn định.</td></tr><tr><td style="text-align:center">2</td><td style="text-align:left"><strong>Hỏi đáp trích nguyên văn (Q&amp;A)</strong></td><td style="text-align:center"><strong>PASS</strong></td><td style="text-align:left">- Câu hỏi đủ căn cứ: Q1 trả lời chính xác trích nguyên văn: <em>&quot;Trong cây tìm kiếm nhị phân, giá trị lớn nhất nằm ở nhánh phải.&quot;</em> kèm citation chunk 1001.<br>- Q2 trả lời chính xác trích dẫn Docker.<br>- Câu hỏi thiếu căn cứ: Q3 trả về <code>status: &quot;insufficient&quot;</code>, <code>answer: None</code>, <code>citations: []</code>. Không bịa đặt thông tin.</td><td style="text-align:left">Đảm bảo tính trung thực (groundedness). Ngăn chặn hallucination triệt để.</td></tr><tr><td style="text-align:center">3</td><td style="text-align:left"><strong>Tóm tắt nội dung tài liệu (Summary)</strong></td><td style="text-align:center"><strong>PASS</strong></td><td style="text-align:left">- Tạo tóm tắt từ 4 chunk của tài liệu gồm 4 gạch đầu dòng rõ ràng.<br>- Gọi lần 2: Cache hit trả về kết quả ngay lập tức.<br>- Không ghi đè trường <code>description</code> thủ công của bảng <code>documents</code>.</td><td style="text-align:left">Đáp ứng đúng thiết kế bộ đệm và tính toàn vẹn của dữ liệu gốc.</td></tr><tr><td style="text-align:center">4</td><td style="text-align:left"><strong>Gợi ý Tag (Tag Suggestions)</strong></td><td style="text-align:center"><span style="color:red;font-weight:bold">FAIL</span></td><td style="text-align:left">- Gọi <code>evidence_search.tag_suggestions</code> với tài liệu cá nhân hoặc tài liệu nhóm đều văng lỗi:<br><code>asyncpg.exceptions.AmbiguousParameterError: could not determine data type of parameter $2</code>.<br>- Khiến API <code>GET /documents/{id}/tag-suggestions</code> trả về <strong>HTTP 500</strong>.</td><td style="text-align:left"><strong>BUG-AI-01</strong> (Mức High): Do câu SQL tại <code>evidence_search.py:215</code> dùng parameter <code>$2 IS NULL</code> và <code>$2 IS NOT NULL</code> không được ép kiểu.</td></tr><tr><td style="text-align:center">5</td><td style="text-align:left"><strong>Tài liệu liên quan (Related Documents)</strong></td><td style="text-align:center"><strong>PASS</strong></td><td style="text-align:left">- Tự động loại trừ chính tài liệu đang xem (Doc 1).<br>- Tự động loại trừ tài liệu trùng lặp checksum (Doc 3).<br>- Tự động loại trừ tài liệu đã bị xóa mềm (Doc 4).<br>- Chặn người ngoài nhóm (Carol) truy cập tài liệu liên quan của nhóm (HTTP 404).</td><td style="text-align:left">Logic lọc bản ghi và kiểm tra quyền hoạt động chính xác.</td></tr><tr><td style="text-align:center">6</td><td style="text-align:left"><strong>Thống kê chủ đề quan tâm (Stats Phase 5)</strong></td><td style="text-align:center"><strong>PASS</strong></td><td style="text-align:left">- Khoảng thời gian <code>days=7</code>: 4 lượt xem, 2 tài liệu, 1 tài liệu mở từ tìm kiếm (loại trừ log cũ hơn 7 ngày).<br>- Khoảng thời gian <code>days=30</code>: 5 lượt xem, 3 tài liệu, 2 mở từ tìm kiếm.<br>- Khoảng thời gian không hợp lệ <code>days=14</code>: ném HTTP 422 chuẩn xác.<br>- Quyền riêng tư: Người dùng Carol có 0 log hoạt động, chỉ thấy dữ liệu cá nhân của mình.</td><td style="text-align:left">Thuật toán đếm và lọc log phân tán chuẩn xác theo đặc tả.</td></tr><tr><td style="text-align:center">+</td><td style="text-align:left"><strong>Preview danh sách tài liệu</strong></td><td style="text-align:center"><strong>PASS</strong></td><td style="text-align:left">- Schema <code>DocumentListOut</code> <strong>không</strong> chứa trường <code>content</code>, chứa trường <code>preview_text</code> giới hạn $\le 400$ ký tự.<br>- Tài liệu chưa lập chỉ mục (Doc 5) có <code>preview_text: None</code>.<br>- Tài liệu đã có tóm tắt ưu tiên hiển thị nội dung tóm tắt làm preview.<br>- Detail API (<code>GET /documents/{id}</code>) vẫn trả về <code>content</code> đầy đủ.</td><td style="text-align:left">Tối ưu dung lượng truyền tải danh sách, đúng kiến trúc đã thống nhất ở Phase 1.</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-kết-quả-benchmark-tập-đánh-giá-cuối-evaluation-split">4. Kết Quả Benchmark Tập Đánh Giá Cuối (Evaluation Split)<a href="#4-kết-quả-benchmark-tập-đánh-giá-cuối-evaluation-split" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Kết Quả Benchmark Tập Đánh Giá Cuối (Evaluation Split)" title="Đường dẫn trực tiếp đến 4. Kết Quả Benchmark Tập Đánh Giá Cuối (Evaluation Split)" translate="no">​</a></h2>
+<p>Toàn bộ 60 câu hỏi đánh giá đã được chuẩn hóa trong <code>backend/tests/evaluation/data/questions.json</code>, chia làm 2 tập độc lập:</p>
+<ol>
+<li class=""><strong>Calibration Split</strong> (CQ01 - CQ30): Dùng cho tinh chỉnh ngưỡng.</li>
+<li class=""><strong>Evaluation Split</strong> (EQ01 - EQ30): <strong>Tập đánh giá cuối</strong> gồm 30 câu hỏi độc lập (24 câu có câu trả lời, 3 câu thuộc tài liệu cấm truy cập, 3 câu không có căn cứ trong tài liệu).</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="41-bảng-đo-lường-chi-tiết-trên-tập-đánh-giá-cuối-evaluation-split---30-câu">4.1 Bảng đo lường chi tiết trên Tập Đánh Giá Cuối (Evaluation Split - 30 câu)<a href="#41-bảng-đo-lường-chi-tiết-trên-tập-đánh-giá-cuối-evaluation-split---30-câu" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.1 Bảng đo lường chi tiết trên Tập Đánh Giá Cuối (Evaluation Split - 30 câu)" title="Đường dẫn trực tiếp đến 4.1 Bảng đo lường chi tiết trên Tập Đánh Giá Cuối (Evaluation Split - 30 câu)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Chỉ số đánh giá</th><th style="text-align:center">Chế độ Từ khóa (Keyword)</th><th style="text-align:center">Chế độ Ngữ nghĩa (Vector)</th><th style="text-align:center">Chế độ Kết hợp (Hybrid RRF)</th><th style="text-align:center">Mục tiêu nghiệm thu</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Hit@5 (Độ chính xác Top 5)</strong></td><td style="text-align:center">87.5% (21/24)</td><td style="text-align:center">79.2% (19/24)</td><td style="text-align:center"><strong>87.5% (21/24)</strong></td><td style="text-align:center">$\ge 85%$</td></tr><tr><td style="text-align:left"><strong>MRR (Mean Reciprocal Rank)</strong></td><td style="text-align:center">0.875</td><td style="text-align:center">0.792</td><td style="text-align:center"><strong>0.875</strong></td><td style="text-align:center">$\ge 0.80$</td></tr><tr><td style="text-align:left"><strong>Citation Hit (Đúng trích dẫn)</strong></td><td style="text-align:center">87.5% (21/24)</td><td style="text-align:center">79.2% (19/24)</td><td style="text-align:center"><strong>87.5% (21/24)</strong></td><td style="text-align:center">$\ge 85%$</td></tr><tr><td style="text-align:left"><strong>No-Evidence False Positive</strong></td><td style="text-align:center"><strong>0.0% (0/3)</strong></td><td style="text-align:center">100.0% (3/3)</td><td style="text-align:center"><strong>0.0% (0/3)</strong></td><td style="text-align:center">$\le 10%$</td></tr><tr><td style="text-align:left"><strong>Data Leak Rate (Rò rỉ tài liệu cấm)</strong></td><td style="text-align:center"><strong>0.0% (0/3)</strong></td><td style="text-align:center"><strong>0.0% (0/3)</strong></td><td style="text-align:center"><strong>0.0% (0/3)</strong></td><td style="text-align:center"><strong>0.0%</strong></td></tr><tr><td style="text-align:left"><strong>Độ trễ p50</strong></td><td style="text-align:center">3.43 ms</td><td style="text-align:center">2.59 ms</td><td style="text-align:center">4.85 ms</td><td style="text-align:center">$\le 100$ ms</td></tr><tr><td style="text-align:left"><strong>Độ trễ p95</strong></td><td style="text-align:center">8.49 ms</td><td style="text-align:center">2.87 ms</td><td style="text-align:center">5.25 ms</td><td style="text-align:center">$\le 200$ ms</td></tr><tr><td style="text-align:left"><strong>Số mẫu đo</strong></td><td style="text-align:center">30</td><td style="text-align:center">30</td><td style="text-align:center">30</td><td style="text-align:center">30</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="42-bảng-đối-chiếu-tổng-quan-calibration-vs-evaluation-vs-toàn-bộ-corpus">4.2 Bảng đối chiếu tổng quan (Calibration vs Evaluation vs Toàn bộ Corpus)<a href="#42-bảng-đối-chiếu-tổng-quan-calibration-vs-evaluation-vs-toàn-bộ-corpus" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.2 Bảng đối chiếu tổng quan (Calibration vs Evaluation vs Toàn bộ Corpus)" title="Đường dẫn trực tiếp đến 4.2 Bảng đối chiếu tổng quan (Calibration vs Evaluation vs Toàn bộ Corpus)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Phân vùng dữ liệu</th><th style="text-align:center">Số câu hỏi</th><th style="text-align:center">Keyword Hit@5</th><th style="text-align:center">Vector Hit@5</th><th style="text-align:center">Hybrid Hit@5</th><th style="text-align:center">Hybrid MRR</th><th style="text-align:center">No-Ev False Positive</th><th style="text-align:center">Data Leak Rate</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Calibration Split</strong></td><td style="text-align:center">30 câu</td><td style="text-align:center">91.7% (22/24)</td><td style="text-align:center">100.0% (24/24)</td><td style="text-align:center"><strong>100.0% (24/24)</strong></td><td style="text-align:center">1.000</td><td style="text-align:center">0.0% (0/3)</td><td style="text-align:center">0.0% (0/3)</td></tr><tr><td style="text-align:left"><strong>Evaluation Split (Tập cuối)</strong></td><td style="text-align:center">30 câu</td><td style="text-align:center">87.5% (21/24)</td><td style="text-align:center">79.2% (19/24)</td><td style="text-align:center"><strong>87.5% (21/24)</strong></td><td style="text-align:center">0.875</td><td style="text-align:center">0.0% (0/3)</td><td style="text-align:center">0.0% (0/3)</td></tr><tr><td style="text-align:left"><strong>Toàn bộ Corpus (Overall)</strong></td><td style="text-align:center">60 câu</td><td style="text-align:center">89.6% (43/48)</td><td style="text-align:center">89.6% (43/48)</td><td style="text-align:center"><strong>93.8% (45/48)</strong></td><td style="text-align:center"><strong>0.938</strong></td><td style="text-align:center"><strong>0.0% (0/6)</strong></td><td style="text-align:center"><strong>0.0% (0/6)</strong></td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="43-nhận-xét-kỹ-thuật-về-hiệu-năng-và-phân-biệt-căn-cứ-trả-lời">4.3 Nhận xét kỹ thuật về hiệu năng và phân biệt căn cứ trả lời<a href="#43-nhận-xét-kỹ-thuật-về-hiệu-năng-và-phân-biệt-căn-cứ-trả-lời" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4.3 Nhận xét kỹ thuật về hiệu năng và phân biệt căn cứ trả lời" title="Đường dẫn trực tiếp đến 4.3 Nhận xét kỹ thuật về hiệu năng và phân biệt căn cứ trả lời" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Phân biệt &quot;Tìm được đoạn liên quan&quot; với &quot;Có đủ căn cứ trả lời&quot;</strong>:
+<ul>
+<li class="">Với chế độ Vector thuần túy: Thuật toán tìm kiếm k-NN luôn trả về các đoạn văn bản gần nhất trong không gian vector. Do đó, đối với 3 câu hỏi <code>no_evidence</code> (hoàn toàn không có nội dung trong tài liệu), Vector search vẫn trả về kết quả (False Positive = 100%).</li>
+<li class="">Với chế độ Hybrid (RRF): Khi kết hợp với ngưỡng độ tương đồng <code>SEMANTIC_MIN_SIMILARITY = 0.65</code> và tính điểm tương hỗ RRF, các đoạn văn bản nhiễu bị loại bỏ hoàn toàn, đưa False Positive về <strong>0.0%</strong>.</li>
+<li class="">Module Q&amp;A độc lập kiểm tra độ tương thích giữa câu hỏi và đoạn trích, chuyển trạng thái sang <code>insufficient</code> khi đoạn trích không đủ cơ sở suy luận.</li>
+</ul>
+</li>
+<li class=""><strong>Cơ chế Fallback</strong>: Khi kết nối embedding provider thất bại hoặc model trả về lỗi, hệ thống tự động fallback về tìm kiếm toàn văn tiếng Việt qua <code>to_tsvector(&#x27;simple&#x27;, unaccent(...))</code> trên <code>document_chunks.search_vector</code>, đảm bảo hệ thống không bị gián đoạn dịch vụ.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-kết-quả-luồng-nghiệp-vụ-cá-nhân-và-nhóm">5. Kết Quả Luồng Nghiệp Vụ Cá Nhân Và Nhóm<a href="#5-kết-quả-luồng-nghiệp-vụ-cá-nhân-và-nhóm" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. Kết Quả Luồng Nghiệp Vụ Cá Nhân Và Nhóm" title="Đường dẫn trực tiếp đến 5. Kết Quả Luồng Nghiệp Vụ Cá Nhân Và Nhóm" translate="no">​</a></h2>
+<ol>
+<li class=""><strong>Khởi tạo và Trạng thái Chỉ mục</strong>:
+<ul>
+<li class="">Tài liệu khi được nạp (<code>document_index_runs</code>) được ghi nhận trạng thái <code>ready</code> với độ bao phủ <code>coverage: {&quot;state&quot;: &quot;full&quot;, &quot;read&quot;: 4, &quot;total&quot;: 4}</code>.</li>
+<li class="">Tài liệu chưa lập chỉ mục báo rõ <code>run_id: None</code> và <code>status: None</code>.</li>
+</ul>
+</li>
+<li class=""><strong>Phân tách Schema Preview Danh sách và Chi tiết</strong>:
+<ul>
+<li class=""><code>DocumentListOut</code>: Tuyệt đối không trả về <code>content</code>. Trường <code>preview_text</code> được định dạng tối đa 400 ký tự. Với tài liệu chưa lập chỉ mục, <code>preview_text</code> là <code>None</code>.</li>
+<li class="">Khi tài liệu đã được tạo bản tóm tắt (<code>evidence_search.summary</code>), <code>preview_text</code> tự động ưu tiên lấy nội dung tóm tắt để hiển thị trên UI.</li>
+<li class="">Cột <code>documents.description</code> của người dùng được bảo vệ nguyên vẹn, không bị ghi đè bởi tóm tắt AI.</li>
+<li class=""><code>DocumentDetailOut</code>: Vẫn nạp và trả về đầy đủ <code>content</code> phục vụ trình đọc chi tiết.</li>
+</ul>
+</li>
+<li class=""><strong>Đặc tính Ghi Log Lượt Đọc (Activity Logging)</strong>:
+<ul>
+<li class="">Khi gọi API chi tiết <code>GET /documents/{document_id}</code>, hệ thống đẩy một background task gọi <code>_log_activity</code>.</li>
+<li class="">Tham số <code>dedup_window_minutes = 0</code> được thiết lập mặc định, dẫn đến mỗi lượt reload trang chi tiết từ client đều phát sinh thêm một bản ghi vào bảng <code>download_logs</code>. Chỉ số <code>opened_from_search</code> được tính toán dựa trên số tài liệu phân biệt (<code>distinct documents</code>) có ít nhất một lượt truy cập xuất phát từ tìm kiếm trong kỳ.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-ma-trận-quyền-tối-thiểu-access-control-matrix">6. Ma Trận Quyền Tối Thiểu (Access Control Matrix)<a href="#6-ma-trận-quyền-tối-thiểu-access-control-matrix" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6. Ma Trận Quyền Tối Thiểu (Access Control Matrix)" title="Đường dẫn trực tiếp đến 6. Ma Trận Quyền Tối Thiểu (Access Control Matrix)" translate="no">​</a></h2>
+<p>Đã kiểm thử thực nghiệm trên 3 tác nhân người dùng với các vai trò khác nhau trên cơ sở dữ liệu thật:</p>
+<ul>
+<li class=""><strong>User A (Alice, ID=1)</strong>: Chủ sở hữu tài liệu cá nhân (Doc 1) và là Thành viên Nhóm Workspace 10 (tài liệu Doc 2).</li>
+<li class=""><strong>User B (Bob, ID=2)</strong>: Thành viên Nhóm Workspace 10.</li>
+<li class=""><strong>User C (Carol, ID=3)</strong>: Người ngoài nhóm Workspace 10, không có quan hệ dữ liệu với Alice.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Hành động kiểm tra</th><th style="text-align:center">User A (Alice - Owner)</th><th style="text-align:center">User B (Bob - Member)</th><th style="text-align:center">User C (Carol - Outsider)</th><th style="text-align:center">User B sau khi rời nhóm</th></tr></thead><tbody><tr><td style="text-align:left">Truy cập thông tin chỉ mục Doc 1 (Cá nhân của Alice)</td><td style="text-align:center"><strong>Cho phép</strong> (HTTP 200)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td></tr><tr><td style="text-align:left">Tìm kiếm từ khóa xuất hiện trong Doc 1</td><td style="text-align:center"><strong>Thấy</strong> Doc 1</td><td style="text-align:center"><strong>Không thấy</strong> (0 kết quả)</td><td style="text-align:center"><strong>Không thấy</strong> (0 kết quả)</td><td style="text-align:center"><strong>Không thấy</strong> (0 kết quả)</td></tr><tr><td style="text-align:left">Truy cập thông tin chỉ mục Doc 2 (Nhóm Workspace 10)</td><td style="text-align:center"><strong>Cho phép</strong> (HTTP 200)</td><td style="text-align:center"><strong>Cho phép</strong> (HTTP 200)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td></tr><tr><td style="text-align:left">Tìm kiếm từ khóa xuất hiện trong Doc 2 (<code>Scrum</code>)</td><td style="text-align:center"><strong>Thấy</strong> Doc 2</td><td style="text-align:center"><strong>Thấy</strong> Doc 2</td><td style="text-align:center"><strong>Không thấy</strong> (0 kết quả)</td><td style="text-align:center"><strong>Không thấy</strong> (0 kết quả)</td></tr><tr><td style="text-align:left">Lấy tài liệu liên quan của Doc 2</td><td style="text-align:center"><strong>Cho phép</strong> (HTTP 200)</td><td style="text-align:center"><strong>Cho phép</strong> (HTTP 200)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td><td style="text-align:center"><strong>Chặn</strong> (HTTP 404)</td></tr><tr><td style="text-align:left">Xem thống kê <code>get_my_stats</code></td><td style="text-align:center">Xem dữ liệu của Alice</td><td style="text-align:center">Xem dữ liệu của Bob</td><td style="text-align:center">Xem dữ liệu của Carol (0 views)</td><td style="text-align:center">Xem dữ liệu của Bob</td></tr></tbody></table>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Xác nhận ca thu hồi quyền (Permission Revocation)</strong>: Khi xóa bản ghi của User B khỏi bảng <code>workspace_members</code> (<code>DELETE FROM workspace_members WHERE workspace_id=10 AND user_id=2</code>), ngay lập tức các yêu cầu truy cập tiếp theo của User B vào Doc 2 đều nhận về HTTP 404. Hệ thống không bị trễ bộ đệm quyền.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-danh-sách-lỗi-và-khuyến-nghị-xử-lý">7. Danh Sách Lỗi Và Khuyến Nghị Xử Lý<a href="#7-danh-sách-lỗi-và-khuyến-nghị-xử-lý" class="hash-link" aria-label="Đường dẫn trực tiếp đến 7. Danh Sách Lỗi Và Khuyến Nghị Xử Lý" title="Đường dẫn trực tiếp đến 7. Danh Sách Lỗi Và Khuyến Nghị Xử Lý" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="71-bug-ai-01-mức-độ-high--lỗi-sql-ambiguousparametererror-tại-gợi-ý-tag">7.1 <code>BUG-AI-01</code> (Mức độ: High) — Lỗi SQL AmbiguousParameterError tại Gợi ý Tag<a href="#71-bug-ai-01-mức-độ-high--lỗi-sql-ambiguousparametererror-tại-gợi-ý-tag" class="hash-link" aria-label="Đường dẫn trực tiếp đến 71-bug-ai-01-mức-độ-high--lỗi-sql-ambiguousparametererror-tại-gợi-ý-tag" title="Đường dẫn trực tiếp đến 71-bug-ai-01-mức-độ-high--lỗi-sql-ambiguousparametererror-tại-gợi-ý-tag" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Vị trí mã nguồn</strong>: <code>backend/app/services/evidence_search.py</code>, dòng 212–218 trong hàm <code>tag_suggestions</code>.</li>
+<li class=""><strong>Nguyên nhân</strong>: Câu lệnh SQL chuẩn bị (<code>prepared statement</code>) dùng mệnh đề:
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">:ws </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">owner_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">:uid </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">OR</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">:ws </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">:ws</span><span class="token punctuation" style="color:#393A34">)</span><br></div></code></pre></div></div>
+Trình điều khiển <code>asyncpg</code> của PostgreSQL không thể suy diễn kiểu dữ liệu cho tham số <code>$2</code> khi biên dịch câu lệnh lúc tham số nhận giá trị <code>NULL</code> hoặc truyền kiểu không tường minh, ném lỗi:
+<code>asyncpg.exceptions.AmbiguousParameterError: could not determine data type of parameter $2</code>.</li>
+<li class=""><strong>Hậu quả</strong>: API <code>GET /documents/{document_id}/tag-suggestions</code> bị sập và trả về <strong>HTTP 500 Internal Server Error</strong> trên cả tài liệu cá nhân và tài liệu nhóm.</li>
+<li class=""><strong>Bằng chứng kiểm tra</strong>: Đã tái hiện 100% trong <code>run_phase6a_matrix.py</code> (xem log <code>matrix_run.log</code>).</li>
+<li class=""><strong>Đề xuất khắc phục cho Codex</strong>: Ép kiểu tường minh cho tham số <code>:ws</code> thành integer:
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">cast</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">:ws </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">integer</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">owner_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">:uid </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">   </span><span class="token operator" style="color:#393A34">OR</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">cast</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">:ws </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">integer</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">cast</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">:ws </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">integer</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><br></div></code></pre></div></div>
+<em>(Đã chạy thử nghiệm phương án ép kiểu trong script kiểm tra, câu lệnh thực thi thành công ngay lập tức).</em></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="72-bug-env-01-mức-độ-medium--hardcode-cấu-hình-ssl-trong-alembic">7.2 <code>BUG-ENV-01</code> (Mức độ: Medium) — Hardcode cấu hình SSL trong Alembic<a href="#72-bug-env-01-mức-độ-medium--hardcode-cấu-hình-ssl-trong-alembic" class="hash-link" aria-label="Đường dẫn trực tiếp đến 72-bug-env-01-mức-độ-medium--hardcode-cấu-hình-ssl-trong-alembic" title="Đường dẫn trực tiếp đến 72-bug-env-01-mức-độ-medium--hardcode-cấu-hình-ssl-trong-alembic" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Vị trí mã nguồn</strong>: <code>backend/alembic/env.py</code>, dòng 71:
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">connect_args</span><span class="token operator" style="color:#393A34">=</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">&quot;ssl&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">}</span><br></div></code></pre></div></div>
+</li>
+<li class=""><strong>Nguyên nhân</strong>: Cấu hình <code>ssl: True</code> được gắn cố định phục vụ Neon Cloud database. Khi chạy migration trên PostgreSQL local (như Docker container hoặc CI/CD pipeline) không có cấu hình TLS/SSL, asyncpg ném lỗi:
+<code>ConnectionError: PostgreSQL server at &#x27;127.0.0.1:55433&#x27; rejected SSL upgrade</code>.</li>
+<li class=""><strong>Hậu quả</strong>: Không thể chạy lệnh <code>alembic upgrade head</code> trên môi trường local/test database.</li>
+<li class=""><strong>Đề xuất khắc phục cho Codex</strong>: Kiểm tra tham số kết nối hoặc chuỗi connection string; chỉ kích hoạt <code>ssl: True</code> khi URL chứa yêu cầu SSL hoặc thuộc host cloud (ví dụ <code>sslmode=require</code>).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="73-behavior-01-mức-độ-info--architecture-review--hành-vi-ghi-log-lượt-đọc-khi-reload">7.3 <code>BEHAVIOR-01</code> (Mức độ: Info / Architecture Review) — Hành vi ghi log lượt đọc khi reload<a href="#73-behavior-01-mức-độ-info--architecture-review--hành-vi-ghi-log-lượt-đọc-khi-reload" class="hash-link" aria-label="Đường dẫn trực tiếp đến 73-behavior-01-mức-độ-info--architecture-review--hành-vi-ghi-log-lượt-đọc-khi-reload" title="Đường dẫn trực tiếp đến 73-behavior-01-mức-độ-info--architecture-review--hành-vi-ghi-log-lượt-đọc-khi-reload" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Vị trí mã nguồn</strong>: <code>backend/app/routers/documents.py:174</code>.</li>
+<li class=""><strong>Hiện tượng</strong>: <code>get_document</code> kích hoạt <code>_log_activity</code> với <code>dedup_window_minutes = 0</code>. Mỗi lần người dùng F5 hoặc frontend refetch dữ liệu, một bản ghi <code>DOCUMENT_VIEWED</code> mới được chèn vào <code>download_logs</code>.</li>
+<li class=""><strong>Đánh giá</strong>: Chỉ số <code>opened_from_search</code> không bị ảnh hưởng tiêu cực vì được tính bằng <code>count(distinct document)</code> có <code>search_views &gt; 0</code>. Tuy nhiên, bảng <code>download_logs</code> có thể phình to nhanh chóng nếu người dùng chuyển tab/refetch liên tục. Khuyến nghị nhóm phát triển xem xét đưa vào khoảng thời gian dedup (ví dụ 10–15 phút).</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-những-giới-hạn-chưa-kiểm-tra">8. Những Giới Hạn Chưa Kiểm Tra<a href="#8-những-giới-hạn-chưa-kiểm-tra" class="hash-link" aria-label="Đường dẫn trực tiếp đến 8. Những Giới Hạn Chưa Kiểm Tra" title="Đường dẫn trực tiếp đến 8. Những Giới Hạn Chưa Kiểm Tra" translate="no">​</a></h2>
+<ol>
+<li class=""><strong>Kiểm tra trực quan trình duyệt (Browser Automation Interaction)</strong>:
+<ul>
+<li class=""><strong>Trạng thái</strong>: <strong>BLOCKED</strong> do môi trường máy chủ chạy tác nhân không có sẵn các công cụ automation trình duyệt (như Playwright, Puppeteer, Chrome headless) và subagent browser bị excluded do vượt quá ngân sách ngữ cảnh.</li>
+<li class=""><strong>Xử lý thay thế</strong>: Toàn bộ hợp đồng dữ liệu giao diện (API contracts, schema <code>preview_text</code>, badge phương thức tìm kiếm, ma trận quyền và phân trang) đã được kiểm chứng bằng script tự động hóa trên DB disposable.</li>
+</ul>
+</li>
+<li class=""><strong>Benchmark toàn diện trên 1043 tài liệu thật của người dùng</strong>:
+<ul>
+<li class=""><strong>Trạng thái</strong>: <strong>BỊ TỪ CHỐI CÓ CHỦ ĐÍCH</strong> nhằm tuân thủ quy tắc bảo vệ dữ liệu cá nhân (Data Protection Rules). Dữ liệu tài liệu thật không được phép gửi ra dịch vụ ngoài (Google Gemini API). Phép đo được thực hiện trên bộ 30 tài liệu mẫu và 60 câu hỏi chuẩn hóa trong <code>backend/tests/evaluation/data/</code>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-danh-sách-file-và-thư-mục-artifact-được-lưu-trữ">9. Danh Sách File Và Thư Mục Artifact Được Lưu Trữ<a href="#9-danh-sách-file-và-thư-mục-artifact-được-lưu-trữ" class="hash-link" aria-label="Đường dẫn trực tiếp đến 9. Danh Sách File Và Thư Mục Artifact Được Lưu Trữ" title="Đường dẫn trực tiếp đến 9. Danh Sách File Và Thư Mục Artifact Được Lưu Trữ" translate="no">​</a></h2>
+<p>Tất cả bằng chứng kiểm thử được lưu trữ tại <code>docs/99-luu-tru/bao-cao/report-codex/phase-06A-artifacts/</code>:</p>
+<ol>
+<li class=""><code>git_check.log</code>: Kết quả kiểm tra git HEAD và tính toàn vẹn mã nguồn.</li>
+<li class=""><code>pytest_full.log</code>: Log chi tiết chạy toàn bộ suite pytest backend.</li>
+<li class=""><code>pytest_focused.log</code>: Log chi tiết chạy bộ test trọng tâm 20 file.</li>
+<li class=""><code>benchmark_run.log</code>: Console log quá trình chạy benchmark hybrid search.</li>
+<li class=""><code>hybrid_benchmark.json</code>: Dữ liệu thô kết quả đo lường Hit@5, MRR, latency p50/p95, false positive.</li>
+<li class=""><code>hybrid_benchmark.md</code>: Báo cáo bảng benchmark so sánh định dạng Markdown.</li>
+<li class=""><code>matrix_run.log</code>: Log chi tiết chạy kịch bản ma trận sáu chức năng và quyền.</li>
+<li class="">Script phục vụ kiểm thử (lưu trong brain scratch): <code>scratch/run_phase6a_matrix.py</code>.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="10-kết-luận-đợt-1-trước-khi-sửa-lỗi">10. Kết Luận Đợt 1 (Trước Khi Sửa Lỗi)<a href="#10-kết-luận-đợt-1-trước-khi-sửa-lỗi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 10. Kết Luận Đợt 1 (Trước Khi Sửa Lỗi)" title="Đường dẫn trực tiếp đến 10. Kết Luận Đợt 1 (Trước Khi Sửa Lỗi)" translate="no">​</a></h2>
+<blockquote>
+<p>[!CAUTION]
+<strong>KẾT QUẢ ĐỢT 1: CHƯA ĐỦ ĐIỀU KIỆN NGHIỆM THU TÍCH HỢP (CONDITIONAL REJECT)</strong></p>
+<p><strong>Lý do</strong>:</p>
+<ul>
+<li class="">Chức năng số 4 (<strong>Gợi ý Tag</strong>) tồn tại lỗi nghiêm trọng <strong>BUG-AI-01</strong> (<code>AmbiguousParameterError</code>), khiến API <code>GET /documents/{document_id}/tag-suggestions</code> trả về <strong>HTTP 500</strong> khi người dùng truy cập.</li>
+<li class="">Cấu hình Alembic tồn tại lỗi <strong>BUG-ENV-01</strong> ngăn cản chạy migration trên môi trường database cục bộ không có SSL.</li>
+</ul>
+<p><strong>Kế hoạch tiếp theo</strong>: Bàn giao danh sách lỗi (<code>BUG-AI-01</code>, <code>BUG-ENV-01</code>) cho nhóm phát triển sửa mã nguồn production và cấu hình môi trường, sau đó tiến hành kiểm tra lại toàn diện.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-kiểm-tra-lại-sau-khi-sửa-lỗi-và-nghiệm-thu-toàn-diện-re-test--final-acceptance">11. Kiểm Tra Lại Sau Khi Sửa Lỗi Và Nghiệm Thu Toàn Diện (Re-test &amp; Final Acceptance)<a href="#11-kiểm-tra-lại-sau-khi-sửa-lỗi-và-nghiệm-thu-toàn-diện-re-test--final-acceptance" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11. Kiểm Tra Lại Sau Khi Sửa Lỗi Và Nghiệm Thu Toàn Diện (Re-test &amp; Final Acceptance)" title="Đường dẫn trực tiếp đến 11. Kiểm Tra Lại Sau Khi Sửa Lỗi Và Nghiệm Thu Toàn Diện (Re-test &amp; Final Acceptance)" translate="no">​</a></h2>
+<p>Đợt kiểm tra lại được thực hiện độc lập vào ngày <strong>28/11/2026</strong> sau khi mã nguồn backend và cấu hình Alembic được cập nhật, trên môi trường PostgreSQL Disposable riêng biệt (<code>pgvector-6a-v2</code> port 55434).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="111-bảng-trạng-thái-lỗi-sau-khi-sửa">11.1 Bảng Trạng Thái Lỗi Sau Khi Sửa<a href="#111-bảng-trạng-thái-lỗi-sau-khi-sửa" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11.1 Bảng Trạng Thái Lỗi Sau Khi Sửa" title="Đường dẫn trực tiếp đến 11.1 Bảng Trạng Thái Lỗi Sau Khi Sửa" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Mã lỗi</th><th style="text-align:center">Mức độ</th><th style="text-align:left">Mô tả hiện tượng ban đầu</th><th style="text-align:center">Trạng thái sau kiểm tra lại</th><th style="text-align:left">Bằng chứng kiểm tra thực nghiệm</th></tr></thead><tbody><tr><td style="text-align:left"><strong>BUG-AI-01</strong></td><td style="text-align:center">High</td><td style="text-align:left">Sập API <code>tag-suggestions</code> với lỗi <code>AmbiguousParameterError</code> do thiếu ép kiểu <code>CAST(:ws AS integer)</code> trong <code>evidence_search.py</code>.</td><td style="text-align:center"><strong>ĐÃ XÁC NHẬN SỬA</strong> (Đạt)</td><td style="text-align:left">Chạy 5 ca kiểm thử thực tế trên DB: cả tài liệu cá nhân, tài liệu nhóm, và tài liệu chưa có chunk đều trả về HTTP 200, đúng phân loại tag, loại bỏ tag đã gắn, có citation căn cứ.<br>Artifact: <code>verify_tag_suggestions.log</code>.</td></tr><tr><td style="text-align:left"><strong>BUG-ENV-01</strong></td><td style="text-align:center">Medium</td><td style="text-align:left">Hardcode <code>ssl: True</code> trong <code>alembic/env.py</code> khiến migration sập trên DB local/CI không có TLS.</td><td style="text-align:center"><strong>ĐÃ XÁC NHẬN SỬA</strong> (Đạt)</td><td style="text-align:left">Chạy migration từ database trống hoàn toàn (<code>phase6a_clean_test</code>) qua <code>test_clean_chain_upgrade_from_empty_database</code>. Chạy thành công toàn bộ 19 revisions lên đúng HEAD <code>f2c3d4e5a6b7</code>.<br>Artifact: <code>pytest_migration.log</code>.</td></tr><tr><td style="text-align:left"><strong>BEHAVIOR-01</strong></td><td style="text-align:center">Info</td><td style="text-align:left"><code>get_document</code> ghi log <code>DOCUMENT_VIEWED</code> với <code>dedup_window_minutes = 0</code>.</td><td style="text-align:center"><strong>ĐÃ GHI NHẬN (REVIEW)</strong></td><td style="text-align:left">Không ảnh hưởng đến độ chính xác của chỉ số <code>opened_from_search</code> (tính theo distinct documents). Không chặn nghiệm thu chức năng.</td></tr></tbody></table>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="112-kết-quả-kiểm-tra-sửa-lỗi-gợi-ý-tag-bug-ai-01-chi-tiết">11.2 Kết Quả Kiểm Tra Sửa Lỗi Gợi Ý Tag (BUG-AI-01) Chi Tiết<a href="#112-kết-quả-kiểm-tra-sửa-lỗi-gợi-ý-tag-bug-ai-01-chi-tiết" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11.2 Kết Quả Kiểm Tra Sửa Lỗi Gợi Ý Tag (BUG-AI-01) Chi Tiết" title="Đường dẫn trực tiếp đến 11.2 Kết Quả Kiểm Tra Sửa Lỗi Gợi Ý Tag (BUG-AI-01) Chi Tiết" translate="no">​</a></h3>
+<p>Đã chạy kiểm thử với 5 kịch bản thực tế qua script <code>scratch/verify_tag_suggestions.py</code>:</p>
+<ol>
+<li class=""><strong>Tài liệu cá nhân của Alice (Doc 1, <code>workspace_id = None</code>)</strong>:
+<ul>
+<li class=""><code>existing</code>: Gợi ý chính xác tag <code>[&#x27;Cấu trúc dữ liệu&#x27;]</code> (chưa gắn, có căn cứ trong chunk 1001).</li>
+<li class="">Loại trừ tag đã gắn: Tag <code>Cơ sở dữ liệu</code> đã gắn vào Doc 1 bị loại hoàn toàn khỏi gợi ý.</li>
+<li class="">Tag không có căn cứ: Tag <code>Mạng máy tính</code> không xuất hiện trong văn bản nên không bị gợi ý bừa.</li>
+<li class="">Tag ngoài kho: Tag của Carol (<code>Bảo mật thông tin</code>) và tag nhóm (<code>Công nghệ phần mềm</code>) không bị rò rỉ.</li>
+</ul>
+</li>
+<li class=""><strong>Tài liệu nhóm Workspace 10 (Doc 2, <code>workspace_id = 10</code>)</strong>:
+<ul>
+<li class=""><code>existing</code>: Gợi ý chính xác tag <code>[&#x27;DevOps&#x27;]</code> được liên kết với Workspace 10 qua bảng <code>workspace_tags</code>.</li>
+<li class="">Loại trừ tag nhóm đã gắn: Tag <code>Công nghệ phần mềm</code> đã gắn vào Doc 2 bị loại.</li>
+<li class="">Tag cá nhân của Alice (<code>Cấu trúc dữ liệu</code>) không bị lẫn vào tài liệu nhóm.</li>
+</ul>
+</li>
+<li class=""><strong>Tài liệu chưa có chunk / chưa lập chỉ mục (Doc 5)</strong>:
+<ul>
+<li class="">Trả về an toàn <code>{&quot;existing&quot;: [], &quot;new&quot;: []}</code>, mã trạng thái HTTP 200, không bị lỗi 500.</li>
+</ul>
+</li>
+<li class=""><strong>Quyền thành viên (Bob)</strong>: Gọi gợi ý tag trên Doc 2 nhận được kết quả hợp lệ.</li>
+<li class=""><strong>Quyền người ngoài nhóm (Carol)</strong>: Gọi gợi ý tag trên Doc 2 nhận về HTTP 404 chuẩn xác.</li>
+</ol>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="113-kết-quả-kiểm-tra-lại-toàn-bộ-backend-test-suite">11.3 Kết Quả Kiểm Tra Lại Toàn Bộ Backend Test Suite<a href="#113-kết-quả-kiểm-tra-lại-toàn-bộ-backend-test-suite" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11.3 Kết Quả Kiểm Tra Lại Toàn Bộ Backend Test Suite" title="Đường dẫn trực tiếp đến 11.3 Kết Quả Kiểm Tra Lại Toàn Bộ Backend Test Suite" translate="no">​</a></h3>
+<p>Khi chạy bộ test với biến môi trường chuẩn xác trỏ vào database test disposable:</p>
+<ul>
+<li class=""><code>TEST_DATABASE_URL=&quot;postgresql+asyncpg://postgres:postgres@127.0.0.1:55434/phase6a_v2&quot;</code></li>
+<li class=""><code>CLEAN_CHAIN_DATABASE_URL=&quot;postgresql+asyncpg://postgres:postgres@127.0.0.1:55434/phase6a_clean_test&quot;</code></li>
+</ul>
+<p>Kết quả ghi nhận:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">======================= 148 passed, 22 warnings in 4.61s =======================</span><br></div></code></pre></div></div>
+<ul>
+<li class=""><strong>Tất cả 148 tests PASSED 100%</strong>.</li>
+<li class=""><strong>0 FAILED, 0 ERROR, 0 SKIPPED</strong>.</li>
+<li class="">Đối chiếu 3 test trước đây gặp sự cố môi trường:
+<ul>
+<li class=""><code>test_batch2_integrity_constraints.py</code> (2 tests): <strong>PASSED</strong></li>
+<li class=""><code>test_library_download_action_filter.py</code> (1 test): <strong>PASSED</strong></li>
+<li class=""><code>test_migration_clean_chain.py</code> (2 tests): <strong>PASSED</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="114-kết-quả-kiểm-tra-giao-diện-trình-duyệt-thực-tế-playwright-e2e">11.4 Kết Quả Kiểm Tra Giao Diện Trình Duyệt Thực Tế (Playwright E2E)<a href="#114-kết-quả-kiểm-tra-giao-diện-trình-duyệt-thực-tế-playwright-e2e" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11.4 Kết Quả Kiểm Tra Giao Diện Trình Duyệt Thực Tế (Playwright E2E)" title="Đường dẫn trực tiếp đến 11.4 Kết Quả Kiểm Tra Giao Diện Trình Duyệt Thực Tế (Playwright E2E)" translate="no">​</a></h3>
+<p>Hệ thống đã chạy backend FastAPI (port 8001) và frontend Vite React (port 5173) song song, kết nối với cơ sở dữ liệu test <code>phase6a_v2</code>. Quá trình kiểm thử tự động hóa được thực thi bằng Playwright trên trình duyệt <strong>Google Chrome 158.0</strong> thực tế.</p>
+<p>Toàn bộ <strong>16 ảnh chụp màn hình</strong> ở các trạng thái quan trọng đã được chụp và lưu trữ tại <code>docs/99-luu-tru/bao-cao/report-codex/phase-06A-artifacts/browser/</code>:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:center">STT</th><th style="text-align:left">Tên file ảnh</th><th style="text-align:left">Mô tả luồng và trạng thái giao diện xác nhận</th><th style="text-align:center">Kết quả UI</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:left"><code>01_login_page.png</code></td><td style="text-align:left">Giao diện đăng nhập chuẩn mực với form xác thực</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">2</td><td style="text-align:left"><code>02_personal_documents_preview.png</code></td><td style="text-align:left">Danh sách tài liệu cá nhân hiển thị trường <code>preview_text</code>, tối ưu dung lượng tải, không chứa full content</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">3</td><td style="text-align:left"><code>03_document_detail_summary.png</code></td><td style="text-align:left">Chi tiết tài liệu Doc 1, tab Tóm tắt AI hiển thị 4 gạch đầu dòng rõ ràng, bộ đệm cache hit hoạt động</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">4</td><td style="text-align:left"><code>04_qa_grounded_answer.png</code></td><td style="text-align:left">Hỏi đáp AI với câu hỏi có căn cứ: trả lời trích dẫn nguyên văn kèm citation chunk 1001</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">5</td><td style="text-align:left"><code>05_qa_insufficient_evidence.png</code></td><td style="text-align:left">Hỏi đáp AI với câu hỏi thiếu căn cứ: thông báo không đủ cơ sở suy luận, không bịa đặt nội dung</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">6</td><td style="text-align:left"><code>06_tag_suggestions_view.png</code></td><td style="text-align:left">Gợi ý tag hiển thị danh sách tag có sẵn dựa trên căn cứ nội dung và cho phép tạo tag mới</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">7</td><td style="text-align:left"><code>07_related_documents_view.png</code></td><td style="text-align:left">Danh mục tài liệu liên quan loại bỏ chính nó, loại bỏ bản trùng checksum và tài liệu đã xóa</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">8</td><td style="text-align:left"><code>08_search_lexical_result.png</code></td><td style="text-align:left">Tìm kiếm từ khóa <code>khóa chính</code> hiển thị nhãn phương thức <code>lexical_content</code></td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">9</td><td style="text-align:left"><code>09_search_semantic_result.png</code></td><td style="text-align:left">Tìm kiếm ngữ nghĩa diễn đạt lại <code>khuôn mẫu tạo container</code> hiển thị nhãn <code>semantic</code></td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">10</td><td style="text-align:left"><code>10_search_unaccent_result.png</code></td><td style="text-align:left">Tìm kiếm tiếng Việt không dấu <code>khuon mau tao moi truong container</code> trả về kết quả chuẩn xác</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">11</td><td style="text-align:left"><code>11_group_workspace_view.png</code></td><td style="text-align:left">Không gian nhóm Workspace 10 hiển thị tài liệu nhóm Doc 2</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">12</td><td style="text-align:left"><code>12_stats_alice_overview.png</code></td><td style="text-align:left">Bảng điều khiển thống kê 7 ngày và 30 ngày của Alice hiển thị chuẩn số lượt đọc và số tài liệu mở từ tìm kiếm</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">13</td><td style="text-align:left"><code>13_stats_carol_privacy.png</code></td><td style="text-align:left">Đăng nhập tài khoản Carol: hiển thị 0 lượt xem, bảo toàn quyền riêng tư tuyệt đối</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">14</td><td style="text-align:left"><code>14_carol_forbidden_group_doc.png</code></td><td style="text-align:left">Carol truy cập trực tiếp tài liệu nhóm Doc 2: bị chặn điều hướng và báo lỗi không tìm thấy</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">15</td><td style="text-align:left"><code>15_bob_group_access.png</code></td><td style="text-align:left">Bob (thành viên nhóm chỉ đọc) truy cập và xem được tài liệu nhóm Workspace 10</td><td style="text-align:center"><strong>PASS</strong></td></tr><tr><td style="text-align:center">16</td><td style="text-align:left"><code>16_ui_error_handling_state.png</code></td><td style="text-align:left">Giả lập lỗi API bằng intercept request: giao diện thông báo lỗi thân thiện thay vì hiển thị số 0 giả</td><td style="text-align:center"><strong>PASS</strong></td></tr></tbody></table>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="115-kết-quả-xác-nhận-ma-trận-quyền-và-thu-hồi-quyền">11.5 Kết Quả Xác Nhận Ma Trận Quyền Và Thu Hồi Quyền<a href="#115-kết-quả-xác-nhận-ma-trận-quyền-và-thu-hồi-quyền" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11.5 Kết Quả Xác Nhận Ma Trận Quyền Và Thu Hồi Quyền" title="Đường dẫn trực tiếp đến 11.5 Kết Quả Xác Nhận Ma Trận Quyền Và Thu Hồi Quyền" translate="no">​</a></h3>
+<p>Chạy kiểm thử thực nghiệm qua <code>scratch/verify_permission_matrix.py</code>:</p>
+<ol>
+<li class=""><strong>User A (Alice - Owner)</strong>: Toàn quyền trên tài liệu cá nhân Doc 1 và tài liệu nhóm Doc 2.</li>
+<li class=""><strong>User B (Bob - Member read-only)</strong>:
+<ul>
+<li class="">Truy cập và tìm kiếm thấy tài liệu nhóm Doc 2.</li>
+<li class="">Bị chặn hoàn toàn khi truy cập tài liệu cá nhân của Alice (HTTP 404).</li>
+</ul>
+</li>
+<li class=""><strong>User C (Carol - Outsider)</strong>:
+<ul>
+<li class="">Bị chặn hoàn toàn khỏi tài liệu nhóm Doc 2 (HTTP 404).</li>
+<li class="">Tìm kiếm không thấy tài liệu nhóm, không rò rỉ snippet hay metadata (0 kết quả).</li>
+<li class="">Không thể lấy gợi ý tag, tóm tắt hay tài liệu liên quan của Doc 2 (HTTP 404).</li>
+</ul>
+</li>
+<li class=""><strong>Ca Thu Hồi Quyền (Permission Revocation)</strong>:
+<ul>
+<li class="">Xóa bản ghi thành viên của Bob khỏi bảng <code>workspace_members</code>.</li>
+<li class="">Ngay lập tức, yêu cầu gọi lại URL hoặc API của Doc 2 từ Bob bị chặn với mã lỗi <strong>HTTP 404</strong>.</li>
+<li class="">Tìm kiếm từ khóa của Bob trả về 0 kết quả. Hệ thống không bị trễ bộ đệm quyền.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="116-danh-mục-artifacts-mới-bổ-sung">11.6 Danh Mục Artifacts Mới Bổ Sung<a href="#116-danh-mục-artifacts-mới-bổ-sung" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11.6 Danh Mục Artifacts Mới Bổ Sung" title="Đường dẫn trực tiếp đến 11.6 Danh Mục Artifacts Mới Bổ Sung" translate="no">​</a></h3>
+<p>Thư mục <code>docs/99-luu-tru/bao-cao/report-codex/phase-06A-artifacts/</code> đã được bổ sung đầy đủ:</p>
+<ul>
+<li class=""><code>verify_tag_suggestions.log</code>: Log xác nhận chi tiết 5 ca kiểm thử sửa lỗi gợi ý tag BUG-AI-01.</li>
+<li class=""><code>pytest_migration.log</code>: Log xác nhận migration chuỗi sạch từ DB trống không có SSL (BUG-ENV-01).</li>
+<li class=""><code>pytest_failing_resolved.log</code>: Log đối chiếu các test integrity constraints và filter download.</li>
+<li class=""><code>pytest_v2_full.log</code>: Log chạy thành công 148/148 tests backend suite.</li>
+<li class=""><code>matrix_permissions.log</code>: Log kiểm tra ma trận quyền và thu hồi quyền.</li>
+<li class=""><code>browser_test.log</code>: Log thực thi kịch bản kiểm thử trình duyệt tự động Playwright.</li>
+<li class="">Thư mục <code>browser/</code>: Chứa 16 file ảnh chụp màn hình định dạng PNG minh chứng cho tất cả các luồng UI.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-kết-luận-nghiệm-thu-chính-thức-task-6a">12. KẾT LUẬN NGHIỆM THU CHÍNH THỨC TASK 6A<a href="#12-kết-luận-nghiệm-thu-chính-thức-task-6a" class="hash-link" aria-label="Đường dẫn trực tiếp đến 12. KẾT LUẬN NGHIỆM THU CHÍNH THỨC TASK 6A" title="Đường dẫn trực tiếp đến 12. KẾT LUẬN NGHIỆM THU CHÍNH THỨC TASK 6A" translate="no">​</a></h2>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>KẾT QUẢ NGHIỆM THU CUỐI CÙNG: CHÍNH THỨC ĐẠT (OFFICIALLY ACCEPTED)</strong></p>
+<ol>
+<li class=""><strong>Hai lỗi đã sửa được xác nhận 100%</strong>:
+<ul>
+<li class=""><code>BUG-AI-01</code> (Gợi ý Tag): Đã sửa và xác nhận đạt trên cả tài liệu cá nhân, nhóm và trường hợp rỗng.</li>
+<li class=""><code>BUG-ENV-01</code> (Alembic SSL): Đã sửa và xác nhận migration thành công trên PostgreSQL local từ DB trống lên HEAD <code>f2c3d4e5a6b7</code>.</li>
+</ul>
+</li>
+<li class=""><strong>Toàn bộ backend test suite đạt 100%</strong>: 148/148 tests passed, không còn lỗi nào chưa giải quyết, không có test bị bỏ qua bất hợp lý.</li>
+<li class=""><strong>Benchmark tập đánh giá cuối</strong>: Đạt Hit@5 = 87.5% (Evaluation split) và 93.8% (Overall), 0% rò rỉ dữ liệu, 0% false positive khi thiếu căn cứ.</li>
+<li class=""><strong>Luồng sử dụng trên trình duyệt thực tế</strong>: Đã thực hiện trọn vẹn và ghi nhận đầy đủ 16 ảnh chụp màn hình chứng minh cho các chức năng Upload, Index, Tìm kiếm kết hợp, Hỏi đáp trích nguyên văn, Tóm tắt, Preview danh sách, Gợi ý Tag, Tài liệu liên quan, Thống kê 7/30 ngày, Phân quyền và Xử lý lỗi.</li>
+<li class=""><strong>Ma trận quyền tối thiểu và ca thu hồi quyền</strong>: Đã được kiểm chứng thực tế có hiệu lực tức thời.</li>
+</ol>
+<p><strong>Task 6A đã hoàn thành xuất sắc toàn bộ các mục tiêu và đủ điều kiện để chuyển giao sang các giai đoạn tiếp theo của dự án.</strong></p>
+</blockquote></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/99-luu-tru/bao-cao/report-codex/phase-06A-hoi-quy-va-nghiem-thu.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-28T05:08:04.000Z" itemprop="dateModified">28 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-môi-trường-và-trạng-thái-code-được-kiểm-tra" class="table-of-contents__link toc-highlight">1. Môi Trường Và Trạng Thái Code Được Kiểm Tra</a><ul><li><a href="#11-trạng-thái-git-repository" class="table-of-contents__link toc-highlight">1.1 Trạng thái Git Repository</a></li><li><a href="#12-môi-trường-cơ-sở-dữ-liệu-và-ai" class="table-of-contents__link toc-highlight">1.2 Môi trường Cơ sở dữ liệu và AI</a></li></ul></li><li><a href="#2-các-lệnh-đã-chạy-và-kết-quả" class="table-of-contents__link toc-highlight">2. Các Lệnh Đã Chạy Và Kết Quả</a></li><li><a href="#3-ma-trận-sáu-chức-năng-ai-và-preview-danh-sách" class="table-of-contents__link toc-highlight">3. Ma Trận Sáu Chức Năng AI Và Preview Danh Sách</a></li><li><a href="#4-kết-quả-benchmark-tập-đánh-giá-cuối-evaluation-split" class="table-of-contents__link toc-highlight">4. Kết Quả Benchmark Tập Đánh Giá Cuối (Evaluation Split)</a><ul><li><a href="#41-bảng-đo-lường-chi-tiết-trên-tập-đánh-giá-cuối-evaluation-split---30-câu" class="table-of-contents__link toc-highlight">4.1 Bảng đo lường chi tiết trên Tập Đánh Giá Cuối (Evaluation Split - 30 câu)</a></li><li><a href="#42-bảng-đối-chiếu-tổng-quan-calibration-vs-evaluation-vs-toàn-bộ-corpus" class="table-of-contents__link toc-highlight">4.2 Bảng đối chiếu tổng quan (Calibration vs Evaluation vs Toàn bộ Corpus)</a></li><li><a href="#43-nhận-xét-kỹ-thuật-về-hiệu-năng-và-phân-biệt-căn-cứ-trả-lời" class="table-of-contents__link toc-highlight">4.3 Nhận xét kỹ thuật về hiệu năng và phân biệt căn cứ trả lời</a></li></ul></li><li><a href="#5-kết-quả-luồng-nghiệp-vụ-cá-nhân-và-nhóm" class="table-of-contents__link toc-highlight">5. Kết Quả Luồng Nghiệp Vụ Cá Nhân Và Nhóm</a></li><li><a href="#6-ma-trận-quyền-tối-thiểu-access-control-matrix" class="table-of-contents__link toc-highlight">6. Ma Trận Quyền Tối Thiểu (Access Control Matrix)</a></li><li><a href="#7-danh-sách-lỗi-và-khuyến-nghị-xử-lý" class="table-of-contents__link toc-highlight">7. Danh Sách Lỗi Và Khuyến Nghị Xử Lý</a><ul><li><a href="#71-bug-ai-01-mức-độ-high--lỗi-sql-ambiguousparametererror-tại-gợi-ý-tag" class="table-of-contents__link toc-highlight">7.1 <code>BUG-AI-01</code> (Mức độ: High) — Lỗi SQL AmbiguousParameterError tại Gợi ý Tag</a></li><li><a href="#72-bug-env-01-mức-độ-medium--hardcode-cấu-hình-ssl-trong-alembic" class="table-of-contents__link toc-highlight">7.2 <code>BUG-ENV-01</code> (Mức độ: Medium) — Hardcode cấu hình SSL trong Alembic</a></li><li><a href="#73-behavior-01-mức-độ-info--architecture-review--hành-vi-ghi-log-lượt-đọc-khi-reload" class="table-of-contents__link toc-highlight">7.3 <code>BEHAVIOR-01</code> (Mức độ: Info / Architecture Review) — Hành vi ghi log lượt đọc khi reload</a></li></ul></li><li><a href="#8-những-giới-hạn-chưa-kiểm-tra" class="table-of-contents__link toc-highlight">8. Những Giới Hạn Chưa Kiểm Tra</a></li><li><a href="#9-danh-sách-file-và-thư-mục-artifact-được-lưu-trữ" class="table-of-contents__link toc-highlight">9. Danh Sách File Và Thư Mục Artifact Được Lưu Trữ</a></li><li><a href="#10-kết-luận-đợt-1-trước-khi-sửa-lỗi" class="table-of-contents__link toc-highlight">10. Kết Luận Đợt 1 (Trước Khi Sửa Lỗi)</a></li><li><a href="#11-kiểm-tra-lại-sau-khi-sửa-lỗi-và-nghiệm-thu-toàn-diện-re-test--final-acceptance" class="table-of-contents__link toc-highlight">11. Kiểm Tra Lại Sau Khi Sửa Lỗi Và Nghiệm Thu Toàn Diện (Re-test &amp; Final Acceptance)</a><ul><li><a href="#111-bảng-trạng-thái-lỗi-sau-khi-sửa" class="table-of-contents__link toc-highlight">11.1 Bảng Trạng Thái Lỗi Sau Khi Sửa</a></li><li><a href="#112-kết-quả-kiểm-tra-sửa-lỗi-gợi-ý-tag-bug-ai-01-chi-tiết" class="table-of-contents__link toc-highlight">11.2 Kết Quả Kiểm Tra Sửa Lỗi Gợi Ý Tag (BUG-AI-01) Chi Tiết</a></li><li><a href="#113-kết-quả-kiểm-tra-lại-toàn-bộ-backend-test-suite" class="table-of-contents__link toc-highlight">11.3 Kết Quả Kiểm Tra Lại Toàn Bộ Backend Test Suite</a></li><li><a href="#114-kết-quả-kiểm-tra-giao-diện-trình-duyệt-thực-tế-playwright-e2e" class="table-of-contents__link toc-highlight">11.4 Kết Quả Kiểm Tra Giao Diện Trình Duyệt Thực Tế (Playwright E2E)</a></li><li><a href="#115-kết-quả-xác-nhận-ma-trận-quyền-và-thu-hồi-quyền" class="table-of-contents__link toc-highlight">11.5 Kết Quả Xác Nhận Ma Trận Quyền Và Thu Hồi Quyền</a></li><li><a href="#116-danh-mục-artifacts-mới-bổ-sung" class="table-of-contents__link toc-highlight">11.6 Danh Mục Artifacts Mới Bổ Sung</a></li></ul></li><li><a href="#12-kết-luận-nghiệm-thu-chính-thức-task-6a" class="table-of-contents__link toc-highlight">12. KẾT LUẬN NGHIỆM THU CHÍNH THỨC TASK 6A</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

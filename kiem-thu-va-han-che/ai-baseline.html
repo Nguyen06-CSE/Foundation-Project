@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-kiem-thu-va-han-che/ai-baseline" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Baseline Tích Hợp Tính Năng Tài Liệu (Phase 0A) | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/kiem-thu-va-han-che/ai-baseline"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Baseline Tích Hợp Tính Năng Tài Liệu (Phase 0A) | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Tài liệu này chấm mức độ tích hợp thực tế của các năng lực tài liệu dựa trên code đang có, test đang có và baseline chạy thật ở Phase 0B. Mục tiêu không phải ca ngợi tính năng, mà là chỉ ra chỗ nào đã dùng được, chỗ nào mới là khung code, và chỗ nào chưa có bằng chứng."><meta data-rh="true" property="og:description" content="Tài liệu này chấm mức độ tích hợp thực tế của các năng lực tài liệu dựa trên code đang có, test đang có và baseline chạy thật ở Phase 0B. Mục tiêu không phải ca ngợi tính năng, mà là chỉ ra chỗ nào đã dùng được, chỗ nào mới là khung code, và chỗ nào chưa có bằng chứng."><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/kiem-thu-va-han-che/ai-baseline"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/kiem-thu-va-han-che/ai-baseline" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/kiem-thu-va-han-che/ai-baseline" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.31488eaf.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.9b395aa4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>📊 BASELINE TÍCH HỢP TÍNH NĂNG TÀI LIỆU — PHASE 0A</h1></header>
+<p>Tài liệu này chấm mức độ tích hợp thực tế của các năng lực tài liệu dựa trên <strong>code đang có</strong>, <strong>test đang có</strong> và <strong>baseline chạy thật ở Phase 0B</strong>. Mục tiêu không phải ca ngợi tính năng, mà là chỉ ra chỗ nào đã dùng được, chỗ nào mới là khung code, và chỗ nào chưa có bằng chứng.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="0-phạm-vi-thang-điểm-và-quy-ước-bằng-chứng">0. Phạm vi, thang điểm và quy ước bằng chứng<a href="#0-phạm-vi-thang-điểm-và-quy-ước-bằng-chứng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 0. Phạm vi, thang điểm và quy ước bằng chứng" title="Đường dẫn trực tiếp đến 0. Phạm vi, thang điểm và quy ước bằng chứng" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="01-phạm-vi">0.1. Phạm vi<a href="#01-phạm-vi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 0.1. Phạm vi" title="Đường dẫn trực tiếp đến 0.1. Phạm vi" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Nhóm</th><th>Nội dung được chấm</th></tr></thead><tbody><tr><td>Upload</td><td>Upload cá nhân, upload nhóm, upload gói (bundle) nhiều file</td></tr><tr><td>Lưu trữ</td><td>Khử trùng lặp theo checksum, tái sử dụng file vật lý, local storage, R2</td></tr><tr><td>Nội dung</td><td>Sinh Markdown, đồng bộ Markdown/thumbnail lên local hoặc R2</td></tr><tr><td>Tra cứu</td><td>Full-text search, xếp hạng, snippet, phân quyền theo kho cá nhân/nhóm</td></tr><tr><td>Tổ chức</td><td>Tag cá nhân, tag nhóm, gắn tag cho tài liệu và bundle</td></tr><tr><td>Đo lường</td><td>View count, download count, trending score, thống kê theo thời gian</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="02-thang-điểm-05">0.2. Thang điểm 0–5<a href="#02-thang-điểm-05" class="hash-link" aria-label="Đường dẫn trực tiếp đến 0.2. Thang điểm 0–5" title="Đường dẫn trực tiếp đến 0.2. Thang điểm 0–5" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:right">Điểm</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td style="text-align:right">0</td><td>Chưa có code hoặc không chạy được</td></tr><tr><td style="text-align:right">1</td><td>Có prototype, chưa nối vào luồng chính</td></tr><tr><td style="text-align:right">2</td><td>Có code chạy được nhưng thiếu test hoặc thiếu xử lý lỗi nghiêm trọng</td></tr><tr><td style="text-align:right">3</td><td>Tích hợp được vào luồng chính, còn khoảng trống rõ ràng về test/ownership/đồng thời</td></tr><tr><td style="text-align:right">4</td><td>Tích hợp tốt, có test trực tiếp hoặc bằng chứng chạy thật, còn ít rủi ro đã biết</td></tr><tr><td style="text-align:right">5</td><td>Hoàn thiện production: test đầy đủ, chịu lỗi, quan sát được, có kiểm soát đồng thời</td></tr></tbody></table>
+<p>Điểm tổng là <strong>trung bình cộng</strong> của 10 năng lực, không trọng số. Độ tin cậy phản ánh chất lượng bằng chứng, không phản ánh mức độ quan trọng.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="03-quy-ước">0.3. Quy ước<a href="#03-quy-ước" class="hash-link" aria-label="Đường dẫn trực tiếp đến 0.3. Quy ước" title="Đường dẫn trực tiếp đến 0.3. Quy ước" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Code evidence</strong>: đường dẫn + hàm/endpoint cụ thể.</li>
+<li class=""><strong>Test evidence</strong>: tên file/test và việc test đó thực sự kiểm tra gì (real DB, mocked DB, hay chỉ kiểm tra schema).</li>
+<li class=""><strong>Runtime evidence</strong>: kết quả chạy baseline 0B trên PostgreSQL tạm.</li>
+<li class="">Không đọc <code>.env</code>, không dùng database đang chạy, không dùng dữ liệu thật.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-kết-luận-điều-hành">1. Kết luận điều hành<a href="#1-kết-luận-điều-hành" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Kết luận điều hành" title="Đường dẫn trực tiếp đến 1. Kết luận điều hành" translate="no">​</a></h2>
+<p><strong>Điểm tích hợp tổng: 3.3/5</strong> — đủ để demo luồng tài liệu end-to-end, chưa đủ để gọi là production-hardened.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="điểm-mạnh-có-bằng-chứng">Điểm mạnh có bằng chứng<a href="#điểm-mạnh-có-bằng-chứng" class="hash-link" aria-label="Đường dẫn trực tiếp đến Điểm mạnh có bằng chứng" title="Đường dẫn trực tiếp đến Điểm mạnh có bằng chứng" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Luồng upload đã nối tương đối đầy đủ</strong>: tạo document → checksum → lưu file → xử lý nền → activity log.</li>
+<li class=""><strong>Full-text search có nền tảng CSDL đúng</strong>: trigger <code>unaccent</code> + <code>simple</code>, weight A/B/C, GIN index, scope cá nhân/nhóm.</li>
+<li class=""><strong>Baseline 0B chạy thật</strong>: 48 câu answerable đạt Hit@5 = 0.896, MRR = 0.896; 0/6 câu forbidden bị rò rỉ; 0/6 câu no-evidence trả kết quả.</li>
+<li class=""><strong>Local storage có test thật</strong>: ghi file, đọc URL tương đối, xóa file và kiểm tra refcount.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="rủi-ro-lớn-nhất">Rủi ro lớn nhất<a href="#rủi-ro-lớn-nhất" class="hash-link" aria-label="Đường dẫn trực tiếp đến Rủi ro lớn nhất" title="Đường dẫn trực tiếp đến Rủi ro lớn nhất" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Ưu tiên</th><th>Rủi ro</th><th>Bằng chứng</th></tr></thead><tbody><tr><td>P0</td><td>Upload cá nhân nhận <code>workspace_id</code> nhưng không kiểm tra membership</td><td><code>backend/app/routers/documents.py</code> → <code>upload_document()</code> truyền thẳng <code>workspace_id</code> vào <code>create_document_from_upload()</code>; không có <code>require_member</code>/<code>require_full_permission</code>.</td></tr><tr><td>P0</td><td>Gắn tag không kiểm tra tag thuộc đúng owner/workspace</td><td><code>document_service.create_document_from_upload()</code> và <code>PATCH /documents/{id}/tags</code> chỉ <code>select(Tag).where(Tag.id.in_(...))</code>; group batch upload cũng không lọc <code>workspace_id</code>.</td></tr><tr><td>P0</td><td>Kiểm tra trùng checksum không nguyên tử</td><td>Kiểm tra <code>SELECT</code> rồi <code>INSERT</code> nhưng không có unique constraint trên <code>(checksum, owner_id, workspace_id)</code>.</td></tr><tr><td>P1</td><td>R2 và Markdown gần như không có test</td><td>Không có test nào chạm <code>upload_bytes_to_r2</code>, <code>download_r2_to_temp_file</code>, <code>generate_markdown</code>.</td></tr><tr><td>P1</td><td>PDF mixed mất trang scan khi index</td><td><code>extract_text()</code> chỉ OCR khi <strong>toàn bộ</strong> PDF không có text layer; baseline 0B cho thấy token recall của <code>pdf_mixed</code> chỉ 0.518.</td></tr><tr><td>P1</td><td>View count có thể mất cập nhật khi đồng thời</td><td><code>_do_log_activity()</code> dùng <code>stats.view_count += 1</code> (read-modify-write) không khóa.</td></tr><tr><td>P2</td><td>FTS chưa xử lý token kiểu <code>Wi-Fi</code> / <code>wifi</code></td><td>Baseline 0B miss câu EQ04 vì <code>Wi-Fi</code> tách thành <code>wi</code> + <code>fi</code>.</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-bảng-điểm-tổng-hợp">2. Bảng điểm tổng hợp<a href="#2-bảng-điểm-tổng-hợp" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Bảng điểm tổng hợp" title="Đường dẫn trực tiếp đến 2. Bảng điểm tổng hợp" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:right">#</th><th>Năng lực</th><th style="text-align:right">Điểm</th><th>Độ tin cậy</th><th>Kết luận ngắn</th></tr></thead><tbody><tr><td style="text-align:right">1</td><td>Upload cá nhân</td><td style="text-align:right">4/5</td><td>Trung bình</td><td>Chạy được; test route còn mock; thiếu kiểm tra <code>workspace_id</code>.</td></tr><tr><td style="text-align:right">2</td><td>Upload nhóm</td><td style="text-align:right">3/5</td><td>Trung bình thấp</td><td>Có <code>require_full_permission</code>; thiếu test route; tag chưa scoped.</td></tr><tr><td style="text-align:right">3</td><td>Upload gói (bundle)</td><td style="text-align:right">3/5</td><td>Thấp</td><td>Tạo cha/con, skip trùng, dọn file lỗi; chưa có test upload thật.</td></tr><tr><td style="text-align:right">4</td><td>CAS / khử trùng lặp</td><td style="text-align:right">3/5</td><td>Trung bình</td><td>Có SHA-256 + single-instance; không phải CAS thật; có race.</td></tr><tr><td style="text-align:right">5</td><td>Local storage</td><td style="text-align:right">4/5</td><td>Cao</td><td>Có test ghi/đọc/xóa thật; thiếu kiểm soát path/quota ở tầng storage.</td></tr><tr><td style="text-align:right">6</td><td>R2 storage</td><td style="text-align:right">2/5</td><td>Thấp</td><td>Có code path; không test; lỗi bị nuốt, không retry.</td></tr><tr><td style="text-align:right">7</td><td>Markdown local/R2</td><td style="text-align:right">3/5</td><td>Thấp</td><td>Có sinh và đồng bộ; phụ thuộc <code>anydoc</code>; không test.</td></tr><tr><td style="text-align:right">8</td><td>Full-text search</td><td style="text-align:right">4/5</td><td>Cao</td><td>Có migration/trigger/scope + baseline thật; còn giới hạn token hóa và PDF mixed.</td></tr><tr><td style="text-align:right">9</td><td>Tags</td><td style="text-align:right">3/5</td><td>Trung bình thấp</td><td>CRUD cá nhân/nhóm có; assignment thiếu ownership; test chỉ status code.</td></tr><tr><td style="text-align:right">10</td><td>View count / trending</td><td style="text-align:right">4/5</td><td>Trung bình</td><td>Near-real-time + scheduler; thiếu test thật; có race và endpoint stats chưa auth.</td></tr><tr><td style="text-align:right"></td><td><strong>Tổng</strong></td><td style="text-align:right"><strong>3.3/5</strong></td><td></td><td><strong>Demo-ready, chưa production-ready.</strong></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-chi-tiết-từng-năng-lực">3. Chi tiết từng năng lực<a href="#3-chi-tiết-từng-năng-lực" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Chi tiết từng năng lực" title="Đường dẫn trực tiếp đến 3. Chi tiết từng năng lực" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="31-upload-cá-nhân--45">3.1. Upload cá nhân — 4/5<a href="#31-upload-cá-nhân--45" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.1. Upload cá nhân — 4/5" title="Đường dẫn trực tiếp đến 3.1. Upload cá nhân — 4/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>POST /documents/upload</code> tại <code>backend/app/routers/documents.py</code> nhận <code>title</code>, <code>description</code>, <code>workspace_id</code>, <code>tag_ids</code>, file; gọi <code>create_document_from_upload()</code>.</li>
+<li class=""><code>backend/app/services/document_service.py</code>:
+<ul>
+<li class="">tính SHA-256 bằng <code>checksum_for_file()</code>;</li>
+<li class="">kiểm tra bản active/trash trùng checksum;</li>
+<li class="">tái sử dụng <code>file_path</code>, <code>thumbnail_path</code>, <code>markdown_path</code>, <code>content</code> nếu đã có file cùng checksum;</li>
+<li class="">tạo <code>Document</code>, gắn tag, <code>flush()</code>.</li>
+</ul>
+</li>
+<li class="">Sau commit, router đẩy <code>_process_document_background()</code> và <code>_log_activity(UPLOADED)</code> vào <code>BackgroundTasks</code>.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>backend/tests/test_documents.py::test_upload_document_duplicate_checksum</code>: <strong>mock toàn bộ</strong> <code>create_document_from_upload</code>, chỉ kiểm tra route trả 201. Không chứng minh logic checksum.</li>
+<li class=""><code>test_document_out_schema_stats</code>: chỉ kiểm tra schema <code>DocumentOut</code>.</li>
+<li class=""><code>test_storage_dedup.py::test_local_storage_save_and_url</code>: test thật cho lưu local, không test route upload.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class=""><code>workspace_id</code> là form field tuỳ chọn nhưng <strong>không có kiểm tra membership</strong>. Người dùng có thể gửi <code>workspace_id</code> của nhóm mình không thuộc về và tạo tài liệu trong đó.</li>
+<li class=""><code>tag_ids</code> không được lọc theo <code>owner_id</code>/<code>workspace_id</code>; có thể gắn tag của người khác/nhóm khác nếu biết ID.</li>
+<li class="">Kiểm tra trùng checksum là check-then-insert, không có ràng buộc DB chống race.</li>
+<li class="">Chưa có test tích hợp upload thật (file → DB → storage → background).</li>
+</ul>
+<p><strong>Kết luận</strong>: luồng chính dùng được, nhưng đây là endpoint cần siết quyền trước khi coi là hoàn thiện.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="32-upload-nhóm--35">3.2. Upload nhóm — 3/5<a href="#32-upload-nhóm--35" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.2. Upload nhóm — 3/5" title="Đường dẫn trực tiếp đến 3.2. Upload nhóm — 3/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>POST /groups/{group_id}/documents/upload</code> tại <code>backend/app/routers/groups.py</code> gọi <code>require_full_permission()</code> trước khi tạo document.</li>
+<li class=""><code>POST /groups/{group_id}/documents/upload-batch</code> cũng gọi <code>require_full_permission()</code>.</li>
+<li class="">Document nhóm được tạo với <code>workspace_id=group_id</code>; checksum trùng được kiểm tra theo workspace.</li>
+<li class=""><code>GET /groups/{group_id}/documents/{document_id}</code> gọi <code>require_member()</code> trước khi trả dữ liệu.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>backend/tests/test_permission_normalization.py::test_require_write_permission_logic</code> kiểm tra logic owner/<code>full</code>/<code>view</code> nhưng <strong>monkeypatch</strong> <code>require_member</code>; không đi qua route upload nhóm.</li>
+<li class=""><code>test_permission_normalization.py::test_disposable_db_chk_workspace_members_permission</code> kiểm tra CHECK constraint <code>view|full</code> trên SQLite in-memory, không kiểm tra upload.</li>
+<li class="">Không có test nào gọi <code>/groups/{id}/documents/upload</code> hoặc <code>/upload-batch</code>.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class="">Upload batch nhóm lấy tag bằng <code>select(Tag).where(Tag.id.in_(tag_ids_list))</code>, <strong>không lọc <code>Tag.workspace_id == group_id</code></strong>. Người có quyền full trong nhóm A có thể gắn tag của nhóm B hoặc tag cá nhân vào tài liệu nhóm A.</li>
+<li class="">Upload đơn nhóm dùng chung <code>create_document_from_upload()</code>, nên cũng dính lỗi tag không scoped.</li>
+<li class="">Bundle nhóm không gán <code>tags=tags_list</code> cho các document con (khác với bundle cá nhân).</li>
+<li class="">Chưa có test thật cho phân quyền route, cleanup file khi lỗi, hay skip file trùng.</li>
+</ul>
+<p><strong>Kết luận</strong>: quyền ở mức route đã có, nhưng tính nhất quán tag và test tích hợp chưa đủ.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="33-upload-gói-bundle--35">3.3. Upload gói (bundle) — 3/5<a href="#33-upload-gói-bundle--35" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.3. Upload gói (bundle) — 3/5" title="Đường dẫn trực tiếp đến 3.3. Upload gói (bundle) — 3/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>POST /documents/upload-batch</code> và <code>POST /groups/{group_id}/documents/upload-batch</code>:
+<ul>
+<li class="">tạo document cha <code>is_bundle=True</code>, <code>file_path=&quot;__bundle__&quot;</code>, <code>file_type=&quot;application/bundle&quot;</code>;</li>
+<li class="">tạo từng document con với <code>bundle_parent_id=bundle.id</code>;</li>
+<li class="">skip file trùng active/trash;</li>
+<li class="">tái sử dụng file vật lý nếu checksum đã tồn tại;</li>
+<li class="">cộng <code>bundle.file_size</code> cho file mới;</li>
+<li class="">rollback và <code>_safe_remove()</code> các file đã lưu nếu lỗi.</li>
+</ul>
+</li>
+<li class=""><code>GET /documents/{id}</code> và <code>GET /groups/{id}/documents/{id}</code> trả <code>bundle_children_count</code>.</li>
+<li class=""><code>GET /documents/{bundle_id}/children</code> và route nhóm tương ứng trả danh sách con.</li>
+<li class=""><code>PATCH /documents/{id}/tags</code> lan tag từ bundle cha xuống con (chỉ personal).</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>backend/tests/test_dashboard.py::test_dashboard_summary_bundle_counting</code> <strong>mock</strong> <code>get_dashboard_summary</code>, nên chỉ kiểm tra contract của mock, không kiểm tra SQL đếm bundle thật.</li>
+<li class="">Không có test upload bundle thật; không có test rollback/cleanup; không có test tag propagation.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class="">Group bundle không gán tag cho child tại thời điểm tạo.</li>
+<li class=""><code>bundle.file_size</code> chỉ cộng file mới; file tái sử dụng CAS không được tính, nên dung lượng bundle có thể thấp hơn thực tế.</li>
+<li class="">Mọi bundle dùng chung <code>checksum=&quot;bundle&quot;</code>; không có ràng buộc duy nhất, dễ gây nhầm nếu sau này query theo checksum.</li>
+<li class=""><code>add-files</code> endpoint cần kiểm tra thêm quyền/ownership và test.</li>
+</ul>
+<p><strong>Kết luận</strong>: mô hình cha/con đã có và dùng được, nhưng thiếu test và còn lệch hành vi giữa personal/group.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="34-cas--khử-trùng-lặp-theo-checksum--35">3.4. CAS / khử trùng lặp theo checksum — 3/5<a href="#34-cas--khử-trùng-lặp-theo-checksum--35" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.4. CAS / khử trùng lặp theo checksum — 3/5" title="Đường dẫn trực tiếp đến 3.4. CAS / khử trùng lặp theo checksum — 3/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>backend/app/utils/checksum.py::compute_file_checksum</code> dùng SHA-256, đọc theo chunk.</li>
+<li class=""><code>document_service.create_document_from_upload()</code>:
+<ul>
+<li class="">chặn trùng trong cùng scope (personal owner hoặc workspace);</li>
+<li class="">tìm bất kỳ document nào cùng checksum để tái sử dụng <code>file_path</code> (single-instance storage);</li>
+<li class="">trả lỗi <code>duplicate_document:{id}</code> hoặc <code>in_trash:{id}:{title}</code>.</li>
+</ul>
+</li>
+<li class=""><code>file_service.remove_file_if_unreferenced()</code> chỉ xóa vật lý khi không còn document nào tham chiếu <code>file_path</code>/<code>thumbnail_path</code>/<code>markdown_path</code>.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>test_documents.py::test_upload_document_duplicate_checksum</code> mock service → không kiểm tra dedupe thật.</li>
+<li class=""><code>test_storage_dedup.py::test_remove_file_if_unreferenced</code> mock DB và <code>safe_remove</code> → kiểm tra nhánh refcount, không kiểm tra storage thật.</li>
+<li class=""><code>test_storage_dedup.py::test_local_storage_save_and_url</code> test thật local save/remove.</li>
+<li class="">Baseline 0B có 3 cặp file trùng byte (C14/C01, C15/C02, E08/E07), xác nhận manifest/checksum; không chạy qua endpoint upload.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class=""><strong>Không phải content-addressed storage thật</strong>: tên file vẫn là UUID, không phải hash; “CAS” ở đây là single-instance storage theo checksum.</li>
+<li class=""><strong>Race condition</strong>: hai request cùng checksum có thể cùng vượt qua <code>SELECT</code> rồi cùng <code>INSERT</code>; DB chưa có unique constraint trên <code>(checksum, owner_id, workspace_id)</code>.</li>
+<li class="">Query tái sử dụng file vật lý không giới hạn tenant; đây là chủ ý để dedupe, nhưng cần đảm bảo quyền đọc file luôn được kiểm tra ở endpoint (hiện <code>get_document_file()</code> có kiểm tra).</li>
+<li class="">Không có test đồng thời hoặc test tích hợp upload thật.</li>
+</ul>
+<p><strong>Kết luận</strong>: tiết kiệm dung lượng tốt cho demo, nhưng chưa đủ chắc cho môi trường nhiều người dùng đồng thời.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="35-local-storage--45">3.5. Local storage — 4/5<a href="#35-local-storage--45" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.5. Local storage — 4/5" title="Đường dẫn trực tiếp đến 3.5. Local storage — 4/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>backend/app/services/file_service.py::save_upload_file()</code>: mặc định <code>STORAGE_BACKEND=local</code> hoặc không có <code>s3_client</code> → ghi <code>storage/{owner_id}/{uuid}{ext}</code>.</li>
+<li class=""><code>get_file_url()</code> trả URL tương đối khi local.</li>
+<li class=""><code>safe_remove()</code> xóa local và R2 (nếu cloud).</li>
+<li class=""><code>remove_file_if_unreferenced()</code> bảo vệ file dùng chung.</li>
+<li class="">Router file (<code>GET /documents/{id}/file</code>) đọc local trước, fallback R2, có kiểm tra quyền.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>test_storage_dedup.py::test_local_storage_save_and_url</code>: ghi file thật vào <code>storage/999/...</code>, đọc lại byte-for-byte, lấy URL tương đối, xóa và xác nhận file biến mất. Đây là test thật có giá trị.</li>
+<li class=""><code>test_remove_file_if_unreferenced</code>: mock DB/safe_remove, chỉ kiểm tra logic refcount.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class="">Chưa kiểm soát quota ở tầng storage; quota chỉ hiển thị ở dashboard.</li>
+<li class=""><code>upload_bytes_to_r2()</code> khi local ghi theo <code>clean_key</code> (chỉ <code>lstrip(&quot;/&quot;)</code>), không chuẩn hóa <code>..</code>; callers hiện truyền path nội bộ, nhưng nên phòng thủ.</li>
+<li class="">Chưa có test cho file lớn, file lỗi giữa chừng, hoặc cleanup sau rollback.</li>
+</ul>
+<p><strong>Kết luận</strong>: nền local storage đủ tốt cho demo và có test thật; cần thêm phòng thủ path/quota.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="36-r2-storage--25">3.6. R2 storage — 2/5<a href="#36-r2-storage--25" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.6. R2 storage — 2/5" title="Đường dẫn trực tiếp đến 3.6. R2 storage — 2/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>file_service.py</code>: <code>save_upload_file()</code> dùng <code>s3_client.put_object</code> khi cloud; <code>upload_bytes_to_r2()</code>; <code>download_file_from_r2()</code>; <code>download_r2_to_temp_file()</code>; <code>get_file_url()</code> trả <code>MINIO_PUBLIC_URL</code>/R2 URL; <code>safe_remove()</code> xóa object.</li>
+<li class=""><code>documents.py::_process_document_background()</code> tải file từ R2 về temp nếu không có local, xử lý, rồi upload thumbnail/Markdown lên R2.</li>
+<li class=""><code>get_document_file()</code> stream object từ R2 nếu local không có.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><strong>Không có test nào</strong> cho R2: không mock <code>s3_client</code>, không test path normalization, không test fallback, không test lỗi upload.</li>
+<li class="">Baseline 0B chạy local, không chạm R2.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class=""><code>upload_bytes_to_r2()</code> nuốt exception và chỉ log warning; endpoint vẫn trả thành công dù Markdown/thumbnail chưa lên R2.</li>
+<li class="">Không có retry/outbox/đánh dấu trạng thái đồng bộ.</li>
+<li class="">Không có test cấu hình thiếu bucket/key.</li>
+<li class=""><code>doc.markdown_path</code> vẫn là path local sau khi upload R2; cần đảm bảo các consumer khác hiểu đúng.</li>
+</ul>
+<p><strong>Kết luận</strong>: code path tồn tại nhưng chưa có bằng chứng vận hành; không nên tuyên bố “hỗ trợ R2 hoàn chỉnh” trong báo cáo.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="37-markdown-localr2--35">3.7. Markdown local/R2 — 3/5<a href="#37-markdown-localr2--35" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.7. Markdown local/R2 — 3/5" title="Đường dẫn trực tiếp đến 3.7. Markdown local/R2 — 3/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>backend/app/services/file_processor.py::generate_markdown()</code>:
+<ul>
+<li class="">file text/code: bọc trong code block có lexer;</li>
+<li class="">file khác: <code>anydoc.to_markdown()</code>;</li>
+<li class="">ghi <code>storage/markdowns/{doc_id}.md</code>.</li>
+</ul>
+</li>
+<li class=""><code>_process_document_background()</code> gọi <code>generate_markdown()</code> trong executor, lưu <code>doc.markdown_path</code>, upload Markdown lên R2 nếu cloud.</li>
+<li class="">Nếu không tạo được thumbnail từ file gốc, lấy ảnh đầu tiên từ Markdown (<code>extract_first_image_from_markdown</code>).</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class="">Không có test cho <code>generate_markdown</code>, <code>extract_first_image_from_markdown</code>, hay sync R2.</li>
+<li class="">Baseline 0B dùng <code>extract_text()</code>, không dùng Markdown; vì vậy không đo được chất lượng Markdown.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class="">Phụ thuộc <code>anydoc</code>; nếu thiếu package hoặc format lạ, chỉ log warning và <code>markdown_path=None</code>.</li>
+<li class="">Không có retry khi R2 upload thất bại.</li>
+<li class="">Markdown không được dùng làm nguồn cho FTS; FTS dùng <code>Document.content</code>. Đây là lựa chọn kiến trúc, nhưng cần nói rõ để tránh hiểu nhầm.</li>
+<li class="">Chưa có test cho PDF scan/mixed, DOCX/PPTX, file text.</li>
+</ul>
+<p><strong>Kết luận</strong>: có pipeline, nhưng là “best effort” chứ chưa phải tính năng được đảm bảo.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="38-full-text-search--45">3.8. Full-text search — 4/5<a href="#38-full-text-search--45" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.8. Full-text search — 4/5" title="Đường dẫn trực tiếp đến 3.8. Full-text search — 4/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class="">Migration <code>alembic/versions/b7c8d9e0f1a2_fix_fts_unaccent_trigger_and_backfill.py</code>:
+<ul>
+<li class=""><code>CREATE EXTENSION unaccent</code>;</li>
+<li class="">function <code>update_document_search_vector()</code> dùng <code>to_tsvector(&#x27;simple&#x27;, unaccent(...))</code>;</li>
+<li class="">weight title A, description B, content C;</li>
+<li class="">trigger <code>trg_documents_search_vector</code> trước INSERT/UPDATE;</li>
+<li class="">backfill toàn bộ document.</li>
+</ul>
+</li>
+<li class=""><code>backend/app/models/document.py</code> có <code>search_vector</code> và GIN index <code>ix_documents_search_vector</code>.</li>
+<li class=""><code>SearchService.full_text_search()</code>:
+<ul>
+<li class=""><code>websearch_to_tsquery(&#x27;simple&#x27;, unaccent(query))</code>;</li>
+<li class=""><code>search_vector @@ ts_query</code>;</li>
+<li class=""><code>ORDER BY ts_rank(...) DESC</code>;</li>
+<li class="">scope <code>(workspace_id IS NULL AND owner_id=user) OR (workspace_id IN accessible_ws_ids)</code>;</li>
+<li class="">snippet lấy từ <code>content</code>, fallback <code>description</code>.</li>
+</ul>
+</li>
+<li class=""><code>GET /search/full</code> gọi service này. <code>GET /search</code> (legacy) dùng <code>search_documents()</code> với FTS <strong>hoặc</strong> <code>LIKE</code> và <code>ORDER BY created_at</code>, không xếp hạng theo <code>ts_rank</code>.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>backend/tests/test_search.py</code>: nhiều test mocked DB, có giá trị kiểm tra SQL predicate/scope, URL, snippet, fallback, pagination.</li>
+<li class=""><code>backend/tests/test_search_unaccent_integration.py</code>: test <strong>real DB</strong> cho trigger/unaccent và <code>search_documents()</code>, nhưng chỉ chạy khi có <code>TEST_DATABASE_URL</code>; không test <code>full_text_search()</code>.</li>
+<li class="">Baseline 0B: chạy <code>full_text_search()</code> thật trên PostgreSQL tạm, 60 câu, có scope.</li>
+</ul>
+<p><strong>Kết quả baseline 0B</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tập</th><th style="text-align:right">Answerable</th><th style="text-align:right">Hit@1</th><th style="text-align:right">Hit@3</th><th style="text-align:right">Hit@5</th><th style="text-align:right">MRR@5</th><th style="text-align:right">Citation@5</th><th style="text-align:right">Forbidden leak</th><th style="text-align:right">No-evidence FP</th></tr></thead><tbody><tr><td>Calibration</td><td style="text-align:right">24</td><td style="text-align:right">0.917</td><td style="text-align:right">0.917</td><td style="text-align:right">0.917</td><td style="text-align:right">0.917</td><td style="text-align:right">0.917</td><td style="text-align:right">0/3</td><td style="text-align:right">0.000</td></tr><tr><td>Evaluation</td><td style="text-align:right">24</td><td style="text-align:right">0.875</td><td style="text-align:right">0.875</td><td style="text-align:right">0.875</td><td style="text-align:right">0.875</td><td style="text-align:right">0.875</td><td style="text-align:right">0/3</td><td style="text-align:right">0.000</td></tr><tr><td><strong>Tổng</strong></td><td style="text-align:right"><strong>48</strong></td><td style="text-align:right"><strong>0.896</strong></td><td style="text-align:right"><strong>0.896</strong></td><td style="text-align:right"><strong>0.896</strong></td><td style="text-align:right"><strong>0.896</strong></td><td style="text-align:right"><strong>0.896</strong></td><td style="text-align:right"><strong>0/6</strong></td><td style="text-align:right"><strong>0.000</strong></td></tr></tbody></table>
+<ul>
+<li class="">0/60 query trả kết quả ngoài quyền; 0 kết quả ngoài quyền.</li>
+<li class="">6/6 câu forbidden tìm thấy tài liệu cấm khi <strong>bỏ scope</strong> → fixture thực sự kiểm tra được rò rỉ.</li>
+<li class="">Latency local: median ~1.9 ms, p95 ~2.9 ms (các lần chạy dao động khoảng 1.8–2.0 ms / 2.3–3.4 ms).</li>
+<li class="">5 câu miss: 4 câu hỏi trang 2 của PDF mixed (không được OCR), 1 câu do <code>Wi-Fi</code> tách token <code>wi</code> + <code>fi</code> trong khi query dùng <code>wifi</code>.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class=""><code>simple</code> không tách từ ghép tiếng Việt, không có synonym, không có <code>pg_trgm</code>.</li>
+<li class=""><code>Wi-Fi</code>/<code>wifi</code>, dấu gạch nối, viết tắt là điểm yếu token hóa.</li>
+<li class="">PDF mixed chỉ OCR khi toàn bộ PDF không có text layer → mất nội dung trang scan.</li>
+<li class=""><code>/search</code> legacy không dùng <code>ts_rank</code>; cần thống nhất API hoặc ghi rõ.</li>
+<li class="">Chưa có test real DB mặc định cho <code>full_text_search()</code>; 0B là runner riêng.</li>
+</ul>
+<p><strong>Kết luận</strong>: đây là năng lực mạnh nhất của hệ thống, với bằng chứng chạy thật; vẫn cần cải thiện token hóa và OCR từng trang.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="39-tags--35">3.9. Tags — 3/5<a href="#39-tags--35" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.9. Tags — 3/5" title="Đường dẫn trực tiếp đến 3.9. Tags — 3/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>backend/app/routers/tags.py</code>: list/stats/create/get by name/merge/update/delete, tất cả lọc <code>Tag.owner_id == current_user.id</code>.</li>
+<li class=""><code>backend/app/routers/groups.py</code>: list group tags (member), create/update/delete group tags (full permission), add/remove tag cho document nhóm (full permission).</li>
+<li class=""><code>backend/app/routers/workspace_tags.py</code>: list/import/create/update/delete workspace tags.</li>
+<li class=""><code>PATCH /documents/{id}/tags</code>: thay tag cá nhân; nếu là bundle thì lan xuống child.</li>
+<li class="">Upload cá nhân/bundle cá nhân gán <code>tags_list</code>; group bundle không gán cho child.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>backend/tests/test_categories_tags.py</code> chỉ assert <code>GET /categories/</code> và <code>GET /tags/</code> trả 200.</li>
+<li class="">Không có test cho merge, update/delete, tag assignment, tag ownership, workspace tag.</li>
+<li class="">Baseline 0B seed 47 tag và gắn vào document; FTS không dùng tag nên không đo tag filtering.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class=""><code>document_service.create_document_from_upload()</code> và <code>PATCH /documents/{id}/tags</code> chỉ kiểm tra tag tồn tại, <strong>không kiểm tra owner/workspace</strong>. Đây là lỗi ownership.</li>
+<li class="">Group batch upload không lọc tag theo <code>workspace_id</code>.</li>
+<li class=""><code>workspace_tags.py::get_workspace_or_404()</code> có <code>TODO: Check user là member của workspace</code>; các endpoint workspace tag hiện chưa được bảo vệ đúng.</li>
+<li class="">Group bundle không gán tag cho child; personal bundle có.</li>
+<li class="">FTS không search theo tag; nếu muốn lọc tag phải bổ sung.</li>
+</ul>
+<p><strong>Kết luận</strong>: CRUD có, nhưng quyền sở hữu tag là khoảng trống P0.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="310-view-count--trending--45">3.10. View count / trending — 4/5<a href="#310-view-count--trending--45" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.10. View count / trending — 4/5" title="Đường dẫn trực tiếp đến 3.10. View count / trending — 4/5" translate="no">​</a></h3>
+<p><strong>Code evidence</strong></p>
+<ul>
+<li class=""><code>document_service._do_log_activity()</code>:
+<ul>
+<li class="">dedupe theo <code>(document_id, user_id, action)</code> trong cửa sổ phút;</li>
+<li class="">tạo <code>DownloadLog</code>;</li>
+<li class="">bump ngay <code>DocumentStats.view_count</code>/<code>download_count</code>/<code>save_count</code>/<code>share_count</code>;</li>
+<li class="">cập nhật <code>trending_score</code> và <code>last_activity_at</code>;</li>
+<li class="">commit session.</li>
+</ul>
+</li>
+<li class=""><code>GET /documents/{id}</code> và <code>GET /groups/{id}/documents/{id}</code> log <code>VIEWED</code> với dedupe 30 phút.</li>
+<li class=""><code>GET /documents/{id}/file</code> log <code>VIEWED</code>/<code>DOWNLOADED</code>; view dedupe 30 phút, download không dedupe.</li>
+<li class=""><code>scheduler.refresh_document_stats()</code> chạy mỗi giờ: lấy document có activity trong 48h, đếm lại từ <code>DownloadLog</code>, tính <code>weighted = views*1 + downloads*2 + saves*3 + shares*2</code>, recency, <code>score = weighted / (age_hours+2)^1.5 * recency</code>, upsert <code>DocumentStats</code>.</li>
+<li class=""><code>GET /documents/{id}/stats</code> trả stats; list <code>sort=trending</code> dùng <code>trending_score</code>.</li>
+</ul>
+<p><strong>Test evidence</strong></p>
+<ul>
+<li class=""><code>test_activity_sorting.py::test_list_documents_trending_sort_order</code> dùng <code>fake_session</code>, kiểm tra response shape/sort, không kiểm tra increment thật.</li>
+<li class=""><code>test_document_out_schema_stats</code> chỉ kiểm tra schema.</li>
+<li class="">Không có test real DB cho <code>_do_log_activity</code> hay <code>refresh_document_stats</code>.</li>
+</ul>
+<p><strong>Khoảng trống</strong></p>
+<ul>
+<li class=""><code>stats.view_count += 1</code> là read-modify-write, có thể mất cập nhật khi nhiều request đồng thời.</li>
+<li class=""><code>unique_viewers</code> chỉ được set khi tạo row; các view sau không tăng ngay, phải chờ scheduler.</li>
+<li class=""><code>GET /documents/{id}/stats</code> không kiểm tra quyền truy cập tài liệu.</li>
+<li class=""><code>_do_log_activity()</code> commit ngay trong hàm; nếu tái sử dụng với request session sẽ commit ngoài ý muốn (hiện <code>log_activity()</code> tạo session riêng nên rủi ro thấp).</li>
+<li class="">Scheduler chỉ quét document có activity trong 48h; đúng cho cập nhật, nhưng không tự sửa dữ liệu cũ nếu không có activity mới.</li>
+</ul>
+<p><strong>Kết luận</strong>: số liệu gần đúng và có cơ chế recompute; cần khóa/atomic update và test thật.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-ma-trận-bằng-chứng-code--test">4. Ma trận bằng chứng code ↔ test<a href="#4-ma-trận-bằng-chứng-code--test" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Ma trận bằng chứng code ↔ test" title="Đường dẫn trực tiếp đến 4. Ma trận bằng chứng code ↔ test" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Năng lực</th><th>Code chính</th><th>Test hiện có</th><th>Mức bằng chứng</th></tr></thead><tbody><tr><td>Upload cá nhân</td><td><code>routers/documents.py</code>, <code>services/document_service.py</code></td><td><code>test_documents.py</code> (mock service)</td><td>Mock, chưa end-to-end</td></tr><tr><td>Upload nhóm</td><td><code>routers/groups.py</code></td><td><code>test_permission_normalization.py</code> (mock helper)</td><td>Mock helper, chưa route</td></tr><tr><td>Bundle</td><td><code>routers/documents.py</code>, <code>routers/groups.py</code></td><td><code>test_dashboard.py</code> (mock service)</td><td>Hợp đồng mock, chưa upload</td></tr><tr><td>CAS/dedupe</td><td><code>utils/checksum.py</code>, <code>services/document_service.py</code>, <code>services/file_service.py</code></td><td><code>test_storage_dedup.py</code> (1 test thật, 1 mock)</td><td>Một phần thật</td></tr><tr><td>Local storage</td><td><code>services/file_service.py</code></td><td><code>test_local_storage_save_and_url</code></td><td><strong>Thật</strong></td></tr><tr><td>R2</td><td><code>services/file_service.py</code>, <code>routers/documents.py</code></td><td>Không có</td><td><strong>Không có</strong></td></tr><tr><td>Markdown</td><td><code>services/file_processor.py</code>, <code>_process_document_background</code></td><td>Không có</td><td><strong>Không có</strong></td></tr><tr><td>FTS</td><td><code>services/search_service.py</code>, migration <code>b7c8…</code>, model</td><td><code>test_search.py</code> (mock), <code>test_search_unaccent_integration.py</code> (real, cần DB), <strong>0B runner</strong></td><td><strong>Thật qua 0B</strong></td></tr><tr><td>Tags</td><td><code>routers/tags.py</code>, <code>routers/groups.py</code>, <code>routers/workspace_tags.py</code></td><td><code>test_categories_tags.py</code> (status 200)</td><td>Rất mỏng</td></tr><tr><td>View count</td><td><code>services/document_service.py</code>, <code>jobs/scheduler.py</code>, <code>routers/stats.py</code></td><td><code>test_activity_sorting.py</code> (fake session)</td><td>Mock</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-baseline-0b--bằng-chứng-chạy-thật">5. Baseline 0B — bằng chứng chạy thật<a href="#5-baseline-0b--bằng-chứng-chạy-thật" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. Baseline 0B — bằng chứng chạy thật" title="Đường dẫn trực tiếp đến 5. Baseline 0B — bằng chứng chạy thật" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="51-thành-phần-corpus">5.1. Thành phần corpus<a href="#51-thành-phần-corpus" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.1. Thành phần corpus" title="Đường dẫn trực tiếp đến 5.1. Thành phần corpus" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Loại</th><th style="text-align:right">Số lượng</th><th>Ghi chú</th></tr></thead><tbody><tr><td>PDF text</td><td style="text-align:right">6</td><td>Có text layer, trích xuất trực tiếp</td></tr><tr><td>PDF scan</td><td style="text-align:right">4</td><td>Không text layer, OCR <code>vie+eng</code></td></tr><tr><td>PDF mixed</td><td style="text-align:right">4</td><td>Trang 1 text, trang 2 scan</td></tr><tr><td>DOCX</td><td style="text-align:right">8</td><td><code>python-docx</code></td></tr><tr><td>PPTX</td><td style="text-align:right">6</td><td><code>python-pptx</code></td></tr><tr><td>Bundle</td><td style="text-align:right">2</td><td>Chỉ metadata cha, có child</td></tr><tr><td><strong>Tổng tài liệu</strong></td><td style="text-align:right"><strong>30</strong></td><td>15 calibration + 15 evaluation</td></tr><tr><td>Câu hỏi</td><td style="text-align:right">60</td><td>48 answerable, 6 forbidden, 6 no-evidence</td></tr></tbody></table>
+<ul>
+<li class="">3 cặp trùng byte: C14/C01, C15/C02, E08/E07.</li>
+<li class="">Quyền: <code>sv_an</code> và <code>sv_binh</code>; G1/G2 có member chéo; G3 chỉ <code>sv_binh</code>.</li>
+<li class="">Mọi citation có <code>quote</code> nằm trong text kỳ vọng và <code>location</code> khớp segment; generator assert điều này trước khi ghi manifest.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="52-kết-quả-trích-xuất">5.2. Kết quả trích xuất<a href="#52-kết-quả-trích-xuất" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.2. Kết quả trích xuất" title="Đường dẫn trực tiếp đến 5.2. Kết quả trích xuất" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Format</th><th style="text-align:right">Số tài liệu</th><th style="text-align:right">Token recall trung bình</th><th style="text-align:right">Thấp nhất</th></tr></thead><tbody><tr><td>bundle</td><td style="text-align:right">2</td><td style="text-align:right">1.000</td><td style="text-align:right">1.000</td></tr><tr><td>docx</td><td style="text-align:right">8</td><td style="text-align:right">1.000</td><td style="text-align:right">1.000</td></tr><tr><td>pdf_mixed</td><td style="text-align:right">4</td><td style="text-align:right">0.518</td><td style="text-align:right">0.473</td></tr><tr><td>pdf_scan</td><td style="text-align:right">4</td><td style="text-align:right">1.000</td><td style="text-align:right">1.000</td></tr><tr><td>pdf_text</td><td style="text-align:right">6</td><td style="text-align:right">1.000</td><td style="text-align:right">1.000</td></tr><tr><td>pptx</td><td style="text-align:right">6</td><td style="text-align:right">1.000</td><td style="text-align:right">1.000</td></tr></tbody></table>
+<p>Diễn giải: OCR scan đạt recall 1.000 trên corpus tổng hợp (chữ rõ, font chuẩn). PDF mixed mất khoảng một nửa nội dung vì trang scan không được OCR. Đây là giới hạn code, không phải lỗi corpus.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="53-kết-quả-truy-hồi">5.3. Kết quả truy hồi<a href="#53-kết-quả-truy-hồi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.3. Kết quả truy hồi" title="Đường dẫn trực tiếp đến 5.3. Kết quả truy hồi" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Hit@1 = 0.896</strong>, <strong>Hit@5 = 0.896</strong>, <strong>MRR@5 = 0.896</strong> trên 48 câu answerable.</li>
+<li class=""><strong>Forbidden leak = 0/6</strong>; <strong>unscoped retrieval = 1.000</strong> (kiểm tra fixture).</li>
+<li class=""><strong>No-evidence false positive = 0.000</strong>.</li>
+<li class=""><strong>Scope leak = 0 query / 0 kết quả</strong>.</li>
+<li class=""><strong>Latency</strong>: median ~1.9 ms, p95 ~2.9 ms trên PostgreSQL tạm local (xem <code>reports/baseline.json</code> để có số chính xác của lần chạy).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="54-các-câu-miss-và-nguyên-nhân">5.4. Các câu miss và nguyên nhân<a href="#54-các-câu-miss-và-nguyên-nhân" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.4. Các câu miss và nguyên nhân" title="Đường dẫn trực tiếp đến 5.4. Các câu miss và nguyên nhân" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ID</th><th>Query</th><th>Nguyên nhân</th></tr></thead><tbody><tr><td>CQ10</td><td><code>bieu do duong xu huong thoi gian</code></td><td>Nội dung nằm ở trang 2 PDF mixed; trang scan không được index.</td></tr><tr><td>CQ12</td><td><code>volume lưu dữ liệu bền vững</code></td><td>Cùng nguyên nhân PDF mixed.</td></tr><tr><td>EQ10</td><td><code>màu sắc dashboard độ tương phản người mù màu</code></td><td>Cùng nguyên nhân PDF mixed.</td></tr><tr><td>EQ12</td><td><code>secret lưu thông tin nhạy cảm mật khẩu</code></td><td>Cùng nguyên nhân PDF mixed.</td></tr><tr><td>EQ04</td><td><code>wpa3 giao thuc bao mat wifi hien dai</code></td><td><code>Wi-Fi</code> trong tài liệu tách thành <code>wi</code> + <code>fi</code>; query <code>wifi</code> không khớp.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="55-cách-tái-lập">5.5. Cách tái lập<a href="#55-cách-tái-lập" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5.5. Cách tái lập" title="Đường dẫn trực tiếp đến 5.5. Cách tái lập" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">.venv/bin/python backend/tests/evaluation/run_baseline.py</span><br></div></code></pre></div></div>
+<p>Chi tiết trong <code>backend/tests/evaluation/README.md</code>, kết quả máy đọc tại <code>backend/tests/evaluation/reports/baseline.json</code>, bản tóm tắt tại <code>backend/tests/evaluation/reports/baseline.md</code>.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-khuyến-nghị-ưu-tiên">6. Khuyến nghị ưu tiên<a href="#6-khuyến-nghị-ưu-tiên" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6. Khuyến nghị ưu tiên" title="Đường dẫn trực tiếp đến 6. Khuyến nghị ưu tiên" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="p0--trước-khi-coi-là-hoàn-thiện-bảo-mật">P0 — trước khi coi là hoàn thiện bảo mật<a href="#p0--trước-khi-coi-là-hoàn-thiện-bảo-mật" class="hash-link" aria-label="Đường dẫn trực tiếp đến P0 — trước khi coi là hoàn thiện bảo mật" title="Đường dẫn trực tiếp đến P0 — trước khi coi là hoàn thiện bảo mật" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Chặn upload vào nhóm không thuộc quyền</strong>: bỏ <code>workspace_id</code> khỏi endpoint cá nhân hoặc gọi <code>require_full_permission()</code> khi có <code>workspace_id</code>.</li>
+<li class=""><strong>Scoped tag assignment</strong>: mọi truy vấn tag phải lọc <code>owner_id</code>/<code>workspace_id</code>; thêm test gắn tag chéo.</li>
+<li class=""><strong>Bảo vệ workspace tags</strong>: thay <code>TODO</code> trong <code>workspace_tags.get_workspace_or_404()</code> bằng kiểm tra member/full.</li>
+<li class=""><strong>Chống race dedupe</strong>: thêm unique constraint/index trên <code>(checksum, owner_id, workspace_id)</code> hoặc dùng transaction advisory lock/upsert.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="p1--trước-khi-coi-là-production-ready">P1 — trước khi coi là production-ready<a href="#p1--trước-khi-coi-là-production-ready" class="hash-link" aria-label="Đường dẫn trực tiếp đến P1 — trước khi coi là production-ready" title="Đường dẫn trực tiếp đến P1 — trước khi coi là production-ready" translate="no">​</a></h3>
+<ol start="5">
+<li class="">Test tích hợp thật cho upload cá nhân/nhóm/bundle: file → storage → DB → background → search.</li>
+<li class="">Test R2 bằng mock S3/MinIO; không nuốt lỗi upload, có retry/outbox.</li>
+<li class="">Test Markdown cho PDF text/scan/mixed, DOCX, PPTX; đánh dấu trạng thái nếu thất bại.</li>
+<li class="">OCR từng trang PDF khi trang đó không có text layer, thay vì chỉ OCR khi toàn bộ PDF rỗng.</li>
+<li class="">Thêm auth cho <code>GET /documents/{id}/stats</code>; cân nhắc quyền member nhóm.</li>
+<li class="">Atomic increment view count (<code>UPDATE ... SET view_count = view_count + 1</code>) và cập nhật <code>unique_viewers</code> đúng cách.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="p2--cải-thiện-chất-lượng-dài-hạn">P2 — cải thiện chất lượng dài hạn<a href="#p2--cải-thiện-chất-lượng-dài-hạn" class="hash-link" aria-label="Đường dẫn trực tiếp đến P2 — cải thiện chất lượng dài hạn" title="Đường dẫn trực tiếp đến P2 — cải thiện chất lượng dài hạn" translate="no">​</a></h3>
+<ol start="11">
+<li class="">Chuẩn hóa token <code>Wi-Fi</code>/<code>wifi</code>, viết tắt, gạch nối; thêm <code>pg_trgm</code>/synonym.</li>
+<li class="">Thống nhất <code>/search</code> và <code>/search/full</code>, tránh client dùng nhầm đường không xếp hạng.</li>
+<li class="">Lan tag nhất quán cho group bundle; tính đúng <code>bundle.file_size</code> khi tái sử dụng CAS.</li>
+<li class="">Đưa baseline 0B vào CI với PostgreSQL disposable và ngưỡng regression (Hit@5, leak = 0, FP = 0).</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-kết-luận">7. Kết luận<a href="#7-kết-luận" class="hash-link" aria-label="Đường dẫn trực tiếp đến 7. Kết luận" title="Đường dẫn trực tiếp đến 7. Kết luận" translate="no">​</a></h2>
+<p>Hệ thống đã có một <strong>luồng tài liệu end-to-end tương đối hoàn chỉnh</strong> cho demo: upload cá nhân/nhóm/bundle, lưu local, xử lý nền, tìm kiếm full-text có phân quyền, tag và thống kê lượt xem. Điểm mạnh lớn nhất là FTS có nền tảng CSDL đúng và lần đầu có <strong>bằng chứng chạy thật</strong> với corpus tiếng Việt 30 tài liệu/60 câu hỏi.</p>
+<p>Điểm yếu lớn nhất không nằm ở tính năng mà ở <strong>ranh giới quyền và bằng chứng kiểm thử</strong>: upload có thể ghi vào nhóm không thuộc quyền, tag chưa được scoped, R2/Markdown gần như chưa được test, và một số test hiện tại chỉ kiểm tra mock/schema. Vì vậy, mức 3.3/5 là đánh giá trung thực: <strong>dùng được cho bảo vệ đồ án và demo, nhưng cần xử lý P0/P1 trước khi triển khai thật</strong>.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/06-kiem-thu-va-han-che/ai-baseline.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-27T06:52:15.000Z" itemprop="dateModified">27 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#0-phạm-vi-thang-điểm-và-quy-ước-bằng-chứng" class="table-of-contents__link toc-highlight">0. Phạm vi, thang điểm và quy ước bằng chứng</a><ul><li><a href="#01-phạm-vi" class="table-of-contents__link toc-highlight">0.1. Phạm vi</a></li><li><a href="#02-thang-điểm-05" class="table-of-contents__link toc-highlight">0.2. Thang điểm 0–5</a></li><li><a href="#03-quy-ước" class="table-of-contents__link toc-highlight">0.3. Quy ước</a></li></ul></li><li><a href="#1-kết-luận-điều-hành" class="table-of-contents__link toc-highlight">1. Kết luận điều hành</a><ul><li><a href="#điểm-mạnh-có-bằng-chứng" class="table-of-contents__link toc-highlight">Điểm mạnh có bằng chứng</a></li><li><a href="#rủi-ro-lớn-nhất" class="table-of-contents__link toc-highlight">Rủi ro lớn nhất</a></li></ul></li><li><a href="#2-bảng-điểm-tổng-hợp" class="table-of-contents__link toc-highlight">2. Bảng điểm tổng hợp</a></li><li><a href="#3-chi-tiết-từng-năng-lực" class="table-of-contents__link toc-highlight">3. Chi tiết từng năng lực</a><ul><li><a href="#31-upload-cá-nhân--45" class="table-of-contents__link toc-highlight">3.1. Upload cá nhân — 4/5</a></li><li><a href="#32-upload-nhóm--35" class="table-of-contents__link toc-highlight">3.2. Upload nhóm — 3/5</a></li><li><a href="#33-upload-gói-bundle--35" class="table-of-contents__link toc-highlight">3.3. Upload gói (bundle) — 3/5</a></li><li><a href="#34-cas--khử-trùng-lặp-theo-checksum--35" class="table-of-contents__link toc-highlight">3.4. CAS / khử trùng lặp theo checksum — 3/5</a></li><li><a href="#35-local-storage--45" class="table-of-contents__link toc-highlight">3.5. Local storage — 4/5</a></li><li><a href="#36-r2-storage--25" class="table-of-contents__link toc-highlight">3.6. R2 storage — 2/5</a></li><li><a href="#37-markdown-localr2--35" class="table-of-contents__link toc-highlight">3.7. Markdown local/R2 — 3/5</a></li><li><a href="#38-full-text-search--45" class="table-of-contents__link toc-highlight">3.8. Full-text search — 4/5</a></li><li><a href="#39-tags--35" class="table-of-contents__link toc-highlight">3.9. Tags — 3/5</a></li><li><a href="#310-view-count--trending--45" class="table-of-contents__link toc-highlight">3.10. View count / trending — 4/5</a></li></ul></li><li><a href="#4-ma-trận-bằng-chứng-code--test" class="table-of-contents__link toc-highlight">4. Ma trận bằng chứng code ↔ test</a></li><li><a href="#5-baseline-0b--bằng-chứng-chạy-thật" class="table-of-contents__link toc-highlight">5. Baseline 0B — bằng chứng chạy thật</a><ul><li><a href="#51-thành-phần-corpus" class="table-of-contents__link toc-highlight">5.1. Thành phần corpus</a></li><li><a href="#52-kết-quả-trích-xuất" class="table-of-contents__link toc-highlight">5.2. Kết quả trích xuất</a></li><li><a href="#53-kết-quả-truy-hồi" class="table-of-contents__link toc-highlight">5.3. Kết quả truy hồi</a></li><li><a href="#54-các-câu-miss-và-nguyên-nhân" class="table-of-contents__link toc-highlight">5.4. Các câu miss và nguyên nhân</a></li><li><a href="#55-cách-tái-lập" class="table-of-contents__link toc-highlight">5.5. Cách tái lập</a></li></ul></li><li><a href="#6-khuyến-nghị-ưu-tiên" class="table-of-contents__link toc-highlight">6. Khuyến nghị ưu tiên</a><ul><li><a href="#p0--trước-khi-coi-là-hoàn-thiện-bảo-mật" class="table-of-contents__link toc-highlight">P0 — trước khi coi là hoàn thiện bảo mật</a></li><li><a href="#p1--trước-khi-coi-là-production-ready" class="table-of-contents__link toc-highlight">P1 — trước khi coi là production-ready</a></li><li><a href="#p2--cải-thiện-chất-lượng-dài-hạn" class="table-of-contents__link toc-highlight">P2 — cải thiện chất lượng dài hạn</a></li></ul></li><li><a href="#7-kết-luận" class="table-of-contents__link toc-highlight">7. Kết luận</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

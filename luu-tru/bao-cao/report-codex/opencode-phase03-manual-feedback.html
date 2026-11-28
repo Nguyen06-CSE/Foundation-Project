@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-luu-tru/bao-cao/report-codex/opencode-phase03-manual-feedback" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Bàn giao OpenCode — Phase 03: phản hồi test thủ công | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/opencode-phase03-manual-feedback"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Bàn giao OpenCode — Phase 03: phản hồi test thủ công | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Ngày lập báo cáo: 27/11/2026."><meta data-rh="true" property="og:description" content="Ngày lập báo cáo: 27/11/2026."><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/opencode-phase03-manual-feedback"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/opencode-phase03-manual-feedback" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/opencode-phase03-manual-feedback" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.31488eaf.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.9b395aa4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>Bàn giao OpenCode — Phase 03: phản hồi test thủ công</h1></header>
+<p>Ngày lập báo cáo: 27/11/2026.
+Phạm vi: <strong>Task A read-only diagnosis</strong> + <strong>Task B frontend UI only</strong>. Không sửa backend, không khởi động/dừng worker, không chạy backfill, không truy vấn DB thật, không in secret/<code>.env</code>/nội dung tài liệu/token.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="0-trạng-thái-tổng-hợp">0. Trạng thái tổng hợp<a href="#0-trạng-thái-tổng-hợp" class="hash-link" aria-label="Đường dẫn trực tiếp đến 0. Trạng thái tổng hợp" title="Đường dẫn trực tiếp đến 0. Trạng thái tổng hợp" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Task A:</strong> không tìm thấy file capture terminal/log của worker trên máy. Mọi giải thích bên dưới là <strong>suy luận từ code</strong>, không phải log quan sát được. Không khẳng định nguyên nhân của hiện tượng “worker log chạy liên tục”.</li>
+<li class=""><strong>Task B:</strong> đã hoàn thành các thay đổi UI frontend; build <code>npm run build</code> thành công; <code>git diff --check</code> sạch cho frontend + báo cáo này.</li>
+<li class="">Các triệu chứng do người dùng báo cáo (chunks đã tồn tại; tìm từ khóa thấy seed; truy vấn semantic/Docker trả 16 tài liệu không liên quan và thiếu seed; Assistant tưởng như hỏng hết) được ghi nhận là <strong>user-reported</strong>, chưa được OpenCode xác minh bằng log hoặc DB. Retrieval/worker là trách nhiệm Codex.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-task-a--chẩn-đoán-read-only-worker-log">1. Task A — Chẩn đoán read-only worker log<a href="#1-task-a--chẩn-đoán-read-only-worker-log" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Task A — Chẩn đoán read-only worker log" title="Đường dẫn trực tiếp đến 1. Task A — Chẩn đoán read-only worker log" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-log-terminal-có-truy-cập-được-không">1.1 Log terminal có truy cập được không?<a href="#11-log-terminal-có-truy-cập-được-không" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.1 Log terminal có truy cập được không?" title="Đường dẫn trực tiếp đến 1.1 Log terminal có truy cập được không?" translate="no">​</a></h3>
+<p><strong>Không.</strong> Đây là kết luận quan trọng nhất của Task A.</p>
+<p>Đã quét read-only repo (<code>/Users/caotiendattx/Developer/Foundation-Project</code>, gồm <code>storage/</code>, <code>backend/</code>, <code>docs/</code>, root) và thư mục temp được phép <code>/private/var/folders/vy/sb1qhh5d17dfz00xg95kfd6h0000gp/T/opencode</code>. Không có file nào là stdout/stderr capture của worker. Các file “gần giống” chỉ là migration/test/DB audit/restore log, cũ hơn code worker (code worker tạo ngày 27/11/2026), và <strong>không chứa</strong> mẫu sự kiện worker (<code>event=start|retry|collected|embedding_*|prepared</code>), không chứa dòng <code>sqlalchemy.engine.Engine</code>, không nhắc <code>document_index_runs</code>.</p>
+<p>Chỉ ghi nhận metadata (không trích nội dung log):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>File</th><th style="text-align:right">Kích thước</th><th>mtime</th><th>worker-event / SQL-echo / <code>document_index_runs</code></th></tr></thead><tbody><tr><td><code>…/T/opencode/pgdisposable/data/server.log</code></td><td style="text-align:right">76,694 B</td><td>2026-11-25 20:32:53</td><td>0 / 0 / 0</td></tr><tr><td><code>…/T/opencode/pgdisposable/restore_live_stage.log</code></td><td style="text-align:right">14,852 B</td><td>2026-11-25 20:12:33</td><td>0 / 0 / 0</td></tr><tr><td><code>…/T/opencode/pgdisposable/backend_tests_full.log</code></td><td style="text-align:right">9,257 B</td><td>2026-11-25 20:02:57</td><td>0 / 0 / 0</td></tr><tr><td><code>…/T/opencode/pgdisposable/data/live_like_load.log</code></td><td style="text-align:right">6,723 B</td><td>2026-11-25 19:56:27</td><td>0 / 0 / 0</td></tr><tr><td><code>…/T/opencode/pgdisposable/restore_live_stage_sql.log</code></td><td style="text-align:right">4,481 B</td><td>2026-11-25 20:12:50</td><td>0 / 0 / 0</td></tr><tr><td><code>…/T/opencode/cursor-agent-logs-502/session-2026-11-27T06-27-39-768Z-19118-1.log</code></td><td style="text-align:right">7,023 B</td><td>2026-11-27 13:27:46</td><td>0 / 0 / 0</td></tr></tbody></table>
+<p>Ngoài ra, <code>ps</code> read-only cho thấy một tiến trình Uvicorn đang chạy từ checkout <strong>khác</strong> (<code>/Users/caotiendattx/Developer/Do_An_Co_So/Foundation-Project</code>); terminal output của tiến trình đó không nằm trong file có thể đọc được từ workspace này. Không có kết luận nào rút ra từ tiến trình đó.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-phân-biệt-ba-khả-năng-chỉ-suy-luận-từ-code">1.2 Phân biệt ba khả năng (chỉ suy luận từ code)<a href="#12-phân-biệt-ba-khả-năng-chỉ-suy-luận-từ-code" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.2 Phân biệt ba khả năng (chỉ suy luận từ code)" title="Đường dẫn trực tiếp đến 1.2 Phân biệt ba khả năng (chỉ suy luận từ code)" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Khả năng</th><th>Bằng chứng trong code</th><th>Dấu hiệu/log mong đợi</th></tr></thead><tbody><tr><td><strong>SQL echo + polling (khả năng cao nhất cho “log SQL liên tục”)</strong></td><td><code>backend/app/core/database.py:6-10</code> dùng <code>echo=True</code> cho <strong>mọi</strong> session (worker + API), nên <code>BEGIN/SELECT/COMMIT</code> luôn được ghi ở <code>INFO:sqlalchemy.engine.Engine</code>. <code>backend/app/services/index_worker.py:124-130</code> là vòng lặp vĩnh viễn; <code>step()</code> trả <code>False</code> khi hết việc (<code>:45-46</code>) rồi <code>sleep(2)</code>; câu lẽo claim ở <code>:38-44</code> (<code>LIMIT 1 … FOR UPDATE OF r SKIP LOCKED</code>) vì thế chạy và echo SQL ~2 s/lần <strong>ngay cả khi hàng đợi rỗng</strong>, trong khi không có dòng <code>log.*</code> nào được phát. Thêm vào đó, <code>frontend/digital-library/src/components/shared/documents/DocumentDetail/hooks/useDocumentInsights.ts:17-20</code> poll <code>index-status</code> mỗi 3 s khi status là <code>pending</code>/<code>retry</code>; endpoint này gọi SQL qua <code>backend/app/routers/document_insights.py:18-21</code> → <code>backend/app/services/evidence_search.py:53-70</code>, làm SQL echo lặp lại trong <strong>tiến trình API</strong> khi tab chi tiết tài liệu đang mở.</td><td>Lặp <code>INFO sqlalchemy.engine.Engine</code> SELECT <code>document_index_runs … FOR UPDATE … SKIP LOCKED</code> với nhịp đều ~2 s, <strong>không có</strong> dòng <code>event=*</code>; hoặc lặp GET <code>/documents/&lt;id&gt;/index-status</code> ~3 s.</td></tr><tr><td><strong>Retry thật sự</strong></td><td><code>backend/app/services/index_worker.py:116-120</code> ghi <code>WARNING … event=retry stage=&lt;name&gt; error=&lt;ExceptionClassName&gt; elapsed_s=&lt;n&gt;</code>, đặt <code>status=&#x27;retry&#x27;</code>, tăng <code>attempts</code>, <code>next_attempt = now() + least(900, 5*(1&lt;&lt;least(attempts,7)))</code>. Delay thực tế theo attempts trước khi tăng: 5, 10, 20, 40, 80, 160, 320, 640 s (mốc cap 900 không đạt tới do shift bị cap ở 7). <code>embedding_service.py:23-40</code> tự retry 3 lần với sleep 1 s/2 s cho timeout/connect, và 429/500/502/503/504 (Retry-After nếu là số); <strong>không log ở module này</strong>, nên chỉ thấy khoảng cách dài hơn giữa <code>embedding_start</code> (<code>:86</code>) và <code>embedding_done</code> (<code>:88</code>), sau đó có thể là warning retry.</td><td>Cùng một <code>run=&lt;id&gt;</code> xuất hiện nhiều dòng <code>WARNING event=retry</code>, khoảng cách tăng dần; hoặc gap 1/2 s nội bộ rồi <code>stage=embedding</code> retry.</td></tr><tr><td><strong>Backlog bình thường</strong></td><td>Một transaction sở hữu một run (<code>:35-44</code>, <code>SKIP LOCKED</code>), nên nhiều worker an toàn. Mỗi run phát theo thứ tự <code>event=start attempt=N</code> (<code>:50</code>) → <code>event=collected chunks=N coverage=…</code> (<code>:66</code>) → <code>event=embedding_start batch=N count=N</code> (<code>:86</code>) → <code>event=embedding_done batch=N</code> (<code>:88</code>) → <code>event=prepared outcome=… commit=pending</code> (<code>:115</code>). Enqueue lúc startup chỉ có <code>schedule_model_change()</code> (<code>:16-31</code>, gọi ở <code>:125</code>); enqueue lúc upload/sửa là trigger trong <code>alembic/versions/ea41b38547bc_document_index.py:30-44</code>, backfill ở <code>:45-46</code>. Format log: <code>index_worker.py:134</code>. Log chỉ gồm ID/count/thời gian/tên exception — <strong>không log nội dung tài liệu hay key</strong>.</td><td>Nhiều <code>event=start</code> với <code>run=</code> khác nhau, tăng dần; mỗi run có chuỗi event hoàn chỉnh; không lặp warning cho cùng một run.</td></tr></tbody></table>
+<p><strong>Không có bằng chứng quan sát được</strong> để chọn chắc chắn một trong ba trường hợp trên. Đặc biệt, không được kết luận “retry liên tục” chỉ vì thấy SQL lặp: <code>echo=True</code> + idle poll đủ để tạo ra dòng SQL liên tục mà không có retry nào.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-mẫu-log-tối-thiểu-cần-có-từ-codexngười-test">1.3 Mẫu log tối thiểu cần có từ Codex/người test<a href="#13-mẫu-log-tối-thiểu-cần-có-từ-codexngười-test" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.3 Mẫu log tối thiểu cần có từ Codex/người test" title="Đường dẫn trực tiếp đến 1.3 Mẫu log tối thiểu cần có từ Codex/người test" translate="no">​</a></h3>
+<p>Xin cung cấp <strong>20–30 dòng liên tiếp hoặc ~60 giây</strong> output terminal của worker (và của tiến trình API nếu tab chi tiết đang mở), đã redact theo đúng hình thức này:</p>
+<ol>
+<li class="">Giữ timestamp đến giây (format worker đã có <code>asctime</code>).</li>
+<li class="">Giữ level + logger name: <code>INFO|WARNING</code>, <code>app.services.index_worker</code> vs <code>sqlalchemy.engine.Engine</code>.</li>
+<li class="">Với dòng worker: giữ pattern và giá trị dạng placeholder: <code>run=&lt;ID&gt; attempt=&lt;n&gt; batch=&lt;n&gt; count=&lt;n&gt; chunks=&lt;n&gt; elapsed_s=&lt;n&gt; stage=&lt;name&gt; error=&lt;ExceptionClassName&gt; outcome=&lt;token&gt; status=&lt;token&gt;</code>. Thay document ID/title/body/URL/key/token bằng <code>&lt;redacted&gt;</code>.</li>
+<li class="">Với dòng SQL echo: chỉ giữ logger name, <code>BEGIN|COMMIT|ROLLBACK</code>, và dạng SQL rút gọn, ví dụ <code>SELECT … FROM document_index_runs … LIMIT 1 FOR UPDATE … SKIP LOCKED</code>. <strong>Bỏ hoàn toàn bound parameter và literal values.</strong></li>
+</ol>
+<p>Tiêu chí phân loại:</p>
+<ul>
+<li class="">SQL echo/polling: SELECT <code>document_index_runs … FOR UPDATE … SKIP LOCKED</code> lặp ~2 s, zero <code>event=*</code>; và/hoặc <code>GET /documents/&lt;id&gt;/index-status</code> lặp ~3 s.</li>
+<li class="">Retry: nhiều <code>WARNING event=retry</code> cho <strong>cùng</strong> <code>run=</code>, gap ~5/10/20/40/80/160/320/640 s (hoặc gap 1/2 s trước <code>stage=embedding</code>).</li>
+<li class="">Backlog: <code>event=start</code> với <code>run=</code> khác nhau, mỗi run đi đủ chuỗi <code>collected → embedding_start/done → prepared</code>.</li>
+</ul>
+<p>Nếu có thể, bổ sung (DB-side, không phải log) cho một document cụ thể: <code>status</code>, <code>attempts</code>, <code>next_attempt</code>, <code>last_error</code> từ <code>document_index_runs</code>. <code>attempts &gt; 0</code> xác nhận retry thật; <code>pending, attempts=0</code> xác nhận backlog chưa xử lý. OpenCode <strong>không truy vấn DB</strong>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-giới-hạn-trách-nhiệm">1.4 Giới hạn trách nhiệm<a href="#14-giới-hạn-trách-nhiệm" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1.4 Giới hạn trách nhiệm" title="Đường dẫn trực tiếp đến 1.4 Giới hạn trách nhiệm" translate="no">​</a></h3>
+<p>Không sửa worker/retrieval/embedding/search backend. Không khởi động/dừng worker. Không chạy backfill. Các vấn đề “16 tài liệu không liên quan, thiếu seed khi query semantic/Docker” và “Assistant functions broken” cần Codex đối chiếu tiếp bằng log/DB theo mục 1.3.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-task-b--ui-frontend-đã-triển-khai">2. Task B — UI frontend đã triển khai<a href="#2-task-b--ui-frontend-đã-triển-khai" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Task B — UI frontend đã triển khai" title="Đường dẫn trực tiếp đến 2. Task B — UI frontend đã triển khai" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="21-quyết-định-và-lý-do">2.1 Quyết định và lý do<a href="#21-quyết-định-và-lý-do" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2.1 Quyết định và lý do" title="Đường dẫn trực tiếp đến 2.1 Quyết định và lý do" translate="no">​</a></h3>
+<ul>
+<li class="">Giữ nguyên tab key <code>insights</code> (URL <code>?tab=insights</code> không đổi), chỉ đổi nhãn hiển thị từ <strong>Trợ lý</strong> thành <strong>Hỏi đáp cùng AI</strong> tại <code>DocumentDetail.types.ts</code>. Phần question input (<code>QuestionAnswerPanel</code>) vẫn nằm trong <code>TabInsights</code>, không di chuyển.</li>
+<li class="">Button tóm tắt đặt <strong>ngay dưới nút tải xuống</strong> trong <code>DocumentActionCard</code> (cột phải), chỉ xuất hiện ở route cá nhân/nhóm (<code>showInsights</code>), nơi endpoint <code>/documents/{id}/summary</code> có ngữ cảnh index/run hợp lệ.</li>
+<li class="">Click button gọi đúng service đã có <code>insightService.getSummary(documentId)</code> → <code>GET /documents/{id}/summary</code>, đồng thời chuyển tab sang <code>description</code> để kết quả hiển thị ngay.</li>
+<li class="">Mô tả thủ công vẫn render từ <code>doc.description</code> như cũ; tóm tắt AI là <strong>section riêng</strong> ngay sau mô tả. Không ghi đè lên <code>description</code> DB (frontend không gọi update).</li>
+<li class="">Dùng chung một component <code>AiSummarySection</code> cho cả tab <strong>Mô tả</strong> và tab <strong>Hỏi đáp cùng AI</strong>, nên citation/coverage/empty/error/loading không bị lệch giữa hai nơi.</li>
+<li class="">Không sửa search UI: mode selector <code>keyword | hybrid</code> giữ nguyên, không bật filter <code>title/content/semantic</code>, không đoán match method từ <code>mode</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="22-files-frontend-đã-đổi">2.2 Files frontend đã đổi<a href="#22-files-frontend-đã-đổi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2.2 Files frontend đã đổi" title="Đường dẫn trực tiếp đến 2.2 Files frontend đã đổi" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>File</th><th>Thay đổi</th></tr></thead><tbody><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/DocumentDetail.types.ts</code></td><td>Nhãn tab <code>insights</code>: <code>Trợ lý</code> → <code>Hỏi đáp cùng AI</code>.</td></tr><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/components/DocumentActionCard.tsx</code></td><td>Thêm prop <code>onGenerateSummary?</code>, <code>isSummaryLoading?</code>; nút “Tóm tắt AI” ngay dưới download, có spinner khi loading.</td></tr><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/DocumentDetail.tsx</code></td><td>Thêm <code>useMutation</code> đo <code>performance.now()</code> quanh <code>insightService.getSummary(id)</code>; lưu result vào React Query cache key <code>[&quot;document-summary&quot;, id]</code>; truyền summary/error/elapsed/indexStatus xuống tab Mô tả và <code>TabInsights</code>; click button chuyển <code>setActiveTab(&quot;description&quot;)</code> rồi mutate.</td></tr><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/tabs/AiSummarySection.tsx</code> <strong>(mới)</strong></td><td>Section tóm tắt dùng chung: loading spinner, elapsed time (<code>x.xs</code>), error <code>role=&quot;alert&quot;</code>, pending vs no-content, item link + <code>CitationMeta</code>, “Mở ngữ cảnh”, coverage text + <code>ProgressBar</code>.</td></tr><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/tabs/TabPanels.tsx</code></td><td><code>TabDescription</code> nhận <code>children?: ReactNode</code> để chèn AI summary section mà không đụng vào <code>&lt;p&gt;{description}&lt;/p&gt;</code>.</td></tr><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/tabs/TabInsights.tsx</code></td><td>Thay block tóm tắt cũ bằng <code>AiSummarySection</code>; nhận thêm <code>summaryError</code>, <code>summaryElapsedMs</code>. Question input giữ nguyên.</td></tr><tr><td><code>frontend/digital-library/src/components/shared/documents/DocumentDetailView.tsx</code></td><td>Nút legacy “Tóm tắt tự động AI” bỏ <code>alert(...)</code>, gọi <code>handleSummaryClick(doc)</code> → navigate tới path chi tiết kèm <code>?tab=description</code> (giữ <code>navigationPath</code> của nhóm).</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="23-trace-legacy-button-và-callers">2.3 Trace legacy button và callers<a href="#23-trace-legacy-button-và-callers" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2.3 Trace legacy button và callers" title="Đường dẫn trực tiếp đến 2.3 Trace legacy button và callers" translate="no">​</a></h3>
+<ul>
+<li class="">Component chứa nút: <code>DocumentDetailView.tsx</code>; nhãn tại footer thẻ detail view.</li>
+<li class="">Caller thực tế: <code>pages/personal/components/PersonalDocumentsSection.tsx</code> (viewMode detail, không truyền <code>navigationPath</code> → <code>/personal/documents/{id}</code>) và <code>pages/group/components/sections/GroupDocumentsSection.tsx</code> (truyền <code>navigationPath={(id) =&gt; /groups/${groupId}/documents/${id}}</code>). Cùng được re-export qua <code>components/shared/documents/index.ts</code>.</li>
+<li class="">Không tạo route mới, không sửa hai caller: dùng lại helper <code>getDocumentPath</code> trong <code>DocumentDetailView</code> rồi nối <code>?tab=description</code>. <code>useDocumentDetail.ts:14-21</code> đã validate <code>description</code> là tab hợp lệ, nên URL đồng bộ sẵn.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="24-trạng-thái-hiển-thị-của-tóm-tắt">2.4 Trạng thái hiển thị của tóm tắt<a href="#24-trạng-thái-hiển-thị-của-tóm-tắt" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2.4 Trạng thái hiển thị của tóm tắt" title="Đường dẫn trực tiếp đến 2.4 Trạng thái hiển thị của tóm tắt" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Trường hợp</th><th>UI</th></tr></thead><tbody><tr><td>Đang request</td><td>Button: “Đang tóm tắt...” + spinner; section: “Đang tạo tóm tắt...” + spinner.</td></tr><tr><td>Request xong, có items</td><td>Render từng item, giữ <code>CitationMeta</code>, link “Mở ngữ cảnh”, dòng coverage <code>read/total unit</code> + progress bar; hiển thị elapsed <code>x.xs</code>.</td></tr><tr><td>HTTP 404 (<code>getSummary</code> trả <code>null</code>)</td><td>“Chưa có nội dung để tóm tắt (x.xs).” — không gọi là lỗi.</td></tr><tr><td>Index đang <code>pending/retry/queued/processing/indexing</code> mà summary rỗng</td><td>“Tài liệu đang được xử lý (x.xs); tóm tắt sẽ sẵn sàng sau khi lập chỉ mục xong.”</td></tr><tr><td>HTTP 409 / HTTP khác / network error</td><td><code>role=&quot;alert&quot;</code> màu đỏ: “Không thể tạo tóm tắt: … (x.xs). Vui lòng thử lại.” Mapping lỗi chỉ dùng status/tên loại lỗi, không log/hiện token hay nội dung.</td></tr><tr><td>Chưa từng bấm button</td><td>Dùng data có sẵn từ query <code>useDocumentInsights</code> nếu có; không tạo request mới.</td></tr></tbody></table>
+<p><strong>Không coi mọi failure là empty result</strong>: <code>error</code> được lưu tách biệt khỏi <code>data</code> trong <code>SummaryRequestResult</code>; <code>data: null</code> chỉ đến từ 404 hoặc response rỗng.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-search-ux--contract-proposal-chưa-bật-chưa-đổi-code">3. Search UX — contract proposal (CHƯA bật, CHƯA đổi code)<a href="#3-search-ux--contract-proposal-chưa-bật-chưa-đổi-code" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Search UX — contract proposal (CHƯA bật, CHƯA đổi code)" title="Đường dẫn trực tiếp đến 3. Search UX — contract proposal (CHƯA bật, CHƯA đổi code)" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="31-hiện-trạng-đã-trace-không-thay-đổi">3.1 Hiện trạng (đã trace, không thay đổi)<a href="#31-hiện-trạng-đã-trace-không-thay-đổi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.1 Hiện trạng (đã trace, không thay đổi)" title="Đường dẫn trực tiếp đến 3.1 Hiện trạng (đã trace, không thay đổi)" translate="no">​</a></h3>
+<ul>
+<li class=""><code>SearchMode = &quot;keyword&quot; | &quot;hybrid&quot;</code> (<code>types/search.ts</code>); <code>SearchModeToggle</code> chỉ có 2 lựa chọn. <code>SearchPage.tsx</code> đọc <code>?mode=</code>, mọi giá trị khác <code>hybrid</code> → <code>keyword</code>; gửi đúng <code>{ q, page, page_size, mode }</code> qua <code>searchService.fullTextSearch</code>.</li>
+<li class="">Backend <code>GET /search/full</code>: <code>q</code> (str, required), <code>page</code> (int ≥1), <code>page_size</code> (int 1..50), <code>mode</code> (<code>Literal[&quot;keyword&quot;,&quot;hybrid&quot;]</code>). Keyword = FTS trên <code>Document.search_vector</code>; hybrid = RRF giữa lexical và vector trong <code>evidence_search.py</code>. <code>fallback</code> là boolean <strong>response-level</strong> (embedding unavailable, hoặc FE retry khi 404 hybrid), <strong>không phải</strong> provenance của từng item.</li>
+<li class="">Response item hiện tại: <code>id, type, title, subtitle, url, snippet?, citation?</code> (<code>backend/app/schemas/search.py</code>, <code>frontend/src/types/search.ts</code>). <strong>Không có</strong> provenance/match method, <strong>không có</strong> param <code>title/content/semantic/match_fields</code>.</li>
+<li class="">Badge hiện tại nằm ở metadata row <code>SearchResultCard.tsx</code> (<code>flex flex-wrap</code>), gồm subtitle pill và <code>CitationMeta</code>. Đây là chỗ dự kiến thêm nhiều badge sau này.</li>
+<li class="">Không được suy ra method từ <code>mode</code>: <code>hybrid</code> có thể trả item thuần lexical (<code>fallback=true</code>) hoặc item có cả hai tín hiệu.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="32-đề-xuất-exact-contract-cho-codex-chưa-implement-ở-frontendbackend">3.2 Đề xuất exact contract cho Codex (chưa implement ở frontend/backend)<a href="#32-đề-xuất-exact-contract-cho-codex-chưa-implement-ở-frontendbackend" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3.2 Đề xuất exact contract cho Codex (chưa implement ở frontend/backend)" title="Đường dẫn trực tiếp đến 3.2 Đề xuất exact contract cho Codex (chưa implement ở frontend/backend)" translate="no">​</a></h3>
+<p><strong>Query param mới (additive) trên <code>GET /search/full</code></strong></p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">match_fields: Optional[list[Literal[&quot;title&quot;,&quot;content&quot;,&quot;semantic&quot;]]] = Query(None)</span><br></div></code></pre></div></div>
+<ul>
+<li class="">Wire format lặp key: <code>?match_fields=title&amp;match_fields=content</code> (axios phải serialize dạng <code>match_fields</code>, không phải <code>match_fields[]</code>).</li>
+<li class="">Giá trị hợp lệ: <code>title | content | semantic</code>; unknown → 422; dedupe giữ thứ tự đầu tiên.</li>
+<li class="">Ý nghĩa: <code>title</code> = lexical tiêu đề; <code>content</code> = lexical nội dung/chunk active; <code>semantic</code> = vector signal với kiểm tra run/model/checksum như hiện tại. Nhiều giá trị = union, dùng RRF <code>k=60</code> khi &gt;1 tín hiệu đóng góp. Omit = giữ nguyên hành vi hiện tại. Scope vẫn do server suy từ user, không nhận query param.</li>
+<li class="">Nếu <code>semantic</code> được yêu cầu nhưng embedding/index unavailable: thêm <code>&quot;semantic&quot;</code> vào <code>unavailable_match_fields</code>, <code>fallback=true</code>, <strong>không phát minh</strong> method semantic cho item nào.</li>
+</ul>
+<p><strong>Backend schema đề xuất</strong></p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token plain">MatchField </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> Literal</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;title&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;content&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;semantic&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">MatchMethod </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> Literal</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;lexical_title&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;lexical_content&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;semantic&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> </span><span class="token class-name">SearchMatchProvenance</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">BaseModel</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    methods</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">list</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">MatchMethod</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain">                 </span><span class="token comment" style="color:#999988;font-style:italic"># fixed order: lexical_title, lexical_content, semantic</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    title_rank</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Optional</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">int</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token plain">           </span><span class="token comment" style="color:#999988;font-style:italic"># 1-based</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    content_rank</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Optional</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">int</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token plain">         </span><span class="token comment" style="color:#999988;font-style:italic"># 1-based</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    semantic_rank</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Optional</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">int</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># 1-based</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    fused_score</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> Optional</span><span class="token punctuation" style="color:#393A34">[</span><span class="token builtin">float</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># chỉ có khi &gt;1 signal fused</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># SearchResultItem += match: Optional[SearchMatchProvenance] = None</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># FullSearchOut += unavailable_match_fields: list[MatchField] = []</span><br></div></code></pre></div></div>
+<p><strong>TypeScript đề xuất (chưa thêm vào repo)</strong></p>
+<div class="language-ts codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-ts codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">type</span><span class="token plain"> </span><span class="token class-name maybe-class-name">SearchMatchField</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;title&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;content&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;semantic&quot;</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">type</span><span class="token plain"> </span><span class="token class-name maybe-class-name">SearchMatchMethod</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;lexical_title&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;lexical_content&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;semantic&quot;</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword module" style="color:#00009f">export</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">interface</span><span class="token plain"> </span><span class="token class-name maybe-class-name">SearchMatchProvenance</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  methods</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token maybe-class-name">SearchMatchMethod</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  title_rank</span><span class="token operator" style="color:#393A34">?</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">number</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  content_rank</span><span class="token operator" style="color:#393A34">?</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">number</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  semantic_rank</span><span class="token operator" style="color:#393A34">?</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">number</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  fused_score</span><span class="token operator" style="color:#393A34">?</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">number</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">|</span><span class="token plain"> </span><span class="token keyword null nil" style="color:#00009f">null</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic">// SearchResultItem += match?: SearchMatchProvenance | null;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic">// FullSearchResponse += unavailable_match_fields?: SearchMatchField[];</span><br></div></code></pre></div></div>
+<p><strong>UI placement đề xuất (sau khi API tồn tại)</strong></p>
+<p>Trong <code>SearchResultCard.tsx</code>, nối badge vào metadata row hiện tại: <code>lexical_title</code> → “Tiêu đề”, <code>lexical_content</code> → “Nội dung”, <code>semantic</code> → “Gần nghĩa”; render nothing khi <code>match</code> null/empty. Không đọc <code>mode</code> trong component này. Giữ nguyên <code>SearchModeToggle</code>.</p>
+<p><strong>Acceptance checks đề xuất cho Codex</strong></p>
+<ul>
+<li class="">Omit <code>match_fields</code> → mọi field cũ giữ nguyên; unknown value → 422; semantic unavailable → không có method semantic giả; item đa tín hiệu → nhiều method + rank/score; permission tests giữ nguyên; <code>SearchModeToggle</code> không đổi.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-kiểm-tra-đã-chạy">4. Kiểm tra đã chạy<a href="#4-kiểm-tra-đã-chạy" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Kiểm tra đã chạy" title="Đường dẫn trực tiếp đến 4. Kiểm tra đã chạy" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Check</th><th>Kết quả</th></tr></thead><tbody><tr><td><code>npm run build</code> trước khi sửa UI (baseline, dirty files có sẵn)</td><td>Pass. Chỉ có warning Vite config <code>configLoader: &#x27;native&#x27;</code> (<code>__dirname</code> ở <code>vite.config.ts:21</code>) và warning chunk &gt;500 kB.</td></tr><tr><td><code>npm run build</code> sau khi sửa UI</td><td>Pass (tsc -b + vite build). Vẫn chỉ 2 warning cũ nêu trên; không có lỗi TypeScript.</td></tr><tr><td><code>git diff --check -- frontend docs/99-luu-tru/bao-cao/report-codex</code></td><td>Sạch.</td></tr><tr><td><code>grep -R &quot;Trợ lý&quot; frontend/digital-library/src --include=*.ts --include=*.tsx</code></td><td>Không còn kết quả.</td></tr><tr><td><code>grep -R &quot;Tóm tắt tự động AI&quot; frontend/digital-library/src</code></td><td>Chỉ còn đúng nhãn button legacy (nay đã có handler navigate thay vì <code>alert</code>).</td></tr><tr><td>Backend tests</td><td><strong>Không chạy</strong> — thuộc trách nhiệm Codex; OpenCode không sửa backend.</td></tr><tr><td>Worker / backfill</td><td><strong>Không khởi động/dừng/chạy</strong>.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-ghi-chú-về-graphify-và-phạm-vi-file">5. Ghi chú về Graphify và phạm vi file<a href="#5-ghi-chú-về-graphify-và-phạm-vi-file" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. Ghi chú về Graphify và phạm vi file" title="Đường dẫn trực tiếp đến 5. Ghi chú về Graphify và phạm vi file" translate="no">​</a></h2>
+<ul>
+<li class="">Đã dùng graph có sẵn tại <code>graphify-out/graph.json</code> bằng inline NetworkX fallback (CLI <code>graphify</code> không có trên PATH). Graph này <strong>cũ hơn</strong> các file AI/worker chưa track, nên các kết luận ở mục 1 và 2 được bổ sung bằng grep/read trực tiếp, read-only. Không rebuild graph (nằm ngoài phạm vi “edit frontend/report only”); file temp <code>.vocab.txt</code> sinh ra khi query đã xóa.</li>
+<li class="">Các file dirty có sẵn của Codex (backend, <code>.env.example</code>, search/document detail cũ) <strong>không bị ghi đè</strong>. OpenCode chỉ thêm/sửa các file frontend liệt kê ở mục 2.2 và tạo báo cáo này.</li>
+<li class="">Không in secret, raw <code>.env</code>, nội dung tài liệu hay token trong quá trình điều tra lẫn trong báo cáo này.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/99-luu-tru/bao-cao/report-codex/opencode-phase03-manual-feedback.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-28T05:08:04.000Z" itemprop="dateModified">28 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#0-trạng-thái-tổng-hợp" class="table-of-contents__link toc-highlight">0. Trạng thái tổng hợp</a></li><li><a href="#1-task-a--chẩn-đoán-read-only-worker-log" class="table-of-contents__link toc-highlight">1. Task A — Chẩn đoán read-only worker log</a><ul><li><a href="#11-log-terminal-có-truy-cập-được-không" class="table-of-contents__link toc-highlight">1.1 Log terminal có truy cập được không?</a></li><li><a href="#12-phân-biệt-ba-khả-năng-chỉ-suy-luận-từ-code" class="table-of-contents__link toc-highlight">1.2 Phân biệt ba khả năng (chỉ suy luận từ code)</a></li><li><a href="#13-mẫu-log-tối-thiểu-cần-có-từ-codexngười-test" class="table-of-contents__link toc-highlight">1.3 Mẫu log tối thiểu cần có từ Codex/người test</a></li><li><a href="#14-giới-hạn-trách-nhiệm" class="table-of-contents__link toc-highlight">1.4 Giới hạn trách nhiệm</a></li></ul></li><li><a href="#2-task-b--ui-frontend-đã-triển-khai" class="table-of-contents__link toc-highlight">2. Task B — UI frontend đã triển khai</a><ul><li><a href="#21-quyết-định-và-lý-do" class="table-of-contents__link toc-highlight">2.1 Quyết định và lý do</a></li><li><a href="#22-files-frontend-đã-đổi" class="table-of-contents__link toc-highlight">2.2 Files frontend đã đổi</a></li><li><a href="#23-trace-legacy-button-và-callers" class="table-of-contents__link toc-highlight">2.3 Trace legacy button và callers</a></li><li><a href="#24-trạng-thái-hiển-thị-của-tóm-tắt" class="table-of-contents__link toc-highlight">2.4 Trạng thái hiển thị của tóm tắt</a></li></ul></li><li><a href="#3-search-ux--contract-proposal-chưa-bật-chưa-đổi-code" class="table-of-contents__link toc-highlight">3. Search UX — contract proposal (CHƯA bật, CHƯA đổi code)</a><ul><li><a href="#31-hiện-trạng-đã-trace-không-thay-đổi" class="table-of-contents__link toc-highlight">3.1 Hiện trạng (đã trace, không thay đổi)</a></li><li><a href="#32-đề-xuất-exact-contract-cho-codex-chưa-implement-ở-frontendbackend" class="table-of-contents__link toc-highlight">3.2 Đề xuất exact contract cho Codex (chưa implement ở frontend/backend)</a></li></ul></li><li><a href="#4-kiểm-tra-đã-chạy" class="table-of-contents__link toc-highlight">4. Kiểm tra đã chạy</a></li><li><a href="#5-ghi-chú-về-graphify-và-phạm-vi-file" class="table-of-contents__link toc-highlight">5. Ghi chú về Graphify và phạm vi file</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

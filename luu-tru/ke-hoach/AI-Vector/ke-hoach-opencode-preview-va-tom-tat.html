@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-luu-tru/ke-hoach/AI-Vector/ke-hoach-opencode-preview-va-tom-tat" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Kế hoạch giao OpenCode — preview và tóm tắt tài liệu | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/ke-hoach/AI-Vector/ke-hoach-opencode-preview-va-tom-tat"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Kế hoạch giao OpenCode — preview và tóm tắt tài liệu | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Ngày giao: 27/11/2026"><meta data-rh="true" property="og:description" content="Ngày giao: 27/11/2026"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/ke-hoach/AI-Vector/ke-hoach-opencode-preview-va-tom-tat"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/ke-hoach/AI-Vector/ke-hoach-opencode-preview-va-tom-tat" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/ke-hoach/AI-Vector/ke-hoach-opencode-preview-va-tom-tat" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.31488eaf.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.9b395aa4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>Kế hoạch giao OpenCode — preview và tóm tắt tài liệu</h1></header>
+<p>Ngày giao: 27/11/2026<br>
+Model ưu tiên: DeepSeek V4.1 Flash<br>
+Công cụ: Graphify để lần luồng code, Ponytail để chọn thay đổi nhỏ nhất đáp ứng đủ contract</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-tài-liệu-bắt-buộc-đọc">1. Tài liệu bắt buộc đọc<a href="#1-tài-liệu-bắt-buộc-đọc" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Tài liệu bắt buộc đọc" title="Đường dẫn trực tiếp đến 1. Tài liệu bắt buộc đọc" translate="no">​</a></h2>
+<ol>
+<li class=""><code>docs/99-luu-tru/ke-hoach/AI-Vector/yeu-cau-preview-va-tom-tat-tai-lieu.md</code></li>
+<li class=""><code>frontend/AGENTS.md</code></li>
+<li class=""><code>frontend/docs/design/DESIGN_SYSTEM.md</code></li>
+<li class=""><code>frontend/docs/COMPONENTS.md</code></li>
+<li class=""><code>frontend/docs/SCREENS.md</code></li>
+<li class=""><code>docs/99-luu-tru/bao-cao/report-codex/phase-03-review-manual-feedback.md</code></li>
+</ol>
+<p>Graphify hiện có thể cũ hơn các file Phase 03. Dùng graph để tìm luồng nền, sau đó đối chiếu trực tiếp code hiện tại. Không rebuild graph nếu không cần.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-nguyên-tắc-bắt-buộc">2. Nguyên tắc bắt buộc<a href="#2-nguyên-tắc-bắt-buộc" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Nguyên tắc bắt buộc" title="Đường dẫn trực tiếp đến 2. Nguyên tắc bắt buộc" translate="no">​</a></h2>
+<ul>
+<li class="">Sửa các API hiện có. Không tạo endpoint preview hoặc summary mới.</li>
+<li class="">Không thêm cột DB, migration, bảng cache hoặc dependency.</li>
+<li class="">Không trả <code>documents.content</code> trong response danh sách cá nhân và nhóm.</li>
+<li class="">API detail vẫn trả full <code>content</code>.</li>
+<li class="">Preview phải được tải theo lô cho tài liệu của trang hiện tại. Không query từng document.</li>
+<li class="">Giữ nguyên phân quyền, pagination, sort, filter, checksum và active-run guard.</li>
+<li class="">Không sửa các file dirty ngoài phạm vi.</li>
+<li class="">Không chạy backfill hoặc worker trên toàn kho.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-task-oc-preview-01--contract-danh-sách">3. Task OC-PREVIEW-01 — Contract danh sách<a href="#3-task-oc-preview-01--contract-danh-sách" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Task OC-PREVIEW-01 — Contract danh sách" title="Đường dẫn trực tiếp đến 3. Task OC-PREVIEW-01 — Contract danh sách" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="phạm-vi-file">Phạm vi file<a href="#phạm-vi-file" class="hash-link" aria-label="Đường dẫn trực tiếp đến Phạm vi file" title="Đường dẫn trực tiếp đến Phạm vi file" translate="no">​</a></h3>
+<ul>
+<li class=""><code>backend/app/schemas/document.py</code></li>
+<li class=""><code>backend/app/routers/documents.py</code></li>
+<li class=""><code>backend/app/routers/groups.py</code></li>
+<li class=""><code>backend/app/services/document_query_service.py</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="công-việc">Công việc<a href="#công-việc" class="hash-link" aria-label="Đường dẫn trực tiếp đến Công việc" title="Đường dẫn trực tiếp đến Công việc" translate="no">​</a></h3>
+<ol>
+<li class="">Tạo schema <code>DocumentListOut</code> với các trường mà card, list, dashboard và picker thực sự dùng.</li>
+<li class="">Thêm <code>preview_text: Optional[str] = None</code>.</li>
+<li class="">Đổi <code>PaginatedDocuments.items</code> sang <code>list[DocumentListOut]</code>.</li>
+<li class="">Giữ <code>DocumentOut</code> cho detail, upload, update và bundle children.</li>
+<li class="">Đảm bảo response model của hai route danh sách tiếp tục là <code>PaginatedDocuments</code> tại đúng URL cũ.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="kết-quả-bàn-giao">Kết quả bàn giao<a href="#kết-quả-bàn-giao" class="hash-link" aria-label="Đường dẫn trực tiếp đến Kết quả bàn giao" title="Đường dẫn trực tiếp đến Kết quả bàn giao" translate="no">​</a></h3>
+<ul>
+<li class="">Ví dụ JSON response danh sách mới.</li>
+<li class="">Danh sách consumer đã kiểm tra.</li>
+<li class="">Khẳng định rõ trường nào bị loại khỏi list response.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-task-oc-preview-02--truy-vấn-preview-theo-lô">4. Task OC-PREVIEW-02 — Truy vấn preview theo lô<a href="#4-task-oc-preview-02--truy-vấn-preview-theo-lô" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Task OC-PREVIEW-02 — Truy vấn preview theo lô" title="Đường dẫn trực tiếp đến 4. Task OC-PREVIEW-02 — Truy vấn preview theo lô" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="phạm-vi-file-1">Phạm vi file<a href="#phạm-vi-file-1" class="hash-link" aria-label="Đường dẫn trực tiếp đến Phạm vi file" title="Đường dẫn trực tiếp đến Phạm vi file" translate="no">​</a></h3>
+<ul>
+<li class=""><code>backend/app/services/document_query_service.py</code></li>
+<li class="">Có thể thêm helper nhỏ trong cùng file hoặc <code>backend/app/services/evidence_text.py</code> nếu dùng chung việc chuẩn hóa văn bản.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="công-việc-1">Công việc<a href="#công-việc-1" class="hash-link" aria-label="Đường dẫn trực tiếp đến Công việc" title="Đường dẫn trực tiếp đến Công việc" translate="no">​</a></h3>
+<ol>
+<li class="">Dùng <code>load_only</code> hoặc projection để query danh sách không nạp <code>Document.content</code> và <code>Document.search_vector</code>.</li>
+<li class="">Giữ selectin load cho owner và tags đang cần.</li>
+<li class="">Sau khi phân trang, lấy active run và preview của toàn bộ <code>doc_ids</code> bằng một query.</li>
+<li class="">Summary preview lấy từ <code>document_index_runs.summary[*].text</code> theo thứ tự mảng.</li>
+<li class="">Fallback chọn một active chunk hợp lệ. Ưu tiên heading tổng quan, sau đó ordinal.</li>
+<li class="">Chuẩn hóa khoảng trắng, giới hạn 400 ký tự ở ranh giới câu hoặc từ.</li>
+<li class="">Bundle và tài liệu chưa có active run trả <code>None</code>.</li>
+<li class="">Không gọi provider embedding hoặc model sinh văn bản.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="yêu-cầu-kiểm-tra">Yêu cầu kiểm tra<a href="#yêu-cầu-kiểm-tra" class="hash-link" aria-label="Đường dẫn trực tiếp đến Yêu cầu kiểm tra" title="Đường dẫn trực tiếp đến Yêu cầu kiểm tra" translate="no">​</a></h3>
+<ul>
+<li class="">Inspect SQL hoặc query count để chứng minh không có N+1.</li>
+<li class="">Xác nhận active run phải có <code>r.is_active</code> và <code>r.checksum = d.checksum</code>.</li>
+<li class="">Xác nhận tài liệu của group khác không thể xuất hiện qua preview query.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-task-oc-summary-01--một-đoạn-tóm-tắt">5. Task OC-SUMMARY-01 — Một đoạn tóm tắt<a href="#5-task-oc-summary-01--một-đoạn-tóm-tắt" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. Task OC-SUMMARY-01 — Một đoạn tóm tắt" title="Đường dẫn trực tiếp đến 5. Task OC-SUMMARY-01 — Một đoạn tóm tắt" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="phạm-vi-file-2">Phạm vi file<a href="#phạm-vi-file-2" class="hash-link" aria-label="Đường dẫn trực tiếp đến Phạm vi file" title="Đường dẫn trực tiếp đến Phạm vi file" translate="no">​</a></h3>
+<ul>
+<li class=""><code>backend/app/services/evidence_text.py</code></li>
+<li class=""><code>backend/app/services/evidence_search.py</code></li>
+<li class=""><code>backend/app/routers/document_insights.py</code> nếu cần schema response rõ ràng</li>
+<li class=""><code>frontend/digital-library/src/types/ai.ts</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="công-việc-2">Công việc<a href="#công-việc-2" class="hash-link" aria-label="Đường dẫn trực tiếp đến Công việc" title="Đường dẫn trực tiếp đến Công việc" translate="no">​</a></h3>
+<ol>
+<li class="">Sửa <code>GET /documents/{id}/summary</code> hiện có để trả thêm <code>text</code>.</li>
+<li class="">Tạo <code>text</code> nhất quán ở cả cache hit và cache miss.</li>
+<li class="">Nối câu theo thứ tự tài liệu thành một đoạn, chuẩn hóa khoảng trắng và loại câu trùng.</li>
+<li class="">Giữ <code>items</code> và <code>coverage</code> để không phá nguồn trích dẫn và client cũ.</li>
+<li class="">Không ghi vào <code>documents.description</code> và không thay schema DB.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="contract-bắt-buộc">Contract bắt buộc<a href="#contract-bắt-buộc" class="hash-link" aria-label="Đường dẫn trực tiếp đến Contract bắt buộc" title="Đường dẫn trực tiếp đến Contract bắt buộc" translate="no">​</a></h3>
+<div class="language-ts codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-ts codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">interface</span><span class="token plain"> </span><span class="token class-name maybe-class-name">SummaryResponse</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  text</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">string</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  items</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token maybe-class-name">SummaryItem</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  coverage</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> </span><span class="token maybe-class-name">IndexCoverage</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-task-oc-preview-03--frontend-listdetail">6. Task OC-PREVIEW-03 — Frontend list/detail<a href="#6-task-oc-preview-03--frontend-listdetail" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6. Task OC-PREVIEW-03 — Frontend list/detail" title="Đường dẫn trực tiếp đến 6. Task OC-PREVIEW-03 — Frontend list/detail" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="phạm-vi-file-chính">Phạm vi file chính<a href="#phạm-vi-file-chính" class="hash-link" aria-label="Đường dẫn trực tiếp đến Phạm vi file chính" title="Đường dẫn trực tiếp đến Phạm vi file chính" translate="no">​</a></h3>
+<ul>
+<li class=""><code>frontend/digital-library/src/types/document.ts</code></li>
+<li class=""><code>frontend/digital-library/src/components/shared/documents/documentView.types.ts</code></li>
+<li class=""><code>frontend/digital-library/src/components/shared/documents/DocumentDetailView.tsx</code></li>
+<li class=""><code>frontend/digital-library/src/pages/personal/hooks/usePersonalDocuments.ts</code></li>
+<li class=""><code>frontend/digital-library/src/pages/personal/components/PersonalDocumentsSection.tsx</code></li>
+<li class=""><code>frontend/digital-library/src/pages/group/components/sections/GroupDocumentsSection.tsx</code></li>
+<li class="">Các caller API danh sách bị TypeScript chỉ ra khi build</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="công-việc-3">Công việc<a href="#công-việc-3" class="hash-link" aria-label="Đường dẫn trực tiếp đến Công việc" title="Đường dẫn trực tiếp đến Công việc" translate="no">​</a></h3>
+<ol>
+<li class="">Tách type list response khỏi type detail để <code>content</code> chỉ thuộc detail.</li>
+<li class="">Map <code>preview_text</code> xuyên suốt luồng cá nhân và nhóm.</li>
+<li class="">Đổi <code>DocumentListItem.content</code> thành <code>preview_text</code>.</li>
+<li class=""><code>DocumentDetailView</code> hiển thị trực tiếp preview, <code>line-clamp-4</code>.</li>
+<li class="">Bỏ import và lời gọi <code>extractSummary</code> khỏi <code>DocumentDetailView</code>.</li>
+<li class="">Giữ helper <code>extractSummary</code> nếu còn caller khác. Chỉ xóa khi <code>rg</code> xác nhận không còn dùng.</li>
+<li class="">Rà dashboard, todo picker và modal chia sẻ vì chúng dùng chung API list.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-task-oc-summary-02--ui-mô-tả-và-cache-danh-sách">7. Task OC-SUMMARY-02 — UI Mô tả và cache danh sách<a href="#7-task-oc-summary-02--ui-mô-tả-và-cache-danh-sách" class="hash-link" aria-label="Đường dẫn trực tiếp đến 7. Task OC-SUMMARY-02 — UI Mô tả và cache danh sách" title="Đường dẫn trực tiếp đến 7. Task OC-SUMMARY-02 — UI Mô tả và cache danh sách" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="phạm-vi-file-chính-1">Phạm vi file chính<a href="#phạm-vi-file-chính-1" class="hash-link" aria-label="Đường dẫn trực tiếp đến Phạm vi file chính" title="Đường dẫn trực tiếp đến Phạm vi file chính" translate="no">​</a></h3>
+<ul>
+<li class=""><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/DocumentDetail.tsx</code></li>
+<li class=""><code>frontend/digital-library/src/components/shared/documents/DocumentDetail/tabs/AiSummarySection.tsx</code></li>
+<li class=""><code>frontend/digital-library/src/components/shared/documents/DocumentDetailView.tsx</code></li>
+<li class=""><code>frontend/digital-library/src/services/insightService.ts</code></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="công-việc-4">Công việc<a href="#công-việc-4" class="hash-link" aria-label="Đường dẫn trực tiếp đến Công việc" title="Đường dẫn trực tiếp đến Công việc" translate="no">​</a></h3>
+<ol>
+<li class="">Hiển thị <code>summary.text</code> thành một đoạn văn trong tab Mô tả.</li>
+<li class="">Giữ trạng thái loading, error, cached result, elapsed time và coverage.</li>
+<li class="">Đưa phần xem nguồn vào thao tác phụ gọn. Không render từng summary item thành card trong luồng chính.</li>
+<li class="">Hai nút tóm tắt hiện có tiếp tục gọi endpoint hiện tại.</li>
+<li class="">Khi summary thành công, invalidate prefix danh sách cá nhân hoặc nhóm phù hợp để card nhận preview mới.</li>
+<li class="">Không để kết quả hoặc lỗi của tài liệu cũ hiện sang tài liệu mới.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-thứ-tự-thực-hiện">8. Thứ tự thực hiện<a href="#8-thứ-tự-thực-hiện" class="hash-link" aria-label="Đường dẫn trực tiếp đến 8. Thứ tự thực hiện" title="Đường dẫn trực tiếp đến 8. Thứ tự thực hiện" translate="no">​</a></h2>
+<ol>
+<li class="">OC-PREVIEW-01</li>
+<li class="">OC-PREVIEW-02</li>
+<li class="">OC-SUMMARY-01</li>
+<li class="">OC-PREVIEW-03</li>
+<li class="">OC-SUMMARY-02</li>
+<li class="">Kiểm tra tích hợp và viết báo cáo</li>
+</ol>
+<p>Backend contract phải xong trước khi đổi frontend types. Không sửa song song các file mapping frontend vì chúng dùng chung type.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-kiểm-tra-bắt-buộc">9. Kiểm tra bắt buộc<a href="#9-kiểm-tra-bắt-buộc" class="hash-link" aria-label="Đường dẫn trực tiếp đến 9. Kiểm tra bắt buộc" title="Đường dẫn trực tiếp đến 9. Kiểm tra bắt buộc" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="backend">Backend<a href="#backend" class="hash-link" aria-label="Đường dẫn trực tiếp đến Backend" title="Đường dẫn trực tiếp đến Backend" translate="no">​</a></h3>
+<ul>
+<li class="">Chạy các test schema/list/query hiện có liên quan.</li>
+<li class="">Chạy test Phase 03 liên quan summary và permission.</li>
+<li class="">Thêm test hồi quy có giá trị cho:
+<ul>
+<li class="">list response không có <code>content</code> và có <code>preview_text</code>;</li>
+<li class="">ưu tiên summary hơn chunk;</li>
+<li class="">fallback chunk;</li>
+<li class="">active checksum guard;</li>
+<li class="">summary cache hit/miss đều có cùng <code>text</code>;</li>
+<li class="">preview query không N+1.</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="frontend">Frontend<a href="#frontend" class="hash-link" aria-label="Đường dẫn trực tiếp đến Frontend" title="Đường dẫn trực tiếp đến Frontend" translate="no">​</a></h3>
+<ul>
+<li class="">Chạy <code>npm run build</code> trong <code>frontend/digital-library</code>.</li>
+<li class="">Chạy <code>git diff --check</code> tại root.</li>
+<li class="">Kiểm tra TypeScript không còn truyền <code>content</code> từ list API vào <code>DocumentDetailView</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="đo-hiệu-quả">Đo hiệu quả<a href="#đo-hiệu-quả" class="hash-link" aria-label="Đường dẫn trực tiếp đến Đo hiệu quả" title="Đường dẫn trực tiếp đến Đo hiệu quả" translate="no">​</a></h3>
+<p>Chọn cùng user, bộ lọc, sort, <code>page=1</code>, <code>page_size=20</code>:</p>
+<ol>
+<li class="">Ghi kích thước response trước khi sửa.</li>
+<li class="">Ghi kích thước response sau khi sửa.</li>
+<li class="">Ghi thời gian phản hồi ít nhất ba lần cho mỗi phiên bản hoặc p50/p95 nếu có script benchmark.</li>
+<li class="">Ghi số query PostgreSQL của một request.</li>
+<li class="">Không in token, API key hoặc toàn bộ nội dung tài liệu vào report/log.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="10-ma-trận-nghiệm-thu-thủ-công">10. Ma trận nghiệm thu thủ công<a href="#10-ma-trận-nghiệm-thu-thủ-công" class="hash-link" aria-label="Đường dẫn trực tiếp đến 10. Ma trận nghiệm thu thủ công" title="Đường dẫn trực tiếp đến 10. Ma trận nghiệm thu thủ công" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Ca</th><th>Thao tác</th><th>Kết quả cần có</th></tr></thead><tbody><tr><td>P01</td><td>Mở kho cá nhân ở chế độ detail</td><td>Mỗi card có tối đa bốn dòng preview; response list không có content</td></tr><tr><td>P02</td><td>Mở kho nhóm</td><td>Hành vi giống kho cá nhân, giữ quyền group</td></tr><tr><td>P03</td><td>Tài liệu đã summary</td><td>Card dùng summary text</td></tr><tr><td>P04</td><td>Tài liệu có chunk, chưa summary</td><td>Card dùng đoạn đại diện</td></tr><tr><td>P05</td><td>Tài liệu pending/empty</td><td>Card hiện empty state, không lỗi</td></tr><tr><td>P06</td><td>Nhấn Tóm tắt AI</td><td>Tab Mô tả hiện một đoạn văn</td></tr><tr><td>P07</td><td>Quay lại danh sách</td><td>Preview mới xuất hiện sau refetch</td></tr><tr><td>P08</td><td>Mở DocumentDetail</td><td>OCR content đầy đủ vẫn hiển thị</td></tr><tr><td>P09</td><td>Đổi file hoặc checksum</td><td>Preview cũ không còn được phục vụ</td></tr><tr><td>P10</td><td>Rời nhóm</td><td>Không đọc được list, preview hoặc summary của nhóm</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-báo-cáo-opencode-phải-tạo">11. Báo cáo OpenCode phải tạo<a href="#11-báo-cáo-opencode-phải-tạo" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11. Báo cáo OpenCode phải tạo" title="Đường dẫn trực tiếp đến 11. Báo cáo OpenCode phải tạo" translate="no">​</a></h2>
+<p>Lưu tại:</p>
+<p><code>docs/99-luu-tru/bao-cao/report-codex/opencode-preview-va-tom-tat-result.md</code></p>
+<p>Báo cáo gồm:</p>
+<ol>
+<li class="">Yêu cầu đã nhận.</li>
+<li class="">Giải pháp cuối cùng và quyết định kỹ thuật.</li>
+<li class="">Quá trình thực hiện theo từng task.</li>
+<li class="">Danh sách file đã sửa.</li>
+<li class="">Contract API trước và sau.</li>
+<li class="">Kết quả test/build/diff check.</li>
+<li class="">Số đo response, thời gian và query count.</li>
+<li class="">Ca chưa kiểm tra hoặc giới hạn còn lại.</li>
+<li class="">Tự đánh giá hiệu quả.</li>
+</ol>
+<p>Sau khi hoàn thành, cập nhật mục <strong>Kết quả thực hiện</strong> trong tài liệu đặc tả. Không ghi “hoàn thành” nếu chưa có số đo và chưa kiểm tra hai API cá nhân/nhóm.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/99-luu-tru/ke-hoach/AI-Vector/ke-hoach-opencode-preview-va-tom-tat.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-28T05:08:04.000Z" itemprop="dateModified">28 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-tài-liệu-bắt-buộc-đọc" class="table-of-contents__link toc-highlight">1. Tài liệu bắt buộc đọc</a></li><li><a href="#2-nguyên-tắc-bắt-buộc" class="table-of-contents__link toc-highlight">2. Nguyên tắc bắt buộc</a></li><li><a href="#3-task-oc-preview-01--contract-danh-sách" class="table-of-contents__link toc-highlight">3. Task OC-PREVIEW-01 — Contract danh sách</a><ul><li><a href="#phạm-vi-file" class="table-of-contents__link toc-highlight">Phạm vi file</a></li><li><a href="#công-việc" class="table-of-contents__link toc-highlight">Công việc</a></li><li><a href="#kết-quả-bàn-giao" class="table-of-contents__link toc-highlight">Kết quả bàn giao</a></li></ul></li><li><a href="#4-task-oc-preview-02--truy-vấn-preview-theo-lô" class="table-of-contents__link toc-highlight">4. Task OC-PREVIEW-02 — Truy vấn preview theo lô</a><ul><li><a href="#phạm-vi-file-1" class="table-of-contents__link toc-highlight">Phạm vi file</a></li><li><a href="#công-việc-1" class="table-of-contents__link toc-highlight">Công việc</a></li><li><a href="#yêu-cầu-kiểm-tra" class="table-of-contents__link toc-highlight">Yêu cầu kiểm tra</a></li></ul></li><li><a href="#5-task-oc-summary-01--một-đoạn-tóm-tắt" class="table-of-contents__link toc-highlight">5. Task OC-SUMMARY-01 — Một đoạn tóm tắt</a><ul><li><a href="#phạm-vi-file-2" class="table-of-contents__link toc-highlight">Phạm vi file</a></li><li><a href="#công-việc-2" class="table-of-contents__link toc-highlight">Công việc</a></li><li><a href="#contract-bắt-buộc" class="table-of-contents__link toc-highlight">Contract bắt buộc</a></li></ul></li><li><a href="#6-task-oc-preview-03--frontend-listdetail" class="table-of-contents__link toc-highlight">6. Task OC-PREVIEW-03 — Frontend list/detail</a><ul><li><a href="#phạm-vi-file-chính" class="table-of-contents__link toc-highlight">Phạm vi file chính</a></li><li><a href="#công-việc-3" class="table-of-contents__link toc-highlight">Công việc</a></li></ul></li><li><a href="#7-task-oc-summary-02--ui-mô-tả-và-cache-danh-sách" class="table-of-contents__link toc-highlight">7. Task OC-SUMMARY-02 — UI Mô tả và cache danh sách</a><ul><li><a href="#phạm-vi-file-chính-1" class="table-of-contents__link toc-highlight">Phạm vi file chính</a></li><li><a href="#công-việc-4" class="table-of-contents__link toc-highlight">Công việc</a></li></ul></li><li><a href="#8-thứ-tự-thực-hiện" class="table-of-contents__link toc-highlight">8. Thứ tự thực hiện</a></li><li><a href="#9-kiểm-tra-bắt-buộc" class="table-of-contents__link toc-highlight">9. Kiểm tra bắt buộc</a><ul><li><a href="#backend" class="table-of-contents__link toc-highlight">Backend</a></li><li><a href="#frontend" class="table-of-contents__link toc-highlight">Frontend</a></li><li><a href="#đo-hiệu-quả" class="table-of-contents__link toc-highlight">Đo hiệu quả</a></li></ul></li><li><a href="#10-ma-trận-nghiệm-thu-thủ-công" class="table-of-contents__link toc-highlight">10. Ma trận nghiệm thu thủ công</a></li><li><a href="#11-báo-cáo-opencode-phải-tạo" class="table-of-contents__link toc-highlight">11. Báo cáo OpenCode phải tạo</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

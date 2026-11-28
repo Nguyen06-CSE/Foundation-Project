@@ -1,0 +1,987 @@
+{
+  "dataset_version": "1.0",
+  "description": "Bộ 30 tài liệu tổng hợp tiếng Việt cho baseline tìm kiếm toàn văn.",
+  "users": {
+    "sv_an": {
+      "id": 1,
+      "name": "Nguyễn Văn An"
+    },
+    "sv_binh": {
+      "id": 2,
+      "name": "Trần Thị Bình"
+    }
+  },
+  "workspaces": {
+    "G1": {
+      "id": 11,
+      "name": "Nhóm Học tập 01",
+      "owner": "sv_binh",
+      "members": {
+        "sv_an": "view"
+      }
+    },
+    "G2": {
+      "id": 12,
+      "name": "Nhóm Đồ án 02",
+      "owner": "sv_an",
+      "members": {
+        "sv_binh": "view"
+      }
+    },
+    "G3": {
+      "id": 13,
+      "name": "Nhóm Nghiên cứu 03",
+      "owner": "sv_binh",
+      "members": {}
+    }
+  },
+  "documents": [
+    {
+      "id": "C01",
+      "split": "calibration",
+      "format": "pdf_text",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Giáo trình Cơ sở dữ liệu - Chương 1",
+      "description": "Tóm tắt khái niệm nền tảng về hệ quản trị cơ sở dữ liệu quan hệ.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu\nHệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột.\nKhóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong bảng.\nThuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững.\nChỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa."
+        }
+      ],
+      "text": "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu\nHệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột.\nKhóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong bảng.\nThuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững.\nChỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa.",
+      "tags": [
+        "cơ sở dữ liệu",
+        "giáo trình"
+      ],
+      "view_count": 12,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C01_giao_trinh_co_so_du_lieu_chuong_1.pdf",
+      "sha256": "1ed9419ad96f3bee25f5ca8215431ff092210b64a5c963328da83cdf95aa488c",
+      "size": 23185,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "1 trang có text"
+    },
+    {
+      "id": "C02",
+      "split": "calibration",
+      "format": "pdf_text",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Bài giảng Mạng máy tính",
+      "description": "Mô hình OSI và bộ giao thức TCP/IP trong mạng máy tính.",
+      "segments": [
+        {
+          "location": "trang 1, mục 1",
+          "text": "Mục 1. Mô hình OSI\nMô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng.\nLớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích.\nGiao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi.\nĐịa chỉ IP dùng để định danh thiết bị trong mạng."
+        }
+      ],
+      "text": "Mục 1. Mô hình OSI\nMô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng.\nLớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích.\nGiao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi.\nĐịa chỉ IP dùng để định danh thiết bị trong mạng.",
+      "tags": [
+        "mạng máy tính",
+        "bài giảng"
+      ],
+      "view_count": 8,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C02_bai_giang_mang_may_tinh.pdf",
+      "sha256": "0c268df6fe3457fc809a87345029e7f8f000ce5d1f10d7b6726f14fbb8fd99b4",
+      "size": 22773,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "1 trang có text"
+    },
+    {
+      "id": "C03",
+      "split": "calibration",
+      "format": "pdf_scan",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Đề cương Học máy",
+      "description": "Các khái niệm cơ bản về học có giám sát và quá khớp.",
+      "segments": [
+        {
+          "location": "trang 1, mục Bài 1",
+          "text": "Bài 1. Học có giám sát\nHọc có giám sát sử dụng dữ liệu đã gán nhãn để huấn luyện mô hình.\nHọc không giám sát tìm cấu trúc ẩn trong dữ liệu chưa gán nhãn.\nQuá khớp xảy ra khi mô hình học thuộc dữ liệu huấn luyện nhưng kém trên dữ liệu mới.\nKỹ thuật kiểm chứng chéo giúp đánh giá khả năng tổng quát hóa."
+        }
+      ],
+      "text": "Bài 1. Học có giám sát\nHọc có giám sát sử dụng dữ liệu đã gán nhãn để huấn luyện mô hình.\nHọc không giám sát tìm cấu trúc ẩn trong dữ liệu chưa gán nhãn.\nQuá khớp xảy ra khi mô hình học thuộc dữ liệu huấn luyện nhưng kém trên dữ liệu mới.\nKỹ thuật kiểm chứng chéo giúp đánh giá khả năng tổng quát hóa.",
+      "tags": [
+        "học máy",
+        "đề cương"
+      ],
+      "view_count": 5,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C03_de_cuong_hoc_may.pdf",
+      "sha256": "7d72dc3395e3a306202d584f03f4031d6c0886b2d2a89b3bb460e9cbe12eef35",
+      "size": 24856,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "1 trang scan (không text layer)"
+    },
+    {
+      "id": "C04",
+      "split": "calibration",
+      "format": "pdf_scan",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Tài liệu An toàn thông tin",
+      "description": "Tam giác CIA và các khái niệm mã hóa cơ bản.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Tam giác CIA\nTính bảo mật, tính toàn vẹn và tính sẵn sàng tạo thành tam giác CIA.\nMã hóa đối xứng dùng cùng một khóa cho mã hóa và giải mã.\nMã hóa bất đối xứng dùng cặp khóa công khai và khóa riêng.\nChữ ký số giúp xác thực nguồn gốc và tính toàn vẹn của thông điệp."
+        }
+      ],
+      "text": "Chương 1. Tam giác CIA\nTính bảo mật, tính toàn vẹn và tính sẵn sàng tạo thành tam giác CIA.\nMã hóa đối xứng dùng cùng một khóa cho mã hóa và giải mã.\nMã hóa bất đối xứng dùng cặp khóa công khai và khóa riêng.\nChữ ký số giúp xác thực nguồn gốc và tính toàn vẹn của thông điệp.",
+      "tags": [
+        "an toàn thông tin",
+        "mã hóa"
+      ],
+      "view_count": 9,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C04_tai_lieu_an_toan_thong_tin.pdf",
+      "sha256": "59605145598f0b1877afb27dae561e3b10d9ba5731f492b891987dbcad04818f",
+      "size": 24323,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "1 trang scan (không text layer)"
+    },
+    {
+      "id": "C05",
+      "split": "calibration",
+      "format": "pdf_mixed",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Báo cáo Phân tích dữ liệu",
+      "description": "Xử lý dữ liệu với pandas và trực quan hóa kết quả.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Xử lý dữ liệu với pandas\nDataFrame là cấu trúc dữ liệu dạng bảng hai chiều trong pandas.\nHàm groupby dùng để nhóm dữ liệu theo một hoặc nhiều cột.\nHàm merge dùng để nối hai DataFrame theo khóa chung."
+        },
+        {
+          "location": "trang 2, mục Chương 2",
+          "text": "Chương 2. Trực quan hóa dữ liệu\nBiểu đồ cột phù hợp để so sánh giá trị giữa các nhóm.\nBiểu đồ đường thể hiện xu hướng theo thời gian.\nBiểu đồ phân tán giúp phát hiện tương quan giữa hai biến."
+        }
+      ],
+      "text": "Chương 1. Xử lý dữ liệu với pandas\nDataFrame là cấu trúc dữ liệu dạng bảng hai chiều trong pandas.\nHàm groupby dùng để nhóm dữ liệu theo một hoặc nhiều cột.\nHàm merge dùng để nối hai DataFrame theo khóa chung.\nChương 2. Trực quan hóa dữ liệu\nBiểu đồ cột phù hợp để so sánh giá trị giữa các nhóm.\nBiểu đồ đường thể hiện xu hướng theo thời gian.\nBiểu đồ phân tán giúp phát hiện tương quan giữa hai biến.",
+      "tags": [
+        "phân tích dữ liệu",
+        "pandas"
+      ],
+      "view_count": 15,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C05_bao_cao_phan_tich_du_lieu.pdf",
+      "sha256": "7d8265b2ec677512a2ad99cb6e0b79470dad7ca39c045fd761fc21957bcc73ea",
+      "size": 40315,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "2 trang (1 text + 1 scan)"
+    },
+    {
+      "id": "C06",
+      "split": "calibration",
+      "format": "pdf_mixed",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Hướng dẫn Docker",
+      "description": "Kiến thức cơ bản về image, container, volume và mạng Docker.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Docker cơ bản\nDocker image là khuôn mẫu chỉ đọc để tạo container.\nContainer là môi trường chạy độc lập được tạo từ image.\nDockerfile chứa các chỉ dẫn để xây dựng image."
+        },
+        {
+          "location": "trang 2, mục Chương 2",
+          "text": "Chương 2. Dữ liệu và mạng\nVolume dùng để lưu dữ liệu bền vững ngoài vòng đời container.\nMạng bridge cho phép các container trên cùng máy chủ giao tiếp.\nCổng publish giúp truy cập dịch vụ trong container từ máy chủ."
+        }
+      ],
+      "text": "Chương 1. Docker cơ bản\nDocker image là khuôn mẫu chỉ đọc để tạo container.\nContainer là môi trường chạy độc lập được tạo từ image.\nDockerfile chứa các chỉ dẫn để xây dựng image.\nChương 2. Dữ liệu và mạng\nVolume dùng để lưu dữ liệu bền vững ngoài vòng đời container.\nMạng bridge cho phép các container trên cùng máy chủ giao tiếp.\nCổng publish giúp truy cập dịch vụ trong container từ máy chủ.",
+      "tags": [
+        "docker",
+        "hạ tầng"
+      ],
+      "view_count": 7,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C06_huong_dan_docker.pdf",
+      "sha256": "97d77ae03060d60264dc6563472dbbbc5d726ed3bd1f74e78d14c49e5631822a",
+      "size": 40681,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "2 trang (1 text + 1 scan)"
+    },
+    {
+      "id": "C07",
+      "split": "calibration",
+      "format": "docx",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Quy trình Scrum",
+      "description": "Vai trò, sự kiện và các thành phần chính trong Scrum.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Vai trò và sự kiện\nScrum có ba vai trò chính: Product Owner, Scrum Master và Development Team.\nSprint là khoảng thời gian cố định, thường từ hai đến bốn tuần.\nProduct Backlog là danh sách ưu tiên các hạng mục cần thực hiện.\nSprint Review diễn ra cuối sprint để trình bày kết quả."
+        }
+      ],
+      "text": "Phần 1. Vai trò và sự kiện\nScrum có ba vai trò chính: Product Owner, Scrum Master và Development Team.\nSprint là khoảng thời gian cố định, thường từ hai đến bốn tuần.\nProduct Backlog là danh sách ưu tiên các hạng mục cần thực hiện.\nSprint Review diễn ra cuối sprint để trình bày kết quả.",
+      "tags": [
+        "scrum",
+        "quản lý dự án"
+      ],
+      "view_count": 11,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C07_quy_trinh_scrum.docx",
+      "sha256": "ff433cc04104b699cf8fd986eb3e990a30cfee77f7407bef46566dfb2610a905",
+      "size": 36925,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "C08",
+      "split": "calibration",
+      "format": "docx",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Thiết kế REST API",
+      "description": "Phương thức HTTP và mã trạng thái trong thiết kế REST API.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Thiết kế tài nguyên\nREST API sử dụng các phương thức HTTP để thao tác tài nguyên.\nGET dùng để đọc tài nguyên, POST dùng để tạo mới.\nPUT cập nhật toàn bộ tài nguyên, PATCH cập nhật một phần.\nMã trạng thái 404 biểu thị tài nguyên không tồn tại."
+        }
+      ],
+      "text": "Phần 1. Thiết kế tài nguyên\nREST API sử dụng các phương thức HTTP để thao tác tài nguyên.\nGET dùng để đọc tài nguyên, POST dùng để tạo mới.\nPUT cập nhật toàn bộ tài nguyên, PATCH cập nhật một phần.\nMã trạng thái 404 biểu thị tài nguyên không tồn tại.",
+      "tags": [
+        "rest api",
+        "backend"
+      ],
+      "view_count": 6,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C08_thiet_ke_rest_api.docx",
+      "sha256": "3c01dddca8fc0c2122bca49dc77c65ddecd71cf77018f2a178bc5a6b4616d1c5",
+      "size": 36875,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "C09",
+      "split": "calibration",
+      "format": "docx",
+      "owner": "sv_binh",
+      "workspace": "G3",
+      "title": "Kiến trúc Microservices",
+      "description": "Tài liệu nội bộ của nhóm nghiên cứu về microservices.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Thành phần kiến trúc\nKiến trúc microservices chia hệ thống thành các dịch vụ độc lập.\nAPI gateway là điểm vào duy nhất, định tuyến yêu cầu đến dịch vụ phù hợp.\nService discovery giúp dịch vụ tìm thấy nhau.\nMỗi dịch vụ có cơ sở dữ liệu riêng."
+        }
+      ],
+      "text": "Phần 1. Thành phần kiến trúc\nKiến trúc microservices chia hệ thống thành các dịch vụ độc lập.\nAPI gateway là điểm vào duy nhất, định tuyến yêu cầu đến dịch vụ phù hợp.\nService discovery giúp dịch vụ tìm thấy nhau.\nMỗi dịch vụ có cơ sở dữ liệu riêng.",
+      "tags": [
+        "microservices",
+        "kiến trúc"
+      ],
+      "view_count": 3,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C09_kien_truc_microservices.docx",
+      "sha256": "dcbf999fa9bc847b4807a7851e8ae5ce0171c07844b681ae446303b393e67894",
+      "size": 36914,
+      "workspace_id": 13,
+      "owner_id": 2,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "C10",
+      "split": "calibration",
+      "format": "docx",
+      "owner": "sv_binh",
+      "workspace": null,
+      "title": "Kinh tế vi mô",
+      "description": "Ghi chú cá nhân về cung cầu và độ co giãn.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Cung cầu và độ co giãn\nĐộ co giãn của cầu theo giá đo mức thay đổi phần trăm lượng cầu khi giá thay đổi một phần trăm.\nCầu co giãn khi trị tuyệt đối lớn hơn 1.\nHàng hóa thiết yếu thường ít co giãn.\nLạm phát làm giảm sức mua."
+        }
+      ],
+      "text": "Phần 1. Cung cầu và độ co giãn\nĐộ co giãn của cầu theo giá đo mức thay đổi phần trăm lượng cầu khi giá thay đổi một phần trăm.\nCầu co giãn khi trị tuyệt đối lớn hơn 1.\nHàng hóa thiết yếu thường ít co giãn.\nLạm phát làm giảm sức mua.",
+      "tags": [
+        "kinh tế",
+        "vi mô"
+      ],
+      "view_count": 4,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C10_kinh_te_vi_mo.docx",
+      "sha256": "1dcd309fc1b77f0546e76ea963003c6d7ed0535c247445d42dd37ac8a9ee8d93",
+      "size": 36877,
+      "workspace_id": null,
+      "owner_id": 2,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "C11",
+      "split": "calibration",
+      "format": "pptx",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Tổng quan Trí tuệ nhân tạo",
+      "description": "Slide giới thiệu AI, học máy và học sâu.",
+      "segments": [
+        {
+          "location": "slide 1",
+          "text": "Slide 1. Trí tuệ nhân tạo\nTrí tuệ nhân tạo là lĩnh vực xây dựng hệ thống có khả năng thực hiện nhiệm vụ thông minh.\nHọc máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật.\nHọc sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu."
+        }
+      ],
+      "text": "Slide 1. Trí tuệ nhân tạo\nTrí tuệ nhân tạo là lĩnh vực xây dựng hệ thống có khả năng thực hiện nhiệm vụ thông minh.\nHọc máy là một nhánh của trí tuệ nhân tạo, sử dụng dữ liệu để học quy luật.\nHọc sâu sử dụng mạng nơ-ron nhiều lớp để học biểu diễn dữ liệu.",
+      "tags": [
+        "trí tuệ nhân tạo",
+        "học máy"
+      ],
+      "view_count": 20,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C11_tong_quan_tri_tue_nhan_tao.pptx",
+      "sha256": "43e5036d0c25db88e2454c8c69829056b1b2b5d7a73b5568d94d9616dd11f150",
+      "size": 28488,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "PPTX đọc được"
+    },
+    {
+      "id": "C12",
+      "split": "calibration",
+      "format": "pptx",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Quản lý dự án Agile",
+      "description": "Slide về Agile, user story và velocity.",
+      "segments": [
+        {
+          "location": "slide 1",
+          "text": "Slide 1. Quản lý dự án Agile\nAgile ưu tiên phản hồi nhanh với thay đổi thay vì tuân thủ kế hoạch cứng nhắc.\nUser story mô tả yêu cầu từ góc nhìn người dùng.\nVelocity đo lượng công việc hoàn thành trong một sprint.\nDaily stand-up là cuộc họp ngắn hằng ngày để đồng bộ tiến độ."
+        }
+      ],
+      "text": "Slide 1. Quản lý dự án Agile\nAgile ưu tiên phản hồi nhanh với thay đổi thay vì tuân thủ kế hoạch cứng nhắc.\nUser story mô tả yêu cầu từ góc nhìn người dùng.\nVelocity đo lượng công việc hoàn thành trong một sprint.\nDaily stand-up là cuộc họp ngắn hằng ngày để đồng bộ tiến độ.",
+      "tags": [
+        "agile",
+        "quản lý dự án"
+      ],
+      "view_count": 10,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C12_quan_ly_du_an_agile.pptx",
+      "sha256": "938e44a480c0e66b8bb1fa0d63feef40e022035dafb74d4db4a6f1a9b8da046d",
+      "size": 28536,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "PPTX đọc được"
+    },
+    {
+      "id": "C13",
+      "split": "calibration",
+      "format": "pptx",
+      "owner": "sv_binh",
+      "workspace": null,
+      "title": "Lịch sử Việt Nam",
+      "description": "Ghi chú cá nhân về một số mốc lịch sử.",
+      "segments": [
+        {
+          "location": "slide 1",
+          "text": "Slide 1. Một số mốc lịch sử\nChiến thắng Bạch Đằng năm 1288 do Trần Hưng Đạo chỉ huy.\nNhà Lý dời đô về Thăng Long năm 1010.\nNhà Lê sơ kéo dài từ năm 1428 đến năm 1527."
+        }
+      ],
+      "text": "Slide 1. Một số mốc lịch sử\nChiến thắng Bạch Đằng năm 1288 do Trần Hưng Đạo chỉ huy.\nNhà Lý dời đô về Thăng Long năm 1010.\nNhà Lê sơ kéo dài từ năm 1428 đến năm 1527.",
+      "tags": [
+        "lịch sử",
+        "việt nam"
+      ],
+      "view_count": 3,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C13_lich_su_viet_nam.pptx",
+      "sha256": "3f8e33d36db4d15a4a947f8e0dd023fea9933265b8158742573d37f496fc4e34",
+      "size": 28452,
+      "workspace_id": null,
+      "owner_id": 2,
+      "audit": "PPTX đọc được"
+    },
+    {
+      "id": "E01",
+      "split": "evaluation",
+      "format": "pdf_text",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Cơ sở dữ liệu nâng cao",
+      "description": "Giao dịch, chỉ mục và mức cô lập trong PostgreSQL.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Giao dịch và chỉ mục\nGiao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại.\nChỉ mục B-tree hỗ trợ tìm kiếm theo khoảng giá trị.\nChỉ mục hash phù hợp cho tìm kiếm bằng đúng.\nMức cô lập có thể điều chỉnh để cân bằng hiệu năng và nhất quán."
+        }
+      ],
+      "text": "Chương 1. Giao dịch và chỉ mục\nGiao dịch đảm bảo các thao tác hoặc cùng thành công hoặc cùng thất bại.\nChỉ mục B-tree hỗ trợ tìm kiếm theo khoảng giá trị.\nChỉ mục hash phù hợp cho tìm kiếm bằng đúng.\nMức cô lập có thể điều chỉnh để cân bằng hiệu năng và nhất quán.",
+      "tags": [
+        "cơ sở dữ liệu",
+        "postgresql"
+      ],
+      "view_count": 18,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E01_co_so_du_lieu_nang_cao.pdf",
+      "sha256": "654c131b40e85eb7137e7e0e82dc5c229dafbe122bff9bcca6ecb3ea0d92194e",
+      "size": 21921,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "1 trang có text"
+    },
+    {
+      "id": "E02",
+      "split": "evaluation",
+      "format": "pdf_text",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Mạng không dây",
+      "description": "Chuẩn IEEE 802.11, băng tần và bảo mật Wi-Fi.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Chuẩn IEEE 802.11\nWi-Fi hoạt động theo chuẩn IEEE 802.11.\nBăng tần 2.4 GHz có phạm vi tốt hơn nhưng dễ nhiễu.\nBăng tần 5 GHz có tốc độ cao hơn nhưng phạm vi ngắn hơn.\nWPA3 là giao thức bảo mật Wi-Fi hiện đại."
+        }
+      ],
+      "text": "Chương 1. Chuẩn IEEE 802.11\nWi-Fi hoạt động theo chuẩn IEEE 802.11.\nBăng tần 2.4 GHz có phạm vi tốt hơn nhưng dễ nhiễu.\nBăng tần 5 GHz có tốc độ cao hơn nhưng phạm vi ngắn hơn.\nWPA3 là giao thức bảo mật Wi-Fi hiện đại.",
+      "tags": [
+        "mạng không dây",
+        "wifi"
+      ],
+      "view_count": 13,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E02_mang_khong_day.pdf",
+      "sha256": "ae77c50c69dd2efbb44b48f1adbda007568e8ca656cdea68c825ba72436f1de2",
+      "size": 22815,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "1 trang có text"
+    },
+    {
+      "id": "E03",
+      "split": "evaluation",
+      "format": "pdf_scan",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Học sâu",
+      "description": "Ghi chú về mạng tích chập và các kỹ thuật huấn luyện.",
+      "segments": [
+        {
+          "location": "trang 1, mục Ghi chú",
+          "text": "Mạng nơ-ron tích chập thường dùng cho dữ liệu ảnh.\nHàm kích hoạt ReLU giúp giảm hiện tượng triệt tiêu đạo hàm.\nDropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện.\nBatch normalization ổn định quá trình huấn luyện."
+        }
+      ],
+      "text": "Mạng nơ-ron tích chập thường dùng cho dữ liệu ảnh.\nHàm kích hoạt ReLU giúp giảm hiện tượng triệt tiêu đạo hàm.\nDropout tắt ngẫu nhiên một phần nơ-ron khi huấn luyện.\nBatch normalization ổn định quá trình huấn luyện.",
+      "tags": [
+        "học sâu",
+        "học máy"
+      ],
+      "view_count": 17,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E03_hoc_sau.pdf",
+      "sha256": "9bd6993c320e5d1e3bef6b23425aaeb30783fee413cb4a50a7cb339e982bd45f",
+      "size": 20874,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "1 trang scan (không text layer)"
+    },
+    {
+      "id": "E04",
+      "split": "evaluation",
+      "format": "pdf_scan",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Mật mã ứng dụng",
+      "description": "AES, RSA, SHA-256 và chữ ký số.",
+      "segments": [
+        {
+          "location": "trang 1, mục Ghi chú",
+          "text": "AES là thuật toán mã hóa đối xứng phổ biến.\nRSA dựa trên độ khó phân tích thừa số nguyên tố.\nHàm băm SHA-256 tạo giá trị băm 256 bit.\nChữ ký số dùng khóa riêng để ký và khóa công khai để xác minh."
+        }
+      ],
+      "text": "AES là thuật toán mã hóa đối xứng phổ biến.\nRSA dựa trên độ khó phân tích thừa số nguyên tố.\nHàm băm SHA-256 tạo giá trị băm 256 bit.\nChữ ký số dùng khóa riêng để ký và khóa công khai để xác minh.",
+      "tags": [
+        "mật mã",
+        "an toàn thông tin"
+      ],
+      "view_count": 14,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E04_mat_ma_ung_dung.pdf",
+      "sha256": "0c4e5cdbb1159bc44bed23ae08325bb168e4d1da5f24d84779775daebe26f1de",
+      "size": 20218,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "1 trang scan (không text layer)"
+    },
+    {
+      "id": "E05",
+      "split": "evaluation",
+      "format": "pdf_mixed",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Trực quan hóa dữ liệu",
+      "description": "Biểu đồ, dashboard và khả năng tiếp cận.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Chọn biểu đồ\nBiểu đồ nhiệt dùng màu sắc để biểu diễn giá trị trong ma trận.\nBiểu đồ hộp hiển thị trung vị và tứ phân vị.\nHistogram thể hiện phân phối của một biến số."
+        },
+        {
+          "location": "trang 2, mục Chương 2",
+          "text": "Chương 2. Thiết kế dashboard\nDashboard nên có tiêu đề rõ ràng và chú thích đơn vị.\nMàu sắc cần đảm bảo độ tương phản cho người mù màu.\nSắp xếp thông tin quan trọng ở góc trên bên trái."
+        }
+      ],
+      "text": "Chương 1. Chọn biểu đồ\nBiểu đồ nhiệt dùng màu sắc để biểu diễn giá trị trong ma trận.\nBiểu đồ hộp hiển thị trung vị và tứ phân vị.\nHistogram thể hiện phân phối của một biến số.\nChương 2. Thiết kế dashboard\nDashboard nên có tiêu đề rõ ràng và chú thích đơn vị.\nMàu sắc cần đảm bảo độ tương phản cho người mù màu.\nSắp xếp thông tin quan trọng ở góc trên bên trái.",
+      "tags": [
+        "trực quan hóa",
+        "dashboard"
+      ],
+      "view_count": 16,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E05_truc_quan_hoa_du_lieu.pdf",
+      "sha256": "a1124a4e206ec097e11984dd3094050c498d2338790eacd22612d2cfa020cbcc",
+      "size": 39323,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "2 trang (1 text + 1 scan)"
+    },
+    {
+      "id": "E06",
+      "split": "evaluation",
+      "format": "pdf_mixed",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Kubernetes",
+      "description": "Pod, Deployment, Service, ConfigMap và Secret.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Đơn vị triển khai\nPod là đơn vị triển khai nhỏ nhất trong Kubernetes.\nDeployment quản lý việc tạo và cập nhật Pod.\nService cung cấp địa chỉ ổn định cho một nhóm Pod."
+        },
+        {
+          "location": "trang 2, mục Chương 2",
+          "text": "Chương 2. Cấu hình và mở rộng\nConfigMap lưu cấu hình không bí mật.\nSecret lưu thông tin nhạy cảm như mật khẩu.\nHorizontal Pod Autoscaler tự động tăng số Pod theo tải."
+        }
+      ],
+      "text": "Chương 1. Đơn vị triển khai\nPod là đơn vị triển khai nhỏ nhất trong Kubernetes.\nDeployment quản lý việc tạo và cập nhật Pod.\nService cung cấp địa chỉ ổn định cho một nhóm Pod.\nChương 2. Cấu hình và mở rộng\nConfigMap lưu cấu hình không bí mật.\nSecret lưu thông tin nhạy cảm như mật khẩu.\nHorizontal Pod Autoscaler tự động tăng số Pod theo tải.",
+      "tags": [
+        "kubernetes",
+        "hạ tầng"
+      ],
+      "view_count": 19,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E06_kubernetes.pdf",
+      "sha256": "255e015235aa5576c991ca55ccdf0b6dce14549228ba3a4cf77c55d615067ab7",
+      "size": 39391,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "2 trang (1 text + 1 scan)"
+    },
+    {
+      "id": "E07",
+      "split": "evaluation",
+      "format": "docx",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Kiểm thử phần mềm",
+      "description": "Các mức kiểm thử và độ bao phủ.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Các mức kiểm thử\nKiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ.\nKiểm thử tích hợp kiểm tra sự phối hợp giữa các thành phần.\nKiểm thử hồi quy đảm bảo thay đổi mới không làm hỏng chức năng cũ.\nĐộ bao phủ dòng đo tỷ lệ dòng mã được thực thi bởi kiểm thử."
+        }
+      ],
+      "text": "Phần 1. Các mức kiểm thử\nKiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ.\nKiểm thử tích hợp kiểm tra sự phối hợp giữa các thành phần.\nKiểm thử hồi quy đảm bảo thay đổi mới không làm hỏng chức năng cũ.\nĐộ bao phủ dòng đo tỷ lệ dòng mã được thực thi bởi kiểm thử.",
+      "tags": [
+        "kiểm thử",
+        "chất lượng"
+      ],
+      "view_count": 21,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E07_kiem_thu_phan_mem.docx",
+      "sha256": "274cf22f07bc9039c2373f30185467cdf3c672abda378579c1510128e2e67db6",
+      "size": 36893,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "E09",
+      "split": "evaluation",
+      "format": "docx",
+      "owner": "sv_binh",
+      "workspace": "G3",
+      "title": "Microservices nâng cao",
+      "description": "Tài liệu nội bộ nhóm nghiên cứu về service discovery.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Khả năng chịu lỗi\nService discovery là cơ chế giúp các dịch vụ tìm thấy địa chỉ mạng của nhau.\nAPI gateway chịu trách nhiệm xác thực và giới hạn tần suất.\nCircuit breaker ngăn lỗi dây chuyền.\nObservability theo dõi độ trễ và log."
+        }
+      ],
+      "text": "Phần 1. Khả năng chịu lỗi\nService discovery là cơ chế giúp các dịch vụ tìm thấy địa chỉ mạng của nhau.\nAPI gateway chịu trách nhiệm xác thực và giới hạn tần suất.\nCircuit breaker ngăn lỗi dây chuyền.\nObservability theo dõi độ trễ và log.",
+      "tags": [
+        "microservices",
+        "kiến trúc"
+      ],
+      "view_count": 5,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E09_microservices_nang_cao.docx",
+      "sha256": "2ea1fdd797207a2eb4c380bc43f14c567361502cf2e9ee601e268657e0d31633",
+      "size": 36921,
+      "workspace_id": 13,
+      "owner_id": 2,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "E10",
+      "split": "evaluation",
+      "format": "docx",
+      "owner": "sv_binh",
+      "workspace": null,
+      "title": "Kinh tế vĩ mô",
+      "description": "Ghi chú cá nhân về lạm phát và thất nghiệp.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Lạm phát\nLạm phát là sự tăng liên tục của mức giá chung.\nLạm phát cao làm giảm sức mua của đồng tiền.\nNgân hàng trung ương dùng lãi suất để kiểm soát lạm phát.\nThất nghiệp và lạm phát có quan hệ đánh đổi ngắn hạn."
+        }
+      ],
+      "text": "Phần 1. Lạm phát\nLạm phát là sự tăng liên tục của mức giá chung.\nLạm phát cao làm giảm sức mua của đồng tiền.\nNgân hàng trung ương dùng lãi suất để kiểm soát lạm phát.\nThất nghiệp và lạm phát có quan hệ đánh đổi ngắn hạn.",
+      "tags": [
+        "kinh tế",
+        "vĩ mô"
+      ],
+      "view_count": 6,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E10_kinh_te_vi_mo.docx",
+      "sha256": "5b305dd0842c21fa5a23cadd143b1b323cb9742728f3155536d489c0fad8610c",
+      "size": 36882,
+      "workspace_id": null,
+      "owner_id": 2,
+      "audit": "DOCX đọc được"
+    },
+    {
+      "id": "E11",
+      "split": "evaluation",
+      "format": "pptx",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Thiết kế UI/UX",
+      "description": "Nguyên tắc nhất quán, phản hồi và khả năng tiếp cận.",
+      "segments": [
+        {
+          "location": "slide 1",
+          "text": "Slide 1. Nguyên tắc thiết kế\nTính nhất quán giúp người dùng dự đoán hành vi của giao diện.\nPhản hồi tức thời cho người dùng biết hệ thống đã nhận thao tác.\nKhả năng tiếp cận đảm bảo sản phẩm dùng được với nhiều nhóm người.\nKiểm thử khả dụng quan sát người dùng thực hiện tác vụ."
+        }
+      ],
+      "text": "Slide 1. Nguyên tắc thiết kế\nTính nhất quán giúp người dùng dự đoán hành vi của giao diện.\nPhản hồi tức thời cho người dùng biết hệ thống đã nhận thao tác.\nKhả năng tiếp cận đảm bảo sản phẩm dùng được với nhiều nhóm người.\nKiểm thử khả dụng quan sát người dùng thực hiện tác vụ.",
+      "tags": [
+        "ui/ux",
+        "thiết kế"
+      ],
+      "view_count": 22,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E11_thiet_ke_ui_ux.pptx",
+      "sha256": "7ef2cba06ff2080b3df6a8ad2ae491d863cde0d7260cc1e3cc06d3062b009fec",
+      "size": 28526,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "PPTX đọc được"
+    },
+    {
+      "id": "E12",
+      "split": "evaluation",
+      "format": "pptx",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Quản trị cơ sở dữ liệu",
+      "description": "Sao lưu, phục hồi và các chỉ tiêu RPO/RTO.",
+      "segments": [
+        {
+          "location": "slide 1",
+          "text": "Slide 1. Sao lưu và phục hồi\nSao lưu toàn phần tạo bản sao đầy đủ của cơ sở dữ liệu.\nSao lưu gia tăng chỉ lưu các thay đổi kể từ lần sao lưu gần nhất.\nĐiểm phục hồi mục tiêu RPO quy định lượng dữ liệu có thể mất.\nThời gian phục hồi mục tiêu RTO quy định thời gian tối đa để khôi phục."
+        }
+      ],
+      "text": "Slide 1. Sao lưu và phục hồi\nSao lưu toàn phần tạo bản sao đầy đủ của cơ sở dữ liệu.\nSao lưu gia tăng chỉ lưu các thay đổi kể từ lần sao lưu gần nhất.\nĐiểm phục hồi mục tiêu RPO quy định lượng dữ liệu có thể mất.\nThời gian phục hồi mục tiêu RTO quy định thời gian tối đa để khôi phục.",
+      "tags": [
+        "cơ sở dữ liệu",
+        "sao lưu"
+      ],
+      "view_count": 12,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E12_quan_tri_co_so_du_lieu.pptx",
+      "sha256": "245ff279df417c5a386993e766c39ffdfc5573f538f2cf96f4f8146043bee1e8",
+      "size": 28499,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "PPTX đọc được"
+    },
+    {
+      "id": "E13",
+      "split": "evaluation",
+      "format": "bundle",
+      "owner": "sv_an",
+      "workspace": null,
+      "title": "Bộ tài liệu ôn thi Học máy",
+      "description": "Gói gồm đề cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ.",
+      "segments": [
+        {
+          "location": "mô tả gói",
+          "text": "Gói gồm đề cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ."
+        }
+      ],
+      "text": "Gói gồm đề cương học máy và báo cáo phân tích dữ liệu phục vụ ôn thi cuối kỳ.",
+      "tags": [
+        "học máy",
+        "bundle"
+      ],
+      "view_count": 8,
+      "duplicate_of": null,
+      "bundle_children": [
+        "E03",
+        "E05"
+      ],
+      "is_public": false,
+      "file": null,
+      "sha256": null,
+      "size": 0,
+      "workspace_id": null,
+      "owner_id": 1,
+      "audit": "bundle metadata"
+    },
+    {
+      "id": "E14",
+      "split": "evaluation",
+      "format": "bundle",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Bộ tài liệu nhóm về hạ tầng",
+      "description": "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm.",
+      "segments": [
+        {
+          "location": "mô tả gói",
+          "text": "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm."
+        }
+      ],
+      "text": "Gói gồm tài liệu Kubernetes và mật mã ứng dụng cho buổi thuyết trình nhóm.",
+      "tags": [
+        "hạ tầng",
+        "bundle"
+      ],
+      "view_count": 4,
+      "duplicate_of": null,
+      "bundle_children": [
+        "E04",
+        "E06"
+      ],
+      "is_public": false,
+      "file": null,
+      "sha256": null,
+      "size": 0,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "bundle metadata"
+    },
+    {
+      "id": "E15",
+      "split": "evaluation",
+      "format": "pptx",
+      "owner": "sv_binh",
+      "workspace": null,
+      "title": "Lịch sử Việt Nam - nhà Lê sơ",
+      "description": "Ghi chú cá nhân về nhà Lê sơ.",
+      "segments": [
+        {
+          "location": "slide 1",
+          "text": "Slide 1. Nhà Lê sơ\nNhà Lê sơ thành lập năm 1428 sau khởi nghĩa Lam Sơn.\nLê Thánh Tông ban hành bộ luật Hồng Đức.\nNhà Lê sơ kết thúc năm 1527.\nVua Lê Thái Tổ là người sáng lập."
+        }
+      ],
+      "text": "Slide 1. Nhà Lê sơ\nNhà Lê sơ thành lập năm 1428 sau khởi nghĩa Lam Sơn.\nLê Thánh Tông ban hành bộ luật Hồng Đức.\nNhà Lê sơ kết thúc năm 1527.\nVua Lê Thái Tổ là người sáng lập.",
+      "tags": [
+        "lịch sử",
+        "việt nam"
+      ],
+      "view_count": 2,
+      "duplicate_of": null,
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E15_lich_su_viet_nam_nha_le_so.pptx",
+      "sha256": "5ea1aff8fbc1a8df5157ae1e42ee5541d010458a33e7a930f352b794ed425a04",
+      "size": 28452,
+      "workspace_id": null,
+      "owner_id": 2,
+      "audit": "PPTX đọc được"
+    },
+    {
+      "id": "C14",
+      "split": "calibration",
+      "format": "pdf_text",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Giáo trình Cơ sở dữ liệu - bản nhóm",
+      "description": "Bản sao tài liệu CSDL được chia sẻ trong nhóm học tập.",
+      "segments": [
+        {
+          "location": "trang 1, mục Chương 1",
+          "text": "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu\nHệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột.\nKhóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong bảng.\nThuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững.\nChỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa."
+        }
+      ],
+      "text": "Chương 1. Tổng quan hệ quản trị cơ sở dữ liệu\nHệ quản trị cơ sở dữ liệu quan hệ lưu dữ liệu trong các bảng gồm hàng và cột.\nKhóa chính là một cột hoặc tổ hợp cột dùng để xác định duy nhất mỗi hàng trong bảng.\nThuộc tính ACID gồm tính nguyên tử, tính nhất quán, tính cô lập và tính bền vững.\nChỉ mục B-tree giúp tăng tốc truy vấn tìm kiếm theo khóa.",
+      "tags": [
+        "cơ sở dữ liệu",
+        "giáo trình"
+      ],
+      "view_count": 2,
+      "duplicate_of": "C01",
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C14_giao_trinh_co_so_du_lieu_ban_nhom_dup.pdf",
+      "sha256": "1ed9419ad96f3bee25f5ca8215431ff092210b64a5c963328da83cdf95aa488c",
+      "size": 23185,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "bản sao byte-for-byte"
+    },
+    {
+      "id": "C15",
+      "split": "calibration",
+      "format": "pdf_text",
+      "owner": "sv_an",
+      "workspace": "G2",
+      "title": "Bài giảng Mạng máy tính - bản đồ án",
+      "description": "Bản sao bài giảng mạng dùng trong nhóm đồ án.",
+      "segments": [
+        {
+          "location": "trang 1, mục 1",
+          "text": "Mục 1. Mô hình OSI\nMô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng.\nLớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích.\nGiao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi.\nĐịa chỉ IP dùng để định danh thiết bị trong mạng."
+        }
+      ],
+      "text": "Mục 1. Mô hình OSI\nMô hình OSI gồm bảy lớp, từ lớp vật lý đến lớp ứng dụng.\nLớp giao vận chịu trách nhiệm chia nhỏ dữ liệu và ghép lại ở đích.\nGiao thức TCP đảm bảo truyền dữ liệu tin cậy, có thứ tự và kiểm tra lỗi.\nĐịa chỉ IP dùng để định danh thiết bị trong mạng.",
+      "tags": [
+        "mạng máy tính",
+        "bài giảng"
+      ],
+      "view_count": 1,
+      "duplicate_of": "C02",
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/C15_bai_giang_mang_may_tinh_ban_do_an_dup.pdf",
+      "sha256": "0c268df6fe3457fc809a87345029e7f8f000ce5d1f10d7b6726f14fbb8fd99b4",
+      "size": 22773,
+      "workspace_id": 12,
+      "owner_id": 1,
+      "audit": "bản sao byte-for-byte"
+    },
+    {
+      "id": "E08",
+      "split": "evaluation",
+      "format": "docx",
+      "owner": "sv_binh",
+      "workspace": "G1",
+      "title": "Kiểm thử phần mềm - bản nhóm",
+      "description": "Bản sao tài liệu kiểm thử dùng trong nhóm học tập.",
+      "segments": [
+        {
+          "location": "mục Phần 1",
+          "text": "Phần 1. Các mức kiểm thử\nKiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ.\nKiểm thử tích hợp kiểm tra sự phối hợp giữa các thành phần.\nKiểm thử hồi quy đảm bảo thay đổi mới không làm hỏng chức năng cũ.\nĐộ bao phủ dòng đo tỷ lệ dòng mã được thực thi bởi kiểm thử."
+        }
+      ],
+      "text": "Phần 1. Các mức kiểm thử\nKiểm thử đơn vị kiểm tra từng hàm hoặc lớp riêng lẻ.\nKiểm thử tích hợp kiểm tra sự phối hợp giữa các thành phần.\nKiểm thử hồi quy đảm bảo thay đổi mới không làm hỏng chức năng cũ.\nĐộ bao phủ dòng đo tỷ lệ dòng mã được thực thi bởi kiểm thử.",
+      "tags": [
+        "kiểm thử",
+        "chất lượng"
+      ],
+      "view_count": 2,
+      "duplicate_of": "E07",
+      "bundle_children": [],
+      "is_public": false,
+      "file": "fixtures/files/E08_kiem_thu_phan_mem_ban_nhom_dup.docx",
+      "sha256": "274cf22f07bc9039c2373f30185467cdf3c672abda378579c1510128e2e67db6",
+      "size": 36893,
+      "workspace_id": 11,
+      "owner_id": 2,
+      "audit": "bản sao byte-for-byte"
+    }
+  ],
+  "summary": {
+    "documents": 30,
+    "questions": 60,
+    "splits": {
+      "calibration": {
+        "documents": 15,
+        "questions": 30
+      },
+      "evaluation": {
+        "documents": 15,
+        "questions": 30
+      }
+    },
+    "formats": {
+      "bundle": 2,
+      "docx": 8,
+      "pdf_mixed": 4,
+      "pdf_scan": 4,
+      "pdf_text": 6,
+      "pptx": 6
+    },
+    "duplicates": 3,
+    "bundles": 2
+  },
+  "dataset_hash": "5956a24d2be91e96b6ae02eb06844e1bffa121ddf28519a94e61020301dbd430"
+}

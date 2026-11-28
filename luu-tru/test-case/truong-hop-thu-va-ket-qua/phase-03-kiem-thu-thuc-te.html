@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-luu-tru/test-case/truong-hop-thu-va-ket-qua/phase-03-kiem-thu-thuc-te" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Kiểm thử thực tế Phase 1–3 | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/test-case/truong-hop-thu-va-ket-qua/phase-03-kiem-thu-thuc-te"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Kiểm thử thực tế Phase 1–3 | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Ngày lập chưa chạy thủ công; không coi kết quả mong đợi là kết quả thực tế."><meta data-rh="true" property="og:description" content="Ngày lập chưa chạy thủ công; không coi kết quả mong đợi là kết quả thực tế."><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/test-case/truong-hop-thu-va-ket-qua/phase-03-kiem-thu-thuc-te"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/test-case/truong-hop-thu-va-ket-qua/phase-03-kiem-thu-thuc-te" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/test-case/truong-hop-thu-va-ket-qua/phase-03-kiem-thu-thuc-te" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.31488eaf.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.9b395aa4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>Kiểm thử thực tế Phase 1–3</h1></header>
+<p>Ngày lập: 27/11/2026. Trạng thái: chưa chạy thủ công; không coi kết quả mong đợi là kết quả thực tế.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="chuẩn-bị-và-giới-hạn">Chuẩn bị và giới hạn<a href="#chuẩn-bị-và-giới-hạn" class="hash-link" aria-label="Đường dẫn trực tiếp đến Chuẩn bị và giới hạn" title="Đường dẫn trực tiếp đến Chuẩn bị và giới hạn" translate="no">​</a></h2>
+<p>Upload file <code>../file-upload/phase-03-mau-kiem-thu.md</code> vào kho cá nhân. Ghi ID tài liệu từ URL. Dùng dữ liệu mẫu không nhạy cảm. Không cần hoàn thiện giao diện để kiểm tra: dùng tab Trợ lý, DevTools Network và SQL bên dưới.</p>
+<p>Backend phải chạy bằng Uvicorn (lệnh <code>python -m app.main</code> trong hướng dẫn chat trước không khởi động HTTP server):</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token builtin class-name">cd</span><span class="token plain"> /Users/caotiendattx/Developer/Foundation-Project</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token assign-left variable" style="color:#36acaa">PYTHONPATH</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">backend .venv/bin/python </span><span class="token parameter variable" style="color:#36acaa">-m</span><span class="token plain"> uvicorn app.main:app </span><span class="token parameter variable" style="color:#36acaa">--reload</span><span class="token plain"> </span><span class="token parameter variable" style="color:#36acaa">--port</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">8000</span><br></div></code></pre></div></div>
+<p>Worker là tiến trình riêng, backend không tự chạy worker. Lệnh sau xử lý TOÀN BỘ hàng đợi và gửi nội dung đến provider đã cấu hình; chỉ chạy khi bạn cho phép xử lý toàn bộ các tài liệu pending. Nếu chỉ muốn thử một file, hãy dùng database thử riêng. Hiện chưa có tùy chọn worker giới hạn theo document ID.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token builtin class-name">cd</span><span class="token plain"> /Users/caotiendattx/Developer/Foundation-Project</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token assign-left variable" style="color:#36acaa">PYTHONPATH</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">backend .venv/bin/python </span><span class="token parameter variable" style="color:#36acaa">-u</span><span class="token plain"> </span><span class="token parameter variable" style="color:#36acaa">-m</span><span class="token plain"> app.services.index_worker</span><br></div></code></pre></div></div>
+<p>Không chạy thêm worker nếu đã có tiến trình đang chạy. Log mới cần khởi động lại worker để có hiệu lực. Log có timestamp, run ID, bước, số chunk, số lô và thời gian; không in nội dung tài liệu hoặc API key. <code>embedding_done</code> chưa có nghĩa dữ liệu đã commit: toàn bộ tài liệu đang nằm trong một transaction. Xác nhận commit bằng SQL trạng thái <code>ready</code> và <code>is_active=true</code>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="tại-sao-upload-xong-chưa-thấy-chunk">Tại sao upload xong chưa thấy chunk?<a href="#tại-sao-upload-xong-chưa-thấy-chunk" class="hash-link" aria-label="Đường dẫn trực tiếp đến Tại sao upload xong chưa thấy chunk?" title="Đường dẫn trực tiếp đến Tại sao upload xong chưa thấy chunk?" translate="no">​</a></h2>
+<p>Bảng đúng là <code>document_chunks</code>, không phải <code>document_chucks</code>. Upload tạo tài liệu và tác vụ pending; worker mới tạo chunk. Các khả năng cần phân biệt: chưa chạy worker; đang chờ sau tài liệu cũ; worker đang xử lý nhưng chưa commit; extraction/API lỗi làm rollback chunk và chuyển retry; file không đọc được nên run empty. Chưa có dữ liệu/log của file .doc cụ thể nên chưa thể kết luận nguyên nhân của file đó. .doc là định dạng Word cũ, cần kiểm tra content/Markdown có được tạo thật hay không.</p>
+<p>Thay <code>123</code> bằng ID tài liệu. Chạy trên cùng database với backend:</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">title</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">file_type</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">checksum</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">length</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">content</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">AS</span><span class="token plain"> content_chars</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">markdown_path</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> documents </span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">123</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">status</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">is_active</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">attempts</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">next_attempt</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">last_error</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">coverage</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">       </span><span class="token function" style="color:#d73a49">count</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">AS</span><span class="token plain"> chunks</span><span class="token punctuation" style="color:#393A34">,</span><span class="token function" style="color:#d73a49">count</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">embedding</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">AS</span><span class="token plain"> embedded</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> document_index_runs r </span><span class="token keyword" style="color:#00009f">LEFT</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">JOIN</span><span class="token plain"> document_chunks c </span><span class="token keyword" style="color:#00009f">ON</span><span class="token plain"> c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">run_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">document_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">123</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">GROUP</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">BY</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id </span><span class="token keyword" style="color:#00009f">ORDER</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">BY</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id </span><span class="token keyword" style="color:#00009f">DESC</span><span class="token punctuation" style="color:#393A34">;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">ordinal</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">heading</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">source</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">location</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">body</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">       c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">embedding </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">AS</span><span class="token plain"> has_vector</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> document_chunks c </span><span class="token keyword" style="color:#00009f">JOIN</span><span class="token plain"> document_index_runs r </span><span class="token keyword" style="color:#00009f">ON</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">run_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">document_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">123</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">is_active </span><span class="token keyword" style="color:#00009f">ORDER</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">BY</span><span class="token plain"> c</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">ordinal</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+<p>Không có run: kiểm tra migration/trigger và database đang kết nối. Pending, attempts=0: chưa hoàn tất xử lý, xem terminal worker. Retry: lấy <code>last_error</code>, <code>next_attempt</code> và log <code>event=retry</code>. Empty: kiểm tra content/Markdown và khả năng đọc file. Ready: phải có chunk và, khi cấu hình embedding bật, có vector cho mọi chunk.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="các-ca-cần-thực-hiện">Các ca cần thực hiện<a href="#các-ca-cần-thực-hiện" class="hash-link" aria-label="Đường dẫn trực tiếp đến Các ca cần thực hiện" title="Đường dẫn trực tiếp đến Các ca cần thực hiện" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Mã</th><th>Thao tác</th><th>Kết quả mong đợi</th></tr></thead><tbody><tr><td>P1-01</td><td>Upload Markdown mẫu, ghi thời điểm upload và ID</td><td>Có documents row và run; không yêu cầu chunk xuất hiện ngay khi upload trả về</td></tr><tr><td>P1-02</td><td>Theo dõi log và SQL đến ready</td><td>Có start → collected → embedding_start/done → prepared; SQL xác nhận active run và chunks &gt; 0, embedded = chunks</td></tr><tr><td>P1-03</td><td>Mở Nội dung OCR và bản Markdown</td><td>Có các câu trong mẫu; không mất dấu tiếng Việt. Nếu pipeline bọc Markdown thành code block, ghi nhận cách hiển thị và heading thay vì tự đánh dấu đạt</td></tr><tr><td>P2-01</td><td>Trang tìm kiếm đầy đủ, chọn Từ khóa, tìm “khóa chính xác định duy nhất”</td><td>Tìm được file mẫu</td></tr><tr><td>P2-02</td><td>Chọn Kết hợp, tìm “Docker image là gì” rồi thử “khuôn mẫu tạo môi trường container”</td><td>Có snippet; ghi thứ hạng thực tế. Câu diễn đạt lại không được bảo đảm top 1</td></tr><tr><td>P3-01</td><td>Tab Trợ lý, hỏi “Giá trị lớn nhất ở phía nào của cây nhị phân?”</td><td>Trích đúng “Trong cây tìm kiếm nhị phân, giá trị lớn nhất nằm ở nhánh phải.”, giữ điều kiện tìm kiếm nhị phân</td></tr><tr><td>P3-02</td><td>Hỏi “Mô hình OSI gồm bao nhiêu lớp?”</td><td>Trích câu bảy lớp từ mẫu</td></tr><tr><td>P3-03</td><td>Hỏi “Cơ sở dữ liệu được phát minh năm nào?”</td><td>insufficient, answer=null, không bịa năm</td></tr><tr><td>P3-04</td><td>Xem tóm tắt, bấm nguồn của từng ý</td><td>Mỗi ý là câu có trong chunk; URL có chunk; API chunk trả đúng body và cùng document_id</td></tr><tr><td>P3-05</td><td>Chuyển sang tài liệu khác</td><td>Không còn câu trả lời của tài liệu trước</td></tr><tr><td>P3-06</td><td>Upload mẫu vào nhóm thử; tài khoản thành viên mở nguồn, sau đó chủ nhóm bỏ thành viên và thành viên tải lại trang</td><td>Trước thu hồi đọc được; sau thu hồi không đọc được nguồn, kể cả URL lưu trước đó. Dùng nhóm/tài khoản thử</td></tr><tr><td>P3-07</td><td>Với một tài liệu thử được xử lý lại, mở URL chunk cũ</td><td>Không phục vụ chunk cũ; 404/thông báo không còn hiệu lực. Nếu UI chưa hỗ trợ thay file thì ghi CHƯA THỬ, không sửa DB nghiệp vụ để giả lập</td></tr></tbody></table>
+<p>File Markdown này không kiểm tra được OCR PDF scan, coverage theo trang hoặc năng lực đọc .doc. Cần chạy thêm file .doc đang gặp lỗi và một PDF scan riêng, ghi kết quả cùng mẫu dưới đây. Đừng coi không có lỗi ở Markdown là .doc đã đạt.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="quan-sát-http-và-thời-gian">Quan sát HTTP và thời gian<a href="#quan-sát-http-và-thời-gian" class="hash-link" aria-label="Đường dẫn trực tiếp đến Quan sát HTTP và thời gian" title="Đường dẫn trực tiếp đến Quan sát HTTP và thời gian" translate="no">​</a></h2>
+<p>Mở DevTools → Network, bật Preserve log, lọc <code>index-status</code>, <code>questions</code>, <code>summary</code>, <code>chunks</code> hoặc <code>search/full</code>. Ghi status HTTP, response và Duration. Request questions cần POST body <code>{&quot;question&quot;:&quot;...&quot;}</code>. Mở nguồn dùng GET <code>/documents/{id}/chunks/{chunk_id}</code>. Đừng gửi kèm token/Cookie khi chia sẻ log.</p>
+<p>Ghi ba thời gian riêng: upload trả về; từ upload đến SQL ready; thời gian request hỏi đáp/tìm kiếm. Log <code>elapsed_s</code> chỉ đo bước worker, không gồm thời gian chờ hàng đợi. Chưa đặt SLA cứng vì chưa đo trên file thật.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="bảng-kết-quả-điền-sau-khi-chạy">Bảng kết quả (điền sau khi chạy)<a href="#bảng-kết-quả-điền-sau-khi-chạy" class="hash-link" aria-label="Đường dẫn trực tiếp đến Bảng kết quả (điền sau khi chạy)" title="Đường dẫn trực tiếp đến Bảng kết quả (điền sau khi chạy)" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Ca</th><th>Document ID / Run ID</th><th>Thời gian</th><th>HTTP / trạng thái DB</th><th>Kết quả thực tế</th><th>PASS / FAIL / CHƯA THỬ</th></tr></thead><tbody><tr><td>P1-01</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P1-02</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P1-03</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P2-01</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P2-02</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-01</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-02</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-03</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-04</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-05</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-06</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>P3-07</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<p>Khi báo lỗi .doc, gửi document ID, kết quả hai truy vấn đầu, đoạn log cùng run ID và thời điểm upload. Những bằng chứng này đủ để phân biệt lỗi hàng đợi, đọc file, embedding và công bố kết quả.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/99-luu-tru/test-case/truong-hop-thu-va-ket-qua/phase-03-kiem-thu-thuc-te.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-28T05:08:04.000Z" itemprop="dateModified">28 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#chuẩn-bị-và-giới-hạn" class="table-of-contents__link toc-highlight">Chuẩn bị và giới hạn</a></li><li><a href="#tại-sao-upload-xong-chưa-thấy-chunk" class="table-of-contents__link toc-highlight">Tại sao upload xong chưa thấy chunk?</a></li><li><a href="#các-ca-cần-thực-hiện" class="table-of-contents__link toc-highlight">Các ca cần thực hiện</a></li><li><a href="#quan-sát-http-và-thời-gian" class="table-of-contents__link toc-highlight">Quan sát HTTP và thời gian</a></li><li><a href="#bảng-kết-quả-điền-sau-khi-chạy" class="table-of-contents__link toc-highlight">Bảng kết quả (điền sau khi chạy)</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

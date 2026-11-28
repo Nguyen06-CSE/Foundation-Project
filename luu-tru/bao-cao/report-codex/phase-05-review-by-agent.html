@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="vi" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-luu-tru/bao-cao/report-codex/phase-05-review-by-agent" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.2">
+<title data-rh="true">Báo cáo review độc lập — Phase 5: Thống kê chủ đề quan tâm | Thư Viện Số - Foundation Project</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-05-review-by-agent"><meta data-rh="true" property="og:locale" content="vi"><meta data-rh="true" name="docusaurus_locale" content="vi"><meta data-rh="true" name="docsearch:language" content="vi"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Báo cáo review độc lập — Phase 5: Thống kê chủ đề quan tâm | Thư Viện Số - Foundation Project"><meta data-rh="true" name="description" content="Ngày review: 28/11/2026"><meta data-rh="true" property="og:description" content="Ngày review: 28/11/2026"><link data-rh="true" rel="icon" href="/Foundation-Project/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-05-review-by-agent"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-05-review-by-agent" hreflang="vi"><link data-rh="true" rel="alternate" href="https://Nguyen06-CSE.github.io/Foundation-Project/luu-tru/bao-cao/report-codex/phase-05-review-by-agent" hreflang="x-default"><link rel="stylesheet" href="/Foundation-Project/assets/css/styles.e73a6fa5.css">
+<script src="/Foundation-Project/assets/js/runtime~main.31488eaf.js" defer="defer"></script>
+<script src="/Foundation-Project/assets/js/main.9b395aa4.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Foundation-Project/img/logo.svg"><div role="region" aria-label="Chuyển tới nội dung chính"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Chuyển tới nội dung chính</a></div><nav aria-label="Thanh điều hướng" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Đóng - mở thanh điều hướng" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Foundation-Project/"><div class="navbar__logo"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Foundation-Project/img/logo.svg" alt="Foundation Project Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Digital Library Docs</b></a><a class="navbar__item navbar__link" href="/Foundation-Project/">Tổng Quan &amp; Kiến Trúc</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang">Đặc Tả Tính Năng</a><a class="navbar__item navbar__link" href="/Foundation-Project/co-so-du-lieu">API &amp; CSDL</a><a class="navbar__item navbar__link" href="/Foundation-Project/kiem-thu-va-han-che">Vận Hành &amp; Kiểm Thử</a><a class="navbar__item navbar__link" href="/Foundation-Project/tinh-nang/template-tai-lieu-tinh-nang">Quản Trị &amp; Quy Chuẩn</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Chuyển đổi chế độ sáng và tối (hiện tại là system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><svg aria-hidden="true" class="searchIcon_T3tP" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" d="M6.02945 10.20327a4.17382 4.17382 0 1 1 4.17382-4.17382 4.15609 4.15609 0 0 1-4.17382 4.17382Zm9.69195 4.2199-4.8225-4.82338A5.88021 5.88021 0 0 0 12.058 6.02856 6.00467 6.00467 0 1 0 9.59979 10.8989l4.82338 4.82338a.89729.89729 0 0 0 1.29912 0 .89749.89749 0 0 0-.00087-1.29909Z"></path></svg><input placeholder="Tìm kiếm..." aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Trở lại đầu trang" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">Trên trang này</button></div><div class="theme-doc-markdown markdown"><header><h1>Báo cáo review độc lập — Phase 5: Thống kê chủ đề quan tâm</h1></header>
+<p>Ngày review: 28/11/2026<br>
+Reviewer: Agent kiểm tra độc lập<br>
+Kết luận ngắn: <strong>Chưa đạt Phase 5</strong>. Build và test tập trung đạt, nhưng endpoint <code>GET /stats/me?days=7|30</code> trả 422 cho cả hai giá trị hợp lệ, tag workspace theo chuẩn hiện tại bị loại khỏi thống kê, và nhóm tag theo tên bị trộn/đếm trùng. Không sửa code production trong quá trình review; mọi bằng chứng được ghi lại trước.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-phạm-vi-đã-kiểm-tra">1. Phạm vi đã kiểm tra<a href="#1-phạm-vi-đã-kiểm-tra" class="hash-link" aria-label="Đường dẫn trực tiếp đến 1. Phạm vi đã kiểm tra" title="Đường dẫn trực tiếp đến 1. Phạm vi đã kiểm tra" translate="no">​</a></h2>
+<ul>
+<li class="">API <code>GET /stats/me</code> với <code>scope=me|my_documents</code>, <code>days=7|30</code>, giá trị <code>days</code> ngoài danh sách, <code>scope</code> sai.</li>
+<li class="">Hợp đồng response cũ (<code>total_uploads</code>, <code>total_views</code>, <code>total_downloads</code>, <code>recent_activities</code>, <code>activity_by_day</code>) và trường mới <code>interests</code>.</li>
+<li class="">Độ đúng số liệu trên PostgreSQL local dùng fixture riêng, đối chiếu bằng SQL tay.</li>
+<li class="">Phân quyền cá nhân/nhóm: user khác, rời nhóm, owner không có membership, tài liệu/workspace đã xóa, tài liệu public.</li>
+<li class="">Phân nhóm theo subject/faculty/tag: thiếu subject, subject không có faculty, document không có subject, nhiều tag, tag cá nhân/tag workspace, tag cùng tên, tag/xóa doc.</li>
+<li class="">Luồng <code>from_search=1</code>: <code>SearchResultCard</code> → URL → <code>useDocumentDetail</code> → API detail → <code>DownloadLog.extra_data.source</code>, ở cả endpoint cá nhân và nhóm; kiểm tra reload/refetch và duplicate.</li>
+<li class="">Frontend: <code>npm run build</code>; đọc mã <code>StatsPage</code>, service, type, query key; không chạy được browser có auth thật (xem mục 11).</li>
+<li class="">Hiệu năng: <code>EXPLAIN (ANALYZE, BUFFERS)</code> trên DB synthetic 10.000 documents và 150.000 logs; đếm số câu query trong một request.</li>
+<li class="">Regression: chạy lệnh pytest được yêu cầu + bộ test bổ sung; <code>git diff --check</code>.</li>
+</ul>
+<p>Không mở rộng sang Phase 6; không chỉnh migration; không ghi vào database Neon cấu hình trong <code>.env</code> (chỉ đọc catalog index).</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-commitdiff-hoặc-file-đã-đọc">2. Commit/diff hoặc file đã đọc<a href="#2-commitdiff-hoặc-file-đã-đọc" class="hash-link" aria-label="Đường dẫn trực tiếp đến 2. Commit/diff hoặc file đã đọc" title="Đường dẫn trực tiếp đến 2. Commit/diff hoặc file đã đọc" translate="no">​</a></h2>
+<ul>
+<li class="">HEAD: <code>0fa3d8e13de0a91e4290497dc26682d32367a771</code> (<code>2026-11-27 13:52:15 +0700</code>).</li>
+<li class="">Working tree có nhiều file đã modified từ các phase trước; <code>git diff --check</code> → <strong>exit 0</strong>.</li>
+<li class=""><code>docs/99-luu-tru/ke-hoach/AI-Vector/ke-hoach-AI-chi-tiet.md</code> tồn tại nhưng <strong>0 byte</strong> — không có yêu cầu bổ sung để đối chiếu (INFO).</li>
+</ul>
+<p>File đã đọc/đối chiếu:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Nhóm</th><th>File</th></tr></thead><tbody><tr><td>Tài liệu</td><td><code>docs/99-luu-tru/bao-cao/report-codex/phase-05-thong-ke-chu-de-quan-tam.md</code>, <code>docs/99-luu-tru/bao-cao/report-codex/phase-03-review-manual-feedback.md</code>, <code>docs/99-luu-tru/ke-hoach/AI-Vector/ke-hoach-AI-chi-tiet.md</code></td></tr><tr><td>Backend</td><td><code>backend/app/routers/stats.py</code>, <code>backend/app/schemas/activity.py</code>, <code>backend/app/routers/documents.py</code>, <code>backend/app/routers/groups.py</code>, <code>backend/app/services/document_service.py</code>, <code>backend/app/services/workspace_tag_service.py</code>, <code>backend/app/routers/tags.py</code>, <code>backend/app/routers/workspace_tags.py</code>, <code>backend/app/models/tag.py</code>, <code>backend/app/models/workspace_tag.py</code></td></tr><tr><td>Frontend</td><td><code>frontend/digital-library/src/pages/stats/StatsPage.tsx</code>, <code>src/services/activityService.ts</code>, <code>src/types/activity.ts</code>, <code>src/pages/search/components/SearchResultCard.tsx</code>, <code>src/components/shared/documents/DocumentDetail/hooks/useDocumentDetail.ts</code>, <code>src/services/documentService.ts</code>, <code>src/services/groupService.ts</code>, <code>src/pages/group/hooks/useGroupData.ts</code>, <code>src/components/shared/layout/SearchBar.tsx</code></td></tr><tr><td>Test</td><td><code>backend/tests/test_phase5_interest_counts.py</code>, <code>test_schema_sync_shares_and_community_stats.py</code>, <code>test_document_insights.py</code></td></tr><tr><td>Migration liên quan</td><td><code>alembic/versions/d9e0f1a2b3c4_map_legacy_tag_and_clear_workspace.py</code></td></tr></tbody></table>
+<p>Artifact kiểm tra (local, không commit): <code>/private/var/folders/vy/sb1qhh5d17dfz00xg95kfd6h0000gp/T/opencode/pg-review/</code> gồm <code>fixture.py</code>, <code>direct_stats.py</code>, <code>validation_and_logs.py</code>, <code>edge_cases.py</code>, <code>subject_edge_test*.py</code>, <code>workspace_tag_test.py</code>, <code>workspace_tag_fix_check.py</code>, <code>unread_tag_test.py</code>, <code>explain.sql</code>, <code>explain-perf.log</code>, <code>query_count.py</code>, <code>frontend-build.log</code>, <code>pytest-three.log</code>, <code>pytest-extra.log</code>.</p>
+<p>Môi trường: PostgreSQL 18 local tại <code>127.0.0.1:55432</code>, DB <code>phase5_review</code> và <code>phase5_perf</code>; schema tạo bằng <code>Base.metadata.create_all</code>; fixture dựng bằng script riêng. Không dùng dữ liệu thật của Neon cho phép đếm.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-kết-quả-kiểm-tra-api">3. Kết quả kiểm tra API<a href="#3-kết-quả-kiểm-tra-api" class="hash-link" aria-label="Đường dẫn trực tiếp đến 3. Kết quả kiểm tra API" title="Đường dẫn trực tiếp đến 3. Kết quả kiểm tra API" translate="no">​</a></h2>
+<p>Gọi qua FastAPI ASGI transport với dependency override user id 1:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Request</th><th>Kết quả</th><th>Đánh giá</th></tr></thead><tbody><tr><td><code>GET /stats/me?scope=me</code></td><td><strong>200</strong>, <code>interests.days=30</code>, đủ 8 field</td><td>PASS cho response mặc định/cũ</td></tr><tr><td><code>GET /stats/me?scope=me&amp;days=7</code></td><td><strong>422</strong> <code>literal_error</code>: <code>Input should be 7 or 30</code>, <code>input: &quot;7&quot;</code></td><td><strong>FAIL</strong></td></tr><tr><td><code>GET /stats/me?scope=me&amp;days=30</code></td><td><strong>422</strong> <code>literal_error</code>: <code>Input should be 7 or 30</code>, <code>input: &quot;30&quot;</code></td><td><strong>FAIL</strong></td></tr><tr><td><code>GET /stats/me?scope=me&amp;days=14</code></td><td>422 <code>literal_error</code></td><td>PASS về việc từ chối giá trị sai, nhưng không phân biệt được với giá trị đúng</td></tr><tr><td><code>GET /stats/me?scope=nope&amp;days=7</code></td><td>422 <code>string_pattern_mismatch</code> + <code>literal_error</code></td><td>PASS</td></tr><tr><td><code>GET /stats/me?scope=my_documents</code></td><td><strong>200</strong>, <code>interests=null</code></td><td>PASS, không ảnh hưởng bởi <code>days</code>/<code>interests</code></td></tr></tbody></table>
+<p>Nguyên nhân: <code>backend/app/routers/stats.py:30</code> khai báo <code>days: Literal[7, 30] = Query(30)</code>. Query string là chuỗi; Pydantic không ép <code>&quot;7&quot;</code>/<code>&quot;30&quot;</code> thành int Literal nên cả hai giá trị hợp lệ đều bị từ chối. Frontend luôn gửi <code>days</code> (<code>StatsPage.tsx:65</code>, <code>activityService.ts:20-22</code>), nên nút “Hoạt động của tôi” thực tế luôn nhận 422. <code>useQuery</code> có <code>retry: 1</code>; component không đọc <code>isError</code>, vì vậy summary cards hiện <code>0</code> và thẻ <code>Chủ đề bạn quan tâm</code> bị ẩn do <code>stats?.interests</code> falsy.</p>
+<p>Gọi trực tiếp <code>get_my_stats(scope=&quot;me&quot;, days=7|30, ...)</code> (bypass validation) trả số liệu đúng như mục 4. Điều này chứng minh lỗi nằm ở lớp validation của endpoint, không phải SQL tổng.</p>
+<p>Response <code>interests</code> khi gọi trực tiếp có đủ:</p>
+<p><code>days, personal_documents, read_views, read_documents, opened_from_search, subjects, faculties, tags</code>; mỗi phần tử <code>subjects/faculties/tags</code> có đủ <code>name, personal_documents, read_views, read_documents, opened_from_search</code>. Tuy nhiên <code>backend/app/schemas/activity.py:48</code> khai báo <code>interests: Optional[dict] = None</code>, nên OpenAPI/Schema <strong>không</strong> enforce hợp đồng này (RISK).</p>
+<p>Trường hợp không có hoạt động (user 3) trả <code>200</code> với <code>personal_documents=0</code>, <code>read_views=0</code>, <code>read_documents=0</code>, <code>opened_from_search=0</code>, <code>subjects=[]</code>, <code>faculties=[]</code>, <code>tags=[]</code>; không có 500 (PASS). Frontend có nhánh “Chưa có hoạt động đọc…” ở <code>StatsPage.tsx:146-147</code>, nhưng do lỗi 422 ở trên nên nhánh này không tới được trong luồng HTTP hiện tại.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-bảng-đối-chiếu-dữ-liệu-fixture-và-response">4. Bảng đối chiếu dữ liệu fixture và response<a href="#4-bảng-đối-chiếu-dữ-liệu-fixture-và-response" class="hash-link" aria-label="Đường dẫn trực tiếp đến 4. Bảng đối chiếu dữ liệu fixture và response" title="Đường dẫn trực tiếp đến 4. Bảng đối chiếu dữ liệu fixture và response" translate="no">​</a></h2>
+<p>Fixture chính (user A = id 1, user B = id 2, user C = id 3):</p>
+<ul>
+<li class="">Cá nhân owner A: 101 (3 logs/7d, 2 search), 102 (0), 103 (1), 106 (40d), 107 (10d), 108 (8d), 109 (7d+2h), 110 (3 logs, action gồm <code>view</code> legacy), 112 (chỉ B đọc), 113 (2, 1 search), 104 (public của A, 2 logs), 105 (deleted, 2 logs).</li>
+<li class="">Nhóm: 201/202/203/204 trong G1 (A còn membership), 205 trong workspace đã xóa, 211 trong G2 (A đã rời), 221 trong G3 (A là owner nhưng không có membership row), 231/232 trong G4 (A membership).</li>
+<li class="">Tags: cá nhân <code>AI</code> (id 1,3), <code>CSDL</code>, <code>Temp</code>; G1/G2/G3/G4 có các tag <code>AI</code> riêng; doc 231 có <strong>hai tag id 9 và 10 cùng tên <code>AI</code></strong>.</li>
+<li class="">Logs: có download (<code>DOCUMENT_DOWNLOADED</code>) và lượt đọc bởi user B; có hoạt động 40d/10d/8d/7d+2h.</li>
+</ul>
+<p>SQL đối chiếu tổng (rút gọn):</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">WITH</span><span class="token plain"> visible </span><span class="token keyword" style="color:#00009f">AS</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">subject_id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">owner_id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> documents d</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">is_deleted </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">coalesce</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">is_public</span><span class="token punctuation" style="color:#393A34">,</span><span class="token boolean" style="color:#36acaa">false</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">owner_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token operator" style="color:#393A34">OR</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">EXISTS</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> workspaces w </span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> w</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> w</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">type</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">&#x27;group&#x27;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> w</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">is_deleted </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">w</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">owner_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">OR</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">EXISTS</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> workspace_members m</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">          </span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> m</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">w</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> m</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">user_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">reads</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">AS</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> dl</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">document_id</span><span class="token punctuation" style="color:#393A34">,</span><span class="token function" style="color:#d73a49">count</span><span class="token punctuation" style="color:#393A34">(</span><span class="token operator" style="color:#393A34">*</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> views</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">         </span><span class="token function" style="color:#d73a49">count</span><span class="token punctuation" style="color:#393A34">(</span><span class="token operator" style="color:#393A34">*</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> FILTER </span><span class="token punctuation" style="color:#393A34">(</span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> dl</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">extra_data</span><span class="token operator" style="color:#393A34">-</span><span class="token operator" style="color:#393A34">&gt;&gt;</span><span class="token string" style="color:#e3116c">&#x27;source&#x27;</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">&#x27;search&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> search_views</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> download_logs dl</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> dl</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">user_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> dl</span><span class="token punctuation" style="color:#393A34">.</span><span class="token keyword" style="color:#00009f">action</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">IN</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;DOCUMENT_VIEWED&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token string" style="color:#e3116c">&#x27;view&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> dl</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">created_at </span><span class="token operator" style="color:#393A34">&gt;=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">now</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">interval</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;&lt;7|30&gt; days&#x27;</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token keyword" style="color:#00009f">GROUP</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">BY</span><span class="token plain"> dl</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">document_id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">SELECT</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">.</span><span class="token punctuation" style="color:#393A34">.</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> visible d </span><span class="token keyword" style="color:#00009f">LEFT</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">JOIN</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">reads</span><span class="token plain"> r </span><span class="token keyword" style="color:#00009f">ON</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">document_id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">WHERE</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">NULL</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">owner_id</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">OR</span><span class="token plain"> r</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">views</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">;</span><br></div></code></pre></div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th style="text-align:right">SQL tay 7 ngày</th><th style="text-align:right"><code>get_my_stats(days=7)</code></th><th style="text-align:right">SQL tay 30 ngày</th><th style="text-align:right"><code>get_my_stats(days=30)</code></th><th>Kết luận</th></tr></thead><tbody><tr><td><code>personal_documents</code></td><td style="text-align:right">10</td><td style="text-align:right">10</td><td style="text-align:right">10</td><td style="text-align:right">10</td><td>PASS</td></tr><tr><td><code>read_views</code></td><td style="text-align:right">14</td><td style="text-align:right">14</td><td style="text-align:right">17</td><td style="text-align:right">17</td><td>PASS</td></tr><tr><td><code>read_documents</code> (distinct)</td><td style="text-align:right">8</td><td style="text-align:right">8</td><td style="text-align:right">11</td><td style="text-align:right">11</td><td>PASS</td></tr><tr><td><code>opened_from_search</code> (distinct doc)</td><td style="text-align:right">3</td><td style="text-align:right">3</td><td style="text-align:right">3</td><td style="text-align:right">3</td><td>PASS</td></tr><tr><td><code>scope=my_documents</code> → <code>interests</code></td><td style="text-align:right"><code>null</code></td><td style="text-align:right"><code>null</code></td><td style="text-align:right">—</td><td style="text-align:right">—</td><td>PASS</td></tr></tbody></table>
+<p>Chi tiết subject/faculty ở 7 ngày:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Nhóm</th><th style="text-align:right"><code>personal_documents</code></th><th style="text-align:right"><code>read_views</code></th><th style="text-align:right"><code>read_documents</code></th><th style="text-align:right"><code>opened_from_search</code></th></tr></thead><tbody><tr><td>Cơ sở dữ liệu</td><td style="text-align:right">6</td><td style="text-align:right">9</td><td style="text-align:right">5</td><td style="text-align:right">3</td></tr><tr><td>Kinh tế phát triển</td><td style="text-align:right">2</td><td style="text-align:right">4</td><td style="text-align:right">2</td><td style="text-align:right">0</td></tr><tr><td>Chưa phân loại</td><td style="text-align:right">2</td><td style="text-align:right">1</td><td style="text-align:right">1</td><td style="text-align:right">0</td></tr></tbody></table>
+<p>Faculty có cùng số liệu với subject tương ứng: <code>Công nghệ thông tin</code> 6/9/5/3, <code>Kinh tế</code> 2/4/2/0, <code>Chưa phân loại</code> 2/1/1/0. Ở 30 ngày, <code>Cơ sở dữ liệu</code> tăng lên 6/11/7/3 và <code>Chưa phân loại</code> 2/2/2/0 do doc 107/108/109 vào cửa sổ.</p>
+<p>Các trường hợp biên đã đối chiếu:</p>
+<ul>
+<li class="">101 đọc 3 lần → <code>read_views += 3</code>, <code>read_documents += 1</code>; lặp không tăng số document.</li>
+<li class="">111 (private của B) có 2 logs của A nhưng bị loại bởi điều kiện visible → không tính; API <code>/documents/111</code> trả 403 và không ghi log mới.</li>
+<li class="">112 do B đọc, không phải A → không vào thống kê A.</li>
+<li class="">106/107/108/109: ngoài 7d; 106 ngoài cả 30d; 107/108/109 vào 30d. Đúng kỳ vọng.</li>
+<li class="">2 logs <code>DOCUMENT_DOWNLOADED</code> không làm tăng <code>read_views</code>.</li>
+<li class="">204 public của G1 có log của A nhưng bị loại; 205 (workspace xóa), 211 (A rời nhóm) bị loại.</li>
+<li class="">221 (A là owner, không có membership row) vẫn tính: 1 view. SQL và code nhất quán ở điểm này.</li>
+<li class="">Tag <code>Temp</code> biến mất khi xóa tag 12 và trở lại khi khôi phục; doc 113 xóa mềm làm giảm đúng 2 views/1 doc; xóa workspace 10 làm giảm đúng 2 views/1 doc của G1.</li>
+</ul>
+<p><strong>Bất thường tag (FAIL):</strong> cùng fixture 7 ngày, API trả tag <code>AI</code> = <code>read_views 12</code>, <code>read_documents 8</code>; đếm đúng theo <code>(tag_id, document_id)</code> thì <code>AI</code> có 11 lượt và 7 document khác nhau. Nguyên nhân doc 231 gắn đồng thời tag id 9 và 10 đều tên <code>AI</code>, nên hai row cùng document bị cộng hai lần. Tổng toàn cục <code>read_documents=8</code> vẫn đúng (đây là điểm prior report nhấn mạnh), nhưng số liệu <strong>theo tag</strong> sai.</p>
+<p><strong>Bất thường public (FAIL trung bình):</strong> doc 104 là public nhưng do A sở hữu và A có quyền; nó được tính vào <code>total_uploads=12</code> nhưng bị điều kiện <code>NOT coalesce(d.is_public,false)</code> ở <code>stats.py:161</code> loại khỏi <code>personal_documents=10</code> và khỏi 2 lượt đọc (1 search). Nếu sản phẩm cố ý tách “kho cá nhân” và “kho cộng đồng”, cần ghi rõ trong UI/contract; hiện tại hai số cùng trang không giải thích được.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-kết-quả-kiểm-tra-quyền-cá-nhânnhóm">5. Kết quả kiểm tra quyền cá nhân/nhóm<a href="#5-kết-quả-kiểm-tra-quyền-cá-nhânnhóm" class="hash-link" aria-label="Đường dẫn trực tiếp đến 5. Kết quả kiểm tra quyền cá nhân/nhóm" title="Đường dẫn trực tiếp đến 5. Kết quả kiểm tra quyền cá nhân/nhóm" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Trường hợp</th><th>API detail</th><th>Ảnh hưởng tới stats</th><th>Đánh giá</th></tr></thead><tbody><tr><td>A đọc private doc 111 của B</td><td>403 <code>Không có quyền truy cập tài liệu này</code></td><td>Không log mới; SQL loại</td><td>PASS</td></tr><tr><td>C (không membership) đọc 201 của G1</td><td>403 <code>Bạn không phải thành viên của nhóm này</code></td><td>Không log mới</td><td>PASS</td></tr><tr><td>A đọc 211 sau khi rời G2</td><td>403</td><td>Không log mới</td><td>PASS</td></tr><tr><td>A đọc 205 trong workspace đã xóa</td><td>404 <code>Không tìm thấy nhóm</code></td><td>Không log mới</td><td>PASS</td></tr><tr><td>A đọc public doc 104 của chính A</td><td>200, trả <code>DocumentOut</code> có <code>content</code></td><td>stats vẫn loại khỏi interests</td><td>Xem mục 4</td></tr><tr><td>A đọc 221 (owner G3, không có member row)</td><td>200</td><td>Tính 1 view</td><td>PASS</td></tr></tbody></table>
+<p>Thử nghiệm chuyển trạng thái membership G4 (xóa rồi khôi phục <code>workspace_members</code> cho A) cho thấy khi rời nhóm, <code>personal_documents/read_views/read_documents/opened_from_search</code> giảm đúng phần của doc 231/232, và subject/faculty/tag lấy từ G4 biến mất; khôi phục membership thì trở lại. Cross-scope tag attachments <code>(101,5)</code> và <code>(201,1)</code> bị loại bởi <code>t.workspace_id IS NOT DISTINCT FROM d.workspace_id</code> — điều này đúng cho dữ liệu legacy, nhưng <strong>sai cho chuẩn workspace_tags hiện tại</strong> (xem mục 10, F2).</p>
+<p>Câu SQL tiềm ẩn rủi ro:</p>
+<div class="language-sql codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sql codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">JOIN</span><span class="token plain"> tags t </span><span class="token keyword" style="color:#00009f">ON</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">id</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">dt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">tag_id </span><span class="token operator" style="color:#393A34">AND</span><span class="token plain"> t</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id </span><span class="token operator" style="color:#393A34">IS</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">NOT</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">DISTINCT</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">FROM</span><span class="token plain"> d</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">workspace_id</span><br></div></code></pre></div></div>
+<p>Với <code>workspace_tags</code> chuẩn, <code>tags.workspace_id</code> luôn <code>NULL</code>; tag G1 tạo qua API không bao giờ thỏa điều kiện trên khi <code>d.workspace_id=10</code>, nên bị bỏ qua. Đây không phải lộ dữ liệu, mà là thiếu dữ liệu.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-kết-quả-kiểm-tra-from_search">6. Kết quả kiểm tra <code>from_search</code><a href="#6-kết-quả-kiểm-tra-from_search" class="hash-link" aria-label="Đường dẫn trực tiếp đến 6-kết-quả-kiểm-tra-from_search" title="Đường dẫn trực tiếp đến 6-kết-quả-kiểm-tra-from_search" translate="no">​</a></h2>
+<p>Luồng tĩnh:</p>
+<ul>
+<li class=""><code>SearchResultCard.tsx:26-29</code>: chỉ nối <code>from_search=1</code> cho <code>personal_doc</code> và <code>group_doc</code>; folder không nối. URL có citation vẫn nối đúng bằng <code>&amp;</code>.</li>
+<li class=""><code>useDocumentDetail.ts:55,90</code>: đọc flag và đưa vào <code>queryKey</code>, nên refetch cùng flag vẫn gửi lại flag.</li>
+<li class=""><code>documentService.getById</code> và <code>groupService.getDocument</code> luôn truyền <code>params.from_search</code> (false hoặc true).</li>
+<li class=""><code>documents.py:515,567-569</code> và <code>groups.py:267,320-322</code>: bool query, ghi 1 <code>DOCUMENT_VIEWED</code> với <code>extra_data={&quot;source&quot;:&quot;search&quot;}</code> khi true, <code>deduplicate_window_minutes=0</code>.</li>
+</ul>
+<p>Kết quả gọi API thật trên fixture:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Hành động</th><th>Log tạo ra</th><th>Đánh giá</th></tr></thead><tbody><tr><td><code>/documents/101?from_search=1</code></td><td>+1 <code>DOCUMENT_VIEWED</code>, <code>workspace_context=personal</code>, <code>source=search</code></td><td>PASS</td></tr><tr><td>Gọi lại <code>/documents/101?from_search=1</code></td><td>+1 log search nữa</td><td>Không dedup</td></tr><tr><td><code>/documents/101</code> (direct)</td><td>+1 log <code>source=null</code></td><td>PASS</td></tr><tr><td><code>/groups/10/documents/201?from_search=1</code></td><td>+1 log <code>workspace_context=group</code>, <code>workspace_id=10</code>, <code>source=search</code></td><td>PASS</td></tr><tr><td>Gọi lại group detail</td><td>+1 log search nữa</td><td>Không dedup</td></tr><tr><td>Các request 403/404 ở mục 5</td><td>Không log</td><td>PASS</td></tr></tbody></table>
+<p><code>opened_from_search</code> đếm theo document có ít nhất một log search nên vẫn ổn định (3 trong fixture), nhưng <code>read_views</code> tăng theo mỗi reload/refetch. Đây là rủi ro đã được prior report nhắc là để Phase 6; Phase 5 yêu cầu ghi rõ ảnh hưởng — báo cáo này ghi nhận tại F5. <code>extra_data.source</code> không bị dữ liệu khác ghi đè trong các ca đã thử.</p>
+<p>Hai endpoint được yêu cầu riêng:</p>
+<ul>
+<li class=""><code>GET /documents/{id}?from_search=true</code>: 200, <code>source=search</code>; <code>from_search=1</code> cũng được FastAPI parse là true.</li>
+<li class=""><code>GET /groups/{group_id}/documents/{id}?from_search=true</code>: 200, <code>source=search</code>, context group.</li>
+</ul>
+<p>Hạn chế luồng: <code>SearchBar</code> quick-search (<code>handleSelect</code> → <code>navigate(url)</code>) không gắn flag, nên các lượt mở từ quick-search không được gán nhãn search (RISK/INFO). Ngoài ra, mở doc nhóm qua <code>/documents/{id}</code> (không phải route group) ghi <code>workspace_context=personal</code>, <code>workspace_id=null</code> dù stats vẫn đếm doc theo workspace; log context bị sai (INFO).</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-kết-quả-frontend-build">7. Kết quả frontend build<a href="#7-kết-quả-frontend-build" class="hash-link" aria-label="Đường dẫn trực tiếp đến 7. Kết quả frontend build" title="Đường dẫn trực tiếp đến 7. Kết quả frontend build" translate="no">​</a></h2>
+<p>Lệnh: <code>cd frontend/digital-library &amp;&amp; npm run build</code> → <strong>exit 0</strong>, <code>✓ built in 781ms</code>.</p>
+<p>Cảnh báo duy nhất: chunk <code>index-D54zDGWQ.js</code> 2.779,68 kB (gzip 796,34 kB) và vài chunk &gt; 500 kB — cảnh báo có từ trước, không phải lỗi Phase 5.</p>
+<p>Đọc mã UI:</p>
+<ul>
+<li class="">Bộ chọn scope “Hoạt động của tôi” / “Tài liệu của tôi” set đúng <code>scope</code>.</li>
+<li class="">Select 7/30 ngày set đúng <code>days</code> và query key [<code>my-stats</code>, <code>scope</code>, <code>days</code>]; đổi days làm đổi key → refetch có chủ đích, không phải render loop. Không thấy effect gây request lặp bất thường khi chỉ đổi tab/render lại (code-level).</li>
+<li class=""><code>stats.interests</code> chỉ render khi truthy; <code>interests=null</code> hoặc 422 làm <strong>ẩn hoàn toàn</strong> thẻ chủ đề. Không có UI <code>isError/error</code> (FAIL nhỏ).</li>
+<li class="">Biểu đồ vẫn cố định 30 ngày (<code>activity_by_day</code> luôn 30 ngày) dù selector đổi 7/30 — INFO.</li>
+<li class="">“Tài liệu của tôi” không đọc <code>days</code>/<code>interests</code>; response vẫn 200 ở scope này.</li>
+</ul>
+<p>Không có bằng chứng browser thật do mục 11.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-kết-quả-test">8. Kết quả test<a href="#8-kết-quả-test" class="hash-link" aria-label="Đường dẫn trực tiếp đến 8. Kết quả test" title="Đường dẫn trực tiếp đến 8. Kết quả test" translate="no">​</a></h2>
+<p>Lệnh được yêu cầu:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token assign-left variable" style="color:#36acaa">PYTHONPATH</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">backend .venv/bin/python </span><span class="token parameter variable" style="color:#36acaa">-m</span><span class="token plain"> pytest </span><span class="token punctuation" style="color:#393A34">\</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  backend/tests/test_phase5_interest_counts.py </span><span class="token punctuation" style="color:#393A34">\</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  backend/tests/test_schema_sync_shares_and_community_stats.py </span><span class="token punctuation" style="color:#393A34">\</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  backend/tests/test_document_insights.py </span><span class="token parameter variable" style="color:#36acaa">-q</span><br></div></code></pre></div></div>
+<p>→ <strong>33 passed, 12 warnings</strong> trong 1.29s. Warnings là <code>on_event</code> deprecated của FastAPI, không liên quan Phase 5.</p>
+<p>Bộ test bổ sung do agent thêm trong thư mục temp (không commit) bao phủ API validation, từng nhóm ngày, permissions, from_search, membership transitions, cross-scope tag, soft delete, empty user → <strong>26 passed</strong>.</p>
+<p><code>git diff --check</code> → exit 0.</p>
+<p>Đánh giá coverage: <code>backend/tests/test_phase5_interest_counts.py</code> <strong>chỉ test hàm <code>_topic_rows</code></strong> với 3 row giả. Không có test nào trong repo kiểm tra endpoint <code>days=7|30</code>, SQL thật, permission, from_search log, hay UI. Vì vậy 33 passed <strong>không</strong> đủ để kết luận Phase 5 đạt (MISSING).</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-kết-quả-hiệu-năng">9. Kết quả hiệu năng<a href="#9-kết-quả-hiệu-năng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 9. Kết quả hiệu năng" title="Đường dẫn trực tiếp đến 9. Kết quả hiệu năng" translate="no">​</a></h2>
+<p>Dựng DB <code>phase5_perf</code>: 10.000 documents (5.000 cá nhân, 5.000 G1, 1.000 G2 đã rời), 40 tags, 11.000 document_tags, 150.000 <code>DOCUMENT_VIEWED</code> logs trong 30 ngày. Để phản ánh schema thực, agent đã đọc catalog index của Neon (chỉ đọc) và tạo tương đương trên DB local: <code>ix_download_logs_user_id_created_at</code>, <code>ix_download_logs_document_id_created_at</code>, <code>ix_documents_owner_workspace_created</code>, <code>ix_documents_workspace_created</code>, <code>ix_document_tags_tag_document</code>, v.v. <strong>Không đổi migration</strong>.</p>
+<p><code>EXPLAIN (ANALYZE, BUFFERS)</code> (log: <code>explain-perf.log</code>):</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Truy vấn</th><th style="text-align:right">Execution Time</th><th>Điểm đáng chú ý</th></tr></thead><tbody><tr><td>Subject/faculty (<code>visible</code> + <code>reads</code> CTE)</td><td style="text-align:right">14.522 ms</td><td>Dùng <code>Bitmap Index Scan on ix_download_logs_user_id_created_at</code> (22.923 rows), <strong>không full scan</strong> download_logs; <code>Seq Scan documents</code> 10.000 rows do filter owner/membership; <code>HashAggregate</code> 9.600 nhóm</td></tr><tr><td>Tag query</td><td style="text-align:right">46.792 ms</td><td>10.000 document-tag rows → <code>Nested Loop Left Join</code> 10.000 lần vào <code>ix_download_logs_document_id_created_at</code>, tạo 22.069 row trước <code>GroupAggregate</code>; buffers shared hit 61.415; có nhân bản row do tag</td></tr></tbody></table>
+<p>Đếm câu lệnh trong một lần <code>get_my_stats(scope=&quot;me&quot;, days=7)</code> bằng SQLAlchemy event: <strong>7 statements</strong> (1 uploads, 2 totals, 1 recent, 1 by_day, 1 subject/faculty, 1 tags), elapsed <strong>212,1 ms</strong> trên fixture lớn. Kết quả: <code>personal_documents=5000</code>, <code>read_views=20804</code>, <code>read_documents=8735</code>, <code>opened_from_search=6437</code>, 10 subjects, 40 tags.</p>
+<p>Đánh giá:</p>
+<ul>
+<li class="">Có index phù hợp trên <code>download_logs</code> theo <code>(user_id, created_at)</code> và <code>(document_id, created_at)</code> trong schema thực; <strong>không có full scan</strong> download_logs. Không có bằng chứng để thêm index mới ngay.</li>
+<li class="">Vấn đề hiệu năng nằm ở tag query: mỗi document-tag row thực hiện một index lookup và bị nhân bản trước khi group. Với dữ liệu thật lớn hơn hoặc document có nhiều tag, chi phí tăng tuyến tính theo số cặp <code>(document, tag)</code>. Nên gom <code>reads</code> dùng chung rồi join với danh sách <code>(document_id, tag_id)</code> đã distinct, thay vì join logs trực tiếp 10.000 lần (RISK).</li>
+<li class=""><code>Seq Scan documents</code> trên fixture lớn là do planner chọn khi phải evaluate membership; remote đã có index tổng hợp. Chưa đề xuất migration mới.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="10-danh-sách-lỗi-theo-mức-độ-nghiêm-trọng">10. Danh sách lỗi theo mức độ nghiêm trọng<a href="#10-danh-sách-lỗi-theo-mức-độ-nghiêm-trọng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 10. Danh sách lỗi theo mức độ nghiêm trọng" title="Đường dẫn trực tiếp đến 10. Danh sách lỗi theo mức độ nghiêm trọng" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ID</th><th>Mức</th><th>Phân loại</th><th>Phát hiện</th><th>Bằng chứng</th><th>Tác động</th></tr></thead><tbody><tr><td>F1</td><td><strong>Critical</strong></td><td><strong>FAIL</strong></td><td><code>days: Literal[7,30]</code> trong query param khiến <code>days=7</code> và <code>days=30</code> đều trả 422</td><td><code>stats.py:30</code>; ASGI test mục 3; frontend luôn gửi <code>days</code></td><td>Tính năng chính không dùng được qua HTTP; thẻ interests bị ẩn, summary hiện 0</td></tr><tr><td>F2</td><td><strong>High</strong></td><td><strong>FAIL</strong></td><td>Tag workspace chuẩn (<code>workspace_tags</code>, <code>tags.workspace_id=NULL</code>) bị loại bởi join <code>t.workspace_id IS NOT DISTINCT FROM d.workspace_id</code></td><td><code>stats.py:193</code>; <code>workspace_tag_service.py:88-107</code>; migration d9e...; thử nghiệm tag 50 chỉ hiện khi set legacy <code>tags.workspace_id=10</code></td><td>Tag nhóm tạo qua UI/API không xuất hiện trong thống kê</td></tr><tr><td>F3</td><td><strong>High</strong></td><td><strong>FAIL</strong></td><td>Nhóm tag theo <code>name</code> làm trộn tag cá nhân/nhóm cùng tên và đếm trùng tag id khác nhau trên cùng doc</td><td><code>stats.py:204-206</code>; AI trả 12 views/8 docs thay vì 11/7</td><td>Số liệu từng tag sai; vi phạm yêu cầu “tag không bị trộn”</td></tr><tr><td>F4</td><td><strong>Medium</strong></td><td><strong>FAIL</strong></td><td>Public doc do chính user sở hữu bị loại khỏi interests nhưng vẫn vào <code>total_uploads</code></td><td><code>stats.py:161</code>; doc 104: 12 uploads vs 10 personal docs</td><td>Thiếu 2 lượt đọc/1 doc; số liệu trong cùng trang không nhất quán</td></tr><tr><td>F5</td><td><strong>Medium</strong></td><td><strong>RISK</strong></td><td><code>from_search</code> là flag URL, không consume một lần, <code>deduplicate_window_minutes=0</code></td><td>validation log: mỗi reload thêm 1 log; <code>opened_from_search</code> vẫn ổn</td><td><code>read_views</code> phình khi reload/refetch; đây là hành vi đã biết nhưng chưa được test/contract hóa</td></tr><tr><td>F6</td><td><strong>Medium</strong></td><td><strong>RISK</strong></td><td><code>interests: Optional[dict]</code> không enforce schema</td><td><code>activity.py:48</code></td><td>Frontend type hand-written có thể lệch OpenAPI; không có validation field bắt buộc</td></tr><tr><td>F7</td><td><strong>Medium</strong></td><td><strong>MISSING</strong></td><td>Test repo chỉ phủ <code>_topic_rows</code></td><td><code>test_phase5_interest_counts.py</code> 13 dòng</td><td>Không có regression cho F1–F4</td></tr><tr><td>F8</td><td><strong>Medium</strong></td><td><strong>MISSING</strong></td><td>Chưa có UI error state khi API 422 hoặc <code>interests=null</code></td><td><code>StatsPage.tsx:63-66,129</code> không dùng <code>isError</code></td><td>Người dùng thấy số 0 và không biết lỗi</td></tr><tr><td>F9</td><td><strong>Low</strong></td><td><strong>RISK</strong></td><td>Quick-search <code>SearchBar</code> không gắn <code>from_search=1</code></td><td><code>SearchBar.tsx:67</code></td><td>Một phần lượt mở từ tìm kiếm không được gán nhãn search</td></tr><tr><td>F10</td><td><strong>Low</strong></td><td><strong>INFO</strong></td><td>Mở group doc qua <code>/documents/{id}</code> ghi log <code>personal</code></td><td>validation log doc 221/201</td><td><code>opened_from_search</code> vẫn đúng; log context sai gây khó debug/phân tích sau này</td></tr><tr><td>F11</td><td><strong>Low</strong></td><td><strong>INFO</strong></td><td><code>activity_by_day</code> luôn 30 ngày; selector chỉ đổi interests</td><td><code>stats.py:121-153</code>, <code>StatsPage.tsx:194</code></td><td>Có thể gây hiểu nhầm khi chọn 7 ngày</td></tr><tr><td>F12</td><td><strong>Low</strong></td><td><strong>RISK</strong></td><td>Tag query nhân bản 10.000 → 22.069 row; 7 query/request</td><td><code>explain-perf.log</code>, <code>query_count.py</code></td><td>212 ms ở 10k docs/150k logs; tăng theo số tag/doc</td></tr></tbody></table>
+<p>Các điểm <strong>PASS</strong> đáng ghi nhận: đếm lượt đọc/distinct document, lọc action download, cửa sổ 7/30 ngày khi gọi trực tiếp, phân quyền private/member/left/deleted, owner không membership, “Chưa phân loại”, không 500 với user rỗng, build thành công, <code>git diff --check</code> sạch.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-các-tiêu-chí-còn-thiếu-bằng-chứng">11. Các tiêu chí còn thiếu bằng chứng<a href="#11-các-tiêu-chí-còn-thiếu-bằng-chứng" class="hash-link" aria-label="Đường dẫn trực tiếp đến 11. Các tiêu chí còn thiếu bằng chứng" title="Đường dẫn trực tiếp đến 11. Các tiêu chí còn thiếu bằng chứng" translate="no">​</a></h2>
+<ol>
+<li class=""><strong>Browser thật</strong>: không có stack frontend+backend authenticated chạy sẵn trong môi trường review; không click được nút 7/30, không quan sát request/response trên network tab, không chụp được trạng thái “chưa có hoạt động”. Kết luận UI dựa trên build + đọc mã + HTTP ASGI.</li>
+<li class=""><strong>Subject dangling / subject không faculty</strong>: thử tạo <code>subject_id=999</code> bị FK <code>documents_subject_id_fkey</code> chặn; thử <code>faculty_id=NULL</code> bị <code>NOT NULL</code> chặn. Không thể tạo ca này trong schema hiện tại; nhánh <code>LEFT JOIN … or &quot;Chưa phân loại&quot;</code> chỉ được suy luận từ code, không đo trực tiếp.</li>
+<li class=""><strong>Dữ liệu Neon thật</strong>: chỉ đọc catalog index; không chạy <code>EXPLAIN</code> hay đối chiếu số liệu trên dữ liệu production. Hiệu năng là synthetic.</li>
+<li class=""><strong>End-to-end browser <code>from_search</code></strong>: đã kiểm tra source + API log, chưa kiểm tra click thật trên <code>SearchResultCard</code> và reload trang trong browser.</li>
+<li class=""><strong>UI error/null interests</strong>: chưa có mock 422/<code>interests=null</code> trong browser; chỉ có bằng chứng code-level.</li>
+<li class=""><strong>Duplicate tag qua luồng UI chuẩn</strong>: tag cá nhân có check 409 khi tạo, tag workspace không có check tên trùng; thử nghiệm chèn tag trùng bằng SQL. Chưa đi lại luồng UI để xác nhận tần suất phát sinh trong dữ liệu thực.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-kết-luận">12. Kết luận<a href="#12-kết-luận" class="hash-link" aria-label="Đường dẫn trực tiếp đến 12. Kết luận" title="Đường dẫn trực tiếp đến 12. Kết luận" translate="no">​</a></h2>
+<p><strong>Chưa đạt Phase 5.</strong></p>
+<p>Lý do chính: endpoint theo đúng hợp đồng (<code>days=7</code> và <code>days=30</code>) trả 422, trong khi frontend luôn gửi <code>days</code>; người dùng không thể thấy phần “Chủ đề bạn quan tâm”. Ngoài ra, tag workspace theo chuẩn hiện tại bị bỏ sót và tag cùng tên/đếm trùng làm sai số liệu chủ đề. Build, 33 test hiện có và <code>git diff --check</code> đạt <strong>không đủ</strong> để bù các lỗi chức năng này.</p>
+<p>Có thể chuyển sang “Đạt có điều kiện” sau khi sửa F1–F4, bổ sung test integration cho F1–F4 và có ít nhất một lần verify browser cho selector 7/30 + empty state.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-khuyến-nghị-sửa-cụ-thể-cho-từng-lỗi">13. Khuyến nghị sửa cụ thể cho từng lỗi<a href="#13-khuyến-nghị-sửa-cụ-thể-cho-từng-lỗi" class="hash-link" aria-label="Đường dẫn trực tiếp đến 13. Khuyến nghị sửa cụ thể cho từng lỗi" title="Đường dẫn trực tiếp đến 13. Khuyến nghị sửa cụ thể cho từng lỗi" translate="no">​</a></h2>
+<blockquote>
+<p>Agent <strong>không</strong> áp dụng các thay đổi này trong lần review; đây là đề xuất có file/nguyên nhân/test xác nhận.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>ID</th><th>File</th><th>Nguyên nhân</th><th>Thay đổi đề xuất</th><th>Test xác nhận</th></tr></thead><tbody><tr><td>F1</td><td><code>backend/app/routers/stats.py:30</code></td><td><code>Literal[int]</code> không parse query string</td><td>Đổi thành <code>days: int = Query(30)</code> rồi <code>if days not in (7, 30): raise HTTPException(status_code=422, detail=&quot;days must be 7 or 30&quot;)</code>, hoặc dùng <code>Enum(str)</code> rồi <code>int(days)</code>. Agent đã prototype kiểu <code>int + HTTPException</code>: default→200, 7→200, 30→200, 14→422, <code>x</code>→422</td><td>ASGI test: <code>?days=7</code> và <code>?days=30</code> → 200 + <code>interests.days</code> đúng; <code>?days=14</code>, <code>?days=x</code> → 422</td></tr><tr><td>F2</td><td><code>backend/app/routers/stats.py:188-203</code></td><td>Chỉ dùng legacy <code>tags.workspace_id</code></td><td>Nối thêm <code>EXISTS (SELECT 1 FROM workspace_tags wt WHERE wt.workspace_id=d.workspace_id AND wt.tag_id=t.id)</code> cho doc nhóm; giữ fallback <code>t.workspace_id=d.workspace_id</code> cho legacy. Điều kiện đề xuất: <code>(d.workspace_id IS NULL AND t.workspace_id IS NULL) OR (d.workspace_id IS NOT NULL AND (t.workspace_id=d.workspace_id OR EXISTS(...)))</code></td><td>Tạo tag qua <code>WorkspaceTagService.create_workspace_tag</code>, gắn vào doc G1, gọi stats → tên tag xuất hiện; không cần set <code>tags.workspace_id</code></td></tr><tr><td>F3</td><td><code>backend/app/routers/stats.py:204-206</code></td><td>Group theo <code>name</code>, inner group theo doc dễ trùng</td><td>Tính một row duy nhất cho mỗi <code>(scope, tag_id, document_id)</code> (scope = <code>personal</code> hoặc <code>group:&lt;workspace_id&gt;</code>), rồi outer group theo <code>(scope, tag_id, name)</code>. Không cộng cùng document hai lần nếu doc có nhiều tag id cùng tên/trùng tên</td><td>Fixture doc 231 (tag 9+10 cùng <code>AI</code>): AI phải 11 views/7 docs thay vì 12/8; tag cá nhân <code>AI</code> và tag G1 <code>AI</code> phải là hai dòng riêng</td></tr><tr><td>F4</td><td><code>backend/app/routers/stats.py:161</code></td><td>Loại public doc ngay cả khi user là owner</td><td>Với personal doc: bỏ điều kiện public, giữ <code>workspace_id IS NULL AND owner_id=:uid</code>. Với group doc: giữ membership/owner check và định nghĩa rõ public nhóm có tính hay không</td><td>Doc 104 phải vào <code>personal_documents</code> và 2 lượt đọc; private doc của user 2 vẫn bị loại; <code>total_uploads</code> và <code>personal_documents</code> giải thích được sự khác biệt (nếu vẫn khác)</td></tr><tr><td>F5</td><td><code>documents.py</code>, <code>groups.py</code>, <code>useDocumentDetail.ts</code>, <code>StatsPage.tsx</code></td><td>Flag URL không consume; refetch ghi log</td><td>Ngắn hạn: thêm test ghi rõ“reload → +1 log” và hiển thị chú thích UI. Dài hạn: token một lần (sessionStorage + query param) hoặc dedupe có cửa sổ theo <code>(user, document, source)</code>; cần quyết định sản phẩm vì prior report từng chủ động bỏ dedupe</td><td>Test: mở search 1 lần → 1 log search; reload cùng tab → không tăng (nếu dùng token) hoặc tăng đúng số reload kỳ vọng (nếu giữ thiết kế hiện tại)</td></tr><tr><td>F6</td><td><code>backend/app/schemas/activity.py:48</code></td><td><code>Optional[dict]</code></td><td>Tạo <code>InterestTopicOut</code> (5 field) và <code>InterestsOut</code> (8 field), set <code>interests: Optional[InterestsOut] = None</code>; synchronized <code>frontend/src/types/activity.ts</code></td><td>Test mở OpenAPI/schema: các field required có mặt; response valid/invalid bị Pydantic bắt</td></tr><tr><td>F7</td><td><code>backend/tests/test_phase5_interest_counts.py</code></td><td>Chỉ test <code>_topic_rows</code></td><td>Thêm integration tests dùng Postgres fixture: API 7/30/14, totals, permissions, rời nhóm, public, duplicate tag, workspace tag, empty user, from_search log</td><td>Chạy lại lệnh pytest mục 8, kỳ vọng &gt;33 passed và các test mới đỏ trước khi sửa F1–F4</td></tr><tr><td>F8</td><td><code>frontend/digital-library/src/pages/stats/StatsPage.tsx:63-66,129</code></td><td>Không xử lý <code>isError</code></td><td>Destructure <code>isError, error</code>; render card lỗi có nút retry; khi <code>stats.interests === null</code> vẫn render thẻ với empty state thay vì ẩn hoàn toàn</td><td>Mock API 422 và mock <code>interests:null</code> trong browser/Test; kiểm tra có thông báo và không còn summary = 0 im lặng</td></tr><tr><td>F9</td><td><code>frontend/digital-library/src/components/shared/layout/SearchBar.tsx:67</code></td><td>Quick-search navigate thẳng URL</td><td>Khi <code>item.url</code> là document, nối <code>from_search=1</code> giống <code>SearchResultCard</code></td><td>Click quick-search → URL có flag → log <code>source=search</code></td></tr><tr><td>F10</td><td><code>documents.py</code> detail handler</td><td>Log cứng <code>workspace_context=&quot;personal&quot;</code></td><td>Suy ra context từ <code>doc.workspace_id</code> hoặc truyền context từ route group vào helper log</td><td>Mở group doc qua <code>/documents/{id}</code> → log <code>workspace_context=group</code>, <code>workspace_id</code> đúng</td></tr><tr><td>F11</td><td><code>StatsPage.tsx</code>, <code>stats.py</code></td><td>Selector chỉ đổi interests</td><td>Ghi rõ trong UI “bộ lọc 7/30 ngày áp dụng cho chủ đề quan tâm” hoặc cho <code>days</code> ảnh hưởng cả chart nếu yêu cầu sản phẩm</td><td>Browser: chọn 7 ngày → nhãn/chart khớp kỳ vọng</td></tr><tr><td>F12</td><td><code>backend/app/routers/stats.py:158-203</code></td><td>Join logs lặp theo từng document-tag</td><td>Dùng chung CTE <code>reads(document_id, views, search_views)</code> cho subject và tag; với tag, join <code>reads</code> vào bảng <code>(document_id, tag_id)</code> đã distinct rồi group. Đo lại trước khi đề xuất index mới</td><td><code>EXPLAIN (ANALYZE, BUFFERS)</code> sau sửa: giảm số loop/index search trên download_logs; request vẫn 7 query hoặc ít hơn, thời gian không tăng trên fixture lớn</td></tr></tbody></table>
+<p>Không có thay đổi production code nào được thực hiện trong review này; do đó không có mục “fix đã áp dụng + test xác nhận” ngoài prototype validation tạm thời nêu ở F1.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-kết-quả-xử-lý-của-codex-sau-review">14. Kết quả xử lý của Codex sau review<a href="#14-kết-quả-xử-lý-của-codex-sau-review" class="hash-link" aria-label="Đường dẫn trực tiếp đến 14. Kết quả xử lý của Codex sau review" title="Đường dẫn trực tiếp đến 14. Kết quả xử lý của Codex sau review" translate="no">​</a></h2>
+<p>Ngày xử lý: 28/11/2026.</p>
+<p>Codex đã đối chiếu và sửa F1–F4, F6, F8–F10 trong phạm vi API và UI hiện có:</p>
+<ul>
+<li class="">F1: đổi <code>days</code> sang query integer có kiểm tra tập <code>{7, 30}</code>. HTTP test xác nhận 7/30 trả 200; 14 và chuỗi sai trả 422.</li>
+<li class="">F2: thống kê tag nhóm nhận mapping chuẩn từ <code>workspace_tags</code> và vẫn hỗ trợ <code>tags.workspace_id</code> legacy.</li>
+<li class="">F3: tag được nhóm theo phạm vi cá nhân hoặc từng workspace, không trộn tag cùng tên giữa các kho và khử trùng cùng tên trên một tài liệu. Response tag bổ sung <code>scope</code> và <code>workspace_id</code> để UI giải thích nguồn.</li>
+<li class="">F4: tài liệu public do chính user sở hữu được tính trong tài liệu cá nhân và hoạt động đọc.</li>
+<li class="">F6: thay <code>Optional[dict]</code> bằng <code>InterestsOut</code> và <code>InterestTopicOut</code> có kiểu rõ ràng.</li>
+<li class="">F8: UI có thông báo lỗi, nút thử lại và trạng thái thiếu dữ liệu.</li>
+<li class="">F9: quick-search gắn <code>from_search=1</code> cho kết quả tài liệu.</li>
+<li class="">F10: khi tài liệu nhóm được mở qua route <code>/documents/{id}</code>, log dùng context nhóm và workspace ID thực tế.</li>
+</ul>
+<p>Xác minh sau sửa:</p>
+<ul>
+<li class="">35 backend tests passed.</li>
+<li class="">Frontend production build passed.</li>
+<li class=""><code>git diff --check</code> passed.</li>
+<li class="">Chạy lại ASGI API trên PostgreSQL fixture <code>phase5_review</code>: <code>days=7</code> và <code>days=30</code> trả 200; các giá trị 0/1/14/31/90/x trả 422; user rỗng trả bộ đếm 0; <code>scope=my_documents</code> giữ <code>interests=null</code>; quyền private và nhóm tiếp tục trả 403 đúng trường hợp.</li>
+<li class="">Trên fixture thật, response đã tách <code>AI</code> cá nhân và <code>AI</code> của từng workspace; tag <code>Docker</code> thuộc workspace xuất hiện qua mapping chuẩn; tài liệu public của chủ sở hữu làm số <code>personal_documents</code> tăng đúng một tài liệu.</li>
+</ul>
+<p>F5 vẫn là quyết định sản phẩm: tải lại trang chi tiết được tính là một lượt đọc mới. <code>opened_from_search</code> đếm số tài liệu khác nhau nên không tăng khi tải lại cùng tài liệu. F11 chỉ ảnh hưởng cách hiểu selector và F12 là tối ưu hiệu năng tiếp theo; chúng không chặn contract Phase 5 sau khi F1–F4 đã được sửa. Vẫn cần một lượt thao tác trình duyệt trên ứng dụng đang chạy để chốt nghiệm thu giao diện.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Nguyen06-CSE/Foundation-Project/tree/main/docs/../docs/99-luu-tru/bao-cao/report-codex/phase-05-review-by-agent.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Sửa trang này</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Cập nhật lần cuối<!-- --> vào <b><time datetime="2026-11-28T05:08:04.000Z" itemprop="dateModified">28 thg 11, 2026</time></b> bởi <b>Nguyen06-CSE</b></span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Trang tài liệu"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-phạm-vi-đã-kiểm-tra" class="table-of-contents__link toc-highlight">1. Phạm vi đã kiểm tra</a></li><li><a href="#2-commitdiff-hoặc-file-đã-đọc" class="table-of-contents__link toc-highlight">2. Commit/diff hoặc file đã đọc</a></li><li><a href="#3-kết-quả-kiểm-tra-api" class="table-of-contents__link toc-highlight">3. Kết quả kiểm tra API</a></li><li><a href="#4-bảng-đối-chiếu-dữ-liệu-fixture-và-response" class="table-of-contents__link toc-highlight">4. Bảng đối chiếu dữ liệu fixture và response</a></li><li><a href="#5-kết-quả-kiểm-tra-quyền-cá-nhânnhóm" class="table-of-contents__link toc-highlight">5. Kết quả kiểm tra quyền cá nhân/nhóm</a></li><li><a href="#6-kết-quả-kiểm-tra-from_search" class="table-of-contents__link toc-highlight">6. Kết quả kiểm tra <code>from_search</code></a></li><li><a href="#7-kết-quả-frontend-build" class="table-of-contents__link toc-highlight">7. Kết quả frontend build</a></li><li><a href="#8-kết-quả-test" class="table-of-contents__link toc-highlight">8. Kết quả test</a></li><li><a href="#9-kết-quả-hiệu-năng" class="table-of-contents__link toc-highlight">9. Kết quả hiệu năng</a></li><li><a href="#10-danh-sách-lỗi-theo-mức-độ-nghiêm-trọng" class="table-of-contents__link toc-highlight">10. Danh sách lỗi theo mức độ nghiêm trọng</a></li><li><a href="#11-các-tiêu-chí-còn-thiếu-bằng-chứng" class="table-of-contents__link toc-highlight">11. Các tiêu chí còn thiếu bằng chứng</a></li><li><a href="#12-kết-luận" class="table-of-contents__link toc-highlight">12. Kết luận</a></li><li><a href="#13-khuyến-nghị-sửa-cụ-thể-cho-từng-lỗi" class="table-of-contents__link toc-highlight">13. Khuyến nghị sửa cụ thể cho từng lỗi</a></li><li><a href="#14-kết-quả-xử-lý-của-codex-sau-review" class="table-of-contents__link toc-highlight">14. Kết quả xử lý của Codex sau review</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Tài Liệu Kỹ Thuật</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/">Cổng Thông Tin (Hub)</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tong-quan">Tổng Quan Dự Án</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/huong-dan-local">Hướng Dẫn Localhost</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kien-truc">Kiến Trúc Hệ Thống</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/co-so-du-lieu">Cơ Sở Dữ Liệu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Chất Lượng &amp; Nghiệp Vụ</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/tinh-nang">Đặc Tả 7 Tính Năng</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/api">Hệ Thống REST API</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/kiem-thu-va-han-che">Kiểm Thử &amp; Đảm Bảo QA</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/requirements">Đặc Tả Yêu Cầu</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Dự Án &amp; Lưu Trữ</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Nguyen06-CSE/Foundation-Project" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub Repository<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/templates/ADR_TEMPLATE">Quy Chuẩn &amp; Biểu Mẫu</a></li><li class="footer__item"><a class="footer__link-item" href="/Foundation-Project/luu-tru/deployment-cu">Khu Lưu Trữ Lịch Sử</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 Foundation Project Team. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
